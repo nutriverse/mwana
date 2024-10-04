@@ -122,6 +122,7 @@ After the data quality checks workflow, you will now be in position to decide wh
 </style>
 <div class="callout-tip">
 <strong>💡 Tip </strong>
+</div>
 
 Despite the fact that this package was designed with the idea of simplifying the IPC AMN checks workflow in mind, you can absolutely use its utilities beyond this scope. For instance, if you are undertaking a research and you want to censor your data before including in your statistical models, etc, you can use this packages utilities for that. 
 </div>

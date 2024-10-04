@@ -9,3 +9,5 @@
 ^pkgdown$
 ^doc$
 ^Meta$
+package_review.md
+^review$
