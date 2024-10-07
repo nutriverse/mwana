@@ -1,5 +1,7 @@
 ---
-format: gfm
+title: "README"
+output: gfm
+always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,7 +15,7 @@ knitr::opts_chunk$set(
 library(ipccheckr)
 ```
 
-# `mwana`: Utilities for analysing children's nutritional status 
+# `ipccheckr`: Utilities for analysing children's nutritional status 
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tomaszaba/ipccheckr/actions/workflows/R-CMD-check.yaml)
@@ -116,11 +118,11 @@ digraph mwana {
 
 In the context of IPC AMN analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met depending on the methodology used to collect the data: survey, screening or sentinel sites. (Check out the vignette).
 
-::: {.callout-tip}
+::: callout-tip
 if you are undertaking a research and you want to censor your data before including in your statistical models, etc, mwana is a great helper.
 :::
 
-::: {.callout-warning}
+::: callout-warning
 Please note that `mwana` is still highly experimental and is undergoing a lot of development. Hence, any functionalities described below have a high likelihood of changing interface or approach as we aim for a stable working version.
 :::
 

@@ -1,136 +1,137 @@
 
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `ipccheckr`:Toolkit for Performing IPC Acute Malnutrition-related Data Checks
+# `ipccheckr`: Utilities for analysing children’s nutritional status
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/tomaszaba/ipccheckr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tomaszaba/ipccheckr/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tomaszaba/ipccheckr/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/tomaszaba/ipccheckr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tomaszaba/ipccheckr?branch=main)
+coverage](https://codecov.io/gh/nutriverse/mwana/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tomaszaba/ipccheckr?branch=main)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Project Status: WIP – Initial development is in progress, but there
+has not yet been a stable, usable release suitable for the
+public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
-<img src="man/figures/logo.png" align="right" height="250" alt="" />
 
 ## Background
 
-IPC AMN is a global tool that uses a set o protocols to classify
-geographical areas into a 5-phases severity based on the prevalence of
-acute malnutrition among children aged 6:59 months. Its main objective
-is to provide actionable information for decision-makers. It is not a
-data collection method *per se*, therefore, it relies on evidence
-generated through other methods (representative surveys, screening,
-sentinel sites, etc). Before any evidence is used an IPC AMN analysis,
-checks must performed to ascertain the quality of data, following the
-minimum quality standards set in the protocol, hence its reliability. As
-such, only evidence that pass the checks are allowed to be used in an
-IPC analysis exercise.
+`mwana`, for “child” in *Elómwè*, a local language spoken in the
+central-northern regions of Mozambique, with a similar meaning across
+various other Bantu languages, including Swahili, that is spoken in many
+parts of Africa, is a package designed for analysing acute
+malnutrition’s prevalence among “mwana”’s aged 6 to 59 months.
 
-## Why `ipccheckr`?
+`mwana` was born out of the author’s frequent wrestle when, in his
+capacity as member of the Quality Assurance team for nutrition of the
+IPC, is frequently presented with the task of handling large datasets to
+conduct data quality and prevalence appraisal before every IPC analysis
+to ensure the use of reliable evidence in the analysis. The typical data
+appraisal workflow in the context of IPC is usually cumbersome, as it
+requires significant time and effort, whilst ensuring that the right
+analysis procedure is used by checking for different conditionals.
+Analysts often need to switch between software: SPSS or Excel for data
+processing, then import data into ENA for SMART software to run checks
+and prevalence analysis, then extract outputs into a summary
+spreadsheet. This process is repeated one by one for the number of units
+of analysis in the dataset. Oftentimes this workflow needs to be
+implemented in relatively short period time, leading to errors in the
+workflow due to fatigue.
 
-The typical analysis workflow is overly complex, tiring and tedious,
-time-consuming and not not reproducible. Oftentimes, due to demand, the
-workflow needs to be implemented on a pile of data in absolute short
-time, making the process prone to human errors due to fatigue. In the
-workflow, data “checker” needs to travel from software to software as
-follows: SPSS software (mostly) to process data and export to Excel or
-CSV to then import it into Emergency Nutrition Assessments (ENA) for
-SMART software for to run the quality. From this stage downstream, the
-workflow needs to be done one-by-one for the number of survey area a
-data set may hold: run the quality check, then transfer the summary
-results into a summary table (Excel spreadsheet or other). Then, run the
-prevalence analysis (also one-by-one), and then transfer the results
-into a spreadsheet and so on and so forth. Sometimes, a fourth tool is
-used to correct for a likely overestimation of acute malnutrition
-prevalence based on MUAC when there are excess of younger children (6:23
-months) over older children (24:59 months) in the sample. Therefore, the
-`ipccheckr` was developed simply to make the workflow simpler, joyful
-and reproducible thanks to its array of handy functions.
+In this way, more than just an R-based implementation of the ENA for
+SMART software, mwana’s key added value lies in its ability to simplify
+the above alluded cumbersome workflow into a wholesome experience, all
+in one place. This is especially beneficial when handling large
+datasets, a day-to-day practice at IPC.
 
-## What does `ipccheckr` do?
+> [!NOTE]
+>
+> `mwana` was made possible thanks to the state-of-the-art work in
+> nutrition survey guidance led by the SMART initiative. Click
+> [here](https://smartmethodology.org) to learn more about the SMART
+> initiative and their innovations.
 
-In a nutshell, the array of exported functions span from sample size
-checkers, data processors, quality checkers, prevalence calculators as
-well as some handy functions to render formatted and presentable output
-tables on the two latter groups of functions.
+## What does `mwana` do?
 
-### Plausibility checks with `ipccheckr`
+It automates plausibility checks and prevalence analysis and respective
+summaries of the outputs.
 
-You can run plausibility checks on:
+### Plausibility checks.
 
-- Weight-for-height z-score (WFHZ) data
-- MUAC-for-age z-score (MFAZ) data *when **age** variable **is**
-  available*
-- Absolute values of MUAC data *when **age** variable **is not**
-  available*
+- `mwana` performs plausibility checks on weight-for-height z-score
+  (WFHZ)-based data. On this, it mimics the plausibility checkers in ENA
+  for SMART software applies the same test scoring criteria and
+  classification.
 
-#### Useful workflow with `ipccheckr` for data quality check
+- It performs, as well, plausibility checks on MUAC data. For this,
+  `mwana` integrates recent advances in using MUAC-for-age z-score
+  (MFAZ) for auditing the plausibility of MUAC data. In this way, when
+  variable age is available: `mwana` performs plausibility checks
+  similar to those in WFHZ, however with few differences on the scoring
+  and classification. Read details here. Otherwise, a similar test suit
+  used in the current version of ENA is performed and returned. Read
+  details here
 
-![](man/figures/README-ipccheckr_workflow-1.png)<!-- -->
+#### Useful workflow for plausibility check
 
-### On the prevalence analysis
+![](man/figures/README-ipccheckr_workflow-1.png)
 
-After the data quality checks workflow, you will now be in position to
-decide whether or not you can proceed to the prevalence analysis. The
-workflow is quite simple: you use the data returned by the data
-processors in the above workflow. `ipccheckr` can compute acute
-malnutrition prevalence based on:
+### Prevalence analysis
 
-- WFHZ and/or edema - guide
-- MUAC and/or edema - guide
-- Combined prevalence (of WFHZ and MUAC and edema) - guide
-- MFAZ and/or edema - guide
+`mwana` prevalence calculators were built to take decisions on the
+appropriate analysis approach to follow based on the quality of the
+data, as per the SMART rules. It returns an output table with the
+appropriate results based on the data quality test results.
+Fundamentally, the calculators loop over the survey areas in the
+dataset, whilst performing quality appraisal and takes decisions on the
+appropriate prevalence analysis to follow on the basis of the result. It
+computes prevalence for:
 
-<style>
-.callout-tip {
-  border-left: 4px solid #2ECC71; /* Green border */
-  background-color: #EAFAF1; /* Light green background */
-  padding: 10px;
-  margin: 20px 0;
-  border-radius: 10px;
-}
-</style>
+- Acute malnutrition based WFHZ and/edema (Read vignettes)
+- Acute malnutrition based on the absolute values of MUAC and/or edema:
+  here, when variable age is available, mwana applies MFAZ flags,
+  otherwise it applies the flagging criteria around the absolute values
+  of MUAC, to exclude outliers before computing prevalence, but the
+  actual prevalence is done on the absolute values. (Read link to the
+  specific section in the vignettes)
+- Acute malnutrition based on MFAZ and/edema: outliers excluded using
+  MFAZ flags. (Read link to the specific section in the vignettes)
+- Acute malnutrition based on combined prevalence: here a concept of
+  combined flags is used to streamline the flags removed in whz and
+  those in MUAC. (Read link to the specific section in the vignettes)
 
-<div class="callout-tip">
+`mwana` provides weighted prevalence analysis, if needed. This is
+possible in all calculators, including for MUAC, combined, which is not
+currently available in ENA.
 
-<strong>💡 Tip </strong>
+In the context of IPC AMN analysis workflow, `mwana` provides a handy
+function for checking if the minimum sample size requirements in a given
+area were met depending on the methodology used to collect the data:
+survey, screening or sentinel sites. (Check out the vignette).
 
-Despite the fact that this package was designed with the idea of
-simplifying the IPC AMN checks workflow in mind, you can absolutely use
-its utilities beyond this scope. For instance, if you are undertaking a
-research and you want to censor your data before including in your
-statistical models, etc, you can use this packages utilities for that.
+> [!TIP]
+>
+> if you are undertaking a research and you want to censor your data
+> before including in your statistical models, etc, mwana is a great
+> helper.
 
-</div>
-
-<style>
-.callout-warning {
-  border-left: 4px solid #FF4500; /* Red border */
-  background-color: #FDEDEC; /* Light red background */
-  padding: 10px;
-  margin: 20px 0;
-  border-radius: 10px;
-}
-</style>
-
-<div class="callout-warning">
-
-<strong>⚠️ Warning</strong>
-
-Please note that `ipccheckr` is still highly experimental and is
-undergoing a lot of development. Hence, any functionalities described
-below have a high likelihood of changing interface or approach as we aim
-for a stable working version.
-
-</div>
+> [!WARNING]
+>
+> Please note that `mwana` is still highly experimental and is
+> undergoing a lot of development. Hence, any functionalities described
+> below have a high likelihood of changing interface or approach as we
+> aim for a stable working version.
 
 ## Installation
 
-`ipccheckr` is not yet on CRAN but you can install the development
-version from [GitHub](https://github.com/) with:
+`mwana` is not yet on CRAN but you can install the development version
+from [nutriverse R universe](https://nutriverse.r-universe.dev) as
+follows:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("tomaszaba/ipccheckr")
+remotes::install_github("tomaszaba/ipccheckr")
 ```
 
 Then load to in memory with
@@ -163,3 +164,14 @@ citation("ipccheckr")
 #>     url = {https://github.com/tomaszaba/ipccheckr},
 #>   }
 ```
+
+# Community guidelines
+
+Feedback, bug reports and feature requests are welcome; file issues or
+seek support [here](https://github.com/nutriverse/mwana/issues). If you
+would like to contribute to the package, please see our [contributing
+guidelines](https://nutriverse.io/mwana/CONTRIBUTING.html).
+
+This project is releases with [Contributor Code of
+Conduct](https://nutriverse.io/mwana/CODE_OF_CONDUCT.html). By
+participating in this project you agree to abide by its terms.
