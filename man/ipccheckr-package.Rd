@@ -4,17 +4,17 @@
 \name{ipccheckr-package}
 \alias{ipccheckr}
 \alias{ipccheckr-package}
-\title{ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks}
+\title{ipccheckr: Utilities for analysing children's nutritional status}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-The Integrated Food Security Phase Classification (IPC) for Acute Malnutrition is a global tool used to classify geographical areas based on the prevalence of acute malnutrition. An IPC AMN product is primarily used to inform countries Humanitarian Needs Overview (HNO) of the Humanitarian Programme Cycle (HPC). The accepted sources of evidence on prevalence of acute malnutrition varies from surveys, community-based screenings and sent- inel sites. According to the IPC AMN protocols, every evidence must be subject to quality checks to ascertain their reliability and decided whether to use or not. This package provides useful functions and utilities that supports IPC AMN-related data analysis check.
+A streamlined and comprehensive implementation of SMART Methodology guidelines for data quality checks and prevalence analyses, with enhanced efficiency for handling large datasets.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/tomaszaba/ipccheckr}
-  \item Report bugs at \url{https://github.com/tomaszaba/ipccheckr/issues}
+  \item \url{https://github.com/nutriverse/mwana}
+  \item Report bugs at \url{https://github.com/nutriverse/mwana/issues}
 }
 
 }
@@ -24,11 +24,6 @@ Useful links:
 Authors:
 \itemize{
   \item Ernest Guevarra (\href{https://orcid.org/0000-0002-4887-4415}{ORCID}) [copyright holder]
-}
-
-Other contributors:
-\itemize{
-  \item Douglas Jayasekaran [contributor]
 }
 
 }

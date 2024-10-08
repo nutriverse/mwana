@@ -1,12 +1,13 @@
 ---
-title: "README"
-output: gfm
-always_allow_html: true
+format: gfm
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup, include = FALSE}
+```{r}
+#| label: global_setup
+#| include: false
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(
 library(ipccheckr)
 ```
 
-# `ipccheckr`: Utilities for analysing children's nutritional status 
+# `mwana`: Utilities for analysing children's nutritional status 
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tomaszaba/ipccheckr/actions/workflows/R-CMD-check.yaml)
@@ -47,7 +48,11 @@ It automates plausibility checks and prevalence analysis and respective summarie
   + It performs, as well, plausibility checks on MUAC data. For this, `mwana` integrates recent advances in using MUAC-for-age z-score (MFAZ) for auditing the plausibility of MUAC data. In this way, when variable age is available: `mwana` performs plausibility checks similar to those in WFHZ, however with few differences on the scoring and classification. Read details here. Otherwise, a similar test suit used in the current version of ENA is performed and returned. Read details here
 
 #### Useful workflow for plausibility check
-```{r ipccheckr_workflow, echo=FALSE, fig.align='default'}
+```{r}
+#| label: worflow
+#| echo: false 
+#| fig-align: 'default'
+
 DiagrammeR::grViz("
 digraph mwana {
   # Default node attributes
@@ -56,36 +61,30 @@ digraph mwana {
   # Nodes
   node1 [label = 'Start', shape = ellipse, color = PaleGreen];
   node2 [label = 'Anthro data', shape = parallelogram];
-  node3 [label = 'Check sample size requirements', shape = box];
-  node4 [label = 'Met?', shape = diamond, color = lightgoldenrod];
   yes [label = 'Yes', shape = note]
   no [label = 'No', shape = note]
   
   # Nodes for YES branch ----
-  node5 [label = 'Indicator', shape = diamond, color = lightgoldenrod];
-  node6 [label = 'WFHZ', shape = note];
-  node7 [label = 'MFAZ', shape = note];
-  node8 [label = 'MUAC', shape = note];
-  node9 [label = 'Process age', shape = box];
-  node10 [label = 'Process data', shape = box];
-  node11 [label = 'Check plausibility', shape = box];
+  node3 [label = 'Indicator', shape = diamond, color = lightgoldenrod];
+  node4 [label = 'WFHZ', shape = note];
+  node5 [label = 'MFAZ', shape = note];
+  node6 [label = 'MUAC', shape = note];
+  node7 [label = 'Process age', shape = box];
+  node8 [label = 'Process data', shape = box];
+  node9 [label = 'Check plausibility', shape = box];
 
   # Node for NO branch ----
-  node12 [label = 'End of workflow', shape = oval, color = salmon];
+  node10 [label = 'End of workflow', shape = oval, color = salmon];
 
   ## Data process ----
   node1 -> node2 [color = gray, arrowhead = vee];
   node2 -> node3 [color = gray, arrowhead = vee];
-  node3 -> node4 [color = gray, arrowhead = vee];
-  node4 -> no [color = gray, arrowhead = vee];
-  no -> node12 [lable = 'NO', color = gray, arrowhead = vee];
+  no -> node10 [lable = 'NO', color = gray, arrowhead = vee];
   
   ## Workflow for Yes WFZH ----
-  node4 -> yes [color = gray, arrowhead = vee]
-  yes -> node5 [color = gray, arrowhead = vee];
-  node5 -> node6 [color = gray, arrowhead = vee];
-  node6 -> node9 [color = gray, arrowhead = vee];
-  node9 -> node10 [color = gray, arrowhead = vee];
+  node3 -> node4 [color = gray, arrowhead = vee];
+  node4 -> node5 [color = gray, arrowhead = vee];
+  node5 -> node10 [color = gray, arrowhead = vee];
   node10 -> node11 [color = gray, arrowhead = vee];
   node11 -> node12 [color = gray, arrowhead = vee];
   
@@ -118,11 +117,11 @@ digraph mwana {
 
 In the context of IPC AMN analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met depending on the methodology used to collect the data: survey, screening or sentinel sites. (Check out the vignette).
 
-::: callout-tip
+::: {.callout-tip}
 if you are undertaking a research and you want to censor your data before including in your statistical models, etc, mwana is a great helper.
 :::
 
-::: callout-warning
+::: {.callout-warning}
 Please note that `mwana` is still highly experimental and is undergoing a lot of development. Hence, any functionalities described below have a high likelihood of changing interface or approach as we aim for a stable working version.
 :::
 

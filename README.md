@@ -2,7 +2,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `ipccheckr`: Utilities for analysing children’s nutritional status
+# `mwana`: Utilities for analysing children’s nutritional status
 
 <!-- badges: start -->
 
@@ -20,102 +20,108 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 
 `mwana`, for “child” in *Elómwè*, a local language spoken in the
 central-northern regions of Mozambique, with a similar meaning across
-various other Bantu languages, including Swahili, that is spoken in many
-parts of Africa, is a package designed for analysing acute
-malnutrition’s prevalence among “mwana”’s aged 6 to 59 months.
+various other Bantu languages, including Swahili, spoken in many parts
+of Africa, is a package designed for analysing anthropometric data, from
+assessing quality of the data to computing prevalence, among `mwana`’s
+aged 6 to 59 months.
 
 `mwana` was born out of the author’s frequent wrestle when, in his
 capacity as member of the Quality Assurance team for nutrition of the
-IPC, is frequently presented with the task of handling large datasets to
-conduct data quality and prevalence appraisal before every IPC analysis
-to ensure the use of reliable evidence in the analysis. The typical data
-appraisal workflow in the context of IPC is usually cumbersome, as it
-requires significant time and effort, whilst ensuring that the right
-analysis procedure is used by checking for different conditionals.
-Analysts often need to switch between software: SPSS or Excel for data
-processing, then import data into ENA for SMART software to run checks
-and prevalence analysis, then extract outputs into a summary
-spreadsheet. This process is repeated one by one for the number of units
-of analysis in the dataset. Oftentimes this workflow needs to be
-implemented in relatively short period time, leading to errors in the
-workflow due to fatigue.
+IPC, was frequently presented with the task of handling large datasets
+to conduct data quality and prevalence appraisal before every IPC
+analysis to ensure the use of reliable evidence in the analyses. The
+typical data appraisal workflow in the context of IPC is usually
+cumbersome, as it requires significant time and effort, whilst ensuring
+that the right analysis procedure is used by checking for different
+conditionals. The data analysts often need to switch between software:
+SPSS or Excel for data processing, then import data into ENA for SMART
+software to run plausibility checks and prevalence analysis, then
+extract outputs into a summary spreadsheet. This process is repeated one
+by one for the number of units of analysis in the dataset. Oftentimes
+this workflow needs to be implemented in relatively short period time,
+leading to errors in the workflow due to fatigue.
 
 In this way, more than just an R-based implementation of the ENA for
-SMART software, mwana’s key added value lies in its ability to simplify
-the above alluded cumbersome workflow into a wholesome experience, all
-in one place. This is especially beneficial when handling large
-datasets, a day-to-day practice at IPC.
+SMART software, `mwana`’s key added value lies in its ability to
+simplify the above alluded cumbersome workflow into a wholesome
+experience, all in one place. This is especially beneficial when
+handling large datasets: a day-to-day practice at IPC.
 
 > [!NOTE]
 >
 > `mwana` was made possible thanks to the state-of-the-art work in
-> nutrition survey guidance led by the SMART initiative. Click
-> [here](https://smartmethodology.org) to learn more about the SMART
-> initiative and their innovations.
+> nutrition survey guidance led by the [SMART
+> initiative](https://smartmethodology.org). Under to hood, `mwana`
+> bundles the SMART guidance through the use of the National Information
+> Platforms for Nutrition Anthropometric Data Toolkit (nipnTK)
+> functionalities in `R` to build its handy function around plausibility
+> checks. Click [here](https://github.com/nutriverse/nipnTK) to learn
+> more about the `nipnTK` package.
 
 ## What does `mwana` do?
 
-It automates plausibility checks and prevalence analysis and respective
+It automates plausibility checks and prevalence analyses and respective
 summaries of the outputs.
 
 ### Plausibility checks.
 
 - `mwana` performs plausibility checks on weight-for-height z-score
-  (WFHZ)-based data. On this, it mimics the plausibility checkers in ENA
-  for SMART software applies the same test scoring criteria and
-  classification.
+  (WFHZ)-based data by mimicking the SMART plausibility checkers in ENA
+  for SMART software, their scoring and classification criterion.
 
 - It performs, as well, plausibility checks on MUAC data. For this,
   `mwana` integrates recent advances in using MUAC-for-age z-score
   (MFAZ) for auditing the plausibility of MUAC data. In this way, when
-  variable age is available: `mwana` performs plausibility checks
-  similar to those in WFHZ, however with few differences on the scoring
-  and classification. Read details here. Otherwise, a similar test suit
-  used in the current version of ENA is performed and returned. Read
-  details here
+  the variable age is available: `mwana` performs plausibility checks
+  similar to those in WFHZ, however with few differences on the scoring.
+  Otherwise, when the variables age is missing, a similar test suit used
+  in the current version of ENA is performed. Read details here.
 
 #### Useful workflow for plausibility check
 
-![](man/figures/README-ipccheckr_workflow-1.png)
+![](man/figures/README-worflow-1.png)
 
 ### Prevalence analysis
 
 `mwana` prevalence calculators were built to take decisions on the
-appropriate analysis approach to follow based on the quality of the
+appropriate analysis procedure to follow based on the quality of the
 data, as per the SMART rules. It returns an output table with the
 appropriate results based on the data quality test results.
-Fundamentally, the calculators loop over the survey areas in the
-dataset, whilst performing quality appraisal and takes decisions on the
-appropriate prevalence analysis to follow on the basis of the result. It
-computes prevalence for:
+Fundamentally, the calculators loop over the survey areas in the dataset
+whilst performing quality appraisal and take decisions on the
+appropriate prevalence analysis procedure to follow on the basis of the
+result.
 
-- Acute malnutrition based WFHZ and/edema (Read vignettes)
-- Acute malnutrition based on the absolute values of MUAC and/or edema:
+`mwana` computes prevalence for:
+
+- Wasting on the basis of WFHZ and/edema (Read vignettes)
+- Wasting on the basis of the absolute values of MUAC and/or edema:
   here, when variable age is available, mwana applies MFAZ flags,
   otherwise it applies the flagging criteria around the absolute values
   of MUAC, to exclude outliers before computing prevalence, but the
   actual prevalence is done on the absolute values. (Read link to the
   specific section in the vignettes)
-- Acute malnutrition based on MFAZ and/edema: outliers excluded using
-  MFAZ flags. (Read link to the specific section in the vignettes)
-- Acute malnutrition based on combined prevalence: here a concept of
-  combined flags is used to streamline the flags removed in whz and
-  those in MUAC. (Read link to the specific section in the vignettes)
+- Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ
+  flags. (Read link to the specific section in the vignettes)
+- Combined prevalence of wasting: here a concept of combined flags is
+  used to streamline the flags removed in WFHZ and those in MUAC. (Read
+  link to the specific section in the vignettes).
 
-`mwana` provides weighted prevalence analysis, if needed. This is
-possible in all calculators, including for MUAC, combined, which is not
-currently available in ENA.
+`mwana` provides weighted prevalence analysis, if needed. And this is
+controlled by the user. This is possible in all calculators, including
+for MUAC, combined, which is not currently available in ENA for SMART.
 
-In the context of IPC AMN analysis workflow, `mwana` provides a handy
-function for checking if the minimum sample size requirements in a given
-area were met depending on the methodology used to collect the data:
-survey, screening or sentinel sites. (Check out the vignette).
+In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow,
+`mwana` provides a handy function for checking if the minimum sample
+size requirements in a given area were met on the basis of the
+methodology used to collect the data: survey, screening or sentinel
+sites. (Check out the vignette).
 
 > [!TIP]
 >
-> if you are undertaking a research and you want to censor your data
-> before including in your statistical models, etc, mwana is a great
-> helper.
+> If you are undertaking a research and you want to censor your data
+> before including in your statistical models, etc, `mwana` is a great
+> helper, as it identifies flags out of your anthro data.
 
 > [!WARNING]
 >
@@ -142,9 +148,9 @@ library(ipccheckr)
 
 # Citation
 
-If you were enticed to using `ipccheckr` package and found it useful,
-please cite using the suggested citation provided by a call to
-`citation` function as follows:
+If you were enticed to use `mwana` package and found it useful, please
+cite using the suggested citation provided by a call to `citation`
+function as follows:
 
 ``` r
 citation("ipccheckr")
