@@ -94,7 +94,7 @@ digraph mwana {
   node8 -> node9 [color = gray, arrowhead = vee];
   node9 -> node10 [color = gray, arrowhead = vee];
 }
-", width = 600, height = 700)
+", width = 650, height = 700)
 ```
 
 ### Prevalence analysis
