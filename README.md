@@ -79,7 +79,7 @@ summaries of the outputs.
 
 #### Useful workflow for plausibility check
 
-![](man/figures/README-worflow-1.png)
+<img src="man/figures/README-worflow-1.png" data-fig-align="center" />
 
 ### Prevalence analysis
 

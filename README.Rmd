@@ -51,7 +51,7 @@ It automates plausibility checks and prevalence analyses and respective summarie
 ```{r}
 #| label: worflow
 #| echo: false 
-#| fig-align: 'default'
+#| fig-align: center
 
 DiagrammeR::grViz("
 digraph mwana {
