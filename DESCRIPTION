@@ -1,28 +1,21 @@
 Type: Package
 Package: ipccheckr
-Title: Toolkit for Performing IPC Acute Malnutrition-related Data Checks
+Title: Utilities for Analysing Children's Nutritional Status 
 Version: 0.0.0.9000
 Authors@R: c(
     person("Tomás", "Zaba", , "tomas.zaba@outlook.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-7079-3574")),
     person("Ernest", "Guevarra", role = c("aut", "cph"),
-           comment = c(ORCID = "0000-0002-4887-4415")),
-    person("Douglas", "Jayasekaran", role = "ctb")
+           comment = c(ORCID = "0000-0002-4887-4415"))
   )
-Description: The Integrated Food Security Phase Classification (IPC) for
-    Acute Malnutrition is a global tool used to classify geographical
-    areas based on the prevalence of acute malnutrition. An IPC AMN
-    product is primarily used to inform countries Humanitarian Needs
-    Overview (HNO) of the Humanitarian Programme Cycle (HPC). The accepted
-    sources of evidence on prevalence of acute malnutrition varies from
-    surveys, community-based screenings and sent- inel sites. According to
-    the IPC AMN protocols, every evidence must be subject to quality
-    checks to ascertain their reliability and decided whether to use or
-    not. This package provides useful functions and utilities that
-    supports IPC AMN-related data analysis check.
+Description: A streamlined and comprehensive implementation of the Standardized
+  Monitoring and Assessment of Relief and Transition (SMART) Methodology
+  <https://smartmethodology.org/> guidelines for data quality checks and 
+  prevalence estimation, with enhanced programmable process particularly when 
+  handling large multiple datasets.
 License: GPL (>= 3)
-URL: https://github.com/tomaszaba/ipccheckr
-BugReports: https://github.com/tomaszaba/ipccheckr/issues
+URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana
+BugReports: https://github.com/nutriverse/mwana/issues
 Imports: 
     dplyr (>= 1.1.4),
     lubridate,
@@ -42,8 +35,8 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1)
 LazyData: true
 VignetteBuilder: knitr
