@@ -4,16 +4,17 @@
 \name{ipccheckr-package}
 \alias{ipccheckr}
 \alias{ipccheckr-package}
-\title{ipccheckr: Utilities for analysing children's nutritional status}
+\title{ipccheckr: Utilities for Analysing Children's Nutritional Status}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A streamlined and comprehensive implementation of SMART Methodology guidelines for data quality checks and prevalence analyses, with enhanced efficiency for handling large datasets.
+A streamlined and comprehensive implementation of the Standardized Monitoring and Assessment of Relief and Transition (SMART) Methodology \url{https://smartmethodology.org/} guidelines for data quality checks and prevalence estimation, with enhanced programmable process particularly when handling large multiple datasets.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/nutriverse/mwana}
+  \item \url{https://nutriverse.io/mwana}
   \item Report bugs at \url{https://github.com/nutriverse/mwana/issues}
 }
 

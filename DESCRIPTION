@@ -1,6 +1,6 @@
 Type: Package
 Package: ipccheckr
-Title: Utilities for analysing children's nutritional status 
+Title: Utilities for Analysing Children's Nutritional Status 
 Version: 0.0.0.9000
 Authors@R: c(
     person("Tomás", "Zaba", , "tomas.zaba@outlook.com", role = c("aut", "cre", "cph"),
@@ -8,11 +8,13 @@ Authors@R: c(
     person("Ernest", "Guevarra", role = c("aut", "cph"),
            comment = c(ORCID = "0000-0002-4887-4415"))
   )
-Description: A streamlined and comprehensive implementation of SMART Methodology
-  guidelines for data quality checks and prevalence analyses, with enhanced 
-  efficiency for handling large datasets.
+Description: A streamlined and comprehensive implementation of the Standardized
+  Monitoring and Assessment of Relief and Transition (SMART) Methodology
+  <https://smartmethodology.org/> guidelines for data quality checks and 
+  prevalence estimation, with enhanced programmable process particularly when 
+  handling large multiple datasets.
 License: GPL (>= 3)
-URL: https://github.com/nutriverse/mwana
+URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana
 BugReports: https://github.com/nutriverse/mwana/issues
 Imports: 
     dplyr (>= 1.1.4),
@@ -35,6 +37,6 @@ Language: en-GB
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1)
 LazyData: true
 VignetteBuilder: knitr
