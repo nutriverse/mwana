@@ -23,7 +23,7 @@
 #' `"sam"` the codes 1 would mean yes for severe wasting.
 #'
 #' @details
-#' Use `define_wasting()` to add the case-definitions in your input data frame.
+#' Use `define_wasting()` to add the case-definitions into data frame.
 #'
 #' @rdname case_definition
 #'

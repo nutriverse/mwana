@@ -54,7 +54,7 @@ Define if an observation is wasted on the basis of the criteria
 of WFHZ, absolute MUAC values and combined case-definition
 }
 \details{
-Use \code{define_wasting()} to add the case-definitions in your input data frame.
+Use \code{define_wasting()} to add the case-definitions into data frame.
 }
 \examples{
 # MUAC-based case-definition ----

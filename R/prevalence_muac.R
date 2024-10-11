@@ -149,31 +149,6 @@ compute_weighted_prevalence <- function(df, .edema=NULL, .summary_by = NULL) {
 
 #'
 #'
-#' Compute MUAC based prevalence estimates of data collected from a two-stage cluster
-#' survey sample design, with the first stage sampling done with Probability Proportional
-#' to the size of population
-#'
-#' @description
-#' Create a survey design object using the [srvyr::as_survey_design()] and then calculate
-#'  the survey means as well the sum of positive cases.
-#'
-#' @param df A data frame object returned by [process_muac_data()].
-#'  this will contain the wrangled vectors that are read inside the function.
-#'
-#' @param .wt A numeric vector containing survey weights. If set to NULL (default) and
-#'  the function will assume self weighted, like in ENA for SMART, otherwise if given, the
-#'  weighted analysis will be computed with weighted population returned.
-#'
-#' @param .edema A character vector containing child's status on edema with "n" for no
-#'  edema, "y" = yes edema. Should you data be coded differently, re-code it to aforementioned
-#'  codes.
-#' @param .summary_by A character vector containing data on the geographical areas where
-#'  the data was collected. This is to group the survey design object into different
-#'  geographical areas in the data and allow for summaries to be computed for each of them.
-#'
-#'  @returns A tibble of size depending on the number of groups of the vector given to
-#'  `.summary_by` or if set to NULL, and of length 17.
-#'
 #'
 #'
 compute_pps_based_muac_prevalence <- function(df,
@@ -226,44 +201,13 @@ compute_pps_based_muac_prevalence <- function(df,
 
 #'
 #'
-#'
-#' Compute acute malnutrition prevalence based on MUAC (the absolute values)
-#'
-#' @description
-#' `compute_muac_prevalence()` is a handy function designed to dynamically compute acute
-#' malnutrition's prevalence using the absolute values of MUAC, however using the MFAZ for
-#' quality checks before advancing to prevalence computations. Under the hood, the function
-#' first checks the status of MFAZ's standard deviation (SD) after removing flags, and
-#' the status of age ratio among children aged 6:23 vs 24:59 months. Then it decides on the
-#' appropriate prevalence analysis approach to follow: (i) if SD & age ratio are both not
-#' problematic, a complex sample-based prevalence analysis (for a two-stage  PPS
-#' cluster sampling) is computed; (ii) if MFAZ's SD is not problematic, but age ratio test
-#' is, the CDC/SMART MUAC tool weighting approach is used to compute the prevalence; (iii)
-#' lastly, if MFAZ's SD is problematic even if age ratio test is not, no prevalence
-#' analysis is computed and NA (of Not Applicable) are thrown.
-#' The function also super handy to work on large data sets with multiple survey areas. For
-#' this, the aforementioned conditionals are checked for each survey areas in a summarized
-#' data frame and prevalence get computed according to each row's scenario.
-#'
-#' @param df A data frame object returned by [process_muac_data()].
-#'
-#' @param .wt A numeric vector containing survey weights. If set to NULL (default) and
-#' the function will assume self weighted, like in ENA for SMART, otherwise if given, the
-#' weighted analysis will be computed with weighted population returned.
-#'
-#' @param .edema A character vector containing child's status on edema with "n" for no
-#' edema, "y" = yes edema. Should you data be coded differently, re-code it to aforementioned
-#' codes.
-#' @param .summary_by A character vector containing data on the geographical areas where
-#' the data was collected. If you are working on a single survey data, set
-#' .summary_by = NULL (default). If this argument is not used, the function will error.
-#'
-#' @returns A tibble. The length vary depending on .summary_by. If set to NULL, a tibble of
-#' 1 x 16 is returned, otherwise, a tibble of n rows (depending on the number of geographical
-#' areas in the data set) x 17.
+#' @rdname prevalence
 #'
 #' @examples
-#' ## When .summary.by = NULL ----
+#'
+#' ## An example of application of `compute_muac_prevalence()` ----
+#'
+#' ### When .summary.by = NULL ----
 #'
 #' x <- compute_muac_prevalence(
 #' df = anthro.04,
@@ -274,7 +218,7 @@ compute_pps_based_muac_prevalence <- function(df,
 #'
 #' print(x)
 #'
-#' ## When .summary_by is not set to NULL ----
+#' ### When .summary_by is not set to NULL ----
 #'
 #' p <- compute_muac_prevalence(
 #' df = anthro.04,
@@ -284,7 +228,6 @@ compute_pps_based_muac_prevalence <- function(df,
 #' )
 #'
 #' print(p)
-#'
 #'
 #' @export
 #'

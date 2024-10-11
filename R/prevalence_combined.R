@@ -63,50 +63,46 @@ compute_pps_based_combined_prevalence <- function(df,
 
 #'
 #'
-#' Compute combined prevalence of acute malnutrition
+#' Compute prevalence of wasting on the basis of the combined case-definition
 #'
 #' @description
-#' `compute_combined_prevalence()` is handy function to compute the combined prevalence of
-#' acute malnutrition using the WFHZ and the absolute values of MUAC and edema for case
-#' definition. Under the hood, before prevalence computations begin, it first evaluates the
-#' status of WFHZ, MFAZ's standard deviation and age ratio test, as documented in
-#' [compute_wfhz_prevalence()] and [compute_muac_prevalence()]. Then, it decides on the
-#' appropriate analysis approach to employ depending on the outcome of the aforementioned
-#' checks: (i) if either WFHZ, MFAZ standard deviation as well as age ratio test are not
-#' simultaneously problematic, a complex sample-based prevalence analysis (for a two-stage
-#' PPS cluster sampling) is computed; (ii) all other possibilities will involve either one
-#' of the z-scores or the age ratio test being problematic, thus NA (for Not Applicable)
-#' get thrown to output table.
-#'
-#' A concept of "combined flags" is introduced here. This consists on creating a new vector
-#' (cflags) of the same length as the input vectors (wfhz_flags and mfaz_flags) and assesses
-#' if any element of either input vector is a flag (1), then that element is labelled as
-#' flag (1) in the "cflags" vector, otherwise is not flag (0). This ensures that all
-#' flagged observations in the WFHZ data and in MFAZ data are excluded for the combined
-#' prevalence analysis.
+#' `compute_combined_prevalence()` is a handy function for calculating the
+#' combined prevalence of wasting also in with the complex sample design
+#' properties inherent to surveys.
 #'
 #' @param df A data frame object returned by [process_muac_data()] and [process_wfhz_data()].
-#' The process_***_data function will have to used both to prepare the input data to be used
-#' in the `compute_combined_prevalence()`. The order of which comes first does not matter,
+#' Both wranglers need to be used to prepare data to be used
+#' `compute_combined_prevalence()`. The order of which comes first does not matter,
 #' however, since the muac data processor transforms MUAC values into centimeters, those
 #' need to be put back into millimeter. This can be achieved my using [recode_muac()] inside
-#' [dplyr::mutate()] or [base::transform()] (see example number 3 below).
+#' [dplyr::mutate()] or [base::transform()].
 #'
-#' @param .wt A numeric vector containing survey weights. If set to NULL (default)
-#' the function will assume self weights, like in ENA for SMART, if otherwise given, the
-#' weighted analysis will be computed.
+#' @param .wt A numeric vector holding final survey weights. When set to `NULL`,
+#' the function assumes self weighted survey, as in the ENA for SMART software;
+#' Otherwise when supplied, weighted analysis is computed.
 #'
-#' @param .edema A character vector containing child's status on edema with "n" for no
-#' edema, "y" = yes edema. Should you data be coded differently, re-code it to aforementioned
-#' codes.
-#' @param .summary_by A character vector containing data on the geographical areas where
-#' the data was collected. If you are working on a single survey data, set
-#' .summary_by = NULL (default). If this argument is not used, the function will error.
+#' @param .edema A character vector indicating if an observation has bilateral
+#' edema or not. The codes are "y" for presence and "n" for absence of bilateral
+#' edema. Default is `NULL`.
 #'
-#' @returns A tibble. The length vary depending on .summary_by. If set to NULL, a tibble of
-#' 1 x 16 is returned, otherwise, a tibble of n rows (depending on the number of geographical
-#' areas in the data set) x 17.
+#' @param .summary_by A character vector containing data on the geographical areas
+#' where the data was collected and for which the analysis should be performed at.
 #'
+#' @returns A table with the descriptive statistics about wasting.
+#'
+#' @details
+#' The concept of "combined flags" is introduced in this function. It consists of
+#' taking the `flag_wfhz` and `flag_mfaz` vectors, generated from the MUAC and
+#' WFHZ wranglers, and checking if any value in either vector is flagged. If flagged,
+#' the value is marked as a flag in the "cflags" vector; otherwise, it is not flagged
+#' (see table below). This ensures that all flagged observations from both WFHZ
+#' and MFAZ data are excluded from the combined prevalence analysis.
+#'
+#' | **flag_wfhz** | **flag_mfaz** | **cflags** |
+#' | :---: | :---: | :---: |
+#' | 1 | 0  | 1 |
+#' | 0 | 1  | 1 |
+#' | 0 | 0  | 0 |
 #'
 #' @examples
 #'

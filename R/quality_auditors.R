@@ -27,7 +27,7 @@
 #' one area, you will still have to supply the corresponding column to `area` in
 #' `check_plausibility_mfaz()` or `check_plausibility_wfhz()`.
 #'
-#' @returns A summarized table with the raw statistics and respective classification.
+#' @returns A summary table of statistics with respective classification.
 #'
 #' @examples
 #'

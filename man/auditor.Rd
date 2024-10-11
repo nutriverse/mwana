@@ -35,7 +35,7 @@ one area, you will still have to supply the corresponding column to \code{area} 
 \item{height}{A numeric vector holding height measurements (in centimeters).}
 }
 \value{
-A summarized table with the raw statistics and respective classification.
+A summary table of statistics with respective classification.
 }
 \description{
 \code{check_plausibility_wfhz()}, \code{check_plausibility_mfaz()}, and
