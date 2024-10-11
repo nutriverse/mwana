@@ -2,21 +2,24 @@
 % Please edit documentation in R/age.R
 \name{compute_age_in_months}
 \alias{compute_age_in_months}
-\title{Get age in months from birth-date and the data when data was collected.}
+\title{Calculate age in months}
 \usage{
 compute_age_in_months(surv_date, birth_date)
 }
 \arguments{
-\item{surv_date, birth_date}{Vectors containing dates. \code{surv_date} refers to the day,
-month and year when the data was collected; while \code{birth_date} refers to the date
-when the child was born.}
+\item{surv_date}{A vector of class "Date" holding values corresponding to
+the date of data collection.}
+
+\item{birth_date}{A vector of class "Date" holding values corresponding to
+the child's date of birth.}
 }
 \value{
-A vector of name \code{age} storing age in months, a mix of double and
-integer and \code{NA} for missing value if any of the processed age in months is
-< 6 or > 59.99 months.
+A numeric vector named \code{age} holding age values in months with two
+decimal places. Any value outside the range of 6.0 to 59.99 is replaced with
+\code{NA}.
 }
 \description{
-\code{compute_age_in_months()} works inside \code{\link[dplyr:mutate]{dplyr::mutate()}} or \code{\link[base:transform]{base::transform()}}
-It helps you to compute age in months from a pair of birth date and survey date.
+\code{compute_age_in_months()} calculates age in months from on the basis of
+difference between the data collection date and the child's date of birth.
+It works inside \code{\link[dplyr:mutate]{dplyr::mutate()}} or \code{\link[base:transform]{base::transform()}}.
 }

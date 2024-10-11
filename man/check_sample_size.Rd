@@ -2,56 +2,35 @@
 % Please edit documentation in R/sample_size.R
 \name{check_sample_size}
 \alias{check_sample_size}
-\title{Check IPC AMN Sample Size Requirements}
+\title{Check if the IPC AMN sample size requirement were met}
 \usage{
 check_sample_size(df, .group, .data_type = c("survey", "screening", "ssite"))
 }
 \arguments{
 \item{df}{A data frame containing the required variables.}
 
-\item{.group}{A vector containing the ID's of the primary sampling unit.
-Usually and ideally a numeric vector, but sometimes this variables may come as
-a character vector. Either way, \code{check_sample_size()} will execute
-the task accordingly.}
+\item{.group}{A vector containing the primary sampling unit (PSU) ID's. Usually and
+ideally a numeric vector, but sometimes this may present itself as a character.
+Either way, \code{check_sample_size()} will work accordingly.}
 
-\item{.data_type}{The data collection method: survey, screening or sentinel sites.
-If you wish to check IPC AMN requirements on surveys were met, set
-method = "survey"; for screening set method = "screening" and for sentinel
-sites set method = "ssite". If by mistake a different parameter is given,
-an error will be thrown and the function will stop, but with a guidance on
-how to go about.}
+\item{.data_type}{A choice between "survey" for survey data, "screening" for
+screening data or "ssite" for community-based sentinel site data.}
 }
 \value{
-\code{check_sample_size()} returns an output of the same type
-as the input (data frame), but of a different size. By default, the function
-returns a summary of length 1 (one row), but with three new columns added to
-the input data frame: \code{groups} (for survey), or sites (for screening or sentinel
-sites) \code{n_obs} and \code{meet_ipc}. The first will store the total number of PSUs
-in the sample. \code{n_obs} will store the total number of rows/observations and
-\code{meet_ipc} is a logical vector to say whether or not the IPC AMN minimum
-criteria for sample size was met. This is flexible according to the method you
-select with \code{.data_type = " "}.
+By default, a summary table of one row and three additional columns
+are returned. Column \code{groups} and \code{n_obs} hold the total number of unique
+PSU's and children respectively, and \code{meet_ipc} tells whether the IPC AMN
+sample size requirements were met.
 }
 \description{
-Evidence used in \href{https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/}{IPC}
-comes from different sources, collected in different ways,
-namely: representative surveys, screenings or even data from community-based
-surveillance system - the sentinel sites. IPC AMN protocols have set minimum
-sampling a sample size requirements for each. For cluster-based
-representative surveys, there must be at least 25 primary sampling unit (PSUs).
-On screening, there ware two ways: i. exhaustive screening (door-to-door) or
-ii. sampled screening. For this, there should be at least three sites (i.e.,
-villages or communities, etc). \code{check_sample_size()} checks the
-on sampled screening.
-
-\code{check_sample_size()} helps you know if your data meets the at least
-IPC AMN minimum requirements. This function should be used before proceeding
-to checking the quality of measurements. Doing this saves you from avoid
-working on data that do not meet the minimum requirements, as it will not be
-used in any IPC analysis.
+\code{check_sample_size()} verifies if the minimum sample size requirements of the
+IPC Acute Malnutrition protocols are met in a given area of analysis.
+}
+\details{
+Use dplyr::group_by() before \code{check_sample_size()} to get a summary for each
+unique survey or screening location from your data.
 }
 \examples{
-# Have an input data frame --------------------------------------------------
 check_sample_size(anthro.01, .group = cluster, .data_type = "survey")
 
 }

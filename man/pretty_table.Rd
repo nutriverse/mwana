@@ -4,7 +4,7 @@
 \alias{generate_pretty_table_mfaz}
 \alias{generate_pretty_table_wfhz}
 \alias{generate_pretty_table_muac}
-\title{Get a prettified formatted and presentable output table}
+\title{Get a formatted and presentable output table for the plausibility auditors}
 \usage{
 generate_pretty_table_mfaz(df)
 
@@ -13,23 +13,22 @@ generate_pretty_table_wfhz(df)
 generate_pretty_table_muac(df)
 }
 \arguments{
-\item{df}{An output data frame returned by \code{\link[=check_plausibility_mfaz]{check_plausibility_mfaz()}},
+\item{df}{The table returned by \code{\link[=check_plausibility_mfaz]{check_plausibility_mfaz()}},
 \code{\link[=check_plausibility_wfhz]{check_plausibility_wfhz()}} or \code{\link[=check_plausibility_muac]{check_plausibility_muac()}}.}
 }
 \value{
-An output data frame of the same size as the input, but with values
-formatted, columns renamed, and ready to share.
+An output table of the same size as the input, with values
+formatted, columns renamed, and ready to be shared.
 }
 \description{
-You may want to share the plausibility report in a table. You usually care for
-a well formatted and pretty table, with values rounded, scientific notations
-converted into conventional notations, etc. \code{generate_pretty_table_mfaz()},
-\code{generate_pretty_table_wfhz()} and \code{generate_pretty_table_muac()} does that
-for you so you already.
+\code{generate_pretty_table_mfaz()}, \code{generate_pretty_table_wfhz()} and
+\code{generate_pretty_table_muac()} are useful to getting the output returned from
+the plausibility auditors into a presentable format. They convert scientific
+notation, round values and rename columns to meaningful names.
 }
 \examples{
 
-## Plausibility check on MFAZ ----
+## Audit the plausibility of MFAZ data ----
 
 anthro.01 |>
 process_age(
@@ -54,7 +53,7 @@ area = area
 ) |>
 generate_pretty_table_mfaz()
 
-## Plausibility check on absolute MUAC ----
+## Audit the plausibility of absolute MUAC values ----
 
 anthro.01 |>
 process_muac_data(
@@ -72,7 +71,7 @@ muac = muac
 ) |>
 generate_pretty_table_muac()
 
-## Plausibility check on WFHZ ----
+## Audit the plausibility of WFHZ data ----
 
 anthro.01 |>
 process_wfhz_data(

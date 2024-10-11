@@ -1,24 +1,32 @@
 #'
-#' Case-Definition: is an observation acutely malnourished?
+#' Define if an observation is wasted on the basis of the criteria
+#' of WFHZ, absolute MUAC values and combined case-definition
 #'
-#' [define_wasting_cases_muac()], [define_wasting_cases_whz()] and
-#' [define_wasting_cases_combined()] help you get through with your wasting
-#' case-definition for each observation. It should be used inside dplyr::mutate()
-#' or base::transform(). It was designed to be used inside [define_wasting()].
+#' @param df A data frame containing the required variables.
 #'
-#' @param muac An integer vector containing MUAC measurements in mm.
-#' @param zscore A double vector containing weight-for-height zscores with 3
-#' decimal places.
-#' @param edema A character vector of "y" = Yes, "n" = No bilateral edema.
-#' Default is NULL.
-#' @param cases A choice of wasting case definition you wish to apply. For combined
-#' acute malnutrition with [define_wasting_cases_combined()] cases options are:
-#' c("cgam", "csam", "cmam").
+#' @param muac A numeric vector holding absolute MUAC values (in mm).
 #'
-#' @returns A numeric vector of the same size as the input vector, with values ranging
-#' between 1=Yes and 0=No.
+#' @param zscore A numeric vector holding WFHZ values (with 3 decimal places).
 #'
-#' @rdname case_definitions
+#' @param edema A character vector indicating if an observation has bilateral
+#' edema or not. The codes are "y" for presence and "n" for absence of bilateral
+#' edema. Default is `NULL`.
+#'
+#' @param cases A choice of the form of wasting to be defined.
+#'
+#' @param base A choice of the criterion which the case-definition should be based
+#' on.
+#'
+#' @returns A numeric vector of the same length as the input vector, with dummy
+#' values: 1 for yes wasted and 0 for not wasted. The meaning of the codes
+#' changes depending on the form of wasting chosen. That is, if set `cases` to
+#' `"sam"` the codes 1 would mean yes for severe wasting.
+#'
+#' @details
+#' Use `define_wasting()` to add the case-definitions in your input data frame.
+#'
+#' @rdname case_definition
+#'
 #'
 define_wasting_cases_muac <- function(muac, edema = NULL,
                                cases = c("gam", "sam", "mam")) {
@@ -46,7 +54,7 @@ define_wasting_cases_muac <- function(muac, edema = NULL,
 
 #'
 #'
-#' @rdname case_definitions
+#' @rdname case_definition
 #'
 #'
 define_wasting_cases_whz <- function(zscore, edema = NULL,
@@ -75,7 +83,7 @@ define_wasting_cases_whz <- function(zscore, edema = NULL,
 
 #'
 #'
-#' @rdname case_definitions
+#' @rdname case_definition
 #'
 #'
 define_wasting_cases_combined <- function(zscore, muac, edema = NULL,
@@ -104,24 +112,6 @@ define_wasting_cases_combined <- function(zscore, muac, edema = NULL,
 }
 
 
-# Function to add new vectors with case definitions ----------------------------
-#'
-#' Add acute malnutrition case-definitions to the data frame
-#'
-#' Use `define_wasting()` to add the case-definitions in your input data frame.
-#'
-#' @param df The data frame object containing the vectors with zscores, muac and
-#' edema.
-#' @param zscore The vector storing zscores values with 3 decimal places.
-#' @param muac An integer vector containing MUAC measurements in mm.
-#' @param edema A character vector of "y" = Yes, "n" = No bilateral edema.
-#' Default is NULL.
-#' @param base A choice of options to which your case definition should be based on.
-#'
-#' @returns A data frame with three vectors added to the input data frame: "gam",
-#' "sam" and "mam". If base = "combined" the vector names change to "cgam",
-#' "csam" and "cmam" for combined global, severe and moderate acute malnutrition
-#' respectively.
 #'
 #' @examples
 #' # MUAC-based case-definition ----
@@ -151,6 +141,8 @@ define_wasting_cases_combined <- function(zscore, muac, edema = NULL,
 #' base = "combined"
 #' )
 #' head(x)
+#'
+#' @rdname case_definition
 #'
 #' @export
 #'
@@ -231,23 +223,17 @@ define_wasting <- function(df, zscore = NULL, muac = NULL, edema = NULL,
 }
 
 #'
-#' A helper function to classify nutritional status into SAM, MAM or not wasted
+#' Classify wasting into severe or moderate wasting for use in SMART MUAC tool
+#' weighting approach
 #'
-#' @description
-#' `classify_wasting_for_cdc_approach()` is used a helper inside
-#' [apply_cdc_age_weighting()] to classify nutritional status into "sam", "mam"
-#' or "not wasted" and then the vector returned is used downstream to calculate
-#' the proportions of children with severe and moderate acute malnutrition.
+#' @param muac A numeric vector holding absolute MUAC values (in mm).
 #'
-#' @param muac An integer vector containing MUAC values. They should be in
-#' millimeters.
+#' @param .edema Optional. A character vector indicating if an observation has
+#' bilateral edema or not. The codes are "y" for presence and "n" for absence of
+#' bilateral edema.
 #'
-#' @param .edema Optional. Its a vector containing data on bilateral pitting
-#' edema coded as "y" for yes and "n" for no.
-#'
-#' @returns A numeric vector of the same size as the input vector with values ranging
-#' between "sam", "mam" and "not wasted" for severe, moderate acute malnutrition and not
-#' acutely malnourished, respectively.
+#' @returns A character vector of the same length as the input indicating if a
+#' child is severe or moderate wasted or not wasted.
 #'
 #'
 classify_wasting_for_cdc_approach <- function(muac, .edema = NULL) {
