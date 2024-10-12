@@ -3,11 +3,11 @@
 \docType{data}
 \name{anthro.04}
 \alias{anthro.04}
-\title{MUAC data from a community-based sentinel site from an anonymized location}
+\title{A sample data of a community-based sentinel site from an anonymized location}
 \format{
 A tibble of 3,002 x 8.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
-   \emph{province} \tab  \cr
+   \emph{province} \tab location where data was collected \cr
    \emph{cluster} \tab Primary sampling unit \cr
    \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
    \emph{age} \tab calculated age in months with two decimal places \cr
@@ -21,18 +21,21 @@ A tibble of 3,002 x 8.\tabular{ll}{
 anthro.04
 }
 \description{
-Data in \code{anthro.04} was generated from a community-based sentinel site of three provinces.
-Each province data set holds different scenarios that informs the appropriate analysis
-approach to follow. One province (province 3) has its MFAZ standard deviation and age
-ratio tests classified as problematic. Another province (province 2) has its age ratio
-classified as problematic, but with a within range standard deviation. Lastly, province 1
-has both tests falling within range of nor problematic. The data is used to test the
-performance of \verb{[compute_muac_prevalence()]} based when used on a multiple survey areas
-data that may or not have on the aforementioned test that may then warrant a different
-analysis approach, as the function is designed for.
+\code{anthro.04} was generated from a community-based sentinel site survey
+conducted across three provinces. Each province's dataset presents distinct
+data quality scenarios, requiring tailored prevalence analysis.
+"Province 3" has problematic MFAZ standard deviation and age ratio tests.
+"Province 2" shows a problematic age ratio but acceptable MFAZ standard
+deviation. Lastly, "Province 1" has both tests within acceptable ranges.
+
+This sample data demonstrates the use of prevalence functions on multi-area
+survey data, where variations in the standard deviation ratings exist.
+As a result, different analytical approaches are required for each area
+to ensure accurate interpretation.
 }
 \examples{
 anthro.04
+
 
 }
 \keyword{datasets}

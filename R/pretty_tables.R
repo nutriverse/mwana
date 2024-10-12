@@ -1,20 +1,20 @@
-#' Get a prettified formatted and presentable output table
+#' Get a formatted and presentable output table for the plausibility auditors
 #'
-#' You may want to share the plausibility report in a table. You usually care for
-#' a well formatted and pretty table, with values rounded, scientific notations
-#' converted into conventional notations, etc. `generate_pretty_table_mfaz()`,
-#' `generate_pretty_table_wfhz()` and `generate_pretty_table_muac()` does that
-#' for you so you already.
+#' @description
+#' `generate_pretty_table_mfaz()`, `generate_pretty_table_wfhz()` and
+#' `generate_pretty_table_muac()` are useful to getting the output returned from
+#' the plausibility auditors into a presentable format. They convert scientific
+#' notation, round values and rename columns to meaningful names.
 #'
-#' @param df An output data frame returned by [check_plausibility_mfaz()],
+#' @param df The table returned by [check_plausibility_mfaz()],
 #' [check_plausibility_wfhz()] or [check_plausibility_muac()].
 #'
-#' @returns An output data frame of the same size as the input, but with values
-#' formatted, columns renamed, and ready to share.
+#' @returns An output table of the same size as the input, with values
+#' formatted, columns renamed, and ready to be shared.
 #'
 #' @examples
 #'
-#' ## Plausibility check on MFAZ ----
+#' ## Audit the plausibility of MFAZ data ----
 #'
 #' anthro.01 |>
 #' process_age(
@@ -39,7 +39,7 @@
 #' ) |>
 #' generate_pretty_table_mfaz()
 #'
-#' ## Plausibility check on absolute MUAC ----
+#' ## Audit the plausibility of absolute MUAC values ----
 #'
 #' anthro.01 |>
 #' process_muac_data(
@@ -57,7 +57,7 @@
 #' ) |>
 #' generate_pretty_table_muac()
 #'
-#' ## Plausibility check on WFHZ ----
+#' ## Audit the plausibility of WFHZ data ----
 #'
 #' anthro.01 |>
 #' process_wfhz_data(

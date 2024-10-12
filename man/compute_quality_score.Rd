@@ -2,36 +2,26 @@
 % Please edit documentation in R/quality_scorers.R
 \name{compute_quality_score}
 \alias{compute_quality_score}
-\title{Get the overall WHZ or MFAZ's quality score}
+\title{Get the overall quality score for WFHZ and MFAZ}
 \usage{
 compute_quality_score(df, type = c("mfaz", "whz"))
 }
 \arguments{
-\item{df}{A data frame containing the scores. If you wish the get the overall
-quality score for MFAZ, the input data frame must have seven (7) required
-columns containing test classification of flagged data, sex ratio, age ratio,
-standard deviation, skewness, kurtosis, crude MUAC's digit preference.
-Alternatively, if you wish to get the quality score of WHZ, then the input
-data frame must have the exact same columns in the plausibility report of the
-ENA for SMART software.}
+\item{df}{A data frame containing individual test quality scores.}
 
 \item{type}{The method you wish to get the overall quality score for.
-A choice between "mfaz" and "whz". If you wish to know the overall survey
-score of your WHZ data, set \code{type = whz}, otherwise set \code{type = mfaz} for
-MFAZ. If by mistake a different input choice is given, an error will be
-thrown with a message guiding how to go about.}
+A choice between "mfaz" and "wfhz".}
 }
 \value{
-A vector (named \code{"quality_score"}) with the overall quality scores.
+A vector named \code{"quality_score"} with the overall quality score.
 }
 \description{
-\code{compute_quality_score()} provides the overall quality score of either WHZ or MFAZ,
-by adding up the scores across each test criteria. This is an input to
-\code{\link[=classify_overall_quality]{classify_overall_quality()}}.
+\code{compute_quality_score()} calculates the overall score of the quality of the
+data for both WFHZ and MFAZ.
 }
 \examples{
-# example code
-## Create a `df` object ----
+
+## A sample data ----
 
 df <- data.frame(
 flagged_class = "Excellent",
@@ -43,11 +33,7 @@ skew_class = "Good",
 kurt_class = "Acceptable"
 )
 
-## Apply function ----
+## Apply the function ----
 compute_quality_score(df, type = "mfaz")
-
-# You can also choose to chain the functions with a pipe operator ----
-df |>
-compute_quality_score(type = "mfaz")
 
 }

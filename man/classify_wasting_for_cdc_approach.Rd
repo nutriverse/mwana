@@ -2,25 +2,23 @@
 % Please edit documentation in R/case_definitions.R
 \name{classify_wasting_for_cdc_approach}
 \alias{classify_wasting_for_cdc_approach}
-\title{A helper function to classify nutritional status into SAM, MAM or not wasted}
+\title{Classify wasting into severe or moderate wasting for use in SMART MUAC tool
+weighting approach}
 \usage{
 classify_wasting_for_cdc_approach(muac, .edema = NULL)
 }
 \arguments{
-\item{muac}{An integer vector containing MUAC values. They should be in
-millimeters.}
+\item{muac}{A numeric vector holding absolute MUAC values (in mm).}
 
-\item{.edema}{Optional. Its a vector containing data on bilateral pitting
-edema coded as "y" for yes and "n" for no.}
+\item{.edema}{Optional. A character vector indicating if an observation has
+bilateral edema or not. The codes are "y" for presence and "n" for absence of
+bilateral edema.}
 }
 \value{
-A numeric vector of the same size as the input vector with values ranging
-between "sam", "mam" and "not wasted" for severe, moderate acute malnutrition and not
-acutely malnourished, respectively.
+A character vector of the same length as the input indicating if a
+child is severe or moderate wasted or not wasted.
 }
 \description{
-\code{classify_wasting_for_cdc_approach()} is used a helper inside
-\code{\link[=apply_cdc_age_weighting]{apply_cdc_age_weighting()}} to classify nutritional status into "sam", "mam"
-or "not wasted" and then the vector returned is used downstream to calculate
-the proportions of children with severe and moderate acute malnutrition.
+Classify wasting into severe or moderate wasting for use in SMART MUAC tool
+weighting approach
 }

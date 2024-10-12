@@ -3,7 +3,7 @@
 \docType{data}
 \name{mfaz.02}
 \alias{mfaz.02}
-\title{A SMART survey data with MUAC}
+\title{A sample SMART survey data with MUAC}
 \format{
 A tibble with 303 rows and 7 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
@@ -19,10 +19,7 @@ A tibble with 303 rows and 7 columns.\tabular{ll}{
 mfaz.02
 }
 \description{
-A SMART survey data collected in an anonymized location. This data has
-mfaz standard deviation and age ratio within range for a normal prevalence
-analysis. It is, thus, used to check if \code{compute_muac_prevalence()} performs
-as designed.
+A sample SMART survey data with MUAC
 }
 \examples{
 mfaz.02
