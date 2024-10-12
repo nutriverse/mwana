@@ -1,15 +1,24 @@
 #'
-#' A helper function to tell how to go about MUAC prevalence analysis based on
-#' on the output of age ratio and standard deviation test results
+#' A helper function to identify the MUAC prevalence analysis approach on the
+#' basis of age ratio and standard deviation test results
 #'
-#' @param age_ratio_class,sd_class Character vectors storing age ratio's p-values
-#' and standard deviation's classification, respectively.
+#' @description
+#' This is a helper function that gives instruction to the main prevalence
+#' analysis function on the analysis approach to follow in a given area of
+#' analysis on the basis of the quality of the age ratio test and the standard
+#' deviation.
 #'
-#' @returns A character vector of the same length containing the indication of
-#' what to do for the MUAC prevalence analysis: "weighted", "unweighted" and
-#' "missing". If "weighted", the CDC weighting approach is applied to correct for
-#' age bias. If "unweighted" a normal complex sample analysis is applied, and for
-#' the latter, NA are thrown.
+#' @param age_ratio_class A character vector returned from the plausibility
+#' auditors holding the rating of the age ratio test results.
+#'
+#' @param sd_class A character vector returned from the plausibility auditors
+#' holding the rating of the standard deviation test results.
+#'
+#' @returns A character vector of the same length as the input holding analysis
+#' approach to be followed in a given area of analysis: "weighted", "unweighted" and
+#' "missing". When "weighted", the CDC weighting approach is applied to correct for
+#' age bias; "unweighted" a normal complex sample analysis is applied; when
+#' "missing" `NA` gets thrown, so no prevalence computed.
 #'
 #'
 tell_muac_analysis_strategy <- function(age_ratio_class, sd_class) {
@@ -24,34 +33,30 @@ tell_muac_analysis_strategy <- function(age_ratio_class, sd_class) {
 
 #'
 #'
-#' Correct the observed MUAC prevalence when there is an unbalanced sample
-#' between children under 2 and over two years old
+#' Apply weighting to the MUAC prevalence when sample distribution is unbalanced
+#' between children aged 6 to 23 months and those aged 24 to 59 months old
 #'
 #' @description
-#' As documented in the SMART MUAC tool and in the literature, MUAC shows a known
-#' bias towards younger children. In a balanced sample, it is expected to have
-#' nearly two thirds of the sample to be of children over two years old. If too
-#' few older children are included in the sample, the weighted tool should be used.
+#' `apply_cdc_age_weighting()` calculates a weighted proportion by adding the
+#' proportion of children under 2 years to twice the proportion of children over 2
+#' and then dividing by 3.
 #'
-#' `apply_cdc_age_weighting()` does that. It takes the proportion of children
-#' under 2 and adds to the product of 2 times the proportion of children over two,
-#' then divided by 3. The use of this function is informed by the output of
-#' [age_ratio_test()]. There is difference between this function and that in the
-#' SMART plausibility check. Consider reading the documentation before use.
+#' @param muac A numeric vector holding MUAC values (in mm).
 #'
-#' @param muac An integer vector containing MUAC measurements in mm.
+#' @param age A numeric vector holding child's age in months.
 #'
-#' @param age A double vector containing age in months with at least 2 decimal
-#' places.
+#' @param .edema Optional. If given, it should be a character vector of "y"
+#' for presence and "n" for absence of bilateral edema.
 #'
-#' @param .edema Optional. If given, it should be a character vector of "y" = Yes,
-#' "n" = No bilateral edema.
-#'
-#' @param status If you wish to get the prevalence/proportions of severe or
-#' moderate acute malnutrition. Set `status = "sam" or status = "mam"` for the
-#' former or latter, respectively.
+#' @param status A choice between "sam" and "mam" for the form of wasting.
 #'
 #' @returns A numeric vector of length and size 1.
+#'
+#' @details
+#' This function is informed by the output of [age_ratio_test()].
+#' Note that this method differs from the approach used in the SMART plausibility
+#' check. Please refer to the documentation for further details.
+#'
 #'
 apply_cdc_age_weighting <- function(muac, age,
                                     .edema = NULL, status = c("sam", "mam")) {
@@ -86,31 +91,22 @@ apply_cdc_age_weighting <- function(muac, age,
 
 #'
 #'
-#' A wrapper function to compute of `apply_cdc_age_weighting()` that allows to work on
-#' a data frame
+#' Apply weighting to the MUAC prevalence when sample distribution is unbalanced
+#' between children aged 6 to 23 months and those aged 24 to 59 months old
 #'
-#' @description
-#' `compute_weighted_prevalence()` is the main function use to compute age adjusted MUAC
-#' prevalence where there are excess of children 6:23 over 24:59 months. It allows the
-#' computations to be done on a data frame. The function is used inside the main and
-#' exported function to compute MUAC based prevalence. Before computing the prevalence,
-#' the function first removed the flagged data so the computations are performed on
-#' non-flagged observations.
+#' @param df A data frame object with the required variables already wrangled.
 #'
-#' @param df A data frame object returned by [process_muac_data()] this will contain the
-#' wrangled vectors that are read inside the function.
+#' @param .edema A character vector indicating if an observation has bilateral
+#' edema or not. The codes are "y" for presence and "n" for absence of bilateral
+#' edema. Default is `NULL`.
 #'
-#' @param .edema A character vector containing child's status on edema with "n" for no
-#'  edema, "y" = yes edema. Should you data be coded differently, re-code it to aforementioned
-#'  codes.
-#' @param .summary_by A character vector containing data on the geographical areas where
-#'  the data was collected. This is to group the survey design object into different
-#'  geographical areas in the data and allow for summaries to be computed for each of them.
+#' @param .summary_by A character vector containing data of the geographical areas
+#' where the data was collected and for which the analysis should be performed at.
 #'
-#' @returns A tibble with length and size varying according to use of `.summary_by`.
-#' If set to NULL, a tibble of 1 x 3 is returned, otherwise the size of the tibble with be
-#' corresponding to the number of groups/areas in the vector given to `.summary_by`, but
-#' with the same length.
+#' @returns A tibble with dimensions that vary based on the use of `.summary_by`.
+#' If set to `NULL`, a 1 x 3 tibble is returned. Otherwise, the number of rows
+#' will match the number of groups or areas provided in `.summary_by`,
+#' while the number of columns will remain the same.
 #'
 #'
 compute_weighted_prevalence <- function(df, .edema=NULL, .summary_by = NULL) {

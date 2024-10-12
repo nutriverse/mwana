@@ -2,34 +2,28 @@
 % Please edit documentation in R/prevalence_muac.R
 \name{compute_weighted_prevalence}
 \alias{compute_weighted_prevalence}
-\title{A wrapper function to compute of \code{apply_cdc_age_weighting()} that allows to work on
-a data frame}
+\title{Apply weighting to the MUAC prevalence when sample distribution is unbalanced
+between children aged 6 to 23 months and those aged 24 to 59 months old}
 \usage{
 compute_weighted_prevalence(df, .edema = NULL, .summary_by = NULL)
 }
 \arguments{
-\item{df}{A data frame object returned by \code{\link[=process_muac_data]{process_muac_data()}} this will contain the
-wrangled vectors that are read inside the function.}
+\item{df}{A data frame object with the required variables already wrangled.}
 
-\item{.edema}{A character vector containing child's status on edema with "n" for no
-edema, "y" = yes edema. Should you data be coded differently, re-code it to aforementioned
-codes.}
+\item{.edema}{A character vector indicating if an observation has bilateral
+edema or not. The codes are "y" for presence and "n" for absence of bilateral
+edema. Default is \code{NULL}.}
 
-\item{.summary_by}{A character vector containing data on the geographical areas where
-the data was collected. This is to group the survey design object into different
-geographical areas in the data and allow for summaries to be computed for each of them.}
+\item{.summary_by}{A character vector containing data of the geographical areas
+where the data was collected and for which the analysis should be performed at.}
 }
 \value{
-A tibble with length and size varying according to use of \code{.summary_by}.
-If set to NULL, a tibble of 1 x 3 is returned, otherwise the size of the tibble with be
-corresponding to the number of groups/areas in the vector given to \code{.summary_by}, but
-with the same length.
+A tibble with dimensions that vary based on the use of \code{.summary_by}.
+If set to \code{NULL}, a 1 x 3 tibble is returned. Otherwise, the number of rows
+will match the number of groups or areas provided in \code{.summary_by},
+while the number of columns will remain the same.
 }
 \description{
-\code{compute_weighted_prevalence()} is the main function use to compute age adjusted MUAC
-prevalence where there are excess of children 6:23 over 24:59 months. It allows the
-computations to be done on a data frame. The function is used inside the main and
-exported function to compute MUAC based prevalence. Before computing the prevalence,
-the function first removed the flagged data so the computations are performed on
-non-flagged observations.
+Apply weighting to the MUAC prevalence when sample distribution is unbalanced
+between children aged 6 to 23 months and those aged 24 to 59 months old
 }

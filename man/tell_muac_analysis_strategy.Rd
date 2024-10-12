@@ -2,23 +2,28 @@
 % Please edit documentation in R/prevalence_muac.R
 \name{tell_muac_analysis_strategy}
 \alias{tell_muac_analysis_strategy}
-\title{A helper function to tell how to go about MUAC prevalence analysis based on
-on the output of age ratio and standard deviation test results}
+\title{A helper function to identify the MUAC prevalence analysis approach on the
+basis of age ratio and standard deviation test results}
 \usage{
 tell_muac_analysis_strategy(age_ratio_class, sd_class)
 }
 \arguments{
-\item{age_ratio_class, sd_class}{Character vectors storing age ratio's p-values
-and standard deviation's classification, respectively.}
+\item{age_ratio_class}{A character vector returned from the plausibility
+auditors holding the rating of the age ratio test results.}
+
+\item{sd_class}{A character vector returned from the plausibility auditors
+holding the rating of the standard deviation test results.}
 }
 \value{
-A character vector of the same length containing the indication of
-what to do for the MUAC prevalence analysis: "weighted", "unweighted" and
-"missing". If "weighted", the CDC weighting approach is applied to correct for
-age bias. If "unweighted" a normal complex sample analysis is applied, and for
-the latter, NA are thrown.
+A character vector of the same length as the input holding analysis
+approach to be followed in a given area of analysis: "weighted", "unweighted" and
+"missing". When "weighted", the CDC weighting approach is applied to correct for
+age bias; "unweighted" a normal complex sample analysis is applied; when
+"missing" \code{NA} gets thrown, so no prevalence computed.
 }
 \description{
-A helper function to tell how to go about MUAC prevalence analysis based on
-on the output of age ratio and standard deviation test results
+This is a helper function that gives instruction to the main prevalence
+analysis function on the analysis approach to follow in a given area of
+analysis on the basis of the quality of the age ratio test and the standard
+deviation.
 }

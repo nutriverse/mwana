@@ -3,9 +3,9 @@
 \docType{data}
 \name{anthro.01}
 \alias{anthro.01}
-\title{Raw data of a district level representative survey}
+\title{A sample data of district level SMART surveys with location anonymised}
 \format{
-A tibble with 1191 rows and 11 columns.\tabular{ll}{
+A tibble of 1,191 rows and 11 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
    \emph{area} \tab Location where the survey took place \cr
    \emph{dos} \tab Survey date \cr
@@ -24,12 +24,13 @@ A tibble with 1191 rows and 11 columns.\tabular{ll}{
 anthro.01
 }
 \description{
-#' \code{anthro.01} is about a two-stage and PPS cluster sampling survey data
-conducted in two district following the SMART survey methodology in two
-livelihood zones. The location information was anonymized for confidentiality.
+\code{anthro.01} is a two-stage cluster-based survey with probability of the
+selection of the clusters proportional to the size of the population. The
+survey employed the SMART methodology. Data was anonymised for confidentiality.
 }
 \examples{
 anthro.01
+
 
 }
 \keyword{datasets}

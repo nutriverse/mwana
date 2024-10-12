@@ -3,7 +3,7 @@
 \docType{data}
 \name{mfaz.01}
 \alias{mfaz.01}
-\title{A MUAC screening data from an anonymized setting}
+\title{A sample MUAC screening data from an anonymized setting}
 \format{
 A tibble with 661 rows and 4 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
@@ -17,7 +17,7 @@ A tibble with 661 rows and 4 columns.\tabular{ll}{
 mfaz.01
 }
 \description{
-A MUAC screening data from an anonymized setting
+A sample MUAC screening data from an anonymized setting
 }
 \examples{
 mfaz.01
