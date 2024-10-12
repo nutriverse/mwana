@@ -1,5 +1,5 @@
 #'
-#' Compute the prevalence of wasting on the basis of WFHZ or MFAZ or MUAC
+#' Compute the prevalence of wasting on the basis of WFHZ, MFAZ and MUAC
 #'
 #' @description
 #' The prevalence is calculated in accordance with the complex sample design

@@ -1,5 +1,5 @@
 #'
-#' Compute combined prevalence of acute malnutrition
+#' Compute combined prevalence of wasting
 #'
 #' @rdname combined_prevalence
 #'
@@ -66,14 +66,13 @@ compute_pps_based_combined_prevalence <- function(df,
 #' Compute prevalence of wasting on the basis of the combined case-definition
 #'
 #' @description
-#' `compute_combined_prevalence()` is a handy function for calculating the
-#' combined prevalence of wasting also in with the complex sample design
-#' properties inherent to surveys.
+#' `compute_combined_prevalence()` is a handy function for calculating the prevalence
+#'  of combined wasting in accordance with the complex sample design properties
+#'  inherent to surveys.
 #'
 #' @param df A data frame object returned by [process_muac_data()] and [process_wfhz_data()].
-#' Both wranglers need to be used to prepare data to be used
-#' `compute_combined_prevalence()`. The order of which comes first does not matter,
-#' however, since the muac data processor transforms MUAC values into centimeters, those
+#' Both wranglers need to be used sequentially. The order of use does not matter,
+#' however, since muac wrangler transforms MUAC values into centimeters, those
 #' need to be put back into millimeter. This can be achieved my using [recode_muac()] inside
 #' [dplyr::mutate()] or [base::transform()].
 #'
@@ -91,7 +90,7 @@ compute_pps_based_combined_prevalence <- function(df,
 #' @returns A table with the descriptive statistics about wasting.
 #'
 #' @details
-#' The concept of "combined flags" is introduced in this function. It consists of
+#' A concept of "combined flags" is introduced in this function. It consists of
 #' taking the `flag_wfhz` and `flag_mfaz` vectors, generated from the MUAC and
 #' WFHZ wranglers, and checking if any value in either vector is flagged. If flagged,
 #' the value is marked as a flag in the "cflags" vector; otherwise, it is not flagged

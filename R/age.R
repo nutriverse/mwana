@@ -38,7 +38,7 @@ compute_age_in_months <- function (surv_date, birth_date) {
 }
 
 #'
-#' Process age
+#' Wrangle age
 #'
 #' @description
 #' `process_age()` helps you to get the variable age in the format needed for

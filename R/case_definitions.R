@@ -1,6 +1,5 @@
 #'
-#' Define if an observation is wasted on the basis of the criteria
-#' of WFHZ, absolute MUAC values and combined case-definition
+#' Wasting case-definition based on WFHZ, MFAZ, MUAC and Combined criteria
 #'
 #' @param df A data frame containing the required variables.
 #'
@@ -223,8 +222,8 @@ define_wasting <- function(df, zscore = NULL, muac = NULL, edema = NULL,
 }
 
 #'
-#' Classify wasting into severe or moderate wasting for use in SMART MUAC tool
-#' weighting approach
+#' Classify wasting into severe or moderate wasting to be used in the
+#' SMART MUAC tool weighting approach
 #'
 #' @param muac A numeric vector holding absolute MUAC values (in mm).
 #'

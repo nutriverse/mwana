@@ -3,8 +3,8 @@
 #' basis of age ratio and standard deviation test results
 #'
 #' @description
-#' This is a helper function that gives instruction to the main prevalence
-#' analysis function on the analysis approach to follow in a given area of
+#' This is a helper function that gives instruction, to the main MUAC prevalence
+#' analysis function, on the analysis approach to follow in a given area of
 #' analysis on the basis of the quality of the age ratio test and the standard
 #' deviation.
 #'
