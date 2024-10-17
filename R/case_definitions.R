@@ -1,28 +1,24 @@
 #'
-#' Wasting case-definition based on WFHZ, MFAZ, MUAC and Combined criteria
+#' Define wasting based on WFHZ, MFAZ, MUAC and Combined criteria
 #'
-#' @param df A data frame containing the required variables.
+#' @param df A dataset object of class `data.frame` to use.
 #'
-#' @param muac A numeric vector holding absolute MUAC values (in mm).
+#' @param muac A vector of class `integer` of MUAC values in millimeters.
 #'
-#' @param zscore A numeric vector holding WFHZ values (with 3 decimal places).
+#' @param zscore A vector of class `double` of WFHZ values (with 3 decimal places).
 #'
-#' @param edema A character vector indicating if an observation has bilateral
-#' edema or not. The codes are "y" for presence and "n" for absence of bilateral
-#' edema. Default is `NULL`.
+#' @param edema A vector of class `character` of edema. Code should be
+#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
 #'
 #' @param cases A choice of the form of wasting to be defined.
 #'
-#' @param base A choice of the criterion which the case-definition should be based
-#' on.
+#' @param base A choice of the criterion on which the case-definition should be based.
 #'
-#' @returns A numeric vector of the same length as the input vector, with dummy
-#' values: 1 for yes wasted and 0 for not wasted. The meaning of the codes
-#' changes depending on the form of wasting chosen. That is, if set `cases` to
-#' `"sam"` the codes 1 would mean yes for severe wasting.
+#' @returns A vector of class `numeric` of dummy values: 1 for case and 0
+#' for not case.
 #'
 #' @details
-#' Use `define_wasting()` to add the case-definitions into data frame.
+#' Use `define_wasting()` to add the case-definitions to data frame.
 #'
 #' @rdname case_definition
 #'
@@ -113,16 +109,8 @@ define_wasting_cases_combined <- function(zscore, muac, edema = NULL,
 
 #'
 #' @examples
-#' # MUAC-based case-definition ----
-#' x <- anthro.02 |>
-#' define_wasting(
-#' muac = muac,
-#' edema = edema,
-#' base = "muac"
-#' )
-#' head(x)
 #'
-#' # Weight-for-height based case-definition ----
+#' ## Weight-for-height based case-definition ----
 #' x <- anthro.02 |>
 #' define_wasting(
 #' zscore = wfhz,
@@ -131,7 +119,16 @@ define_wasting_cases_combined <- function(zscore, muac, edema = NULL,
 #' )
 #' head(x)
 #'
-#' # Combined case-definition ----
+#' ## MUAC-based case-definition ----
+#' x <- anthro.02 |>
+#' define_wasting(
+#' muac = muac,
+#' edema = edema,
+#' base = "muac"
+#' )
+#' head(x)
+#'
+#' ## Combined case-definition ----
 #' x <- anthro.02 |>
 #' define_wasting(
 #' zscore = wfhz,
@@ -225,14 +222,13 @@ define_wasting <- function(df, zscore = NULL, muac = NULL, edema = NULL,
 #' Classify wasting into severe or moderate wasting to be used in the
 #' SMART MUAC tool weighting approach
 #'
-#' @param muac A numeric vector holding absolute MUAC values (in mm).
+#' @param muac A vector of class `integer` of MUAC values in millimeters.
 #'
-#' @param .edema Optional. A character vector indicating if an observation has
-#' bilateral edema or not. The codes are "y" for presence and "n" for absence of
-#' bilateral edema.
+#' @param .edema A vector of class `character` of edema. Code should be
+#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
 #'
-#' @returns A character vector of the same length as the input indicating if a
-#' child is severe or moderate wasted or not wasted.
+#' @returns A vector of class `character` of the same length as `muac` and `.edema`
+#'  indicating if a child is severe or moderately wasted or not wasted.
 #'
 #'
 classify_wasting_for_cdc_approach <- function(muac, .edema = NULL) {
