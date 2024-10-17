@@ -5,8 +5,7 @@
 \alias{define_wasting_cases_whz}
 \alias{define_wasting_cases_combined}
 \alias{define_wasting}
-\title{Define if an observation is wasted on the basis of the criteria
-of WFHZ, absolute MUAC values and combined case-definition}
+\title{Wasting case-definition based on WFHZ, MFAZ, MUAC and Combined criteria}
 \usage{
 define_wasting_cases_muac(muac, edema = NULL, cases = c("gam", "sam", "mam"))
 
@@ -50,8 +49,7 @@ changes depending on the form of wasting chosen. That is, if set \code{cases} to
 \code{"sam"} the codes 1 would mean yes for severe wasting.
 }
 \description{
-Define if an observation is wasted on the basis of the criteria
-of WFHZ, absolute MUAC values and combined case-definition
+Wasting case-definition based on WFHZ, MFAZ, MUAC and Combined criteria
 }
 \details{
 Use \code{define_wasting()} to add the case-definitions into data frame.

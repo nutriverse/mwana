@@ -1,20 +1,18 @@
 #'
-#' Score the rating of proportion of flagged data, the magnitude of the standard
-#' deviation, skewness, kurtosis and the p-values sex and age ratio test
+#' Score the acceptability classification of the standard deviation and percentage
+#' of flagged data test results
 #'
 #' @description
-#' `assign_penalty_points_flags_and_sd()` ranks the proportion of the flagged
-#' values in the data and the magnitude of standard deviation based on the SMART
-#' scoring criteria.
+#' Attribute a penalty point based on the acceptability classification in which
+#' the plausibility test result falls.
 #'
-#' @param x A character vector holding the test classifications for the proportion
-#' of flagged data, the magnitude of the standard deviation, the p-values of the
-#' age and sex ratio tests, as well as the results of skewness and kurtosis tests.
+#' @param x A vector of class `character` of acceptability classification of the
+#' plausibility test results.
 #'
-#' @returns A numeric vector with the corresponding score.
+#' @returns A vector of class `integer` of the same length as `x` for the score.
 #'
 #' @details
-#' The ranking is as in [SMART Plausibility checks](https://smartmethodology.org/).
+#' The scoring criteria is as in [SMART Plausibility checks](https://smartmethodology.org/).
 #'
 #' @rdname scorer
 #'
@@ -56,19 +54,19 @@ assign_penalty_points_skew_kurt <- function(x) {
 
 #'
 #'
-#' Get the overall quality score for WFHZ and MFAZ
+#' Get the overall acceptability score from the acceptability classification scores
 #'
 #' @description
-#' `compute_quality_score()` calculates the overall score of the quality of the
-#' data for both WFHZ and MFAZ.
+#' Calculate the total amount of penalty points based on each plausibility test
+#' result acceptability classification for WFHZ and MFAZ.
 #'
-#' @param df A data frame containing individual test quality scores.
+#' @param df A dataset object of class `data.frame` to calculate from.
 #'
-#' @param type The method you wish to get the overall quality score for.
-#' A choice between "mfaz" and "wfhz".
+#' @param type A choice between "wfhz" and "mfaz" for the basis on which the
+#' calculations should be made.
 #'
-#' @returns A vector named `"quality_score"` with the overall quality score.
-#'
+#' @returns A `data.frame` based on `df` with a new column named `"quality_score"`
+#' for the overall of acceptability (of quality) score.
 #'
 #' @examples
 #'

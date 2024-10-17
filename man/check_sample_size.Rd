@@ -2,35 +2,38 @@
 % Please edit documentation in R/sample_size.R
 \name{check_sample_size}
 \alias{check_sample_size}
-\title{Check if the IPC AMN sample size requirement were met}
+\title{Check whether the IPC Acute Malnutrition sample size requirements were met}
 \usage{
 check_sample_size(df, .group, .data_type = c("survey", "screening", "ssite"))
 }
 \arguments{
-\item{df}{A data frame containing the required variables.}
+\item{df}{A dataset of class \code{data.frame} to check.}
 
-\item{.group}{A vector containing the primary sampling unit (PSU) ID's. Usually and
-ideally a numeric vector, but sometimes this may present itself as a character.
-Either way, \code{check_sample_size()} will work accordingly.}
+\item{.group}{A vector of class \code{integer} of the cluster ID's for survey,
+screening or site ID's for screenings and sentinel sites.}
 
 \item{.data_type}{A choice between "survey" for survey data, "screening" for
 screening data or "ssite" for community-based sentinel site data.}
 }
 \value{
-By default, a summary table of one row and three additional columns
-are returned. Column \code{groups} and \code{n_obs} hold the total number of unique
-PSU's and children respectively, and \code{meet_ipc} tells whether the IPC AMN
-sample size requirements were met.
+A summarised table of three columns: \code{groups} for the total number
+of unique cluster or screening or site IDs; \code{n_obs} for the respective total
+number of children; and \code{meet_ipc} for whether the IPC AMN requirements were met.
 }
 \description{
-\code{check_sample_size()} verifies if the minimum sample size requirements of the
-IPC Acute Malnutrition protocols are met in a given area of analysis.
+Verify whether the minimum sample size requirements for the area of analysis
+were met, in accordance with the IPC Acute Malnutrition (IPC AMN) protocols.
 }
 \details{
-Use dplyr::group_by() before \code{check_sample_size()} to get a summary for each
-unique survey or screening location from your data.
+\href{https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/}{The IPC Manual}.
 }
 \examples{
-check_sample_size(anthro.01, .group = cluster, .data_type = "survey")
+
+anthro.01 |>
+dplyr::group_by(area) |>
+check_sample_size(
+.group = cluster,
+.data_type = "survey"
+)
 
 }

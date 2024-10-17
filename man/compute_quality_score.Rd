@@ -2,22 +2,23 @@
 % Please edit documentation in R/quality_scorers.R
 \name{compute_quality_score}
 \alias{compute_quality_score}
-\title{Get the overall quality score for WFHZ and MFAZ}
+\title{Get the overall acceptability score from the acceptability classification scores}
 \usage{
 compute_quality_score(df, type = c("mfaz", "whz"))
 }
 \arguments{
-\item{df}{A data frame containing individual test quality scores.}
+\item{df}{A dataset object of class \code{data.frame} to calculate from.}
 
-\item{type}{The method you wish to get the overall quality score for.
-A choice between "mfaz" and "wfhz".}
+\item{type}{A choice between "wfhz" and "mfaz" for the basis on which the
+calculations should be made.}
 }
 \value{
-A vector named \code{"quality_score"} with the overall quality score.
+A \code{data.frame} based on \code{df} with a new column named \code{"quality_score"}
+for the overall of acceptability (of quality) score.
 }
 \description{
-\code{compute_quality_score()} calculates the overall score of the quality of the
-data for both WFHZ and MFAZ.
+Calculate the total amount of penalty points based on each plausibility test
+result acceptability classification for WFHZ and MFAZ.
 }
 \examples{
 

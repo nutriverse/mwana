@@ -2,33 +2,34 @@
 % Please edit documentation in R/age.R
 \name{process_age}
 \alias{process_age}
-\title{Process age}
+\title{Wrangle child's age}
 \usage{
 process_age(df, svdate = NULL, birdate = NULL, age)
 }
 \arguments{
-\item{df}{Input data frame holding the required variables.}
+\item{df}{A dataset of class \code{data.frame} to process age from.}
 
-\item{svdate}{A vector of class "Date" holding values corresponding to
-the data collection date. Default is \code{NULL}.}
+\item{svdate}{A vector of class \code{Date} for date of data collection.
+Default is \code{NULL}.}
 
-\item{birdate}{A vector of class "Date" holding values corresponding to
-the child's date of birth. Default is \code{NULL}.}
+\item{birdate}{A vector of class \code{Date} for child's date of birth.
+Default is \code{NULL}.}
 
-\item{age}{A numeric vector holding age values in months, usually estimated
+\item{age}{A vector of class \code{integer} of age in months, usually estimated
 using local event calendars.}
 }
 \value{
-A data frame of the same length as the input with an additional
-column. A new variable, \code{age_day}, is added to the output data frame whilst
-the \code{age} variable gets filled where applicable, and then any values outside
-the range of 6.0 to 59.99 months get replaced with \code{NA}.
+A \code{data.frame} based on \code{df}. The variable \code{age} that is required to be
+included in \code{df} will be filled where applicable with the age in months for
+each row of data in \code{df}. A new variable for \code{df} named \code{age_days} will be
+created. Values for \code{age} and \code{age_days} for children less than 6.0 and greater
+than or equal to 60.0 months old will be set to \code{NA}.
 }
 \description{
-\code{process_age()} helps you to get the variable age in the format needed for
-the analyses in the downstream workflow. Fundamentally, it calculates age in
-months from on the basis of the difference between the data collection date
-and the child's date of birth and then censors age values that are out of range.
+Wrangle child's age for downstream analysis. This includes calculating age
+in months based on the date of data collection and child's date of birth and
+setting to \code{NA} the age values that are less than 6.0 and greater than or equal
+to 60.0 months old.
 }
 \examples{
 

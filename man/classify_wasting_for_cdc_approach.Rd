@@ -2,8 +2,8 @@
 % Please edit documentation in R/case_definitions.R
 \name{classify_wasting_for_cdc_approach}
 \alias{classify_wasting_for_cdc_approach}
-\title{Classify wasting into severe or moderate wasting for use in SMART MUAC tool
-weighting approach}
+\title{Classify wasting into severe or moderate wasting to be used in the
+SMART MUAC tool weighting approach}
 \usage{
 classify_wasting_for_cdc_approach(muac, .edema = NULL)
 }
@@ -19,6 +19,6 @@ A character vector of the same length as the input indicating if a
 child is severe or moderate wasted or not wasted.
 }
 \description{
-Classify wasting into severe or moderate wasting for use in SMART MUAC tool
-weighting approach
+Classify wasting into severe or moderate wasting to be used in the
+SMART MUAC tool weighting approach
 }

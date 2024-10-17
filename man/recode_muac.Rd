@@ -7,31 +7,24 @@
 recode_muac(muac, unit = c("cm", "mm"))
 }
 \arguments{
-\item{muac}{A numeric vector holding the absolute MUAC values.}
+\item{muac}{A vector of class \code{double} or \code{integer} of the absolute MUAC values.}
 
-\item{unit}{A choice of the unit to which you wish to convert the MUAC
-values into.}
+\item{unit}{A choice of the unit to which the MUAC values should be converted.}
 }
 \value{
-A numeric vector of the same length as input, with values converted
-into your chosen unit.
+A numeric vector of the same length \code{muac}, with values converted
+to the chosen unit.
 }
 \description{
-Recode the MUAC values into either centimeters or millimeters as required.
-\code{recode_muac()} works inside \code{\link[dplyr:mutate]{dplyr::mutate()}} or \code{\link[base:transform]{base::transform()}}.
+Recode the MUAC values to either centimeters or millimeters as required.
 }
 \examples{
 
-## A sample of MUAC data in millimeters ----
-muac <- seq(90, 250, by = 4)
+## Recode from millimeters to centimeters ----
+muac <- anthro.01$muac
+muac_cm <- recode_muac(muac, unit = "cm")
 
-## Apply the function ----
-recode_muac(muac, unit = "cm")
-
-## A sample of MUAC data in centimeters ----
-muac <- seq(9.0, 25.0, by = 0.2)
-
-# Apply the function ----
-recode_muac(muac, unit = "mm")
+## Using the `muac_cm` object to recode it back to "mm" ----
+muac_mm <- recode_muac(muac_cm, unit = "mm")
 
 }

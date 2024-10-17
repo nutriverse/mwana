@@ -23,24 +23,21 @@ A tibble of 2,267 rows and 14 columns.\tabular{ll}{
    \emph{flag_mfaz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
 }
 }
+\source{
+Mozambique National Institute of Statistics. The data is publicly
+available at \url{https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-data_access}.
+Data was wrangled using this package's wranglers. Details about survey design
+can be gotten from: \url{https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-sampling}
+}
 \usage{
 anthro.02
 }
 \description{
 \code{anthro.02} is about a household budget survey conducted in Mozambique in
-2019/2020, known as IOF (\emph{Inquérito ao Orçamento Familiar} in Portuguese).
-The data is publicly available \href{https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-data_access}{here}.
-The survey had a module on nutrition with anthropometric measurements taken
-from children age 0-59 months for weight-for-height and 6-59 months for MUAC.
-
-\emph{IOF} is a two-stage cluster-based survey, representative at
-province level (admin 2), with probability of the selection of the clusters
-proportional to the size of the population. Its data collection spans for a
-period of 12 months, with anthropometric measurements
-taken during that period too. Read the \href{https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-sampling}{Bureau of Statistic's website on IOF} for
-more details.
-
-\code{anthro.02} has already been wrangled using this package's utilities.
+2019/2020, known as IOF (\emph{Inquérito ao Orçamento Familiar} in Portuguese).\emph{IOF}
+is a two-stage cluster-based survey, representative at province level (admin 2),
+with probability of the selection of the clusters proportional to the size of
+the population. Its data collection spans for a period of 12 months.
 }
 \examples{
 anthro.02

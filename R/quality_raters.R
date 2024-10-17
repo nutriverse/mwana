@@ -1,28 +1,28 @@
 #'
-#' Rate the proportion of flagged values in the data and the magnitude of the
-#' standard deviation
+#' Rate the acceptability of the standard deviation and the percentage of flagged
+#' data
 #'
 #' @description
-#' `classify_percent_flagged()` rates how much high is the proportion of
-#' of flagged data in your data set, as well as the magnitude of the standard
-#' deviation. It applies for the WFHZ, the MFAZ and absolute MUAC values.
+#' Rate how much high is the standard deviation and the percentage of flagged
+#' data in the dataset, hence it's acceptability.
 #'
-#' @param p A numeric vector containing the proportions of flagged values
+#' @param p A vector of class `double` of the proportions of flagged values in
+#' the dataset.
 #'
-#' @param sd A numeric vector containing values for standard deviation.
+#' @param sd A vector of class `double` of the values of the standard deviation.
 #'
-#' @param type The indicator to be used for the rating. A choice between "mfaz"
-#' for MFAZ, "whz" for WFHZ and "crude" for crude MUAC.
+#' @param type A choice between "wfhz", "mfaz" and "crude" for the basis on which
+#' the rating should be done.
 #'
-#' @returns A character vector with the rating results.
+#' @returns A vector of class `character` for the acceptability rate.
 #'
 #' @details
-#' The rating categories are: "Excellent", "Good", "Acceptable", "Problematic".
-#' The cut-offs of the WFHZ are as in the [
-#' SMART Methodology](https://smartmethodology.org/). As for the MFAZ and the
-#' absolute MUAC values, the maximum acceptable limit is at 2%, as recommended
-#' by [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478).
-#' Cut-offs for crude MUAC are based on the
+#' The ranges of acceptability are: "Excellent", "Good", "Acceptable", "Problematic".
+#' The cut-offs for WFHZ are as in the [SMART Methodology](https://smartmethodology.org/).
+#' For the MFAZ and the absolute MUAC values, the maximum acceptable limit for
+#' outliers is 2%, as recommended by
+#' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478).
+#' Cut-offs for the standard deviation of the absolute MUAC values are based on the
 #' [IPC AMN guidelines](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/).
 #'
 #'
@@ -93,11 +93,12 @@ classify_sd <-  function(sd, type = c("zscore", "crude")) {
 
 
 #'
-#' Rate the p-values of the age and sex ratio test
+#' Rate the acceptability of the age and sex ratio test p-values
 #'
-#' @param p A numeric vector containing the test p-values.
+#' @param p A vector of class `double` of the age or sex ratio test p-values.
 #'
-#' @returns A character vector with the rating results.
+#' @returns A vector of class `character` of the same length as `p` for the
+#' acceptability rate.
 #'
 #'
 classify_age_sex_ratio <- function(p) {
@@ -111,11 +112,12 @@ classify_age_sex_ratio <- function(p) {
 
 
 #'
-#' Rate the magnitude of skewness and kurtosis test results
+#' Rate the acceptability of the skewness and kurtosis test results
 #'
-#' @param sk A numeric vector containing values of either skewness or kurtosis.
+#' @param sk A vector of class `double` for skewness or kurtosis test results.
 #'
-#' @returns A character vector with the rating results.
+#' @returns A vector of class `character` of the same length as `sk` for the
+#' acceptability rate.
 #'
 #'
 classify_skew_kurt <- function(sk) {
@@ -130,18 +132,17 @@ classify_skew_kurt <- function(sk) {
 
 #'
 #'
-#' Rate the overall data quality
+#' Rate the overall acceptability score
 #'
 #' @description
-#' `classify_overall_quality()` informs you about the overall quality of the data
-#' by rating the overall quality score in "Excellent", "Good", "Acceptable" and
+#' Rate the overall acceptability score into "Excellent", "Good", "Acceptable" and
 #' "Problematic".
 #'
-#' @param df A data frame containing a vector with the quality scores yielded
-#' from [compute_quality_score()].
+#' @param df A dataset of class `data.frame` containing a vector of the overall
+#' acceptability score as yielded from [compute_quality_score()].
 #'
-#' @returns A character vector of the same length with a new column called
-#' `quality_class`.
+#' @returns A `data.frame` based on `df`. A new column `quality_class` for the
+#' overall acceptability rate is created and added to `df`.
 #'
 #' @examples
 #' ## A sample data ----

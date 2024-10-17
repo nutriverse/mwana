@@ -5,7 +5,7 @@
 \alias{compute_mfaz_prevalence}
 \alias{compute_muac_prevalence}
 \alias{compute_wfhz_prevalence}
-\title{Compute the prevalence of wasting on the basis of WFHZ or MFAZ or MUAC}
+\title{Compute the prevalence of wasting on the basis of WFHZ, MFAZ and MUAC}
 \usage{
 compute_mfaz_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 

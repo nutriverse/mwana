@@ -4,8 +4,8 @@
 \alias{assign_penalty_points_flags_and_sd}
 \alias{assign_penalty_points_age_sex_ratio}
 \alias{assign_penalty_points_skew_kurt}
-\title{Score the rating of proportion of flagged data, the magnitude of the standard
-deviation, skewness, kurtosis and the p-values sex and age ratio test}
+\title{Score the acceptability classification of the standard deviation and percentage
+of flagged data test results}
 \usage{
 assign_penalty_points_flags_and_sd(x)
 
@@ -14,18 +14,16 @@ assign_penalty_points_age_sex_ratio(x)
 assign_penalty_points_skew_kurt(x)
 }
 \arguments{
-\item{x}{A character vector holding the test classifications for the proportion
-of flagged data, the magnitude of the standard deviation, the p-values of the
-age and sex ratio tests, as well as the results of skewness and kurtosis tests.}
+\item{x}{A vector of class \code{character} of acceptability classification of the
+plausibility test results.}
 }
 \value{
-A numeric vector with the corresponding score.
+A vector of class \code{integer} of the same length as \code{x} for the score.
 }
 \description{
-\code{assign_penalty_points_flags_and_sd()} ranks the proportion of the flagged
-values in the data and the magnitude of standard deviation based on the SMART
-scoring criteria.
+Attribute a penalty point based on the acceptability classification in which
+the plausibility test result falls.
 }
 \details{
-The ranking is as in \href{https://smartmethodology.org/}{SMART Plausibility checks}.
+The scoring criteria is as in \href{https://smartmethodology.org/}{SMART Plausibility checks}.
 }

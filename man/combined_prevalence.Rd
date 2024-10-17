@@ -3,7 +3,7 @@
 \name{compute_pps_based_combined_prevalence}
 \alias{compute_pps_based_combined_prevalence}
 \alias{compute_combined_prevalence}
-\title{Compute combined prevalence of acute malnutrition}
+\title{Compute combined prevalence of wasting}
 \usage{
 compute_pps_based_combined_prevalence(
   df,
@@ -16,9 +16,8 @@ compute_combined_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 }
 \arguments{
 \item{df}{A data frame object returned by \code{\link[=process_muac_data]{process_muac_data()}} and \code{\link[=process_wfhz_data]{process_wfhz_data()}}.
-Both wranglers need to be used to prepare data to be used
-\code{compute_combined_prevalence()}. The order of which comes first does not matter,
-however, since the muac data processor transforms MUAC values into centimeters, those
+Both wranglers need to be used sequentially. The order of use does not matter,
+however, since muac wrangler transforms MUAC values into centimeters, those
 need to be put back into millimeter. This can be achieved my using \code{\link[=recode_muac]{recode_muac()}} inside
 \code{\link[dplyr:mutate]{dplyr::mutate()}} or \code{\link[base:transform]{base::transform()}}.}
 
@@ -37,12 +36,12 @@ where the data was collected and for which the analysis should be performed at.}
 A table with the descriptive statistics about wasting.
 }
 \description{
-\code{compute_combined_prevalence()} is a handy function for calculating the
-combined prevalence of wasting also in with the complex sample design
-properties inherent to surveys.
+\code{compute_combined_prevalence()} is a handy function for calculating the prevalence
+of combined wasting in accordance with the complex sample design properties
+inherent to surveys.
 }
 \details{
-The concept of "combined flags" is introduced in this function. It consists of
+A concept of "combined flags" is introduced in this function. It consists of
 taking the \code{flag_wfhz} and \code{flag_mfaz} vectors, generated from the MUAC and
 WFHZ wranglers, and checking if any value in either vector is flagged. If flagged,
 the value is marked as a flag in the "cflags" vector; otherwise, it is not flagged

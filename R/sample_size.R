@@ -1,30 +1,34 @@
 #'
-#' Check if the IPC AMN sample size requirement were met
+#' Check whether the IPC Acute Malnutrition sample size requirements were met
 #'
 #' @description
-#' `check_sample_size()` verifies if the minimum sample size requirements of the
-#' IPC Acute Malnutrition protocols are met in a given area of analysis.
+#' Verify whether the minimum sample size requirements for the area of analysis
+#' were met, in accordance with the IPC Acute Malnutrition (IPC AMN) protocols.
 #'
-#' @param df A data frame containing the required variables.
+#' @param df A dataset of class `data.frame` to check.
 #'
-#' @param .group A vector containing the primary sampling unit (PSU) ID's. Usually and
-#' ideally a numeric vector, but sometimes this may present itself as a character.
-#' Either way, `check_sample_size()` will work accordingly.
+#' @param .group A vector of class `integer` of the cluster ID's for survey,
+#' screening or site ID's for screenings and sentinel sites.
 #'
 #' @param .data_type A choice between "survey" for survey data, "screening" for
 #' screening data or "ssite" for community-based sentinel site data.
 #'
-#' @returns By default, a summary table of one row and three additional columns
-#' are returned. Column `groups` and `n_obs` hold the total number of unique
-#' PSU's and children respectively, and `meet_ipc` tells whether the IPC AMN
-#' sample size requirements were met.
+#' @returns A summarised table of three columns: `groups` for the total number
+#' of unique cluster or screening or site IDs; `n_obs` for the respective total
+#' number of children; and `meet_ipc` for whether the IPC AMN requirements were met.
 #'
 #' @details
-#' Use dplyr::group_by() before `check_sample_size()` to get a summary for each
-#' unique survey or screening location from your data.
+#' [The IPC Manual](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/).
+#'
 #'
 #' @examples
-#' check_sample_size(anthro.01, .group = cluster, .data_type = "survey")
+#'
+#' anthro.01 |>
+#' dplyr::group_by(area) |>
+#' check_sample_size(
+#' .group = cluster,
+#' .data_type = "survey"
+#' )
 #'
 #' @export
 #'

@@ -3,43 +3,42 @@
 #' Identify and flag outliers
 #'
 #' @description
-#' Outliers are extreme values that deviate remarkably from the mean, making
-#' them unlikely to be accurate measurements. `flag_outliers()` helps you to
-#' identify them whether in the WFHZ, the MFAZ or the absolute MUAC values.
+#' Outliers are extreme values that deviate remarkably from the survey mean, making
+#' them unlikely to be accurate measurements. This function detects and signals
+#' them based on a criterion set for the WFHZ, the MFAZ and for the absolute MUAC
+#' values.
 #'
-#' @param x A numeric vector holding either the WFHZ, the MFAZ values, or the
-#' absolute MUAC values (in millimeters).
+#' @param x A vector of class `double` of WFHZ or MFAZ or absolute MUAC values.
+#' The latter should be in millimeters.
 #'
-#' @param type The method you wish `flag_outliers()` to identify flag outliers
-#' in the data. A choice between "zscore" (for WFHZ and MFAZ), and "crude" (for
-#' absolute MUAC values).
+#' @param type A choice between `zscore` and `crude` for where outliers should be
+#' detected and flagged from.
 #'
-#' @param unit A choice between "zscore" (for WFHZ and MFAZ), and "crude" (for
-#' absolute MUAC values).
+#' @param unit A choice between `zscore` and `crude` for where outliers should be
+#' detected and flagged from.
 #'
-#' @return A vector of the same length as input holding dummy values: 1 for is
-#' a flag and 0 is not a flag.
+#' @return A vector of the same length as `x` of flagged observations that are
+#' outliers: 1 for is a flag and 0 is not a flag.
 #'
 #' @details
-#' The flagging criteria for the WFHZ is as in
-#' [SMART plausibility check](https://smartmethodology.org/). As for the MFAZ, it
-#' uses the same criteria as WFHZ, whilst a fixed flagging criteria is used for
-#' absolute MUAC values. This is as recommended by
+#' The flagging criterion used for the WFHZ and the MFAZ is as in
+#' [SMART plausibility check](https://smartmethodology.org/). A fixed flagging
+#' criterion is used for the absolute MUAC values. This is as recommended by
 #' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478)
 #'
 #'
 #' @examples
 #'
 #' ## Sample data for absolute MUAC values ----
-#' x <- c(90, 110, 140, 200, 119, 235)
+#' x <- anthro.01$muac
 #'
-#' ## Apply `flag_outliers()` with type set to "crude" ----
+#' ## Apply the function with type set to "crude" ----
 #' flag_outliers(x, type = "crude")
 #'
 #' ## Sample data for MFAZ or for WFHZ values ----
-#' x <- c(-2.265, -5.275, -0.72, -2.261, -2.264, -4.451, -2.261, -1.828)
+#' x <- anthro.02$mfaz
 #'
-#' # Apply `flag_outliers()` with type set to "zscore" ----
+#' # Apply the function with type set to "zscore" ----
 #' flag_outliers(x, type = "zscore")
 #'
 #' @rdname outliers
@@ -95,30 +94,23 @@ remove_flags <- function(x, unit = c("zscore", "crude")) {
 #' Convert MUAC values to either centimeters or millimeters
 #'
 #' @description
-#' Recode the MUAC values into either centimeters or millimeters as required.
-#' `recode_muac()` works inside [dplyr::mutate()] or [base::transform()].
+#' Recode the MUAC values to either centimeters or millimeters as required.
 #'
-#' @param muac A numeric vector holding the absolute MUAC values.
+#' @param muac A vector of class `double` or `integer` of the absolute MUAC values.
 #'
-#' @param unit A choice of the unit to which you wish to convert the MUAC
-#' values into.
+#' @param unit A choice of the unit to which the MUAC values should be converted.
 #'
-#' @returns A numeric vector of the same length as input, with values converted
-#' into your chosen unit.
+#' @returns A numeric vector of the same length `muac`, with values converted
+#' to the chosen unit.
 #'
 #' @examples
 #'
-#' ## A sample of MUAC data in millimeters ----
-#' muac <- seq(90, 250, by = 4)
+#' ## Recode from millimeters to centimeters ----
+#' muac <- anthro.01$muac
+#' muac_cm <- recode_muac(muac, unit = "cm")
 #'
-#' ## Apply the function ----
-#' recode_muac(muac, unit = "cm")
-#'
-#' ## A sample of MUAC data in centimeters ----
-#' muac <- seq(9.0, 25.0, by = 0.2)
-#'
-#' # Apply the function ----
-#' recode_muac(muac, unit = "mm")
+#' ## Using the `muac_cm` object to recode it back to "mm" ----
+#' muac_mm <- recode_muac(muac_cm, unit = "mm")
 #'
 #' @export
 #'
@@ -141,51 +133,51 @@ recode_muac <- function(muac, unit = c("cm", "mm")) {
 
 #'
 #'
-#' Process and censor weight-for-height and MUAC data
+#' Wrangle weight-for-height and MUAC data
 #'
 #' @description
-#' This is the job of `process_wfhz_data` and `process_muac_data()`. They are
-#' responsible for computing the weight-for-height and the muac-for-age z-scores
-#' respectively, and censor the data by flagging outliers based on the SMART flags.
-#' For the latter, if age is not supplied, the function censors the absolute MUAC
-#' values.
+#' This function performs data wrangling by calculating weight-for-height
+#' and MUAC-for-age z-scores, followed by the detection and flagging of outliers.
+#' For MUAC data, if age is not supplies, z-scores do not get computed. In such
+#' cases, outlier detection and flagging are based on the absolute MUAC values.
 #'
-#' @param df The input data frame with the required variables.
+#' @param df A dataset of class `data.frame` to wrangle data from.
 #'
 #' @param sex A numeric or character vector of child's sex. Code values should
-#' either be 1 or "m" for boy and 2 or "f" for girl. The variable name must be
-#' sex, otherwise it will not work.
+#' be 1 or "m" for boy and 2 or "f" for girl. The variable name must be sex,
+#' otherwise it will not work.
 #'
-#' @param .recode_sex Logical. It asks whether sex should be recoded. In the end,
-#' the variable sex have values coded as 1 for boy and 2 for girl. Setting
-#' `.recode_sex = TRUE` works over "m" and "f" values. If your vector is coded
-#' differently, make sure to put it in "m" and "f" or in 1 or 2 right away.
+#' @param .recode_sex Logical. Default is `FALSE`. Setting to `TRUE` assumes that
+#' the sex variable is a character vector of values "m" for boys and "f" for girls
+#' and will recode them to 1 and 2 respectively.
 #'
-#' @param muac A numeric vector holding the absolute MUAC values.
+#' @param muac A vector of class `double` or `integer` of the absolute MUAC values.
 #'
-#' @param .recode_muac Logical. Choose between `TRUE` if you wish to recode
-#' the MUAC values into either centimeters or millimeters.
+#' @param .recode_muac Logical. Default is `FALSE`. Set to `TRUE` if MUAC values
+#' should be converted to either centimeters or millimeters.
 #'
-#' @param unit A choice of the unit to which you wish to convert the MUAC
-#' variable into. Choose "cm" for centimeters, "mm" for millimeters and "none"
-#' to leave as it is.
+#' @param unit A choice of the unit to which the MUAC values should be converted.
+#' "cm" for centimeters, "mm" for millimeters and "none" to leave as it is.
 #'
-#' @param age A numeric vector of child's age in months. It must be named age,
-#' otherwise it will not work. For instance, if given as following: age = months
-#' it will not work.
+#' @param age A double vector of child's age in months. It must be named age,
+#' otherwise it will not work.
 #'
-#' @param weight A numeric vector holding the weight values of the child in
-#' kilograms.
+#' @param weight A vector of class `double` of child's weight in kilograms.
 #'
-#' @param height A numeric vector holding the height values of the child in
-#' centimeters.
+#' @param height A vector of class `double` of child's height in centimeters.
 #'
-#' @returns A data frame of the same length as the input with additional
-#' columns: one named `wfhz` or `mfaz` that holds the zscore values, and the other
-#' holding dummy values: 1 (is a flag) and 0 (is not a flag). For the
-#' `process_muac_data` function, when age is not supplied, only `flag_muac` is
-#' added. This refers to flags based based on absolute MUAC values as recommended by
+#' @returns A data frame based on `df`. New variables named `wfhz` and
+#' `flag_wfhz`, of child's weight-for-height z-scores and flags, or `mfaz` and
+#' `flag_mfaz`, of child's MUAC-for-age z-scores and flags, will be created. For
+#' MUAC, when age is not supplied only `flag_muac` variable is created.
+#' This refers to flags based on the absolute MUAC values as recommended by
 #' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478).
+#'
+#' @details
+#' The flagging criterion used for the WFHZ and MFAZ is as in
+#' [SMART plausibility check](https://smartmethodology.org/). A fixed flagging
+#' criterion is used for the absolute MUAC values. This is as recommended by
+#' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478)
 #'
 #' @examples
 #'
@@ -213,6 +205,7 @@ recode_muac <- function(muac, unit = c("cm", "mm")) {
 #'  )
 #'
 #'  ### The application of the function ----
+#'
 #'  df |>
 #'  process_age(
 #'  svdate = "survey_date",
@@ -232,8 +225,49 @@ recode_muac <- function(muac, unit = c("cm", "mm")) {
 #'
 #' @export
 #'
+
+process_wfhz_data <- function(df,
+                              sex,
+                              weight,
+                              height,
+                              .recode_sex = TRUE) {
+
+  recode_sex <- quote(
+    if (.recode_sex) {
+      sex <- ifelse({{ sex }} == "m", 1, 2)
+    } else {
+      {{ sex }}
+    }
+  )
+
+  df <- df |>
+    mutate(
+      sex = !!recode_sex
+    ) |>
+    addWGSR(
+      sex = {{ "sex" }},
+      firstPart = {{ "weight" }},
+      secondPart = {{ "height" }},
+      index = "wfh",
+      digits = 3
+    ) |>
+    mutate(
+      flag_wfhz = do.call(flag_outliers, list(.data$wfhz, type = "zscore"))
+    )
+  tibble::as_tibble(df)
+}
+
+
+
+#'
+#' @rdname wrangler
+#'
+#' @export
+#'
 process_muac_data <- function(df,
-                              sex, muac, age = NULL,
+                              sex,
+                              muac,
+                              age = NULL,
                               .recode_sex = TRUE,
                               .recode_muac = TRUE,
                               unit = c("cm", "mm", "none")) {
@@ -280,38 +314,5 @@ process_muac_data <- function(df,
         flag_muac = do.call(flag_outliers, list({{ muac }}, type = "crude"))
       )
   }
-  tibble::as_tibble(df)
-}
-
-
-#'
-#' @rdname wrangler
-#'
-#' @export
-#'
-process_wfhz_data <- function(df, sex, weight, height, .recode_sex = TRUE) {
-
-  recode_sex <- quote(
-    if (.recode_sex) {
-      sex <- ifelse({{ sex }} == "m", 1, 2)
-    } else {
-      {{ sex }}
-    }
-  )
-
-  df <- df |>
-    mutate(
-      sex = !!recode_sex
-    ) |>
-    addWGSR(
-      sex = {{ "sex" }},
-      firstPart = {{ "weight" }},
-      secondPart = {{ "height" }},
-      index = "wfh",
-      digits = 3
-    ) |>
-    mutate(
-      flag_wfhz = do.call(flag_outliers, list(.data$wfhz, type = "zscore"))
-    )
   tibble::as_tibble(df)
 }

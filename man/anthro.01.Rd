@@ -20,13 +20,16 @@ A tibble of 1,191 rows and 11 columns.\tabular{ll}{
    \emph{muac} \tab Mid-upper arm circumference (mm) \cr
 }
 }
+\source{
+Anonymous
+}
 \usage{
 anthro.01
 }
 \description{
-\code{anthro.01} is a two-stage cluster-based survey with probability of the
-selection of the clusters proportional to the size of the population. The
-survey employed the SMART methodology. Data was anonymised for confidentiality.
+\code{anthro.01} is a two-stage cluster-based survey with probability of selection
+of clusters proportional to the size of the population. The survey employed
+the SMART methodology.
 }
 \examples{
 anthro.01

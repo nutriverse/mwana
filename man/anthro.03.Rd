@@ -18,18 +18,21 @@ A tibble of 943 x 9.\tabular{ll}{
    \emph{muac} \tab Mid-upper arm circumference (mm) \cr
 }
 }
+\source{
+Anonymous
+}
 \usage{
 anthro.03
 }
 \description{
 \code{anthro.03} contains survey data of four districts. Each district's dataset
 presents distinct data quality scenarios that requires tailored prevalence
-analysis approach. Two districts show a problematic WFHZ standard deviation
+analysis approach: two districts show a problematic WFHZ standard deviation
 whilst the remaining are all within range.
 
 This sample data demonstrates the use of prevalence functions on multi-area
-survey data, where variations in the standard deviation ratings exist.
-As a result, different analytical approaches are required for each area
+survey data, where there is variations in the standard deviation rating.
+As a result, different analyses approaches are required for each area
 to ensure accurate estimation.
 }
 \examples{

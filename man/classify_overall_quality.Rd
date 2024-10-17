@@ -2,21 +2,20 @@
 % Please edit documentation in R/quality_raters.R
 \name{classify_overall_quality}
 \alias{classify_overall_quality}
-\title{Rate the overall data quality}
+\title{Rate the overall acceptability score}
 \usage{
 classify_overall_quality(df)
 }
 \arguments{
-\item{df}{A data frame containing a vector with the quality scores yielded
-from \code{\link[=compute_quality_score]{compute_quality_score()}}.}
+\item{df}{A dataset of class \code{data.frame} containing a vector of the overall
+acceptability score as yielded from \code{\link[=compute_quality_score]{compute_quality_score()}}.}
 }
 \value{
-A character vector of the same length with a new column called
-\code{quality_class}.
+A \code{data.frame} based on \code{df}. A new column \code{quality_class} for the
+overall acceptability rate is created and added to \code{df}.
 }
 \description{
-\code{classify_overall_quality()} informs you about the overall quality of the data
-by rating the overall quality score in "Excellent", "Good", "Acceptable" and
+Rate the overall acceptability score into "Excellent", "Good", "Acceptable" and
 "Problematic".
 }
 \examples{

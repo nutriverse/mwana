@@ -2,16 +2,17 @@
 % Please edit documentation in R/quality_raters.R
 \name{classify_age_sex_ratio}
 \alias{classify_age_sex_ratio}
-\title{Rate the p-values of the age and sex ratio test}
+\title{Rate the acceptability of the age and sex ratio test p-values}
 \usage{
 classify_age_sex_ratio(p)
 }
 \arguments{
-\item{p}{A numeric vector containing the test p-values.}
+\item{p}{A vector of class \code{double} of the age or sex ratio test p-values.}
 }
 \value{
-A character vector with the rating results.
+A vector of class \code{character} of the same length as \code{p} for the
+acceptability rate.
 }
 \description{
-Rate the p-values of the age and sex ratio test
+Rate the acceptability of the age and sex ratio test p-values
 }

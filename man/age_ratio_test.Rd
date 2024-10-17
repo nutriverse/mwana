@@ -2,41 +2,39 @@
 % Please edit documentation in R/age.R
 \name{age_ratio_test}
 \alias{age_ratio_test}
-\title{Test the proportion of children aged 24 to 59 months over 6 to 23 months old}
+\title{Test for statistical difference between the proportion of children aged 24 to
+59 months old over those aged 6 to 23 months old}
 \usage{
 age_ratio_test(age, .expectedP = 0.66)
 }
 \arguments{
-\item{age}{A numeric vector holding child's age in months.}
+\item{age}{A double vector of age in months.}
 
 \item{.expectedP}{The expected proportion of children aged 24 to 59 months
-old over those aged 6 to 23 months old. As in the
-\href{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}{SMART MUAC tool},
-this is estimated at 0.66.}
+old over those aged 6 to 23 months old. This is estimated to be 0.66 as in the
+\href{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}{SMART MUAC tool}.}
 }
 \value{
-A vector of class "list" holding three statistics: \code{p} for p-value,
-\code{observedR} for the observed ratio and \code{observedP} for the observed proportion
-of children aged 24 to 59 months over those aged 6 to 24 months old.
+A vector of class \code{list} of three statistics: \code{p} for p-value of the
+statistical difference between the observed and the expected proportion of
+children aged 24 to 59 months old over those aged 6 to 23 months old;
+\code{observedR} and \code{observedP} for the observed ratio and proportion respectively.
 
 @details
-\code{age_ratio_test()} should be used specifically for assessing MUAC data. For
-age ratio tests of children ages 6 to 29 months and 30 to 59 months old, as
-performed in the SMART plausibility checks, use \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}} instead.
+This function should be used specifically for assessing MUAC data. For
+age ratio tests of children aged 6 to 29 months old over 30 to 59 months old, as
+performed in the SMART plausibility check, use \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}} instead.
 }
 \description{
-Age ratio test of the proportion of children aged 24 to 59 months over those
-aged 6 to 23 months old.
+Calculate the observed age ratio of children aged 24 to 59 months old over
+those aged 6 to 23 months old and test if there is a statistical difference
+between the observed and the expected.
 }
 \examples{
 
-## A sample data ----
-age <- seq(6,59) |>
-sample(300, replace = TRUE)
-
-## Apply the function ----
+## An example of application using `anthro.02` dataset ----
 age_ratio_test(
-age = age,
+age = anthro.02$age,
 .expectedP = 0.66
 )
 

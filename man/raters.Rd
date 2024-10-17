@@ -3,34 +3,35 @@
 \name{classify_percent_flagged}
 \alias{classify_percent_flagged}
 \alias{classify_sd}
-\title{Rate the proportion of flagged values in the data and the magnitude of the
-standard deviation}
+\title{Rate the acceptability of the standard deviation and the percentage of flagged
+data}
 \usage{
 classify_percent_flagged(p, type = c("mfaz", "whz", "crude"))
 
 classify_sd(sd, type = c("zscore", "crude"))
 }
 \arguments{
-\item{p}{A numeric vector containing the proportions of flagged values}
+\item{p}{A vector of class \code{double} of the proportions of flagged values in
+the dataset.}
 
-\item{type}{The indicator to be used for the rating. A choice between "mfaz"
-for MFAZ, "whz" for WFHZ and "crude" for crude MUAC.}
+\item{type}{A choice between "wfhz", "mfaz" and "crude" for the basis on which
+the rating should be done.}
 
-\item{sd}{A numeric vector containing values for standard deviation.}
+\item{sd}{A vector of class \code{double} of the values of the standard deviation.}
 }
 \value{
-A character vector with the rating results.
+A vector of class \code{character} for the acceptability rate.
 }
 \description{
-\code{classify_percent_flagged()} rates how much high is the proportion of
-of flagged data in your data set, as well as the magnitude of the standard
-deviation. It applies for the WFHZ, the MFAZ and absolute MUAC values.
+Rate how much high is the standard deviation and the percentage of flagged
+data in the dataset, hence it's acceptability.
 }
 \details{
-The rating categories are: "Excellent", "Good", "Acceptable", "Problematic".
-The cut-offs of the WFHZ are as in the \href{https://smartmethodology.org/}{ SMART Methodology}. As for the MFAZ and the
-absolute MUAC values, the maximum acceptable limit is at 2\%, as recommended
-by \href{https://doi.org/10.1111/mcn.13478}{Bilukha, O., & Kianian, B. (2023).}.
-Cut-offs for crude MUAC are based on the
+The ranges of acceptability are: "Excellent", "Good", "Acceptable", "Problematic".
+The cut-offs for WFHZ are as in the \href{https://smartmethodology.org/}{SMART Methodology}.
+For the MFAZ and the absolute MUAC values, the maximum acceptable limit for
+outliers is 2\%, as recommended by
+\href{https://doi.org/10.1111/mcn.13478}{Bilukha, O., & Kianian, B. (2023).}.
+Cut-offs for the standard deviation of the absolute MUAC values are based on the
 \href{https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/}{IPC AMN guidelines}.
 }

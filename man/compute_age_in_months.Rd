@@ -2,24 +2,19 @@
 % Please edit documentation in R/age.R
 \name{compute_age_in_months}
 \alias{compute_age_in_months}
-\title{Calculate age in months}
+\title{Calculate child's age in months}
 \usage{
 compute_age_in_months(surv_date, birth_date)
 }
 \arguments{
-\item{surv_date}{A vector of class "Date" holding values corresponding to
-the date of data collection.}
+\item{surv_date}{A vector of class \code{Date} for data collection date.}
 
-\item{birth_date}{A vector of class "Date" holding values corresponding to
-the child's date of birth.}
+\item{birth_date}{A vector of class \code{Date} for child's date of birth.}
 }
 \value{
-A numeric vector named \code{age} holding age values in months with two
-decimal places. Any value outside the range of 6.0 to 59.99 is replaced with
-\code{NA}.
+A vector of class \code{double} for child's age in months with two decimal places.
+Any value less than 6.0 and greater than or equal to 60.0 months will be set to \code{NA}.
 }
 \description{
-\code{compute_age_in_months()} calculates age in months from on the basis of
-difference between the data collection date and the child's date of birth.
-It works inside \code{\link[dplyr:mutate]{dplyr::mutate()}} or \code{\link[base:transform]{base::transform()}}.
+Calculate child's age in months based on date of birth and the data collection date.
 }

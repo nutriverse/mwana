@@ -17,16 +17,19 @@ A tibble of 3,002 x 8.\tabular{ll}{
    \emph{flag_mfaz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
 }
 }
+\source{
+Anonymous
+}
 \usage{
 anthro.04
 }
 \description{
-\code{anthro.04} was generated from a community-based sentinel site survey
-conducted across three provinces. Each province's dataset presents distinct
-data quality scenarios, requiring tailored prevalence analysis.
-"Province 3" has problematic MFAZ standard deviation and age ratio tests.
+\code{anthro.04} was generated from a community-based sentinel site conducted
+across three provinces. Each province's dataset presents distinct
+data quality scenarios, requiring tailored prevalence analysis:
+"Province 3" has problematic MFAZ standard deviation and age ratio tests;
 "Province 2" shows a problematic age ratio but acceptable MFAZ standard
-deviation. Lastly, "Province 1" has both tests within acceptable ranges.
+deviation; lastly, "Province 1" has both tests within acceptable ranges.
 
 This sample data demonstrates the use of prevalence functions on multi-area
 survey data, where variations in the standard deviation ratings exist.

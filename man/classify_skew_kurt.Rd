@@ -2,16 +2,17 @@
 % Please edit documentation in R/quality_raters.R
 \name{classify_skew_kurt}
 \alias{classify_skew_kurt}
-\title{Rate the magnitude of skewness and kurtosis test results}
+\title{Rate the acceptability of the skewness and kurtosis test results}
 \usage{
 classify_skew_kurt(sk)
 }
 \arguments{
-\item{sk}{A numeric vector containing values of either skewness or kurtosis.}
+\item{sk}{A vector of class \code{double} for skewness or kurtosis test results.}
 }
 \value{
-A character vector with the rating results.
+A vector of class \code{character} of the same length as \code{sk} for the
+acceptability rate.
 }
 \description{
-Rate the magnitude of skewness and kurtosis test results
+Rate the acceptability of the skewness and kurtosis test results
 }
