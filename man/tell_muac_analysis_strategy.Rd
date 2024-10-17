@@ -2,28 +2,29 @@
 % Please edit documentation in R/prevalence_muac.R
 \name{tell_muac_analysis_strategy}
 \alias{tell_muac_analysis_strategy}
-\title{A helper function to identify the MUAC prevalence analysis approach on the
-basis of age ratio and standard deviation test results}
+\title{A helper function to determine the MUAC prevalence analysis approach to follow}
 \usage{
 tell_muac_analysis_strategy(age_ratio_class, sd_class)
 }
 \arguments{
-\item{age_ratio_class}{A character vector returned from the plausibility
-auditors holding the rating of the age ratio test results.}
+\item{age_ratio_class}{A vector of class \code{character} of the acceptability
+classification of the age ratio test result.}
 
-\item{sd_class}{A character vector returned from the plausibility auditors
-holding the rating of the standard deviation test results.}
+\item{sd_class}{A vector of class \code{character} of the acceptability
+classification of the standard deviation analysis result.}
 }
 \value{
-A character vector of the same length as the input holding analysis
-approach to be followed in a given area of analysis: "weighted", "unweighted" and
-"missing". When "weighted", the CDC weighting approach is applied to correct for
-age bias; "unweighted" a normal complex sample analysis is applied; when
-"missing" \code{NA} gets thrown, so no prevalence computed.
+A vector of class \code{character} of the same length as the input vectors,
+containing values indicating the analysis approach for each analysis area: "weighted",
+"unweighted" and "missing".
 }
 \description{
-This is a helper function that gives instruction, to the main MUAC prevalence
-analysis function, on the analysis approach to follow in a given area of
-analysis on the basis of the quality of the age ratio test and the standard
-deviation.
+It determines the analysis approach to follow for a given analysis area on
+the basis of the rate of acceptability of the age ratio test and the standard
+deviation analysis result.
+}
+\details{
+When "weighted", the CDC weighting approach is applied to correct for
+age bias; when "unweighted" a normal complex sample analysis is applied; when
+"missing" \code{NA} gets thrown.
 }

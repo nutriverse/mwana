@@ -21,7 +21,7 @@
 #' @param flags A vector of class `numeric` of flagged observations.
 #'
 #' @param area A vector of class `character` of the geographical location where
-#' data was collected and to which the analysis should be aggregated at.
+#' data was collected and for which the analysis should be aggregated.
 #'
 #' @returns A summarised `data.frame` of plausibility test results and their
 #' respective acceptability ratings.

@@ -8,15 +8,14 @@ SMART MUAC tool weighting approach}
 classify_wasting_for_cdc_approach(muac, .edema = NULL)
 }
 \arguments{
-\item{muac}{A numeric vector holding absolute MUAC values (in mm).}
+\item{muac}{A vector of class \code{integer} of MUAC values in millimeters.}
 
-\item{.edema}{Optional. A character vector indicating if an observation has
-bilateral edema or not. The codes are "y" for presence and "n" for absence of
-bilateral edema.}
+\item{.edema}{A vector of class \code{character} of edema. Code should be
+"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
 }
 \value{
-A character vector of the same length as the input indicating if a
-child is severe or moderate wasted or not wasted.
+A vector of class \code{character} of the same length as \code{muac} and \code{.edema}
+indicating if a child is severe or moderately wasted or not wasted.
 }
 \description{
 Classify wasting into severe or moderate wasting to be used in the

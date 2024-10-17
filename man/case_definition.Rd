@@ -5,7 +5,7 @@
 \alias{define_wasting_cases_whz}
 \alias{define_wasting_cases_combined}
 \alias{define_wasting}
-\title{Wasting case-definition based on WFHZ, MFAZ, MUAC and Combined criteria}
+\title{Define wasting based on WFHZ, MFAZ, MUAC and Combined criteria}
 \usage{
 define_wasting_cases_muac(muac, edema = NULL, cases = c("gam", "sam", "mam"))
 
@@ -27,44 +27,33 @@ define_wasting(
 )
 }
 \arguments{
-\item{muac}{A numeric vector holding absolute MUAC values (in mm).}
+\item{muac}{A vector of class \code{integer} of MUAC values in millimeters.}
 
-\item{edema}{A character vector indicating if an observation has bilateral
-edema or not. The codes are "y" for presence and "n" for absence of bilateral
-edema. Default is \code{NULL}.}
+\item{edema}{A vector of class \code{character} of edema. Code should be
+"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
 
 \item{cases}{A choice of the form of wasting to be defined.}
 
-\item{zscore}{A numeric vector holding WFHZ values (with 3 decimal places).}
+\item{zscore}{A vector of class \code{double} of WFHZ values (with 3 decimal places).}
 
-\item{df}{A data frame containing the required variables.}
+\item{df}{A dataset object of class \code{data.frame} to use.}
 
-\item{base}{A choice of the criterion which the case-definition should be based
-on.}
+\item{base}{A choice of the criterion on which the case-definition should be based.}
 }
 \value{
-A numeric vector of the same length as the input vector, with dummy
-values: 1 for yes wasted and 0 for not wasted. The meaning of the codes
-changes depending on the form of wasting chosen. That is, if set \code{cases} to
-\code{"sam"} the codes 1 would mean yes for severe wasting.
+A vector of class \code{numeric} of dummy values: 1 for case and 0
+for not case.
 }
 \description{
-Wasting case-definition based on WFHZ, MFAZ, MUAC and Combined criteria
+Define if a given observation in the dataset is wasted or not, on the basis of
+WFHZ, MFAZ, MUAC and the combined criteria.
 }
 \details{
-Use \code{define_wasting()} to add the case-definitions into data frame.
+Use \code{define_wasting()} to add the case-definitions to data frame.
 }
 \examples{
-# MUAC-based case-definition ----
-x <- anthro.02 |>
-define_wasting(
-muac = muac,
-edema = edema,
-base = "muac"
-)
-head(x)
 
-# Weight-for-height based case-definition ----
+## Weight-for-height based case-definition ----
 x <- anthro.02 |>
 define_wasting(
 zscore = wfhz,
@@ -73,7 +62,16 @@ base = "wfhz"
 )
 head(x)
 
-# Combined case-definition ----
+## MUAC-based case-definition ----
+x <- anthro.02 |>
+define_wasting(
+muac = muac,
+edema = edema,
+base = "muac"
+)
+head(x)
+
+## Combined case-definition ----
 x <- anthro.02 |>
 define_wasting(
 zscore = wfhz,

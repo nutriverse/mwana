@@ -63,40 +63,40 @@ compute_pps_based_combined_prevalence <- function(df,
 
 #'
 #'
-#' Compute prevalence of wasting on the basis of the combined case-definition
+#' Compute the prevalence of combined wasting
 #'
 #' @description
-#' `compute_combined_prevalence()` is a handy function for calculating the prevalence
-#'  of combined wasting in accordance with the complex sample design properties
-#'  inherent to surveys.
+#' The prevalence is calculated in accordance with the complex sample design
+#' properties inherent to surveys. This includes weighting the survey data where
+#' applicable. When either the acceptability of the standard deviation of WFHZ or
+#' of the age ratio test is problematic, prevalence is not calculated.
 #'
-#' @param df A data frame object returned by [process_muac_data()] and [process_wfhz_data()].
-#' Both wranglers need to be used sequentially. The order of use does not matter,
-#' however, since muac wrangler transforms MUAC values into centimeters, those
-#' need to be put back into millimeter. This can be achieved my using [recode_muac()] inside
-#' [dplyr::mutate()] or [base::transform()].
+#' @param df An already wrangled dataset of class `data.frame` to use. Both
+#' wranglers (of WFHZ and MUAC) need to be used sequentially, regardless of the
+#' order. Note that MUAC values should be converted to millimeters after using
+#' the MUAC wrangler.
 #'
-#' @param .wt A numeric vector holding final survey weights. When set to `NULL`,
-#' the function assumes self weighted survey, as in the ENA for SMART software;
-#' Otherwise when supplied, weighted analysis is computed.
+#' @param .wt A vector of class `double` of the final survey weights. Default is
+#'  `NULL` assuming a self weighted survey, as in the ENA for SMART software;
+#'  otherwise, when a vector of weights if supplied, weighted analysis is computed.
 #'
-#' @param .edema A character vector indicating if an observation has bilateral
-#' edema or not. The codes are "y" for presence and "n" for absence of bilateral
-#' edema. Default is `NULL`.
+#' @param .edema A vector of class `character` of edema. Code should be
+#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
 #'
-#' @param .summary_by A character vector containing data on the geographical areas
-#' where the data was collected and for which the analysis should be performed at.
+#' @param .summary_by A vector of class `character` of the geographical areas
+#' where the data was collected and for which the analysis should be performed.
 #'
-#' @returns A table with the descriptive statistics about wasting.
+#' @returns A summarised table of class `data.frame` of the descriptive
+#' statistics about combined wasting.
 #'
 #' @details
 #' A concept of "combined flags" is introduced in this function. It consists of
-#' taking the `flag_wfhz` and `flag_mfaz` vectors, generated from the MUAC and
-#' WFHZ wranglers, and checking if any value in either vector is flagged. If flagged,
-#' the value is marked as a flag in the "cflags" vector; otherwise, it is not flagged
-#' (see table below). This ensures that all flagged observations from both WFHZ
+#' defining as flag any observation that is flagged in either `flag_wfhz` or
+#' `flag_mfaz` vectors. A new column `cflag` for combined flags is created and
+#' added to `df`. This ensures that all flagged observations from both WFHZ
 #' and MFAZ data are excluded from the combined prevalence analysis.
 #'
+#' *The table below shows an overview of how `cflags` are defined*
 #' | **flag_wfhz** | **flag_mfaz** | **cflags** |
 #' | :---: | :---: | :---: |
 #' | 1 | 0  | 1 |

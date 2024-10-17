@@ -2,28 +2,23 @@
 % Please edit documentation in R/prevalence_muac.R
 \name{compute_weighted_prevalence}
 \alias{compute_weighted_prevalence}
-\title{Apply weighting to the MUAC prevalence when sample distribution is unbalanced
-between children aged 6 to 23 months and those aged 24 to 59 months old}
+\title{Apply the CDC/SMART prevalence weighting approach on MUAC data}
 \usage{
 compute_weighted_prevalence(df, .edema = NULL, .summary_by = NULL)
 }
 \arguments{
-\item{df}{A data frame object with the required variables already wrangled.}
+\item{df}{An already wrangled dataset object of class \code{data.frame} to use.}
 
-\item{.edema}{A character vector indicating if an observation has bilateral
-edema or not. The codes are "y" for presence and "n" for absence of bilateral
-edema. Default is \code{NULL}.}
+\item{.edema}{A vector of class \code{character} of edema. Code should be
+"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
 
-\item{.summary_by}{A character vector containing data of the geographical areas
-where the data was collected and for which the analysis should be performed at.}
+\item{.summary_by}{A vector of class \code{character} of the geographical areas
+where the data was collected and for which the analysis should be performed.}
 }
 \value{
-A tibble with dimensions that vary based on the use of \code{.summary_by}.
-If set to \code{NULL}, a 1 x 3 tibble is returned. Otherwise, the number of rows
-will match the number of groups or areas provided in \code{.summary_by},
-while the number of columns will remain the same.
+A table of class \code{data.frame} of dimensions that vary based on
+\code{.summary_by}, containing the results.
 }
 \description{
-Apply weighting to the MUAC prevalence when sample distribution is unbalanced
-between children aged 6 to 23 months and those aged 24 to 59 months old
+Apply the CDC/SMART prevalence weighting approach on MUAC data
 }

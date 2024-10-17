@@ -1,6 +1,10 @@
 #'
 #' Define wasting based on WFHZ, MFAZ, MUAC and Combined criteria
 #'
+#' @description
+#' Define if a given observation in the dataset is wasted or not, on the basis of
+#' WFHZ, MFAZ, MUAC and the combined criteria.
+#'
 #' @param df A dataset object of class `data.frame` to use.
 #'
 #' @param muac A vector of class `integer` of MUAC values in millimeters.

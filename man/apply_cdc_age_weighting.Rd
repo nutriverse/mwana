@@ -2,31 +2,28 @@
 % Please edit documentation in R/prevalence_muac.R
 \name{apply_cdc_age_weighting}
 \alias{apply_cdc_age_weighting}
-\title{Apply weighting to the MUAC prevalence when sample distribution is unbalanced
-between children aged 6 to 23 months and those aged 24 to 59 months old}
+\title{Apply the CDC/SMART prevalence weighting approach on MUAC data}
 \usage{
 apply_cdc_age_weighting(muac, age, .edema = NULL, status = c("sam", "mam"))
 }
 \arguments{
-\item{muac}{A numeric vector holding MUAC values (in mm).}
+\item{muac}{A vector of class \code{integer} of MUAC values (in mm).}
 
-\item{age}{A numeric vector holding child's age in months.}
+\item{age}{A vector of class \code{double} of child's age in months.}
 
-\item{.edema}{Optional. If given, it should be a character vector of "y"
-for presence and "n" for absence of bilateral edema.}
+\item{.edema}{A vector of class \code{character} of edema. Code should be
+"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
 
-\item{status}{A choice between "sam" and "mam" for the form of wasting.}
+\item{status}{A choice of the form of wasting to be defined.}
 }
 \value{
-A numeric vector of length and size 1.
+A vector of class \code{numeric} of length and size 1.
 }
 \description{
-\code{apply_cdc_age_weighting()} calculates a weighted proportion by adding the
-proportion of children under 2 years to twice the proportion of children over 2
-and then dividing by 3.
+Calculate a weighted prevalence estimate of MUAC by adding the proportion of
+children under 2 years to twice the proportion of children over 2 and then
+dividing by 3.
 }
 \details{
 This function is informed by the output of \code{\link[=age_ratio_test]{age_ratio_test()}}.
-Note that this method differs from the approach used in the SMART plausibility
-check. Please refer to the documentation for further details.
 }

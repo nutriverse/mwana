@@ -5,7 +5,7 @@
 \alias{compute_mfaz_prevalence}
 \alias{compute_muac_prevalence}
 \alias{compute_wfhz_prevalence}
-\title{Compute the prevalence of wasting on the basis of WFHZ, MFAZ and MUAC}
+\title{Compute the prevalence estimates of wasting on the basis of WFHZ, MFAZ or MUAC}
 \usage{
 compute_mfaz_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 
@@ -14,27 +14,27 @@ compute_muac_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 compute_wfhz_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 }
 \arguments{
-\item{df}{A data frame object with the required variables already wrangled.}
+\item{df}{An already wrangled dataset object of class \code{data.frame} to use.}
 
-\item{.wt}{A numeric vector holding final survey weights. When set to \code{NULL},
-the function assumes self weighted survey, as in the ENA for SMART software;
-Otherwise when supplied, weighted analysis is computed.}
+\item{.wt}{A vector of class \code{double} of the final survey weights. Default is
+\code{NULL} assuming a self weighted survey, as in the ENA for SMART software;
+otherwise, when a vector of weights if supplied, weighted analysis is computed.}
 
-\item{.edema}{A character vector indicating if an observation has bilateral
-edema or not. The codes are "y" for presence and "n" for absence of bilateral
-edema. Default is \code{NULL}.}
+\item{.edema}{A vector of class \code{character} of edema. Code should be
+"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
 
-\item{.summary_by}{A character vector containing data on the geographical areas
-where the data was collected and for which the analysis should be performed at.}
+\item{.summary_by}{A vector of class \code{character} of the geographical areas
+where the data was collected and for which the analysis should be performed.}
 }
 \value{
-A table with the descriptive statistics about wasting.
+A summarised table of class \code{data.frame} of the descriptive
+statistics about wasting.
 }
 \description{
 The prevalence is calculated in accordance with the complex sample design
 properties inherent to surveys. This includes weighting the survey data where
-applicable and applying PROBIT method estimation of prevalence (for WFHZ and
-MFAZ) when standard deviation is problematic. This is as in the SMART Methodology.
+applicable and applying PROBIT method estimation (for WFHZ) when the standard
+deviation is problematic. This is as in the SMART Methodology.
 }
 \examples{
 

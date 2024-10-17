@@ -15,38 +15,39 @@ compute_pps_based_combined_prevalence(
 compute_combined_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 }
 \arguments{
-\item{df}{A data frame object returned by \code{\link[=process_muac_data]{process_muac_data()}} and \code{\link[=process_wfhz_data]{process_wfhz_data()}}.
-Both wranglers need to be used sequentially. The order of use does not matter,
-however, since muac wrangler transforms MUAC values into centimeters, those
-need to be put back into millimeter. This can be achieved my using \code{\link[=recode_muac]{recode_muac()}} inside
-\code{\link[dplyr:mutate]{dplyr::mutate()}} or \code{\link[base:transform]{base::transform()}}.}
+\item{df}{An already wrangled dataset of class \code{data.frame} to use. Both
+wranglers (of WFHZ and MUAC) need to be used sequentially, regardless of the
+order. Note that MUAC values should be converted to millimeters after using
+the MUAC wrangler.}
 
-\item{.wt}{A numeric vector holding final survey weights. When set to \code{NULL},
-the function assumes self weighted survey, as in the ENA for SMART software;
-Otherwise when supplied, weighted analysis is computed.}
+\item{.wt}{A vector of class \code{double} of the final survey weights. Default is
+\code{NULL} assuming a self weighted survey, as in the ENA for SMART software;
+otherwise, when a vector of weights if supplied, weighted analysis is computed.}
 
-\item{.edema}{A character vector indicating if an observation has bilateral
-edema or not. The codes are "y" for presence and "n" for absence of bilateral
-edema. Default is \code{NULL}.}
+\item{.edema}{A vector of class \code{character} of edema. Code should be
+"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
 
-\item{.summary_by}{A character vector containing data on the geographical areas
-where the data was collected and for which the analysis should be performed at.}
+\item{.summary_by}{A vector of class \code{character} of the geographical areas
+where the data was collected and for which the analysis should be performed.}
 }
 \value{
-A table with the descriptive statistics about wasting.
+A summarised table of class \code{data.frame} of the descriptive
+statistics about combined wasting.
 }
 \description{
-\code{compute_combined_prevalence()} is a handy function for calculating the prevalence
-of combined wasting in accordance with the complex sample design properties
-inherent to surveys.
+The prevalence is calculated in accordance with the complex sample design
+properties inherent to surveys. This includes weighting the survey data where
+applicable. When either the acceptability of the standard deviation of WFHZ or
+of the age ratio test is problematic, prevalence is not calculated.
 }
 \details{
 A concept of "combined flags" is introduced in this function. It consists of
-taking the \code{flag_wfhz} and \code{flag_mfaz} vectors, generated from the MUAC and
-WFHZ wranglers, and checking if any value in either vector is flagged. If flagged,
-the value is marked as a flag in the "cflags" vector; otherwise, it is not flagged
-(see table below). This ensures that all flagged observations from both WFHZ
-and MFAZ data are excluded from the combined prevalence analysis.\tabular{ccc}{
+defining as flag any observation that is flagged in either \code{flag_wfhz} or
+\code{flag_mfaz} vectors. A new column \code{cflag} for combined flags is created and
+added to \code{df}. This ensures that all flagged observations from both WFHZ
+and MFAZ data are excluded from the combined prevalence analysis.
+
+\emph{The table below shows an overview of how \code{cflags} are defined}\tabular{ccc}{
    \strong{flag_wfhz} \tab \strong{flag_mfaz} \tab \strong{cflags} \cr
    1 \tab 0 \tab 1 \cr
    0 \tab 1 \tab 1 \cr

@@ -17,12 +17,12 @@ generate_pretty_table_muac(df)
 plausibility checkers.}
 }
 \value{
-A \code{data.frame} as \code{df}, columns columns renamed, values formatted and
+A \code{data.frame} as \code{df}. Columns are renamed, values formatted and
 ready to be shared.
 }
 \description{
 Useful to getting the output returned from the plausibility checkers
-into a presentable format. It converts scientific notation to standard
+into a presentable format. It converts scientific notations to standard
 notations, round values and rename columns to meaningful names.
 }
 \examples{
@@ -46,7 +46,7 @@ area = area
 ) |>
 generate_pretty_table_wfhz()
 
-## Check the plausibility of the absolute MUAC values ----
+## Check the plausibility of MUAC data ----
 
 anthro.01 |>
 process_muac_data(

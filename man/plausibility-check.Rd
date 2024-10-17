@@ -25,7 +25,7 @@ wrangled using this package's wranglers.}
 \item{flags}{A vector of class \code{numeric} of flagged observations.}
 
 \item{area}{A vector of class \code{character} of the geographical location where
-data was collected and to which the analysis should be aggregated at.}
+data was collected and for which the analysis should be aggregated.}
 
 \item{weight}{A vector of class \code{double} of child's weight in kilograms.}
 

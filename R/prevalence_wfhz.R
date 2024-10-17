@@ -1,26 +1,26 @@
 #'
-#' Compute the prevalence of wasting on the basis of WFHZ, MFAZ and MUAC
+#' Compute the prevalence estimates of wasting on the basis of WFHZ, MFAZ or MUAC
 #'
 #' @description
 #' The prevalence is calculated in accordance with the complex sample design
 #' properties inherent to surveys. This includes weighting the survey data where
-#' applicable and applying PROBIT method estimation of prevalence (for WFHZ and
-#' MFAZ) when standard deviation is problematic. This is as in the SMART Methodology.
+#' applicable and applying PROBIT method estimation (for WFHZ) when the standard
+#' deviation is problematic. This is as in the SMART Methodology.
 #'
-#' @param df A data frame object with the required variables already wrangled.
+#' @param df An already wrangled dataset object of class `data.frame` to use.
 #'
-#' @param .wt A numeric vector holding final survey weights. When set to `NULL`,
-#' the function assumes self weighted survey, as in the ENA for SMART software;
-#' Otherwise when supplied, weighted analysis is computed.
+#' @param .wt A vector of class `double` of the final survey weights. Default is
+#'  `NULL` assuming a self weighted survey, as in the ENA for SMART software;
+#'  otherwise, when a vector of weights if supplied, weighted analysis is computed.
 #'
-#' @param .edema A character vector indicating if an observation has bilateral
-#' edema or not. The codes are "y" for presence and "n" for absence of bilateral
-#' edema. Default is `NULL`.
+#' @param .edema A vector of class `character` of edema. Code should be
+#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
 #'
-#' @param .summary_by A character vector containing data on the geographical areas
-#' where the data was collected and for which the analysis should be performed at.
+#' @param .summary_by A vector of class `character` of the geographical areas
+#' where the data was collected and for which the analysis should be performed.
 #'
-#' @returns A table with the descriptive statistics about wasting.
+#' @returns A summarised table of class `data.frame` of the descriptive
+#' statistics about wasting.
 #'
 #' @examples
 #' ## An example of application of `compute_wfhz_prevalence()` ----
@@ -187,32 +187,29 @@ compute_pps_based_wfhz_prevalence <- function(df,
 
 #'
 #'
-#' Compute the prevalence of wasting on the basis of the PROBIT method.
+#' Compute the prevalence estimates of wasting on the basis of the PROBIT method.
 #'
 #' @description
 #' This approach is applied when the standard deviation of WFHZ is problematic.
 #' The PROBIT method estimates the prevalence of wasting indirectly by calculating
-#' the area under the curve the tail of the curve, from negative infinitive to
+#' the area under the tail of the curve, from negative infinitive to
 #' the given threshold, using the cumulative normal distribution function with
 #' the mean and standard deviation as inputs.
 #'
-#' @param df A data frame object with the required variables already wrangled.
+#' @param df An already wrangled dataset object of class `data.frame` to use.
 #'
-#' @param x A numeric vector holding WFHZ or MFAZ values.
+#' @param x A vector of class `double` of WFHZ or MFAZ values.
 #'
-#' @param .status A choice on the form of wasting for which the prevalence should
-#' be calculated for.
+#' @param .status A choice of the form of wasting for which the prevalence should
+#' be estimated.
 #'
-#' @param .summary_by A character vector containing data on the geographical areas where
-#'  the data was collected. This is to group the survey design object into different
-#'  geographical areas in the data and allow for summaries to be computed for each of them.
-#'  Default is NULL.
+#' @param .summary_by A vector of class `character` of the geographical areas
+#' where the data was collected and for which the analysis should be performed.
 #'
-#' @param .for A choice between "wfhz" and "mfaz" for the anthropometric index you wish
-#'  to compute PROBIT prevalence on.
+#' @param .for A choice between "wfhz" and "mfaz" for the anthropometric index.
 #'
-#' @returns A data frame with the prevalence. No confidence intervals are
-#' yielded.
+#' @returns A summarised table of class `data.frame` of the prevalence estimates.
+#'  No confidence intervals are yielded.
 #'
 #' @rdname probit-method
 #'

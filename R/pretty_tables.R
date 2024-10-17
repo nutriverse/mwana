@@ -2,13 +2,13 @@
 #'
 #' @description
 #' Useful to getting the output returned from the plausibility checkers
-#' into a presentable format. It converts scientific notation to standard
+#' into a presentable format. It converts scientific notations to standard
 #' notations, round values and rename columns to meaningful names.
 #'
 #' @param df A summary table object of class `data.frame` returned by the
 #' plausibility checkers.
 #'
-#' @returns A `data.frame` as `df`, columns columns renamed, values formatted and
+#' @returns A `data.frame` as `df`. Columns are renamed, values formatted and
 #' ready to be shared.
 #'
 #' @examples
@@ -32,7 +32,7 @@
 #' ) |>
 #' generate_pretty_table_wfhz()
 #'
-#' ## Check the plausibility of the absolute MUAC values ----
+#' ## Check the plausibility of MUAC data ----
 #'
 #' anthro.01 |>
 #' process_muac_data(
