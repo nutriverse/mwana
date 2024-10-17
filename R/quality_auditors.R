@@ -1,37 +1,57 @@
 #'
-#' Audit the plausibility of WFHZ, MFAZ data and absolute MUAC values
+#' Check the plausibility of the data
 #'
 #' @description
-#' `check_plausibility_wfhz()`, `check_plausibility_mfaz()`, and
-#' `check_plausibility_muac()` examines the plausibility of data through a
-#' structured set of tests around sampling and measurement-related errors.
+#' Verify the overall acceptability of the data through a set of
+#' structured tests around sampling and measurement-related biases in the data.
 #'
-#' @param df A data frame yielded from [process_muac_data()] for
-#' `check_plausibility_mfaz()` and `check_plausibility_muac()`, and yielded from
-#' [process_wfhz_data()] for `check_plausibility_wfhz()`.
+#' @param df A dataset object of class `data.frame` to check. It should have been
+#' wrangled using this package's wranglers.
 #'
-#' @param sex A vector holding codes on child's sex: 1 for boy and 2 for girl.
+#' @param sex A vector of class `numeric` of child's sex: 1 for boy and 2 for girl.
 #'
-#' @param age A numeric vector holding age in months.
+#' @param age A vector of class `double` of child's age in months.
 #'
-#' @param muac A numeric vector holding MUAC measurements (in centimeters).
+#' @param muac A vector of class `double` of child's MUAC in centimeters.
 #'
-#' @param weight A numeric vector holding weight measurements (in kilograms).
+#' @param weight A vector of class `double` of child's weight in kilograms.
 #'
-#' @param height A numeric vector holding height measurements (in centimeters).
+#' @param height A vector of class `double` of child's height in centimeters.
 #'
-#' @param flags A character vector holding on values on flagged observations.
+#' @param flags A vector of class `numeric` of flagged observations.
 #'
-#' @param area A character vector holding values on where was the data collected
-#' and for which you want the analysis to be performed. If analysing data of just
-#' one area, you will still have to supply the corresponding column to `area` in
-#' `check_plausibility_mfaz()` or `check_plausibility_wfhz()`.
+#' @param area A vector of class `character` of the geographical location where
+#' data was collected and to which the analysis should be aggregated at.
 #'
-#' @returns A summary table of statistics with respective classification.
+#' @returns A summarised `data.frame` of plausibility test results and their
+#' respective acceptability ratings.
 #'
 #' @examples
 #'
-#' ## Audit the plausibility of MFAZ data ----
+#' ## Check the plausibility of WFHZ data ----
+#'
+#' anthro.01 |>
+#' process_age(
+#' svdate = "dos",
+#' birdate = "dob",
+#' age = age
+#' ) |>
+#' process_wfhz_data(
+#' sex = sex,
+#' weight = weight,
+#' height = height,
+#' .recode_sex = TRUE
+#' ) |>
+#' check_plausibility_wfhz(
+#' sex = sex,
+#' age = age,
+#' weight = weight,
+#' height = height,
+#' flags = flag_wfhz,
+#' area = area
+#' )
+#'
+#' ## Check the plausibility of MFAZ data ----
 #'
 #' anthro.01 |>
 #' process_age(
@@ -55,30 +75,7 @@
 #' area = area
 #' )
 #'
-#' ## Audit the plausibility of WFHZ ----
-#'
-#' anthro.01 |>
-#' process_age(
-#' svdate = "dos",
-#' birdate = "dob",
-#' age = age
-#' ) |>
-#' process_wfhz_data(
-#' sex = sex,
-#' weight = weight,
-#' height = height,
-#' .recode_sex = TRUE
-#' ) |>
-#' check_plausibility_wfhz(
-#' sex = sex,
-#' age = age,
-#' weight = weight,
-#' height = height,
-#' flags = flag_wfhz,
-#' area = area
-#' )
-#'
-#' ## Audit the plausibility of the absolute MUAC values ----
+#' ## Check the plausibility of the absolute MUAC values ----
 #'
 #' anthro.01 |>
 #' process_muac_data(
@@ -95,7 +92,7 @@
 #' muac = muac
 #' )
 #'
-#' @rdname auditor
+#' @rdname plausibility-check
 #'
 #' @export
 #'
@@ -142,7 +139,7 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
 
 #'
 #'
-#' @rdname auditor
+#' @rdname plausibility-check
 #'
 #' @export
 #'
@@ -192,7 +189,7 @@ check_plausibility_wfhz <- function(df, sex, age, weight, height, flags, area) {
 
 
 #'
-#' @rdname auditor
+#' @rdname plausibility-check
 #'
 #' @export
 #'

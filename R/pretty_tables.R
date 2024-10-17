@@ -1,20 +1,56 @@
-#' Get a formatted and presentable output table for the plausibility auditors
+#' Get a formatted and presentable output table for the plausibility checkers
 #'
 #' @description
-#' `generate_pretty_table_mfaz()`, `generate_pretty_table_wfhz()` and
-#' `generate_pretty_table_muac()` are useful to getting the output returned from
-#' the plausibility auditors into a presentable format. They convert scientific
-#' notation, round values and rename columns to meaningful names.
+#' Useful to getting the output returned from the plausibility checkers
+#' into a presentable format. It converts scientific notation to standard
+#' notations, round values and rename columns to meaningful names.
 #'
-#' @param df The table returned by [check_plausibility_mfaz()],
-#' [check_plausibility_wfhz()] or [check_plausibility_muac()].
+#' @param df A summary table object of class `data.frame` returned by the
+#' plausibility checkers.
 #'
-#' @returns An output table of the same size as the input, with values
-#' formatted, columns renamed, and ready to be shared.
+#' @returns A `data.frame` as `df`, columns columns renamed, values formatted and
+#' ready to be shared.
 #'
 #' @examples
 #'
-#' ## Audit the plausibility of MFAZ data ----
+#' ## Check the plausibility of WFHZ data ----
+#'
+#' anthro.01 |>
+#' process_wfhz_data(
+#' sex = sex,
+#' weight = weight,
+#' height = height,
+#' .recode_sex = TRUE
+#' ) |>
+#' check_plausibility_wfhz(
+#' sex = sex,
+#' age = age,
+#' weight = weight,
+#' height = height,
+#' flags = flag_wfhz,
+#' area = area
+#' ) |>
+#' generate_pretty_table_wfhz()
+#'
+#' ## Check the plausibility of the absolute MUAC values ----
+#'
+#' anthro.01 |>
+#' process_muac_data(
+#' sex = sex,
+#' muac = muac,
+#' age = NULL,
+#' .recode_sex = TRUE,
+#' .recode_muac = FALSE,
+#' unit = "none"
+#' ) |>
+#' check_plausibility_muac(
+#' flags = flag_muac,
+#' sex = sex,
+#' muac = muac
+#' ) |>
+#' generate_pretty_table_muac()
+#'
+#' ## Check the plausibility of MFAZ data ----
 #'
 #' anthro.01 |>
 #' process_age(
@@ -38,44 +74,6 @@
 #' area = area
 #' ) |>
 #' generate_pretty_table_mfaz()
-#'
-#' ## Audit the plausibility of absolute MUAC values ----
-#'
-#' anthro.01 |>
-#' process_muac_data(
-#' sex = sex,
-#' muac = muac,
-#' age = NULL,
-#' .recode_sex = TRUE,
-#' .recode_muac = FALSE,
-#' unit = "none"
-#' ) |>
-#' check_plausibility_muac(
-#' flags = flag_muac,
-#' sex = sex,
-#' muac = muac
-#' ) |>
-#' generate_pretty_table_muac()
-#'
-#' ## Audit the plausibility of WFHZ data ----
-#'
-#' anthro.01 |>
-#' process_wfhz_data(
-#' sex = sex,
-#' weight = weight,
-#' height = height,
-#' .recode_sex = TRUE
-#' ) |>
-#' check_plausibility_wfhz(
-#' sex = sex,
-#' age = age,
-#' weight = weight,
-#' height = height,
-#' flags = flag_wfhz,
-#' area = area
-#' ) |>
-#' generate_pretty_table_wfhz()
-#'
 #'
 #' @rdname pretty_table
 #'
