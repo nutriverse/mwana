@@ -2,23 +2,29 @@
 % Please edit documentation in R/prevalence_muac.R
 \name{tell_muac_analysis_strategy}
 \alias{tell_muac_analysis_strategy}
-\title{A helper function to tell how to go about MUAC prevalence analysis based on
-on the output of age ratio and standard deviation test results}
+\title{A helper function to determine the MUAC prevalence analysis approach to follow}
 \usage{
 tell_muac_analysis_strategy(age_ratio_class, sd_class)
 }
 \arguments{
-\item{age_ratio_class, sd_class}{Character vectors storing age ratio's p-values
-and standard deviation's classification, respectively.}
+\item{age_ratio_class}{A vector of class \code{character} of the acceptability
+classification of the age ratio test result.}
+
+\item{sd_class}{A vector of class \code{character} of the acceptability
+classification of the standard deviation analysis result.}
 }
 \value{
-A character vector of the same length containing the indication of
-what to do for the MUAC prevalence analysis: "weighted", "unweighted" and
-"missing". If "weighted", the CDC weighting approach is applied to correct for
-age bias. If "unweighted" a normal complex sample analysis is applied, and for
-the latter, NA are thrown.
+A vector of class \code{character} of the same length as the input vectors,
+containing values indicating the analysis approach for each analysis area: "weighted",
+"unweighted" and "missing".
 }
 \description{
-A helper function to tell how to go about MUAC prevalence analysis based on
-on the output of age ratio and standard deviation test results
+It determines the analysis approach to follow for a given analysis area on
+the basis of the rate of acceptability of the age ratio test and the standard
+deviation analysis result.
+}
+\details{
+When "weighted", the CDC weighting approach is applied to correct for
+age bias; when "unweighted" a normal complex sample analysis is applied; when
+"missing" \code{NA} gets thrown.
 }

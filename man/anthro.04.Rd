@@ -3,11 +3,11 @@
 \docType{data}
 \name{anthro.04}
 \alias{anthro.04}
-\title{MUAC data from a community-based sentinel site from an anonymized location}
+\title{A sample data of a community-based sentinel site from an anonymized location}
 \format{
 A tibble of 3,002 x 8.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
-   \emph{province} \tab  \cr
+   \emph{province} \tab location where data was collected \cr
    \emph{cluster} \tab Primary sampling unit \cr
    \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
    \emph{age} \tab calculated age in months with two decimal places \cr
@@ -17,22 +17,32 @@ A tibble of 3,002 x 8.\tabular{ll}{
    \emph{flag_mfaz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
 }
 }
+\source{
+Anonymous
+}
 \usage{
 anthro.04
 }
 \description{
-Data in \code{anthro.04} was generated from a community-based sentinel site of three provinces.
-Each province data set holds different scenarios that informs the appropriate analysis
-approach to follow. One province (province 3) has its MFAZ standard deviation and age
-ratio tests classified as problematic. Another province (province 2) has its age ratio
-classified as problematic, but with a within range standard deviation. Lastly, province 1
-has both tests falling within range of nor problematic. The data is used to test the
-performance of \verb{[compute_muac_prevalence()]} based when used on a multiple survey areas
-data that may or not have on the aforementioned test that may then warrant a different
-analysis approach, as the function is designed for.
+Data was generated through a community-based sentinel site conducted
+across three provinces. Each province's dataset presents distinct
+data quality scenarios, requiring tailored prevalence analysis:
+\itemize{
+\item "Province 1" has MFAZ's standard deviation and age ratio test rating of
+acceptability falling within range;
+\item "Province 2" has age ratio rated as problematic but with an acceptable
+standard deviation of MFAZ;
+\item "Province 3" has both tests rated as problematic.
+}
+
+This sample data is useful to demonstrate the use of prevalence functions on
+a multi-area survey data where variations in the rating of acceptability of the
+standard deviation exist, hence require different analyses approaches for each
+area to ensure accurate estimation.
 }
 \examples{
 anthro.04
+
 
 }
 \keyword{datasets}

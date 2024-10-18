@@ -2,16 +2,16 @@
 % Please edit documentation in R/age.R
 \name{compute_month_to_days}
 \alias{compute_month_to_days}
-\title{Recode age variable from months to days}
+\title{Calculate child's age in days}
 \usage{
 compute_month_to_days(x)
 }
 \arguments{
-\item{x}{A numeric vector containing values of age in months.}
+\item{x}{A double vector of child's age in months.}
 }
 \value{
-A numeric vector with values corresponding to age in days
+A double vector of the same length as \code{x} of age in days.
 }
 \description{
-Recode age variable from months to days
+Calculate child's age in days
 }

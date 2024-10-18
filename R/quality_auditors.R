@@ -1,43 +1,57 @@
 #'
-#' Plausibility checkers: MUAC-for-age z-scores, Weight-for-Height z-scores and
-#' MUAC
+#' Check the plausibility of the data
 #'
 #' @description
-#' `check_plausibility_mfaz()`, `check_plausibility_wfhz()` and
-#' `check_plausibility_muac()` lets you know the quality of your data, based on
-#' the statistics around MUAC-for-age zscores, weight-for-height z-scores and on
-#' crude MUAC, respectively. Note that `check_plausibility_wfhz()` is all about
-#' WHZ only. If you wish to know about MUAC checks consider using either
-#' `check_plausibility_mfaz()` or `check_plausibility_muac()`
+#' Verify the overall acceptability of the data through a set of
+#' structured tests around sampling and measurement-related biases in the data.
 #'
-#' @param df A data frame object returned by [process_muac_data()] for
-#' `check_plausibility_mfaz()` and `check_plausibility_muac()` and returned by
-#' [process_wfhz_data()] for `check_plausibility_wfhz()`.
+#' @param df A dataset object of class `data.frame` to check. It should have been
+#' wrangled using this package's wranglers.
 #'
-#' @param sex A vector telling whether a given child is a boy or girl.
+#' @param sex A vector of class `numeric` of child's sex: 1 for boy and 2 for girl.
 #'
-#' @param age A vector containing children's age in months.
+#' @param age A vector of class `double` of child's age in months.
 #'
-#' @param muac A vector containing MUAC measurements.
+#' @param muac A vector of class `double` of child's MUAC in centimeters.
 #'
-#' @param weight A vector containing weight measurements in kilograms.
+#' @param weight A vector of class `double` of child's weight in kilograms.
 #'
-#' @param height A vector containing height measurements in centimeters.
+#' @param height A vector of class `double` of child's height in centimeters.
 #'
-#' @param flags A character vector telling whether or not an observation is an
-#' outlier.
+#' @param flags A vector of class `numeric` of flagged observations.
 #'
-#' @param area A vector with values on where was the data collected. If you are
-#' analyzing a data set with just one area, provide it anyway to
-#' `check_plausibility_mfaz()` or `check_plausibility_wfhz()`
+#' @param area A vector of class `character` of the geographical location where
+#' data was collected and for which the analysis should be aggregated.
 #'
-#' @returns A summarized data frame containing quality checks statistics and
-#' respective classification.
-#'
+#' @returns A summarised `data.frame` of plausibility test results and their
+#' respective acceptability ratings.
 #'
 #' @examples
 #'
-#' ## Check Plausibility: MFAZ ----
+#' ## Check the plausibility of WFHZ data ----
+#'
+#' anthro.01 |>
+#' process_age(
+#' svdate = "dos",
+#' birdate = "dob",
+#' age = age
+#' ) |>
+#' process_wfhz_data(
+#' sex = sex,
+#' weight = weight,
+#' height = height,
+#' .recode_sex = TRUE
+#' ) |>
+#' check_plausibility_wfhz(
+#' sex = sex,
+#' age = age,
+#' weight = weight,
+#' height = height,
+#' flags = flag_wfhz,
+#' area = area
+#' )
+#'
+#' ## Check the plausibility of MFAZ data ----
 #'
 #' anthro.01 |>
 #' process_age(
@@ -61,30 +75,7 @@
 #' area = area
 #' )
 #'
-#' ## Check Plausibility: WFHZ ----
-#'
-#' anthro.01 |>
-#' process_age(
-#' svdate = "dos",
-#' birdate = "dob",
-#' age = age
-#' ) |>
-#' process_wfhz_data(
-#' sex = sex,
-#' weight = weight,
-#' height = height,
-#' .recode_sex = TRUE
-#' ) |>
-#' check_plausibility_wfhz(
-#' sex = sex,
-#' age = age,
-#' weight = weight,
-#' height = height,
-#' flags = flag_wfhz,
-#' area = area
-#' )
-#'
-#' ## Check Plausibility: MUAC ----
+#' ## Check the plausibility of the absolute MUAC values ----
 #'
 #' anthro.01 |>
 #' process_muac_data(
@@ -101,7 +92,7 @@
 #' muac = muac
 #' )
 #'
-#' @rdname plausibility_checkers
+#' @rdname plausibility-check
 #'
 #' @export
 #'
@@ -114,7 +105,7 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
       n = n(),
       flagged = sum({{ flags }}, na.rm = TRUE) / n(),
       flagged_class = classify_percent_flagged(.data$flagged, type = "mfaz"),
-      sex_ratio = sexRatioTest({{ sex }}, code = c(1, 2))$p,
+      sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))$p,
       sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
       age_ratio = age_ratio_test({{ age }}, .expectedP = 0.66)$p,
       age_ratio_class = classify_age_sex_ratio(.data$age_ratio),
@@ -148,7 +139,7 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
 
 #'
 #'
-#' @rdname plausibility_checkers
+#' @rdname plausibility-check
 #'
 #' @export
 #'
@@ -162,7 +153,7 @@ check_plausibility_wfhz <- function(df, sex, age, weight, height, flags, area) {
       n = n(),
       flagged = sum({{ flags }}, na.rm = TRUE) / n(),
       flagged_class = classify_percent_flagged(.data$flagged, type = "whz"),
-      sex_ratio = sexRatioTest({{ sex }}, code = c(1, 2))$p,
+      sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))$p,
       sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
       age_ratio = ageRatioTest({{ age }}, ratio = 0.85)$p,
       age_ratio_class = classify_age_sex_ratio(.data$age_ratio),
@@ -198,7 +189,7 @@ check_plausibility_wfhz <- function(df, sex, age, weight, height, flags, area) {
 
 
 #'
-#' @rdname plausibility_checkers
+#' @rdname plausibility-check
 #'
 #' @export
 #'
@@ -210,7 +201,7 @@ check_plausibility_muac <- function(df, flags, sex, muac) {
       n = n(),
       flagged = sum({{ flags }}, na.rm = TRUE) / n(),
       flagged_class = classify_percent_flagged(.data$flagged, type = "crude"),
-      sex_ratio = sexRatioTest({{ sex }}, code = c(1, 2))[["p"]],
+      sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))[["p"]],
       sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
       dps = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dps"]],
       dps_class = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dpsClass"]],

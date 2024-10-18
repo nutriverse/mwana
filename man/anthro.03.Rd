@@ -3,11 +3,11 @@
 \docType{data}
 \name{anthro.03}
 \alias{anthro.03}
-\title{District level SMART surveys conducted in four district in Mozambique}
+\title{A sample data of district level SMART surveys conducted in Mozambique}
 \format{
 A tibble of 943 x 9.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
-   \emph{district} \tab The administrative unit (admin 1) where data was collected. \cr
+   \emph{district} \tab The location where data was collected \cr
    \emph{cluster} \tab Primary sampling unit \cr
    \emph{team} \tab Survey teams \cr
    \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
@@ -18,16 +18,22 @@ A tibble of 943 x 9.\tabular{ll}{
    \emph{muac} \tab Mid-upper arm circumference (mm) \cr
 }
 }
+\source{
+Anonymous
+}
 \usage{
 anthro.03
 }
 \description{
-This example data contains survey data of four districts. Two of them have their WFHZ
-standard deviation classified as problematic, and the are other two within range of
-acceptable standard deviation. The data is used to test the performance of WFHZ based
-prevalence when used on a data set with multiple survey areas that may or not have
-different classification for standard deviation that may warrant different analysis
-approach, as the function is designed for.
+\code{anthro.03} contains survey data of four districts. Each district dataset
+presents distinct data quality scenarios that requires tailored prevalence
+analysis approach: two districts show a problematic WFHZ standard deviation
+whilst the remaining are all within range.
+
+This sample data is useful to demonstrate the use of the prevalence functions on
+a multi-area survey data where there can be variations in the rating of
+acceptability of the standard deviation, hence require different analyses approaches
+for each area to ensure accurate estimation.
 }
 \examples{
 anthro.03

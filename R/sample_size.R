@@ -1,51 +1,34 @@
 #'
-#' Check IPC AMN Sample Size Requirements
+#' Check whether the IPC Acute Malnutrition sample size requirements were met
 #'
 #' @description
-#' Evidence used in [IPC](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/)
-#' comes from different sources, collected in different ways,
-#' namely: representative surveys, screenings or even data from community-based
-#' surveillance system - the sentinel sites. IPC AMN protocols have set minimum
-#' sampling a sample size requirements for each. For cluster-based
-#' representative surveys, there must be at least 25 primary sampling unit (PSUs).
-#' On screening, there ware two ways: i. exhaustive screening (door-to-door) or
-#' ii. sampled screening. For this, there should be at least three sites (i.e.,
-#' villages or communities, etc). `check_sample_size()` checks the
-#' on sampled screening.
+#' Verify whether the minimum sample size requirements for the area of analysis
+#' were met, in accordance with the IPC Acute Malnutrition (IPC AMN) protocols.
 #'
-#' `check_sample_size()` helps you know if your data meets the at least
-#' IPC AMN minimum requirements. This function should be used before proceeding
-#' to checking the quality of measurements. Doing this saves you from avoid
-#' working on data that do not meet the minimum requirements, as it will not be
-#' used in any IPC analysis.
+#' @param df A dataset of class `data.frame` to check.
 #'
-#' @param df A data frame containing the required variables.
+#' @param .group A vector of class `integer` of the cluster ID's for survey,
+#' screening or site ID's for screenings and sentinel sites.
 #'
-#' @param .group A vector containing the ID's of the primary sampling unit.
-#' Usually and ideally a numeric vector, but sometimes this variables may come as
-#' a character vector. Either way, `check_sample_size()` will execute
-#' the task accordingly.
+#' @param .data_type A choice between "survey" for survey data, "screening" for
+#' screening data or "ssite" for community-based sentinel site data.
 #'
-#' @param .data_type The data collection method: survey, screening or sentinel sites.
-#' If you wish to check IPC AMN requirements on surveys were met, set
-#' method = "survey"; for screening set method = "screening" and for sentinel
-#' sites set method = "ssite". If by mistake a different parameter is given,
-#' an error will be thrown and the function will stop, but with a guidance on
-#' how to go about.
+#' @returns A summarised table of three columns: `groups` for the total number
+#' of unique cluster or screening or site IDs; `n_obs` for the respective total
+#' number of children; and `meet_ipc` for whether the IPC AMN requirements were met.
 #'
-#' @returns `check_sample_size()` returns an output of the same type
-#' as the input (data frame), but of a different size. By default, the function
-#' returns a summary of length 1 (one row), but with three new columns added to
-#' the input data frame: `groups` (for survey), or sites (for screening or sentinel
-#' sites) `n_obs` and `meet_ipc`. The first will store the total number of PSUs
-#' in the sample. `n_obs` will store the total number of rows/observations and
-#' `meet_ipc` is a logical vector to say whether or not the IPC AMN minimum
-#' criteria for sample size was met. This is flexible according to the method you
-#' select with `.data_type = " "`.
+#' @details
+#' [The IPC Manual](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/).
+#'
 #'
 #' @examples
-#' # Have an input data frame --------------------------------------------------
-#' check_sample_size(anthro.01, .group = cluster, .data_type = "survey")
+#'
+#' anthro.01 |>
+#' dplyr::group_by(area) |>
+#' check_sample_size(
+#' .group = cluster,
+#' .data_type = "survey"
+#' )
 #'
 #' @export
 #'

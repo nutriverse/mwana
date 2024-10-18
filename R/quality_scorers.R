@@ -1,28 +1,20 @@
 #'
-#' Assign a penalty point for the amount of proportion flagged data and standard deviation
+#' Score the acceptability classification of the standard deviation and percentage
+#' of flagged data test results
 #'
 #' @description
-#' The function assigns a penalty score for a given category of test classification.
-#' The score range varies between 0 (when "Excellent") to 20 (when "Problematic") for
-#' both flagged data and standard deviation. This was borrowed from the
-#' [ENA for SMART software](https://smartmethodology.org/)
-#' In the SMART Methodology, flagged data and standard deviation are tho test
-#' criteria that gets the highest penalty scores, so it is here.
+#' Attribute a penalty point based on the acceptability classification in which
+#' the plausibility test result falls.
 #'
-#' @param x A character vector containing the test classifications of proportion
-#' of flagged data and the value of standard deviation.
+#' @param x A vector of class `character` of acceptability classification of the
+#' plausibility test results.
 #'
-#' @returns A numeric vector with the corresponding penalty points (scores) according
-#' to the classification.
+#' @returns A vector of class `integer` of the same length as `x` for the score.
 #'
-#' @examples
+#' @details
+#' The scoring criteria is as in [SMART Plausibility checks](https://smartmethodology.org/).
 #'
-#' ## Sample data ----
-#' x <- c("Excellent", "Problematic", "Acceptable", "Good")
-#' ## Apply the function ----
-#' assign_penalty_points_flags_and_sd(x)
-#'
-#' @export
+#' @rdname scorer
 #'
 assign_penalty_points_flags_and_sd <- function(x) {
   case_when(
@@ -33,29 +25,10 @@ assign_penalty_points_flags_and_sd <- function(x) {
   )
 }
 
+
 #'
-#' Assign a penalty point for the amount of selection biases in age and sex ratios
 #'
-#' @description
-#' The function assigns a penalty score for a age and sex ratio's test classification.
-#' The score range varies between 0 (when "Excellent") to 10 (when "Problematic") for
-#' both, according to the [ENA for SMART software](https://smartmethodology.org/).
-#'
-#' @param x A numeric vector containing p-values from either age or sex ratio
-#' test results.
-#'
-#' @returns A numeric vector with the corresponding penalty points (scores) according
-#' to the classification.
-#'
-#' @examples
-#'
-#' ## A vector storing age ratio or sex ratio p-values' classification ----
-#' x <- c("Excellent", "Problematic", "Acceptable", "Good")
-#'
-#' ## Apply the function ----
-#' assign_penalty_points_age_sex_ratio(x)
-#'
-#' @export
+#' @rdname scorer
 #'
 assign_penalty_points_age_sex_ratio <- function(x) {
   case_when(
@@ -68,28 +41,7 @@ assign_penalty_points_age_sex_ratio <- function(x) {
 
 #'
 #'
-#' Assign a penalty point for the amount of issues in Skweness and Kurtosis
-#'
-#' @description
-#' The function assigns a penalty score for a Skewness and Kurtosis test classification.
-#' The score range varies between 0 (when "Excellent") to 5 (when "Problematic") for
-#' both, according to the [ENA for SMART software](https://smartmethodology.org/).
-#'
-#' @param x A numeric vector containing Skewness or Kurtosis test results classification.
-#'
-#' @returns A numeric vector with the corresponding penalty points (scores) according
-#' to the classification.
-#'
-#' @examples
-#'
-#' ## A vector storing Skewness or Kurtosis test classification ----
-#'
-#' x <- c("Excellent", "Problematic", "Acceptable", "Good")
-#'
-#' ## Apply the function ----
-#' assign_penalty_points_skew_kurt(x)
-#'
-#' @export
+#' @rdname scorer
 #'
 assign_penalty_points_skew_kurt <- function(x) {
   case_when(
@@ -101,33 +53,24 @@ assign_penalty_points_skew_kurt <- function(x) {
 }
 
 #'
-#' Get the overall WHZ or MFAZ's quality score
 #'
+#' Get the overall acceptability score from the acceptability classification scores
 #'
 #' @description
-#' `compute_quality_score()` provides the overall quality score of either WHZ or MFAZ,
-#' by adding up the scores across each test criteria. This is an input to
-#' [classify_overall_quality()].
+#' Calculate the total amount of penalty points based on each plausibility test
+#' result acceptability classification for WFHZ and MFAZ.
 #'
-#' @param df A data frame containing the scores. If you wish the get the overall
-#' quality score for MFAZ, the input data frame must have seven (7) required
-#' columns containing test classification of flagged data, sex ratio, age ratio,
-#' standard deviation, skewness, kurtosis, crude MUAC's digit preference.
-#' Alternatively, if you wish to get the quality score of WHZ, then the input
-#' data frame must have the exact same columns in the plausibility report of the
-#' ENA for SMART software.
+#' @param df A dataset object of class `data.frame` to calculate from.
 #'
-#' @param type The method you wish to get the overall quality score for.
-#' A choice between "mfaz" and "whz". If you wish to know the overall survey
-#' score of your WHZ data, set `type = whz`, otherwise set `type = mfaz` for
-#' MFAZ. If by mistake a different input choice is given, an error will be
-#' thrown with a message guiding how to go about.
+#' @param type A choice between "wfhz" and "mfaz" for the basis on which the
+#' calculations should be made.
 #'
-#' @returns A vector (named `"quality_score"`) with the overall quality scores.
+#' @returns A `data.frame` based on `df` with a new column named `"quality_score"`
+#' for the overall of acceptability (of quality) score.
 #'
 #' @examples
-#' # example code
-#' ## Create a `df` object ----
+#'
+#' ## A sample data ----
 #'
 #' df <- data.frame(
 #' flagged_class = "Excellent",
@@ -139,12 +82,8 @@ assign_penalty_points_skew_kurt <- function(x) {
 #' kurt_class = "Acceptable"
 #' )
 #'
-#' ## Apply function ----
+#' ## Apply the function ----
 #' compute_quality_score(df, type = "mfaz")
-#'
-#' # You can also choose to chain the functions with a pipe operator ----
-#' df |>
-#' compute_quality_score(type = "mfaz")
 #'
 #' @export
 #'

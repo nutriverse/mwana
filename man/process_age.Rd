@@ -2,38 +2,38 @@
 % Please edit documentation in R/age.R
 \name{process_age}
 \alias{process_age}
-\title{Transform age in months and age in days with a data frame}
+\title{Wrangle child's age}
 \usage{
 process_age(df, svdate = NULL, birdate = NULL, age)
 }
 \arguments{
-\item{df}{The input data frame.}
+\item{df}{A dataset of class \code{data.frame} to process age from.}
 
-\item{svdate, birdate}{Vectors containing dates. \code{svdate} refers to the day, month
-and year when the data was collected; while \code{birdate} refers to the date when the
-child was born (birth-date). By default, both arguments are \code{NULL}. This is
-makes \code{process_age()} work even in data sets where either survey date or birth-
-data is not available, so the \code{process_age()} works on already given age variable.}
+\item{svdate}{A vector of class \code{Date} for date of data collection.
+Default is \code{NULL}.}
 
-\item{age}{A numeric vector containing already given age in months, usually an
-integer in the input data as it is estimated using local event calendars.
-\code{age} will typically be available on a particular row when \code{birth_date} of
-that same row is missing.}
+\item{birdate}{A vector of class \code{Date} for child's date of birth.
+Default is \code{NULL}.}
+
+\item{age}{A vector of class \code{integer} of age in months, usually estimated
+using local event calendars.}
 }
 \value{
-A data frame of the same length as the input data frame, but of a
-different width. If \code{svdate} or \code{birdate} are available, two new vectors are added
-to the data frame: \code{age} in months with two decimal places and \code{age_day} which
-is age in days with decimal two decimal places.
+A \code{data.frame} based on \code{df}. The variable \code{age} that is required to be
+included in \code{df} will be filled where applicable with the age in months for
+each row of data in \code{df}. A new variable for \code{df} named \code{age_days} will be
+created. Values for \code{age} and \code{age_days} for children less than 6.0 and greater
+than or equal to 60.0 months old will be set to \code{NA}.
 }
 \description{
-\code{process_age()} helps you get the variable age in the right format and ready
-to be used for downstream workflow, i.e., get z-scores, as well as exclude
-age values that are out-of-range.
+Wrangle child's age for downstream analysis. This includes calculating age
+in months based on the date of data collection and child's date of birth and
+setting to \code{NA} the age values that are less than 6.0 and greater than or equal
+to 60.0 months old.
 }
 \examples{
 
-# Have a sample data ----
+## A sample data ----
 df <- data.frame(
 survy_date = as.Date(c(
 "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),
@@ -42,8 +42,12 @@ birthdate = as.Date(c(
 age = c(NA, 36, NA, NA, NA)
 )
 
-## Apply function ----
+## Apply the function ----
 df |>
-process_age(svdate = "survy_date", birdate = "birthdate", age = age)
+process_age(
+svdate = "survy_date",
+birdate = "birthdate",
+age = age
+)
 
 }

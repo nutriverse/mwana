@@ -1,12 +1,12 @@
 #'
-#' Raw data of a district level representative survey
+#' A sample data of district level SMART surveys with location anonymised
 #'
 #' @description
-#' #' `anthro.01` is about a two-stage and PPS cluster sampling survey data
-#' conducted in two district following the SMART survey methodology in two
-#' livelihood zones. The location information was anonymized for confidentiality.
+#' `anthro.01` is a two-stage cluster-based survey with probability of selection
+#' of clusters proportional to the size of the population. The survey employed
+#' the SMART methodology.
 #'
-#' @format A tibble with 1191 rows and 11 columns.
+#' @format A tibble of 1,191 rows and 11 columns.
 #'
 #' | **Variable** | **Description** |
 #' | :--- | :--- |
@@ -22,31 +22,25 @@
 #' | *edema* | Edema, "n" = no, "y" = yes |
 #' | *muac* | Mid-upper arm circumference (mm) |
 #'
+#' @source Anonymous
+#'
 #' @examples
 #' anthro.01
+#'
 #'
 "anthro.01"
 
 #'
-#'
-#' Province representative survey conducted in Mozambique
+#' A sample of an already wrangled survey data
 #'
 #' @description
-#' `anthro.02` is about a household budget survey conducted in Mozambique in
-#' 2019/2020, known as IOF (*Inquérito ao Orçamento Familiar* in portuguese).
-#' The data is publicly available [here](https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-data_access).
-#' The survey had a module on nutrition with anthropometric measurements taken
-#' from children age 0-59 months for weight-for-height and 6-59 months for MUAC.
-#' *IOF* is a cluster and PPS-based, survey, with sampling done in two stages,
-#' designed to give representative estimates at province level. Its data
-#' collection spans for a period of 12 months, with anthropometric measurements
-#' taken during that period too. Read the [Bureau of Statistic's website on
-#' IOF](https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-sampling) for
-#' more details.
+#' A household budget survey data conducted in Mozambique in
+#' 2019/2020, known as *IOF* (*Inquérito ao Orçamento Familiar* in Portuguese). *IOF*
+#' is a two-stage cluster-based survey, representative at province level (admin 2),
+#'  with probability of the selection of the clusters proportional to the size of
+#'  the population. Its data collection spans for a period of 12 months.
 #'
-#' `anthro.02` has been processed for this package's purpose.
-#'
-#' @format A tibble with 2267 rows and 14 columns.
+#' @format A tibble of 2,267 rows and 14 columns.
 #'
 #' |**Variable** | **Description** |
 #' | :--- | :---|
@@ -65,29 +59,36 @@
 #' | *mfaz* | MUAC-for-age z-scores with 3 decimal places |
 #' | *flag_mfaz* | Flagged observations. 1=flagged, 0=not flagged |
 #'
+#' @source Mozambique National Institute of Statistics. The data is publicly
+#' available at <https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-data_access>.
+#' Data was wrangled using this package's wranglers. Details about survey design
+#' can be gotten from: <https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-sampling>
+#'
 #' @examples
 #' anthro.02
-#'
 #'
 "anthro.02"
 
 
 #'
-#' District level SMART surveys conducted in four district in Mozambique
+#' A sample data of district level SMART surveys conducted in Mozambique
 #'
 #' @description
-#' This example data contains survey data of four districts. Two of them have their WFHZ
-#' standard deviation classified as problematic, and the are other two within range of
-#' acceptable standard deviation. The data is used to test the performance of WFHZ based
-#' prevalence when used on a data set with multiple survey areas that may or not have
-#' different classification for standard deviation that may warrant different analysis
-#' approach, as the function is designed for.
+#' `anthro.03` contains survey data of four districts. Each district dataset
+#' presents distinct data quality scenarios that requires tailored prevalence
+#' analysis approach: two districts show a problematic WFHZ standard deviation
+#' whilst the remaining are all within range.
+#'
+#' This sample data is useful to demonstrate the use of the prevalence functions on
+#' a multi-area survey data where there can be variations in the rating of
+#' acceptability of the standard deviation, hence require different analyses approaches
+#' for each area to ensure accurate estimation.
 #'
 #' @format A tibble of 943 x 9.
 #'
 #' |**Variable** | **Description** |
 #' | :--- | :---|
-#' | *district* | The administrative unit (admin 1) where data was collected. |
+#' | *district* | The location where data was collected |
 #' | *cluster* | Primary sampling unit |
 #' | *team* | Survey teams |
 #' | *sex* | Sex, "m" = boys, "f" = girls |
@@ -97,6 +98,8 @@
 #' | *edema* | Edema, "n" = no, "y" = yes |
 #' | *muac* | Mid-upper arm circumference (mm) |
 #'
+#' @source Anonymous
+#'
 #' @examples
 #' anthro.03
 #'
@@ -105,24 +108,29 @@
 
 
 #'
-#' MUAC data from a community-based sentinel site from an anonymized location
+#'
+#' A sample data of a community-based sentinel site from an anonymized location
 #'
 #' @description
-#' Data in `anthro.04` was generated from a community-based sentinel site of three provinces.
-#' Each province data set holds different scenarios that informs the appropriate analysis
-#' approach to follow. One province (province 3) has its MFAZ standard deviation and age
-#' ratio tests classified as problematic. Another province (province 2) has its age ratio
-#' classified as problematic, but with a within range standard deviation. Lastly, province 1
-#' has both tests falling within range of nor problematic. The data is used to test the
-#' performance of `[compute_muac_prevalence()]` based when used on a multiple survey areas
-#' data that may or not have on the aforementioned test that may then warrant a different
-#' analysis approach, as the function is designed for.
+#' Data was generated through a community-based sentinel site conducted
+#' across three provinces. Each province's dataset presents distinct
+#' data quality scenarios, requiring tailored prevalence analysis:
+#'  + "Province 1" has MFAZ's standard deviation and age ratio test rating of
+#'  acceptability falling within range;
+#'  + "Province 2" has age ratio rated as problematic but with an acceptable
+#'  standard deviation of MFAZ;
+#'  + "Province 3" has both tests rated as problematic.
+#'
+#' This sample data is useful to demonstrate the use of prevalence functions on
+#' a multi-area survey data where variations in the rating of acceptability of the
+#' standard deviation exist, hence require different analyses approaches for each
+#' area to ensure accurate estimation.
 #'
 #' @format A tibble of 3,002 x 8.
 #'
 #' |**Variable** | **Description** |
 #' | :--- | :---|
-#' | *province* |
+#' | *province* | location where data was collected |
 #' | *cluster* | Primary sampling unit |
 #' | *sex* | Sex, "m" = boys, "f" = girls |
 #' | *age* | calculated age in months with two decimal places |
@@ -131,20 +139,17 @@
 #' | *mfaz* | MUAC-for-age z-scores with 3 decimal places |
 #' | *flag_mfaz* | Flagged observations. 1=flagged, 0=not flagged |
 #'
+#' @source Anonymous
+#'
 #' @examples
 #' anthro.04
+#'
 #'
 "anthro.04"
 
 
 #'
-#' A SMART survey data with standard deviation on weight-for-height zscores
-#' classified as problematic
-#'
-#' @description
-#' A SMART survey data with weight-for-height data where standard deviation is
-#' problematic. The data is used to test that `compute_wfhz_prevalence()` works as
-#' designed for when standard deviation is problematic.
+#' A sample SMART survey data with WFHZ standard deviation rated as problematic
 #'
 #' @format A tibble with 303 rows and 6 columns.
 #'
@@ -157,6 +162,8 @@
 #' | *wfhz* | MUAC-for-age z-scores with 3 decimal places |
 #' | *flag_wfhz* | Flagged observations. 1=flagged, 0=not flagged |
 #'
+#' @source Anonymous
+#'
 #' @examples
 #' wfhz.01
 #'
@@ -165,7 +172,7 @@
 
 
 #'
-#' A MUAC screening data from an anonymized setting
+#' A sample MUAC screening data from an anonymized setting
 #'
 #' @format A tibble with 661 rows and 4 columns.
 #'
@@ -176,18 +183,15 @@
 #' | *edema* | Edema, "n" = no, "y" = yes |
 #' | *muac* | Mid-upper arm circumference (mm) |
 #'
+#' @source Anonymous
+#'
 #' @examples
 #' mfaz.01
 #'
 "mfaz.01"
 
-#' A SMART survey data with MUAC
 #'
-#' @description
-#' A SMART survey data collected in an anonymized location. This data has
-#' mfaz standard deviation and age ratio within range for a normal prevalence
-#' analysis. It is, thus, used to check if `compute_muac_prevalence()` performs
-#' as designed.
+#' A sample SMART survey data with MUAC
 #'
 #' @format A tibble with 303 rows and 7 columns.
 #'
@@ -199,6 +203,8 @@
 #' | *edema* | Edema, "n" = no, "y" = yes |
 #' | *mfaz* | MUAC-for-age z-scores with 3 decimal places |
 #' | *flag_mfaz* | Flagged observations. 1=flagged, 0=not flagged |
+#'
+#' @source Anonymous
 #'
 #' @examples
 #' mfaz.02

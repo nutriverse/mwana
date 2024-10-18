@@ -2,44 +2,40 @@
 % Please edit documentation in R/age.R
 \name{age_ratio_test}
 \alias{age_ratio_test}
-\title{Age ratio test on children aged 6:23 over 24:59 months}
+\title{Test for statistical difference between the proportion of children aged 24 to
+59 months old over those aged 6 to 23 months old}
 \usage{
 age_ratio_test(age, .expectedP = 0.66)
 }
 \arguments{
-\item{age}{A vector storing values about child's age in months.}
+\item{age}{A double vector of age in months.}
 
-\item{.expectedP}{The expected proportion of children aged 24-59 months over
-children aged 6-29 months, considered to be of 0.66 according to the
+\item{.expectedP}{The expected proportion of children aged 24 to 59 months
+old over those aged 6 to 23 months old. This is estimated to be 0.66 as in the
 \href{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}{SMART MUAC tool}.}
 }
 \value{
-A list three statistics: \code{p} for p-value, \code{observedR} for observed ratio
-from your data, \code{observedP} for observed proportion of children 24-59 months
-over the universe of your sample data.
+A vector of class \code{list} of three statistics: \code{p} for p-value of the
+statistical difference between the observed and the expected proportion of
+children aged 24 to 59 months old over those aged 6 to 23 months old;
+\code{observedR} and \code{observedP} for the observed ratio and proportion respectively.
+
+@details
+This function should be used specifically for assessing MUAC data. For
+age ratio tests of children aged 6 to 29 months old over 30 to 59 months old, as
+performed in the SMART plausibility check, use \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}} instead.
 }
 \description{
-As documented in \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}}, age ratio test is an age-related
-test of survey data quality. This includes other assessments as screenings,
-sentinel sites, etc. Different to \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}}, in \code{age_ratio_test()}
-the ratio of children is calculate from children 6-23 months to the number of
-children age 24-59 months. The ratio is then compared to the expected ratio
-(set at 0.66). Then the difference between the observed ratio is compared to
-the expected using a Chi-squared test.
-
-\code{age_ratio_test()} should only be used for MUAC checks. This particularly
-useful as allows you to determine if downstream your analysis you should
-consider adjusting your MUAC prevalence, should there be more younger children
-than older children in your survey, screening or sentinel site data. If you
-wish to get the age ratio for children 6-29/30-59 like in SMART Methodology,
-then you should use \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}} NOT \code{age_ratio_test()}.
+Calculate the observed age ratio of children aged 24 to 59 months old over
+those aged 6 to 23 months old and test if there is a statistical difference
+between the observed and the expected.
 }
 \examples{
 
-## Have a sample data ----
-age <- seq(6,59) |> sample(300, replace = TRUE)
-
-## Apply the function ----
-age_ratio_test(age, .expectedP = 0.66)
+## An example of application using `anthro.02` dataset ----
+age_ratio_test(
+age = anthro.02$age,
+.expectedP = 0.66
+)
 
 }

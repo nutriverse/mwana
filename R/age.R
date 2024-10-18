@@ -1,27 +1,30 @@
 #'
-#' Recode age variable from months to days
+#' Calculate child's age in days
 #'
-#' @param x A numeric vector containing values of age in months.
+#' @param x A double vector of child's age in months.
 #'
-#' @returns A numeric vector with values corresponding to age in days
+#' @returns A double vector of the same length as `x` of age in days.
+#'
 #'
 compute_month_to_days <- function(x) {
   x * (365.25 / 12)
 }
 
+
+
+
 #'
-#' Get age in months from birth-date and the data when data was collected.
+#' Calculate child's age in months
 #'
-#' `compute_age_in_months()` works inside [dplyr::mutate()] or [base::transform()]
-#' It helps you to compute age in months from a pair of birth date and survey date.
+#' @description
+#' Calculate child's age in months based on date of birth and the data collection date.
 #'
-#' @param surv_date,birth_date Vectors containing dates. `surv_date` refers to the day,
-#' month and year when the data was collected; while `birth_date` refers to the date
-#' when the child was born.
+#' @param surv_date A vector of class `Date` for data collection date.
 #'
-#' @returns A vector of name `age` storing age in months, a mix of double and
-#' integer and `NA` for missing value if any of the processed age in months is
-#' < 6 or > 59.99 months.
+#' @param birth_date A vector of class `Date` for child's date of birth.
+#'
+#' @returns A vector of class `double` for child's age in months with two decimal places.
+#' Any value less than 6.0 and greater than or equal to 60.0 months will be set to `NA`.
 #'
 #'
 compute_age_in_months <- function (surv_date, birth_date) {
@@ -31,34 +34,38 @@ compute_age_in_months <- function (surv_date, birth_date) {
   age_mo <- ifelse(age_mo < 6.0 | age_mo >= 60.0, NA, age_mo)
 }
 
+
+
+
 #'
-#' Transform age in months and age in days with a data frame
+#' Wrangle child's age
 #'
-#' `process_age()` helps you get the variable age in the right format and ready
-#' to be used for downstream workflow, i.e., get z-scores, as well as exclude
-#' age values that are out-of-range.
+#' @description
+#' Wrangle child's age for downstream analysis. This includes calculating age
+#' in months based on the date of data collection and child's date of birth and
+#' setting to `NA` the age values that are less than 6.0 and greater than or equal
+#' to 60.0 months old.
 #'
-#' @param df The input data frame.
+#' @param df A dataset of class `data.frame` to process age from.
 #'
-#' @param svdate,birdate Vectors containing dates. `svdate` refers to the day, month
-#' and year when the data was collected; while `birdate` refers to the date when the
-#' child was born (birth-date). By default, both arguments are `NULL`. This is
-#' makes `process_age()` work even in data sets where either survey date or birth-
-#' data is not available, so the `process_age()` works on already given age variable.
+#' @param svdate A vector of class `Date` for date of data collection.
+#' Default is `NULL`.
 #'
-#' @param age A numeric vector containing already given age in months, usually an
-#' integer in the input data as it is estimated using local event calendars.
-#' `age` will typically be available on a particular row when `birth_date` of
-#' that same row is missing.
+#' @param birdate A vector of class `Date` for child's date of birth.
+#' Default is `NULL`.
 #'
-#' @returns A data frame of the same length as the input data frame, but of a
-#' different width. If `svdate` or `birdate` are available, two new vectors are added
-#' to the data frame: `age` in months with two decimal places and `age_day` which
-#' is age in days with decimal two decimal places.
+#' @param age A vector of class `integer` of age in months, usually estimated
+#' using local event calendars.
+#'
+#' @returns A `data.frame` based on `df`. The variable `age` that is required to be
+#' included in `df` will be filled where applicable with the age in months for
+#' each row of data in `df`. A new variable for `df` named `age_days` will be
+#' created. Values for `age` and `age_days` for children less than 6.0 and greater
+#' than or equal to 60.0 months old will be set to `NA`.
 #'
 #' @examples
 #'
-#' # Have a sample data ----
+#' ## A sample data ----
 #' df <- data.frame(
 #' survy_date = as.Date(c(
 #' "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),
@@ -67,9 +74,13 @@ compute_age_in_months <- function (surv_date, birth_date) {
 #' age = c(NA, 36, NA, NA, NA)
 #' )
 #'
-#' ## Apply function ----
+#' ## Apply the function ----
 #' df |>
-#' process_age(svdate = "survy_date", birdate = "birthdate", age = age)
+#' process_age(
+#' svdate = "survy_date",
+#' birdate = "birthdate",
+#' age = age
+#' )
 #'
 #' @export
 #'
@@ -95,42 +106,40 @@ process_age <- function(df, svdate = NULL, birdate = NULL, age) {
   tibble::as_tibble(df)
 }
 
+
+
 #'
-#' Age ratio test on children aged 6:23 over 24:59 months
+#' Test for statistical difference between the proportion of children aged 24 to
+#'  59 months old over those aged 6 to 23 months old
 #'
 #' @description
-#' As documented in [nipnTK::ageRatioTest()], age ratio test is an age-related
-#' test of survey data quality. This includes other assessments as screenings,
-#' sentinel sites, etc. Different to [nipnTK::ageRatioTest()], in `age_ratio_test()`
-#' the ratio of children is calculate from children 6-23 months to the number of
-#' children age 24-59 months. The ratio is then compared to the expected ratio
-#' (set at 0.66). Then the difference between the observed ratio is compared to
-#' the expected using a Chi-squared test.
+#' Calculate the observed age ratio of children aged 24 to 59 months old over
+#' those aged 6 to 23 months old and test if there is a statistical difference
+#' between the observed and the expected.
 #'
-#' `age_ratio_test()` should only be used for MUAC checks. This particularly
-#' useful as allows you to determine if downstream your analysis you should
-#' consider adjusting your MUAC prevalence, should there be more younger children
-#' than older children in your survey, screening or sentinel site data. If you
-#' wish to get the age ratio for children 6-29/30-59 like in SMART Methodology,
-#' then you should use [nipnTK::ageRatioTest()] NOT `age_ratio_test()`.
+#' @param age A double vector of age in months.
 #'
-#' @param age A vector storing values about child's age in months.
-#'
-#' @param .expectedP The expected proportion of children aged 24-59 months over
-#' children aged 6-29 months, considered to be of 0.66 according to the
+#' @param .expectedP The expected proportion of children aged 24 to 59 months
+#' old over those aged 6 to 23 months old. This is estimated to be 0.66 as in the
 #' [SMART MUAC tool](https://smartmethodology.org/survey-planning-tools/updated-muac-tool/).
 #'
-#' @returns A list three statistics: `p` for p-value, `observedR` for observed ratio
-#' from your data, `observedP` for observed proportion of children 24-59 months
-#' over the universe of your sample data.
+#' @returns A vector of class `list` of three statistics: `p` for p-value of the
+#' statistical difference between the observed and the expected proportion of
+#' children aged 24 to 59 months old over those aged 6 to 23 months old;
+#'  `observedR` and `observedP` for the observed ratio and proportion respectively.
+#'
+#'  @details
+#' This function should be used specifically for assessing MUAC data. For
+#' age ratio tests of children aged 6 to 29 months old over 30 to 59 months old, as
+#' performed in the SMART plausibility check, use [nipnTK::ageRatioTest()] instead.
 #'
 #' @examples
 #'
-#' ## Have a sample data ----
-#' age <- seq(6,59) |> sample(300, replace = TRUE)
-#'
-#' ## Apply the function ----
-#' age_ratio_test(age, .expectedP = 0.66)
+#' ## An example of application using `anthro.02` dataset ----
+#' age_ratio_test(
+#' age = anthro.02$age,
+#' .expectedP = 0.66
+#' )
 #'
 #' @export
 #'

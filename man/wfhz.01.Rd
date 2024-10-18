@@ -3,8 +3,7 @@
 \docType{data}
 \name{wfhz.01}
 \alias{wfhz.01}
-\title{A SMART survey data with standard deviation on weight-for-height zscores
-classified as problematic}
+\title{A sample SMART survey data with WFHZ standard deviation rated as problematic}
 \format{
 A tibble with 303 rows and 6 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
@@ -16,13 +15,14 @@ A tibble with 303 rows and 6 columns.\tabular{ll}{
    \emph{flag_wfhz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
 }
 }
+\source{
+Anonymous
+}
 \usage{
 wfhz.01
 }
 \description{
-A SMART survey data with weight-for-height data where standard deviation is
-problematic. The data is used to test that \code{compute_wfhz_prevalence()} works as
-designed for when standard deviation is problematic.
+A sample SMART survey data with WFHZ standard deviation rated as problematic
 }
 \examples{
 wfhz.01
