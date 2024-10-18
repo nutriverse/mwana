@@ -10,3 +10,6 @@
 ^doc$
 ^Meta$
 ^data-raw$
+^README\.qmd$
+^README_files$
+^mwana\.Rproj$

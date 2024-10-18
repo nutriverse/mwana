@@ -29,6 +29,7 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
+    quarto,
     spelling,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
@@ -39,4 +40,5 @@ RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.1)
 LazyData: true
-VignetteBuilder: knitr
+VignetteBuilder:
+    quarto

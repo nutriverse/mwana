@@ -39,7 +39,7 @@ In this way, more than just an R-based implementation of the ENA for SMART softw
 
 ## What does `mwana` do?
 
-It automates plausibility checks and prevalence analysis and respective summaries of the outputs.
+It automates plausibility checks and prevalence analyses and respective output summaries.
 
 ### Plausibility checks. 
 
@@ -118,7 +118,7 @@ digraph mwana {
 In the context of IPC AMN analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met depending on the methodology used to collect the data: survey, screening or sentinel sites. (Check out the vignette).
 
 ::: {.callout-tip}
-if you are undertaking a research and you want to censor your data before including in your statistical models, etc, mwana is a great helper.
+if you are undertaking a research and you want to wrangle your data before including in your statistical models, etc, `mwana` is a great resource.
 :::
 
 ::: {.callout-warning}
@@ -129,20 +129,27 @@ Please note that `mwana` is still highly experimental and is undergoing a lot of
 
 `mwana` is not yet on CRAN but you can install the development version from [nutriverse R universe](https://nutriverse.r-universe.dev) as follows:
 
-```{r install, eval = FALSE}
+```{r}
+#| label: installation
+#| eval: false
+
 remotes::install_github("tomaszaba/ipccheckr")
 ```
 
 Then load to in memory with
-```{r example}
+```{r}
+#| label: example
+
 library(ipccheckr)
 ```
 
 # Citation
 
-If you were enticed to using `ipccheckr` package and found it useful, please cite using the suggested citation provided by a call to `citation` function as follows:
+If you were enticed to using `mwana` package and found it useful, please cite using the suggested citation provided by a call to `citation` function as follows:
 
-```{r citation}
+```{r}
+#| label: citation
+
 citation("ipccheckr")
 ```
 

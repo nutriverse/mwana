@@ -1,0 +1,130 @@
+---
+title: "Checking if IPC AMN sample size requeriments were met"
+author: "Tomás Zaba"
+format: html
+vignette: >
+  %\VignetteIndexEntry{Checking if IPC AMN sample size requeriments were met}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| label: global-setup
+#| include: false
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = TRUE
+)
+
+library(ipccheckr)
+```
+Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrition (IPC AMN) can come from different sources with the data collected in different ways:  representative surveys, screenings or community-based surveillance system (known as sentinel sites). The IPC set minimum sample size requirements for each of these sources. Details can be read from the [IPC Manual version 3.1 ](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/). 
+
+In the IPC AMN analysis workflow, the very first step of a data analyst is to check if these requirements were met. This is done for each area meant to be included in the *de facto* IPC AMN analysis. For this, `mwana` provides a handy function: `check_sample_size()`.
+
+To demonstrate its usage, we will use a built-in sample dataset `anthro.01`.
+
+```{r}
+#| label: view-data
+#| echo: true
+#| eval: false
+
+head(anthro.01)
+```
+
+```{r}
+#| label: view-data.
+#| echo: false
+#| eval: true
+head(anthro.01)
+```
+
+`anthro.01` contains anthropometry data from SMART surveys from anonymized locations. We can check further details about the dataset by calling `help(anthro.01)` in `R` console. 
+
+Now that we are acquainted with the dataset, we can now execute the task. To achieve this we simply do:
+
+```{r}
+#| label: check
+#| echo: true
+#| eval: false
+
+check_sample_size(
+  df = anthro.01,
+  .group = cluster,
+  .data_type = "survey"
+)
+```
+
+Or we can also choose to chain the data object to the function using the pipe operator: 
+```{r}
+#| label: pipe_operator
+#| echo: true
+#| eval: false
+
+anthro.01 |> 
+  check_sample_size(
+    .group = cluster,
+    .data_type = "survey"
+  )
+```
+
+Either way, the returned output will be: 
+```{r}
+#| label: view_check
+#| echo: false
+#| eval: true
+
+anthro.01 |> 
+  check_sample_size(
+    .group = cluster,
+    .data_type = "survey"
+  )
+```
+
+A table (of class `tibble`) is returned with three columns:  
+
+  + Column `groups` counts the number of unique cluster ID's in the dataset.  
+  + Column `n_obs` counts the number of children the dataset.  
+  + Column `meet_ipc` indicates whether the IPC AMN sample size requirements (for surveys in this case) were met or not
+
+We often deal with multi-area dataset. We can get a summarised table by area as follows: 
+```{r}
+#| label: group_by
+#| echo: true
+#| eval: false
+
+## Load dplyr package ----
+library(dplyr)
+
+## Use group_by() function ----
+anthro.01 |> 
+  group_by(area) |> 
+  check_sample_size(
+    .group = cluster,
+    .data_type = "survey"
+  )
+```
+
+This will return: 
+
+```{r}
+#| label: view_group_by
+#| echo: false
+#| eval: true
+#| message: false
+
+## Load the `dplyr` library ----
+library(dplyr)
+
+## Use the `group_by()` function ----
+anthro.01 |> 
+  group_by(area) |> 
+  check_sample_size(
+    .group = cluster,
+    .data_type = "survey"
+  )
+```
+
+For screening or sentinel site-based data, we approach the task the same way; we only have to change the `.data_type` parameter to "screening" or to "ssite" as appropriate, as well as by supplying `.group` with the right column name of the sub-areas inside the main area (villages, localities, comunas, communities, etc) .
