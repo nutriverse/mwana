@@ -16,13 +16,13 @@ compute_combined_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 }
 \arguments{
 \item{df}{An already wrangled dataset of class \code{data.frame} to use. Both
-wranglers (of WFHZ and MUAC) need to be used sequentially, regardless of the
+wranglers (of WFHZ and of MUAC) need to be used sequentially, regardless of the
 order. Note that MUAC values should be converted to millimeters after using
 the MUAC wrangler.}
 
 \item{.wt}{A vector of class \code{double} of the final survey weights. Default is
-\code{NULL} assuming a self weighted survey, as in the ENA for SMART software;
-otherwise, when a vector of weights if supplied, weighted analysis is computed.}
+\code{NULL} assuming a self-weighted survey, as in the ENA for SMART software;
+otherwise a weighted analysis is computed.}
 
 \item{.edema}{A vector of class \code{character} of edema. Code should be
 "y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
@@ -31,19 +31,19 @@ otherwise, when a vector of weights if supplied, weighted analysis is computed.}
 where the data was collected and for which the analysis should be performed.}
 }
 \value{
-A summarised table of class \code{data.frame} of the descriptive
+A summarised table of class \code{data.frame} for the descriptive
 statistics about combined wasting.
 }
 \description{
 The prevalence is calculated in accordance with the complex sample design
-properties inherent to surveys. This includes weighting the survey data where
+properties inherent to surveys. This includes weighting of survey data where
 applicable. When either the acceptability of the standard deviation of WFHZ or
 of the age ratio test is problematic, prevalence is not calculated.
 }
 \details{
 A concept of "combined flags" is introduced in this function. It consists of
 defining as flag any observation that is flagged in either \code{flag_wfhz} or
-\code{flag_mfaz} vectors. A new column \code{cflag} for combined flags is created and
+\code{flag_mfaz} vectors. A new column \code{cflags} for combined flags is created and
 added to \code{df}. This ensures that all flagged observations from both WFHZ
 and MFAZ data are excluded from the combined prevalence analysis.
 

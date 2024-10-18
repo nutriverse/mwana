@@ -33,8 +33,8 @@ can be gotten from: \url{https://mozdata.ine.gov.mz/index.php/catalog/88#metadat
 anthro.02
 }
 \description{
-\code{anthro.02} is about a household budget survey conducted in Mozambique in
-2019/2020, known as IOF (\emph{Inquérito ao Orçamento Familiar} in Portuguese).\emph{IOF}
+A household budget survey data conducted in Mozambique in
+2019/2020, known as \emph{IOF} (\emph{Inquérito ao Orçamento Familiar} in Portuguese). \emph{IOF}
 is a two-stage cluster-based survey, representative at province level (admin 2),
 with probability of the selection of the clusters proportional to the size of
 the population. Its data collection spans for a period of 12 months.

@@ -24,17 +24,21 @@ Anonymous
 anthro.04
 }
 \description{
-\code{anthro.04} was generated from a community-based sentinel site conducted
+Data was generated through a community-based sentinel site conducted
 across three provinces. Each province's dataset presents distinct
 data quality scenarios, requiring tailored prevalence analysis:
-"Province 3" has problematic MFAZ standard deviation and age ratio tests;
-"Province 2" shows a problematic age ratio but acceptable MFAZ standard
-deviation; lastly, "Province 1" has both tests within acceptable ranges.
+\itemize{
+\item "Province 1" has MFAZ's standard deviation and age ratio test rating of
+acceptability falling within range;
+\item "Province 2" has age ratio rated as problematic but with an acceptable
+standard deviation of MFAZ;
+\item "Province 3" has both tests rated as problematic.
+}
 
-This sample data demonstrates the use of prevalence functions on multi-area
-survey data, where variations in the standard deviation ratings exist.
-As a result, different analytical approaches are required for each area
-to ensure accurate interpretation.
+This sample data is useful to demonstrate the use of prevalence functions on
+a multi-area survey data where variations in the rating of acceptability of the
+standard deviation exist, hence require different analyses approaches for each
+area to ensure accurate estimation.
 }
 \examples{
 anthro.04

@@ -34,8 +34,8 @@
 #' A sample of an already wrangled survey data
 #'
 #' @description
-#' `anthro.02` is about a household budget survey conducted in Mozambique in
-#' 2019/2020, known as IOF (*Inquérito ao Orçamento Familiar* in Portuguese).*IOF*
+#' A household budget survey data conducted in Mozambique in
+#' 2019/2020, known as *IOF* (*Inquérito ao Orçamento Familiar* in Portuguese). *IOF*
 #' is a two-stage cluster-based survey, representative at province level (admin 2),
 #'  with probability of the selection of the clusters proportional to the size of
 #'  the population. Its data collection spans for a period of 12 months.
@@ -74,21 +74,21 @@
 #' A sample data of district level SMART surveys conducted in Mozambique
 #'
 #' @description
-#' `anthro.03` contains survey data of four districts. Each district's dataset
+#' `anthro.03` contains survey data of four districts. Each district dataset
 #' presents distinct data quality scenarios that requires tailored prevalence
 #' analysis approach: two districts show a problematic WFHZ standard deviation
 #' whilst the remaining are all within range.
 #'
-#' This sample data demonstrates the use of prevalence functions on multi-area
-#' survey data, where there is variations in the standard deviation rating.
-#' As a result, different analyses approaches are required for each area
-#' to ensure accurate estimation.
+#' This sample data is useful to demonstrate the use of the prevalence functions on
+#' a multi-area survey data where there can be variations in the rating of
+#' acceptability of the standard deviation, hence require different analyses approaches
+#' for each area to ensure accurate estimation.
 #'
 #' @format A tibble of 943 x 9.
 #'
 #' |**Variable** | **Description** |
 #' | :--- | :---|
-#' | *district* | The administrative unit (admin 1) where data was collected. |
+#' | *district* | The location where data was collected |
 #' | *cluster* | Primary sampling unit |
 #' | *team* | Survey teams |
 #' | *sex* | Sex, "m" = boys, "f" = girls |
@@ -112,17 +112,19 @@
 #' A sample data of a community-based sentinel site from an anonymized location
 #'
 #' @description
-#' `anthro.04` was generated from a community-based sentinel site conducted
+#' Data was generated through a community-based sentinel site conducted
 #' across three provinces. Each province's dataset presents distinct
 #' data quality scenarios, requiring tailored prevalence analysis:
-#' "Province 3" has problematic MFAZ standard deviation and age ratio tests;
-#' "Province 2" shows a problematic age ratio but acceptable MFAZ standard
-#' deviation; lastly, "Province 1" has both tests within acceptable ranges.
+#'  + "Province 1" has MFAZ's standard deviation and age ratio test rating of
+#'  acceptability falling within range;
+#'  + "Province 2" has age ratio rated as problematic but with an acceptable
+#'  standard deviation of MFAZ;
+#'  + "Province 3" has both tests rated as problematic.
 #'
-#' This sample data demonstrates the use of prevalence functions on multi-area
-#' survey data, where variations in the standard deviation ratings exist.
-#' As a result, different analytical approaches are required for each area
-#' to ensure accurate interpretation.
+#' This sample data is useful to demonstrate the use of prevalence functions on
+#' a multi-area survey data where variations in the rating of acceptability of the
+#' standard deviation exist, hence require different analyses approaches for each
+#' area to ensure accurate estimation.
 #'
 #' @format A tibble of 3,002 x 8.
 #'
