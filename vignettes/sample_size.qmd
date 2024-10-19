@@ -1,19 +1,20 @@
 ---
-title: "Checking if IPC AMN sample size requeriments were met"
-author: "Tomás Zaba"
+title: "Checking if IPC Acute Malnutrition sample size requeriments were met"
+author: Tomás Zaba
 format: html
 execute: 
   echo: false
+  include: true
+  eval: true
 number-sections: true
 vignette: >
-  %\VignetteIndexEntry{Checking if IPC AMN sample size requeriments were met}
+  %\VignetteIndexEntry{Checking if IPC Acute Malnutrition sample size requeriments were met}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r}
 #| label: global-setup
-#| include: false
 
 library(ipccheckr)
 ```
@@ -34,7 +35,6 @@ head(anthro.01)
 ```{r}
 #| label: view-data.
 #| echo: false
-#| eval: true
 
 head(anthro.01)
 ```
@@ -72,7 +72,6 @@ Either way, the returned output will be:
 ```{r}
 #| label: view_check
 #| echo: false
-#| eval: true
 
 anthro.01 |> 
   check_sample_size(
@@ -93,10 +92,10 @@ The above output is not quite useful yet, as we often deal with multi-area datas
 #| echo: true
 #| eval: false
 
-## Load dplyr package ----
+## Load the dplyr package ----
 library(dplyr)
 
-## Use group_by() function ----
+## Use the group_by() function ----
 anthro.01 |> 
   group_by(area) |> 
   check_sample_size(
@@ -110,13 +109,10 @@ This will return:
 ```{r}
 #| label: view_group_by
 #| echo: false
-#| eval: true
 #| message: false
-#| 
-## Load the `dplyr` library ----
+
 library(dplyr)
 
-## Use the `group_by()` function ----
 anthro.01 |> 
   group_by(area) |> 
   check_sample_size(
