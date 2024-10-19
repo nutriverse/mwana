@@ -1,0 +1,698 @@
+---
+title: "Running plausibility checks"
+author: Tomás Zaba
+format: html
+execute:
+  echo: false
+number-sections: true
+vignette: >
+  %\VignetteIndexEntry{Running plausibility checks}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| label: setup
+#| collapse: true
+
+library(ipccheckr)
+```
+
+# Introduction
+
+Plausibility check is a tool that evaluates the overall quality and acceptability of anthropometric data to ensure its suitability for informing decision-making process.  
+
+`mwana` provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or the absolute MUAC values.  
+
+In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on the absolute MUAC values. For demonstration, we will use a `mwana` built-in sample dataset named `anthro.01`. This dataset is about district level SMART surveys from anonymized locations. You can read more about it by calling `?anthro.01` in `R`console.
+
+We will begin the demonstration with the plausibility check that you are most familiar with and then proceed to the ones you are less familiar with. 
+
+## Plausibility check on WFHZ data
+
+We check the plausibility of WFHZ data by calling the `check_plausibility_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to help you understand some key features about this function. 
+
+`check_plausibility_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria as well. Beware though that there some small differences to have in mind: 
+
+  (i) `check_plausibility_wfhz()` does not include MUAC in its test suit. This is simply due the fact that now you can run a more comprehensive test suit on MUAC;
+  
+  (ii) `check_plausibility_wfhz()` allows user to run checks on a multiple-area dataset at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
+
+That is it! Now we can begin delving into the "how to". 
+
+It is always a good practice to start off by inspecting the dataset. Let us check the first 6 rows of the dataset:
+
+```{r}
+#| label: data
+#| echo: true
+#| eval: false
+
+head(anthro.01)
+```
+
+```{r}
+#| label: view_data
+#| echo: false
+#| eval: true
+
+head(anthro.01)
+```
+
+As you see, the dataset has eleven variables and way how their respective values are presented. This is useful to inform the data wrangling workflow. 
+
+Now let's wrangle the data. 
+
+### Data wrangling
+
+As mentioned somewhere above, before we supply data object to `check_plausibility_wfhz()`, we need to wrangle it first. This task is executed by `process_age()` and `process_wfhz_data()`. Read more about the technical documentation by doing this `help(process_age)` or `help(process_wfhz_data)` in `R` console. 
+
+#### Age {#sec-age}
+
+We use `process_age()` to calculate child's age in months based on the date of data collection and child's date of birth. This is done as follows:
+
+```{r}
+#| label: process_age
+#| echo: true
+#| eval: false
+
+age_mo <- process_age(
+  df = anthro.01,
+  svdate = "dos",
+  birdate = "dob",
+  age = age
+)
+```
+
+This will return: 
+
+```{r}
+#| label: view_process_age
+#| echo: false
+#| eval: true
+
+age_mo <- anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  )
+head(age_mo)
+```
+
+#### Wrangling all other required variables 
+
+For this, we call `process_wfhz_data()` as follows: 
+
+```{r}
+#| label: wrangle_wfhz_data
+#| echo: true
+#| eval: false
+
+wrangled_df <- anthro.01 |> 
+  process_wfhz_data(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  )
+```
+
+In this example, the argument `.recode_sex` was set to `TRUE`. That is because under the hood, to compute the z-scores, a task made possible thanks to the [zscorer](https://cran.r-project.org/web/packages/zscorer/index.htmlpackage) package, it uses sex coded into 1 and 2 for male and female,  respectively. This means that if our sex variable is already in 1 and 2's, we would set it to `FALSE`. 
+
+:::{.callout-note}
+If by any chance your sex variable is coded in any other different way than aforementioned, then you will have to recode it outside `mwana` utilities and then set `.recode_sex` accordingly.
+:::
+
+Under the hood, after recoding (or not) the sex variables, `process_wfhz_data()` computes the z-scores, then identifies outliers and flags them and adds them to the dataset through the `wfhz` and `flag_wfhz` variables. We can see this below: 
+
+```{r}
+#| label: view_df
+#| echo: false
+#| eval: true
+#| include: true
+
+wrangled_df <- anthro.01 |> 
+  process_wfhz_data(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  )
+
+x <- wrangled_df |> 
+  dplyr::select(area, wfhz, flag_wfhz)
+
+head(x)
+```
+
+### On to *de facto* WFHZ plausibility check
+
+We now can check the plausibility of our data. We do that by calling `check_plausibility_wfhz()` function as demonstrated below: 
+
+```{r}
+#| label: pl_wfhz
+#| echo: true
+#| eval: false
+
+x <- wrangled_df |> 
+  check_plausibility_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz,
+    area = area # This is variable name with the geographical areas to summarise at.
+  )
+```
+
+Or we can chain all previous functions using the pipe operator:
+
+```{r}
+#| label: pipe_workflow
+#| echo: true
+#| eval: false
+
+x <- anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_wfhz_data(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |> 
+  check_plausibility_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz,
+    area = area.
+  )
+```
+
+The returned output is: 
+
+```{r}
+#| label: view_pl_wfhz
+#| echo: false
+#| eval: true
+
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_wfhz_data(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |> 
+  check_plausibility_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz,
+    area = area         
+  )
+```
+
+As we can see, the returned output is a summary table of statistics and rating grouped by district. I think by now you do realize that this output is kind of what you used to construct through the extraction of details from each plausibility check reports from ENA for SMART software. You would do this district by district, jumping from ENA itself to Microsoft Word then to Excel spreadsheet - where you used to compile a table like the above back-and-forth.
+
+We can make this output more pretty and ready to share. We can achieve this by chaining `generate_pretty_table_wfhz()` to the previous pipeline: 
+
+```{r}
+#| label: pretty_table
+#| echo: true
+#| eval: false
+
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_wfhz_data(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |> 
+  check_plausibility_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz,
+    area = area
+  ) |> 
+  generate_pretty_table_wfhz()
+
+```
+
+This will give us: 
+
+```{r}
+#| label: view_pretty_table
+#| echo: false
+#| eval: true
+
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_wfhz_data(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |> 
+  check_plausibility_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz,
+    area = area
+  ) |> 
+  generate_pretty_table_wfhz()
+
+```
+
+An already formatted table, with scientific notations converted to standard notations, etc.
+
+At this point, you have reached the end of your workflow 🎉 .
+
+## Plausibility check on MFAZ data
+
+We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our data.
+
+:::{.callout-note}
+The MFAZ plausibility check was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that in WFHZ for MFAZ, with a difference in the amount of flags to be considered: maximum of 2%.
+:::
+
+We can run MFAZ plausibility check by calling `check_plausibility_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with processing age; for this, we approach the same way as in @sec-age.
+
+:::{.callout-important}
+## Age ratio test in MFAZ
+
+As you know, the age ratio test in WFHZ is done on children aged 6 to 29 months old over those aged 30 to 59 months old. 
+This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in [SMART MUAC Tool](https://smartmethodology.org/survey-planning-tools/updated-muac-tool/). The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.
+:::
+
+### Wrangling MFAZ data {#sec-wrangle_mfaz}
+
+This is the job of `process_muac_data()` function. We use it as follows:
+
+```{r}
+#| label: wrangle_mfaz_data
+#| echo: true
+#| eval: false
+
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_muac_data(
+    sex = sex,
+    muac = muac, 
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    unit = "cm"
+  )
+```
+
+Just as in WFHZ wrangler, under the hood, `process_muac_data()` computes the z-scores then identifies outliers and flags them. These are stored in the `mfaz` and `flag_mfaz` variables that are created and added to the dataset. 
+
+The above code returns: 
+
+```{r}
+#| label: view_wrangled_mfaz_data
+#| echo: false
+#| eval: true
+
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_muac_data(
+    sex = sex,
+    muac = muac, 
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    unit = "cm"
+  )
+```
+
+:::{.callout-note}
+`process_muac_data()` accepts MUAC values in centimeters. This is why it takes the arguments `.recode_muac` and `unit` to control whether there is need to transform the variable `muac`function or not. Read the function documentation to learn how to control these two arguments.
+:::
+
+### On to *de facto* MFAZ plausibility check
+
+We achieve this by calling the `check_plausibility_mfaz()` function: 
+
+```{r}
+#| label: pl_mfaz
+#| echo: true
+#| eval: false
+
+## Load dplyr library ----
+library(dplyr)
+
+## Check plausibility ----
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_muac_data(
+    sex = sex,
+    muac = muac, 
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    unit = "cm"
+  ) |> 
+  mutate(muac = recode_muac(muac, unit = "mm")) |> 
+  check_plausibility_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz,
+    area = area
+  )
+```
+
+And this will return: 
+
+```{r}
+#| label: view_pl_mfaz
+#| echo: false
+#| eval: true
+
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_muac_data(
+    sex = sex,
+    muac = muac, 
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    unit = "cm"
+  ) |> 
+  dplyr::mutate(muac = recode_muac(muac, unit = "mm")) |> 
+  check_plausibility_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz,
+    area = area
+  )
+```
+
+We can also make this output pretty and ready to share it out. We just need to call `generate_pretty_table_mfaz()` and chain it to the pipeline:
+
+```{r}
+#| label: pretty_mfaz
+#| echo: true
+#| eval: false
+
+## Load dplyr library ----
+library(dplyr)
+
+## Check plausibility ----
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_muac_data(
+    sex = sex,
+    muac = muac, 
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    unit = "cm"
+  ) |> 
+  mutate(muac = recode_muac(muac, unit = "mm")) |> 
+  check_plausibility_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz,
+    area = area
+  ) |> 
+  generate_pretty_table_mfaz()
+```
+
+This will return: 
+
+```{r}
+#| label: view_pretty_mfaz
+#| echo: false
+#| message: false
+#| eval: true
+
+anthro.01 |> 
+  process_age(
+    svdate = "dos",
+    birdate = "dob",
+    age = age
+  ) |> 
+  process_muac_data(
+    sex = sex,
+    muac = muac, 
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    unit = "cm"
+  ) |> 
+  dplyr::mutate(muac = recode_muac(muac, unit = "mm")) |> 
+  check_plausibility_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz,
+    area = area
+  ) |> 
+  generate_pretty_table_mfaz()
+```
+
+At this point, you have reached the end of your workflow ✨.
+
+## Plausibility check on the absolute MUAC values
+
+We will assess the plausibility of the MUAC data through it's absolute values when the variable age is not available in the dataset. This is a job assigned to `check_plausibility_muac()`. The workflow for this check is the shortest one.
+
+### Data wrangling
+
+As you can tell, z-scores cannot be computed in the absence of age. In this way, the data wrangling workflow would be quite minimal. You still set the arguments inside `process_muac_data()` as learned in @sec-wrangle_mfaz. The only difference is that here we will set `age` to `NULL`. Fundamentally, under the hood the function detects MUAC values that are outliers and flags them and stores them in `flag_muac` variable that is added to the dataset. 
+  
+We will continue using the same dataset:
+
+```{r usage.4, echo=TRUE, eval=FALSE}
+#| label: wrangle_muac
+#| echo: true
+#| eval: false
+
+anthro.01 |>
+process_muac_data(
+sex = sex,
+muac = muac,
+age = NULL,
+.recode_sex = TRUE,
+.recode_muac = FALSE,
+unit = "none"
+)
+```
+
+This returns: 
+
+```{r usage.4a, echo=FALSE}
+#| label: view_wrangled_muac
+#| echo: false
+#| eval: true
+
+anthro.01 |>
+process_muac_data(
+sex = sex,
+muac = muac,
+age = NULL,
+.recode_sex = TRUE,
+.recode_muac = FALSE,
+unit = "none"
+)
+```
+
+### On to *de facto* plausibility check
+
+We just have to add `check_plausibility_muac()` to the above pipeline:
+
+```{r}
+#| label: pl_muac
+#| echo: true
+#| eval: false
+
+anthro.01 |>
+process_muac_data(
+sex = sex,
+muac = muac,
+age = NULL,
+.recode_sex = TRUE,
+.recode_muac = FALSE,
+unit = "none"
+) |> 
+  check_plausibility_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+  )
+```
+
+And this will return: 
+
+```{r}
+#| label: view_pl_muac
+#| echo: false
+
+
+anthro.01 |>
+process_muac_data(
+sex = sex,
+muac = muac,
+age = NULL,
+.recode_sex = TRUE,
+.recode_muac = FALSE,
+unit = "none"
+) |> 
+  check_plausibility_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+  )
+```
+
+We can also return a formatted table with `generate_pretty_table_muac()`:
+
+```{r}
+#| label: pretty_table_muac
+#| echo: true
+#| eval: false
+
+anthro.01 |>
+process_muac_data(
+sex = sex,
+muac = muac,
+age = NULL,
+.recode_sex = TRUE,
+.recode_muac = FALSE,
+unit = "none"
+) |> 
+  check_plausibility_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+  ) |> 
+  generate_pretty_table_muac()
+```
+
+And we get
+
+```{r}
+#| label: view_pretty_tabl_muac
+#| echo: false
+
+anthro.01 |>
+process_muac_data(
+sex = sex,
+muac = muac,
+age = NULL,
+.recode_sex = TRUE,
+.recode_muac = FALSE,
+unit = "none"
+) |> 
+  check_plausibility_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+  ) |> 
+  generate_pretty_table_muac()
+```
+
+
+When working on multiple-area data, we will have to approach it slightly different. We use `dplyr::group_by()`:
+
+```{r usage.4g, echo=TRUE, eval=FALSE}
+#| label: by_area
+#| echo: true
+#| eval: false
+
+## Load library ----
+library(dplyr)
+
+## Check plausibility ----
+anthro.01 |>
+  process_muac_data(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    unit = "none"
+    ) |> 
+    group_by(area) |> 
+  check_plausibility_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+    ) |> 
+  generate_pretty_table_muac()
+```
+
+And we get:
+
+```{r usage.4h, echo=FALSE, message=FALSE}
+#| label: view_by_area
+#| echo: false
+#| message: false
+
+library(dplyr)
+
+anthro.01 |>
+  process_muac_data(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    unit = "none"
+    ) |> 
+    group_by(area) |> 
+  check_plausibility_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+    ) |> 
+  generate_pretty_table_muac()
+```
