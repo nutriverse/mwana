@@ -113,7 +113,7 @@ survey, screening or sentinel sites. (Check out the vignette).
 
 > [!TIP]
 >
-> if you are undertaking a research and you want to wrangle your data
+> If you are undertaking a research and you want to wrangle your data
 > before including in your statistical models, etc, `mwana` is a great
 > resource.
 

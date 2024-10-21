@@ -66,6 +66,7 @@ compute_age_in_months <- function (surv_date, birth_date) {
 #' @examples
 #'
 #' ## A sample data ----
+#'
 #' df <- data.frame(
 #' survy_date = as.Date(c(
 #' "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),
