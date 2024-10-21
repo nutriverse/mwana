@@ -1,11 +1,6 @@
 ---
 title: "Estimating the prevalence of wasting"
 author: Tomás Zaba
-format: html
-execute:
-  echo: false
-  eval: true
-number-sections: true
 vignette: >
   %\VignetteIndexEntry{Estimating the prevalence of wasting}
   %\VignetteEngine{quarto::html}

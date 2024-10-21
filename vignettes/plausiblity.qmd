@@ -1,10 +1,6 @@
 ---
 title: "Running plausibility checks"
 author: Tomás Zaba
-format: html
-execute:
-  echo: false
-number-sections: true
 vignette: >
   %\VignetteIndexEntry{Running plausibility checks}
   %\VignetteEngine{quarto::html}

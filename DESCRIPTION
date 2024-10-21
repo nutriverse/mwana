@@ -14,7 +14,7 @@ Description: A streamlined and comprehensive implementation of the Standardized
   prevalence estimation, with enhanced programmable process particularly when 
   handling large multiple datasets.
 License: GPL (>= 3)
-URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana
+URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana, http://nutriverse.io/mwana/
 BugReports: https://github.com/nutriverse/mwana/issues
 Imports: 
     dplyr (>= 1.1.4),

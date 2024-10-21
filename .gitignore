@@ -9,3 +9,9 @@ inst/doc
 docs
 /doc/
 /Meta/
+
+/README_files/
+
+/vignettes/plausibility_files/
+/vignettes/prevalence_files/
+/vignettes/sample_size_files/

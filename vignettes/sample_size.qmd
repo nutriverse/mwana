@@ -1,14 +1,8 @@
 ---
-title: "Checking if IPC Acute Malnutrition sample size requeriments were met"
+title: "Checking if IPC Acute Malnutrition sample size requirements were met"
 author: Tomás Zaba
-format: html
-execute: 
-  echo: false
-  include: true
-  eval: true
-number-sections: true
 vignette: >
-  %\VignetteIndexEntry{Checking if IPC Acute Malnutrition sample size requeriments were met}
+  %\VignetteIndexEntry{Checking if IPC Acute Malnutrition sample size requirements were met}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
