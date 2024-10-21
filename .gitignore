@@ -15,3 +15,5 @@ docs
 /vignettes/plausibility_files/
 /vignettes/prevalence_files/
 /vignettes/sample_size_files/
+
+/.quarto/
