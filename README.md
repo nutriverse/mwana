@@ -2,18 +2,20 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `mwana`: Utilities for Analysing Children’s Nutritional Status
+# `mwana`: Utilities for analysing children’s nutritional status
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Project Status: WIP – Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![R-CMD-check](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tomaszaba/ipccheckr/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/nutriverse/mwana/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tomaszaba/ipccheckr?branch=main)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![pages-build-deployment](https://github.com/nutriverse/mwana/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/pages/pages-build-deployment)
+[![R-CMD-check](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/gh/nutriverse/mwana/graph/badge.svg?token=kUUp1WOlSi)](https://codecov.io/gh/nutriverse/mwana)
+[![CodeFactor](https://www.codefactor.io/repository/github/nutriverse/mwana/badge.png)](https://www.codefactor.io/repository/github/nutriverse/mwana)
 <!-- badges: end -->
 
 Child anthropometric assessments, implemented routinely in most
@@ -54,7 +56,7 @@ process particularly when handling large multiple datasets.
 >
 > `mwana` was made possible thanks to the state-of-the-art work in
 > nutrition survey guidance led by the [SMART
-> initiative](https://smartmethodology.org). Under to hood, `mwana`
+> initiative](https://smartmethodology.org). Under the hood, `mwana`
 > bundles the SMART guidance through the use of the National Information
 > Platforms for Nutrition Anthropometric Data Toolkit (nipnTK)
 > functionalities in `R` to build its handy function around plausibility
@@ -82,7 +84,10 @@ summaries of the outputs.
 
 #### A useful workflow for plausibility check using `mwana`
 
-<img src="man/figures/README-worflow-1.png" data-fig-align="center" />
+    PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
+
+<img src="README_files/figure-commonmark/workflow-1.png"
+data-fig-align="center" />
 
 ### Prevalence analysis
 
@@ -135,12 +140,14 @@ sites. (Check out the vignette).
 
 ## Installation
 
-`mwana` is not yet on CRAN but you can install the development version
-from [nutriverse R universe](https://nutriverse.r-universe.dev) as
-follows:
+`mwana` is not yet on CRAN but can be installed fromthe [nutriverse R
+Universe](https://nutriverse.r-universe.dev) as follows:
 
 ``` r
-remotes::install_github("tomaszaba/ipccheckr")
+install.packages(
+  "mwana",
+  repos = c('https://nutriverse.r-universe.dev', 'https://cloud.r-project.org')
+)
 ```
 
 Then load to in memory with
@@ -157,22 +164,23 @@ function as follows:
 
 ``` r
 citation("ipccheckr")
-#> To cite ipccheckr: in publications use:
-#> 
-#>   Tomás Zaba, Ernest Guevarra (2024). _ipccheckr: Toolkit for
-#>   Performing IPC Acute Malnutrition-related Data Checks_. R package
-#>   version 0.0.0.9000, <https://github.com/tomaszaba/ipccheckr>.
-#> 
-#> A BibTeX entry for LaTeX users is
-#> 
-#>   @Manual{,
-#>     title = {ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks},
-#>     author = {{Tomás Zaba} and {Ernest Guevarra}},
-#>     year = {2024},
-#>     note = {R package version 0.0.0.9000},
-#>     url = {https://github.com/tomaszaba/ipccheckr},
-#>   }
 ```
+
+    To cite ipccheckr: in publications use:
+
+      Tomás Zaba, Ernest Guevarra (2024). _ipccheckr: Toolkit for
+      Performing IPC Acute Malnutrition-related Data Checks_. R package
+      version 0.0.0.9000, <https://github.com/tomaszaba/ipccheckr>.
+
+    A BibTeX entry for LaTeX users is
+
+      @Manual{,
+        title = {ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks},
+        author = {{Tomás Zaba} and {Ernest Guevarra}},
+        year = {2024},
+        note = {R package version 0.0.0.9000},
+        url = {https://github.com/tomaszaba/ipccheckr},
+      }
 
 # Community guidelines
 

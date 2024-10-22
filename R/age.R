@@ -38,10 +38,10 @@ compute_age_in_months <- function (surv_date, birth_date) {
 
 
 #'
-#' Wrangle child's age
+#' Process child's age
 #'
 #' @description
-#' Wrangle child's age for downstream analysis. This includes calculating age
+#' Process child's age for downstream analysis. This includes calculating age
 #' in months based on the date of data collection and child's date of birth and
 #' setting to `NA` the age values that are less than 6.0 and greater than or equal
 #' to 60.0 months old.
@@ -66,6 +66,7 @@ compute_age_in_months <- function (surv_date, birth_date) {
 #' @examples
 #'
 #' ## A sample data ----
+#'
 #' df <- data.frame(
 #' survy_date = as.Date(c(
 #' "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),

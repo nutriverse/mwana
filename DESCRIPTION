@@ -15,7 +15,6 @@ Description: A streamlined and comprehensive implementation of the Standardized
   handling large multiple datasets.
 License: GPL (>= 3)
 URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana
-BugReports: https://github.com/nutriverse/mwana/issues
 Imports: 
     dplyr (>= 1.1.4),
     lubridate,
@@ -29,6 +28,7 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
+    quarto,
     spelling,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
@@ -39,4 +39,4 @@ RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.1)
 LazyData: true
-VignetteBuilder: knitr
+VignetteBuilder: quarto

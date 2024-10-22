@@ -15,7 +15,6 @@ Useful links:
 \itemize{
   \item \url{https://github.com/nutriverse/mwana}
   \item \url{https://nutriverse.io/mwana}
-  \item Report bugs at \url{https://github.com/nutriverse/mwana/issues}
 }
 
 }

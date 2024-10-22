@@ -2,7 +2,7 @@
 % Please edit documentation in R/age.R
 \name{process_age}
 \alias{process_age}
-\title{Wrangle child's age}
+\title{Process child's age}
 \usage{
 process_age(df, svdate = NULL, birdate = NULL, age)
 }
@@ -26,7 +26,7 @@ created. Values for \code{age} and \code{age_days} for children less than 6.0 an
 than or equal to 60.0 months old will be set to \code{NA}.
 }
 \description{
-Wrangle child's age for downstream analysis. This includes calculating age
+Process child's age for downstream analysis. This includes calculating age
 in months based on the date of data collection and child's date of birth and
 setting to \code{NA} the age values that are less than 6.0 and greater than or equal
 to 60.0 months old.
@@ -34,6 +34,7 @@ to 60.0 months old.
 \examples{
 
 ## A sample data ----
+
 df <- data.frame(
 survy_date = as.Date(c(
 "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),
