@@ -16,3 +16,4 @@
 ^vignettes/plausibility_files$
 ^vignettes/prevalence_files$
 ^vignettes/sample_size_files$
+^CODE_OF_CONDUCT\.md$
