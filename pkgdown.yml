@@ -2,10 +2,10 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  plausiblity: plausiblity.html
+  plausibility: plausibility.html
   prevalence: prevalence.html
   sample_size: sample_size.html
-last_built: 2024-10-23T15:09Z
+last_built: 2024-10-24T09:28Z
 urls:
   reference: https://nutriverse.io/mwana/reference
   article: https://nutriverse.io/mwana/articles
