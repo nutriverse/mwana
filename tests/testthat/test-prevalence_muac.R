@@ -65,7 +65,7 @@ local({
 local({
   #### Input data ----
   x <- mfaz.01 |>
-    process_age(age = age) |>
+    mw_wrangle_age(age = age) |>
     process_muac_data(
       sex = sex,
       muac = muac,
@@ -114,7 +114,7 @@ local({
 local({
   #### Input data ----
   x <- mfaz.01 |>
-    process_age(age = age) |>
+    mw_wrangle_age(age = age) |>
     process_muac_data(
       sex = sex,
       muac = muac,

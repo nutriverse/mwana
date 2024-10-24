@@ -43,9 +43,9 @@ local(
 local(
   {
     quality <- anthro.01 |>
-      process_age(
-        svdate = "dos",
-        birdate = "dob",
+      mw_wrangle_age(
+        dos = dos,
+        dob = dob,
         age = age
       ) |>
       process_muac_data(
@@ -93,9 +93,9 @@ local(
 local(
   {
     quality <- anthro.01 |>
-      process_age(
-        svdate = "dos",
-        birdate = "dob",
+      mw_wrangle_age(
+        dos = dos,
+        dob = dob,
         age = age
       ) |>
       process_wfhz_data(

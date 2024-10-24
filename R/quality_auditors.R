@@ -31,9 +31,9 @@
 #' ## Check the plausibility of WFHZ data ----
 #'
 #' anthro.01 |>
-#' process_age(
-#' svdate = "dos",
-#' birdate = "dob",
+#' mw_wrangle_age(
+#' dos = dos,
+#' dob = dob,
 #' age = age
 #' ) |>
 #' process_wfhz_data(
@@ -54,9 +54,9 @@
 #' ## Check the plausibility of MFAZ data ----
 #'
 #' anthro.01 |>
-#' process_age(
-#' svdate = "dos",
-#' birdate = "dob",
+#' mw_wrangle_age(
+#' dos = dos,
+#' dob = dob,
 #' age = age
 #' ) |>
 #' process_muac_data(
@@ -107,7 +107,7 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
       flagged_class = classify_percent_flagged(.data$flagged, type = "mfaz"),
       sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))$p,
       sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
-      age_ratio = age_ratio_test({{ age }}, .expectedP = 0.66)$p,
+      age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
       age_ratio_class = classify_age_sex_ratio(.data$age_ratio),
       dps = digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
       dps_class = digitPreference({{ muac }}, digits = 1, values = 0:9)$dpsClass,
