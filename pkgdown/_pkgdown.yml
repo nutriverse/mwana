@@ -43,33 +43,43 @@ home:
     href: https://www.ipcinfo.org/
 
 # reference:
-#   - title: Age
+#   - title: Description
 #     contents:
-#     - compute_age_in_months
-#     - compute_month_to_days
-#     - proxess_age
+#     - mwana
 
-#   - title: Classifiers
-#     contents:
-#     - classify_age_sex_ratio
-#     - classify_overall_quality
-#     - classify_skew_kurt
-#     - classify_wasting_for_cdc_approach
-
-#   - title: Case definitions
-#     contents:
-#     - define_wasting_cases_muac
-#     - define_wasting_cases_whz
-#     - define_wasting_cases_combined
-#     - define_wasting
-
-#   - title: Datasets
+#   - title: Built-in datasets
 #     contents:
 #     - anthro.01
 #     - anthro.02
 #     - anthro.03
 #     - anthro.04
-#     - mfaz.01
-#     - mfaz.02
-#     - wfhz.01
+
+#   - title: Wrangle data
+#     contents:
+#     - mw_wrangle_age
+#     - mw_wrangle_wfhz
+#     - mw_wrangle_muac
+
+#   - title: Recode variables
+#     contents:
+#     - mw_recode_muac
+
+#   - title: Statistical tests
+#     contents:
+#     - mw_stattest_ageratio
+
+#   - title: Check IPC AMN sample size requirements
+#     contents:
+#     - mw_check_ipc_ssreq
+
+#   - title: Check plausibility
+#     contents:
+#     - mw_check_plausibility_wfhz
+#     - mw_check_plausibility_mfaz
+#     - mw_check_plausibility_muac
+
+#   - title: Neat output tables
+#     contents:
+#     - mw_neat_output_table
+
 

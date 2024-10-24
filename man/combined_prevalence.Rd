@@ -78,7 +78,7 @@ print(x)
 
 ## When working on data frame with multiple survey areas ----
 s <- anthro.03 |>
-process_age(age = age) |>
+mw_wrangle_age(age = age) |>
 process_muac_data(
 sex = sex,
 muac = muac,

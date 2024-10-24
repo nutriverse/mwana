@@ -67,9 +67,9 @@ generate_pretty_table_muac()
 ## Check the plausibility of MFAZ data ----
 
 anthro.01 |>
-process_age(
-svdate = "dos",
-birdate = "dob",
+mw_wrangle_age(
+dos = dos,
+dob = dob,
 age = age
 ) |>
 process_muac_data(

@@ -127,7 +127,7 @@ compute_pps_based_combined_prevalence <- function(df,
 #'
 #' ## When working on data frame with multiple survey areas ----
 #' s <- anthro.03 |>
-#' process_age(age = age) |>
+#' mw_wrangle_age(age = age) |>
 #' process_muac_data(
 #' sex = sex,
 #' muac = muac,
@@ -168,7 +168,7 @@ compute_combined_prevalence <- function(df,
     x <- summarise(
       df,
       std_wfhz = classify_sd(sd(remove_flags(as.numeric(.data$wfhz), "zscore"), na.rm = TRUE)),
-      age_ratio = classify_age_sex_ratio(age_ratio_test(.data$age, .expectedP = 0.66)$p),
+      age_ratio = classify_age_sex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
       std_mfaz = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
       muac_analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std_mfaz),
       .by = !!.summary_by
@@ -178,7 +178,7 @@ compute_combined_prevalence <- function(df,
     x <- summarise(
       df,
       std_wfhz = classify_sd(sd(remove_flags(as.numeric(.data$wfhz), "zscore"), na.rm = TRUE)),
-      age_ratio = classify_age_sex_ratio(age_ratio_test(.data$age, .expectedP = 0.66)$p),
+      age_ratio = classify_age_sex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
       std_mfaz = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
       muac_analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std_mfaz),
     )

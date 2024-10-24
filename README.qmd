@@ -123,7 +123,7 @@ Please note that `mwana` is still highly experimental and is undergoing a lot of
 
 ## Installation
 
-`mwana` is not yet on CRAN but can be installed fromthe [nutriverse R Universe](https://nutriverse.r-universe.dev) as follows:
+`mwana` is not yet on CRAN but can be installed from the [nutriverse R Universe](https://nutriverse.r-universe.dev) as follows:
 
 ```{r}
 #| label: installation
