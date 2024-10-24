@@ -54,7 +54,7 @@ tell_muac_analysis_strategy <- function(age_ratio_class, sd_class) {
 #' @returns A vector of class `numeric` of length and size 1.
 #'
 #' @details
-#' This function is informed by the output of [age_ratio_test()].
+#' This function is informed by the output of [mw_stattest_ageratio()].
 #'
 #'
 apply_cdc_age_weighting <- function(muac, age,

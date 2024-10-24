@@ -84,8 +84,6 @@ summaries of the outputs.
 
 #### A useful workflow for plausibility check using `mwana`
 
-    PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
-
 <img src="README_files/figure-commonmark/workflow-1.png"
 data-fig-align="center" />
 
@@ -140,7 +138,7 @@ sites. (Check out the vignette).
 
 ## Installation
 
-`mwana` is not yet on CRAN but can be installed fromthe [nutriverse R
+`mwana` is not yet on CRAN but can be installed from the [nutriverse R
 Universe](https://nutriverse.r-universe.dev) as follows:
 
 ``` r
