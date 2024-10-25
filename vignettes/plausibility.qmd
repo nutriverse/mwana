@@ -75,7 +75,8 @@ age_mo <- anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   )
 ```
 
@@ -90,7 +91,8 @@ age_mo <- anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   )
 head(age_mo)
 ```
@@ -172,7 +174,8 @@ x <- anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age, 
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -201,7 +204,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -232,7 +236,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -263,7 +268,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -317,7 +323,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -342,7 +349,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -375,7 +383,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -406,7 +415,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age, 
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -441,7 +451,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -474,7 +485,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,

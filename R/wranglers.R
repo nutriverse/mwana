@@ -210,7 +210,8 @@ recode_muac <- function(muac, unit = c("cm", "mm")) {
 #'  mw_wrangle_age(
 #'  dos = survey_date,
 #'  dob = birth_date,
-#'  age = age
+#'  age = age,
+#'  .decimals = 2
 #'  ) |>
 #'  process_muac_data(
 #'  sex = sex,

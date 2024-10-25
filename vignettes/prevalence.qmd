@@ -328,7 +328,10 @@ library(dplyr)
 
 ## Compute prevalence ----
 anthro.02 |> 
-  mw_wrangle_age(age = age) |> 
+  mw_wrangle_age(
+    age = age,
+    .decimals = 2
+    ) |> 
   process_muac_data(
     sex = sex, 
     .recode_sex = FALSE,
@@ -357,7 +360,10 @@ This will return:
 library(dplyr)
 
 anthro.02 |> 
-  mw_wrangle_age(age = age) |> 
+  mw_wrangle_age(
+    age = age,
+    .decimals = 2
+    ) |> 
   process_muac_data(
     sex = sex, 
     .recode_sex = FALSE,
@@ -410,7 +416,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 
@@ -444,7 +451,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 
@@ -502,7 +510,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 
@@ -540,7 +549,8 @@ anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 

@@ -4,19 +4,22 @@
 \alias{mw_wrangle_age}
 \title{Wrangle child's age}
 \usage{
-mw_wrangle_age(df, dos = NULL, dob = NULL, age)
+mw_wrangle_age(df, dos = NULL, dob = NULL, age, .decimals = 2)
 }
 \arguments{
-\item{df}{A dataset of class \code{data.frame} to process age from.}
+\item{df}{A dataset of class \code{data.frame} to wrangle age from.}
 
-\item{dos}{A vector of class \code{Date} for date of data collection.
+\item{dos}{A vector of class \code{Date} for date of data collection from the
+\code{df}. Default is \code{NULL}.}
+
+\item{dob}{A vector of class \code{Date} for child's date of birth from the \code{df}.
 Default is \code{NULL}.}
 
-\item{dob}{A vector of class \code{Date} for child's date of birth.
-Default is \code{NULL}.}
-
-\item{age}{A vector of class \code{integer} of age in months, usually estimated
+\item{age}{A vector of class \code{numeric} of age in months, usually estimated
 using local event calendars.}
+
+\item{.decimals}{The number of decimals places to which the age should be rounded.
+Default is 2.}
 }
 \value{
 A \code{data.frame} based on \code{df}. The variable \code{age} that is required to be
@@ -48,7 +51,8 @@ df |>
 mw_wrangle_age(
 dos = surv_date,
 dob = birth_date,
-age = age
+age = age,
+.decimals = 3
 )
 
 }

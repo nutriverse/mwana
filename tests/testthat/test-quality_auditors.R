@@ -8,7 +8,8 @@ local(
       mw_wrangle_age(
         dos = dos,
         dob = dob,
-        age = age
+        age = age,
+        .decimals = 2
       ) |>
       process_muac_data(
         sex = sex,
@@ -58,7 +59,8 @@ local(
       mw_wrangle_age(
         dos = dos,
         dob = dob,
-        age = age
+        age = age,
+        .decimals = 2
       ) |>
       process_wfhz_data(
         sex = sex,
