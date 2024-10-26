@@ -15,24 +15,25 @@ mw_wrangle_age(df, dos = NULL, dob = NULL, age, .decimals = 2)
 \item{dob}{A vector of class \code{Date} for child's date of birth from the \code{df}.
 Default is \code{NULL}.}
 
-\item{age}{A vector of class \code{numeric} of child's age in months. In most of
-the cases this will be estimated using local event calendars; in some other
-cases it can be a mix of the former and age in months based on date of birth
-and survey date.}
+\item{age}{A vector of class \code{numeric} of child's age in months. In most
+cases this will be estimated using local event calendars; in some other
+cases it can be a mix of the former and the one based on the child's
+date of birth and the date of data collection.}
 
 \item{.decimals}{The number of decimals places to which the age should be rounded.
 Default is 2.}
 }
 \value{
-A \code{data.frame} based on \code{df}. The variable \code{age} that is required to be
-included in \code{df} will be filled where applicable with the age in months for
-each row of data in \code{df}. A new variable for \code{df} named \code{age_days} will be
-created. Values for \code{age} and \code{age_days} for children less than 6.0 and greater
-than or equal to 60.0 months old will be set to \code{NA}.
+A \code{data.frame} based on \code{df}. The variable \code{age} will be automatically
+filled in each row where age value was missing and both the child's
+date of birth and the date of data collection are available. Rows where \code{age}
+is less than 6.0 and greater than or equal to 60.0 months old will be set to \code{NA}.
+Additionally, a new variable for \code{df} named \code{age_days}, of class \code{double}, will
+be created.
 }
 \description{
 Wrangle child's age for downstream analysis. This includes calculating age
-in months based on the date of data collection and child's date of birth and
+in months based on the date of data collection and the child's date of birth and
 setting to \code{NA} the age values that are less than 6.0 and greater than or equal
 to 60.0 months old.
 }

@@ -29,17 +29,18 @@ testthat::test_that(
     )
 
     #### Observed results ----
-    df <- df |>
+    x <- df |>
       mutate(
         age_mo = get_age_months(dos = surv_date, dob = bir_date)
       )
 
+    k <- get_age_months(dos = df[["surv_date"]], dob = df[["bir_date"]])
+
     #### The tests ----
-    testthat::expect_vector(df[["age_mo"]], size = 10)
-    testthat::expect_true(is.double(df[["age_mo"]]))
-    testthat::expect_error(calculate_age_in_months(df$surv_date, df$birdate))
-    testthat::expect_error(calculate_age_in_months(df$svdate, df$bir_date))
-    testthat::expect_true(is.numeric(df[["age_mo"]]))
+    testthat::expect_vector(x[["age_mo"]], size = 10)
+    testthat::expect_error(get_age_months(df[["surv_date"]], df[["birdate"]]))
+    testthat::expect_error(get_age_months(df[["svdate"]], df[["bir_date"]]))
+    testthat::expect_true(is.numeric(k))
   }
 )
 

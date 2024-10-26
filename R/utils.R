@@ -2,11 +2,12 @@
 #' Calculate child's age in months
 #'
 #' @description
-#' Calculate child's age in months based on date of birth and the data collection date.
+#' Calculate child's age in months based on the date of birth and the date of
+#' data collection.
 #'
-#' @param dos A vector of class `Date` for data collection date.
+#' @param dos A vector of class `Date` for the date of data collection.
 #'
-#' @param dob A vector of class `Date` for child's date of birth.
+#' @param dob A vector of class `Date` for the child's date of birth.
 #'
 #' @returns A vector of class `numeric` for child's age in months. Any value less
 #' than 6.0 and greater than or equal to 60.0 months will be set to `NA`.
@@ -35,16 +36,17 @@
 #'
 #' @export
 get_age_months <- function(dos, dob) {
-  ## Check if vector dos is 'Date' ----
+  ## Check if the class of vector "dos" is "Date" ----
   if (!is(dos, "Date")) {
-    stop("Child's birthdate should be of class 'Date'. Please try again.")
+    stop("Child's date of birth should be of class 'Date'. Please try again.")
   }
 
-  ## Check if vector dob is 'Date' ----
+  ## Check if the class of vector "dob" is "Date" ----
   if (!is(dob, "Date")) {
-    stop("Date of data collection should be of class 'Date'. Please try again.")
+    stop("The date of data collection should be of class 'Date'. Please try again.")
   }
 
+  ## Calculate age in months ----
   int <- dos - dob
   age_mo <- int / (365.25 / 12)
   age_mo <- ifelse(age_mo < 6.0 | age_mo >= 60.0, NA, age_mo)

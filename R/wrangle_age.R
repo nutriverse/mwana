@@ -4,7 +4,7 @@
 #'
 #' @description
 #' Wrangle child's age for downstream analysis. This includes calculating age
-#' in months based on the date of data collection and child's date of birth and
+#' in months based on the date of data collection and the child's date of birth and
 #' setting to `NA` the age values that are less than 6.0 and greater than or equal
 #' to 60.0 months old.
 #'
@@ -16,20 +16,20 @@
 #' @param dob A vector of class `Date` for child's date of birth from the `df`.
 #' Default is `NULL`.
 #'
-#' @param age A vector of class `numeric` of child's age in months. In most of
-#' the cases this will be estimated using local event calendars; in some other
-#' cases it can be a mix of the former and age in months based on date of birth
-#' and survey date.
+#' @param age A vector of class `numeric` of child's age in months. In most
+#' cases this will be estimated using local event calendars; in some other
+#' cases it can be a mix of the former and the one based on the child's
+#' date of birth and the date of data collection.
 #'
 #' @param .decimals The number of decimals places to which the age should be rounded.
 #' Default is 2.
 #'
-#' @returns A `data.frame` based on `df`. The variable `age` will be filled
-#' automatically in each row where age values were missing and both the child's
-#' date of birth and the date of data collection are available. Additionally,
-#' a new variable for `df` named `age_days` will be created. Values for `age`
-#' and `age_days` for children less than 6.0 and greater than or equal to 60.0
-#' months old will be set to `NA`.
+#' @returns A `data.frame` based on `df`. The variable `age` will be automatically
+#' filled in each row where age value was missing and both the child's
+#' date of birth and the date of data collection are available. Rows where `age`
+#' is less than 6.0 and greater than or equal to 60.0 months old will be set to `NA`.
+#' Additionally, a new variable for `df` named `age_days`, of class `double`, will
+#' be created.
 #'
 #' @examples
 #'
@@ -72,9 +72,10 @@ mw_wrangle_age <- function(df,
 
   ## Calculate child's age in months then in days ----
   if (!rlang::quo_is_null(dob) | !rlang::quo_is_null(dos)) {
-    ## Check if vector dos is.Date ----
+
+    ## Check if the class of vector "z" is "numeric" ----
     if (!is.numeric(z)) {
-      stop("Child's age should be of class 'integer'. Please try again.")
+      stop("Child's age should be of class 'numeric'. Please try again.")
     }
 
     ## Calculate age in months ----
@@ -87,9 +88,9 @@ mw_wrangle_age <- function(df,
         age_days = round(.data$age * (365.25 / 12), .decimals)
       )
   } else {
-    ## Check if vector age is.numeric ----
+    ## Check if the class of vector "z" is "numeric" ----
     if (!is.numeric(z)) {
-      stop("Child's age should be of class 'integer'. Please try again.")
+      stop("Child's age should be of class 'numeric'. Please try again.")
     }
 
     ## Calculate age in months ----

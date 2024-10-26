@@ -10,5 +10,8 @@ testthat::test_that(
     testthat::expect_type(x, "list")
     testthat::expect_vector(x)
     testthat::expect_named(x, c("p", "observedR", "observedP"))
+    testthat::expect_error(
+      mw_stattest_ageratio(as.character(anthro.01[["age"]]), .expectedP = 0.66)
+    )
   }
 )

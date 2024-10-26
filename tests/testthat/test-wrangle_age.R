@@ -22,7 +22,7 @@ testthat::test_that(
     w <- c(1461.00, 1095.75, 1748.00, 1153.00, 616.00)
 
     #### Observed results ----
-    df <- df |>
+    x <- df |>
       mw_wrangle_age(
         dos = surdate,
         dob = birdate,
@@ -31,9 +31,10 @@ testthat::test_that(
       )
 
     #### The tests ----
-    testthat::expect_type(df, "list")
-    testthat::expect_vector(df[["age_days"]], size = 5)
-    testthat::expect_equal(df[["age_days"]], w)
+    testthat::expect_type(x, "list")
+    testthat::expect_vector(x[["age_days"]], size = 5)
+    testthat::expect_equal(x[["age_days"]], w)
+    testthat::expect_true(is.double(x[["age_days"]]))
     testthat::expect_error(mw_wrangle_age(df, surdate, birdate, age_, 2))
   }
 )

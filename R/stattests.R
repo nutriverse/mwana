@@ -7,7 +7,7 @@
 #' those aged 6 to 23 months old and test if there is a statistical difference
 #' between the observed and the expected.
 #'
-#' @param age A double vector of age in months.
+#' @param age A vector of class `numeric` of child's age in months.
 #'
 #' @param .expectedP The expected proportion of children aged 24 to 59 months
 #' old over those aged 6 to 23 months old. This is estimated to be 0.66 as in the
@@ -34,14 +34,24 @@
 #' @export
 #'
 mw_stattest_ageratio <- function(age, .expectedP = 0.66) {
+
+  ## Check if the class of vector "age" is "numeric" ----
+  if(!is.numeric(age)) {
+    stop("Child's age should be of class 'numeric'. Please try again.")
+  }
+
+  ## Calculate observed proportion and ratio ----
   x <- ifelse(age >= 24, 1, 2)
   sum_o24 <- sum(na.omit(x == 1))
   sum_u24 <- sum(na.omit(x == 2))
   total <- sum(table(na.omit(x)))
   ratio <- sum_o24 / sum_u24
   prop <- sum_o24 / total
+
+  ## Test of proportions with Yates continuity correction set to false ----
   test <- prop.test(sum_o24, total, p = .expectedP, correct = FALSE)
 
+  ## Return ----
   list(
     p = test$p.value,
     observedR = ratio,

@@ -8,7 +8,7 @@
 mw_stattest_ageratio(age, .expectedP = 0.66)
 }
 \arguments{
-\item{age}{A double vector of age in months.}
+\item{age}{A vector of class \code{numeric} of child's age in months.}
 
 \item{.expectedP}{The expected proportion of children aged 24 to 59 months
 old over those aged 6 to 23 months old. This is estimated to be 0.66 as in the

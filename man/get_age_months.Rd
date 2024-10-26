@@ -7,16 +7,17 @@
 get_age_months(dos, dob)
 }
 \arguments{
-\item{dos}{A vector of class \code{Date} for data collection date.}
+\item{dos}{A vector of class \code{Date} for the date of data collection.}
 
-\item{dob}{A vector of class \code{Date} for child's date of birth.}
+\item{dob}{A vector of class \code{Date} for the child's date of birth.}
 }
 \value{
 A vector of class \code{numeric} for child's age in months. Any value less
 than 6.0 and greater than or equal to 60.0 months will be set to \code{NA}.
 }
 \description{
-Calculate child's age in months based on date of birth and the data collection date.
+Calculate child's age in months based on the date of birth and the date of
+data collection.
 }
 \examples{
 
