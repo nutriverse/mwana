@@ -211,7 +211,10 @@ local({
 
   ### Get the prevalence estimates ----
   p <- anthro.03 |>
-    process_age(age = age) |>
+    mw_wrangle_age(
+      age = age,
+      .decimals = 2
+      ) |>
     process_muac_data(
       sex = sex,
       muac = muac,

@@ -328,7 +328,10 @@ library(dplyr)
 
 ## Compute prevalence ----
 anthro.02 |> 
-  process_age(age = age) |> 
+  mw_wrangle_age(
+    age = age,
+    .decimals = 2
+    ) |> 
   process_muac_data(
     sex = sex, 
     .recode_sex = FALSE,
@@ -357,7 +360,10 @@ This will return:
 library(dplyr)
 
 anthro.02 |> 
-  process_age(age = age) |> 
+  mw_wrangle_age(
+    age = age,
+    .decimals = 2
+    ) |> 
   process_muac_data(
     sex = sex, 
     .recode_sex = FALSE,
@@ -407,10 +413,11 @@ library(dplyr)
 
 ## Apply the wrangling workflow ----
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 
@@ -441,10 +448,11 @@ This is to get the `wfhz` and `flag_wfhz` the `mfaz` and `flag_mfaz` added to th
 library(dplyr)
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 
@@ -499,10 +507,11 @@ library(dplyr)
 
 ## Apply the workflow ----
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 
@@ -537,10 +546,11 @@ We get this:
 library(dplyr)
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex, 

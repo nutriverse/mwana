@@ -81,7 +81,7 @@ height = height,
 df <- data.frame(
  survey_date = as.Date(c(
  "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),
- birthdate = as.Date(c(
+ birth_date = as.Date(c(
  "2019-01-01", NA, "2018-03-20", "2019-11-05", "2021-04-25")),
  age = c(NA, 36, NA, NA, NA),
  sex = c("m", "f", "m", "m", "f"),
@@ -91,10 +91,11 @@ df <- data.frame(
  ### The application of the function ----
 
  df |>
- process_age(
- svdate = "survey_date",
- birdate = "birthdate",
- age = age
+ mw_wrangle_age(
+ dos = survey_date,
+ dob = birth_date,
+ age = age,
+ .decimals = 2
  ) |>
  process_muac_data(
  sex = sex,

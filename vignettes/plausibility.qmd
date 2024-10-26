@@ -60,37 +60,39 @@ Now let's wrangle the data.
 
 ### Data wrangling
 
-As mentioned somewhere above, before we supply data object to `check_plausibility_wfhz()`, we need to wrangle it first. This task is executed by `process_age()` and `process_wfhz_data()`. Read more about the technical documentation by doing this `help(process_age)` or `help(process_wfhz_data)` in `R` console. 
+As mentioned somewhere above, before we supply data object to `check_plausibility_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `process_wfhz_data()`. Read more about the technical documentation by doing this `help(mw_wrangle_age)` or `help(process_wfhz_data)` in `R` console. 
 
 #### Age {#sec-age}
 
-We use `process_age()` to calculate child's age in months based on the date of data collection and child's date of birth. This is done as follows:
+We use `mw_wrangle_age()` to calculate child's age in months based on the date of data collection and child's date of birth. This is done as follows:
 
 ```{r}
-#| label: process_age
+#| label: wrangle_age
 #| echo: true
 #| eval: false
 
-age_mo <- process_age(
-  df = anthro.01,
-  svdate = "dos",
-  birdate = "dob",
-  age = age
-)
+age_mo <- anthro.01 |> 
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  )
 ```
 
 This will return: 
 
 ```{r}
-#| label: view_process_age
+#| label: view_age
 #| echo: false
 #| eval: true
 
 age_mo <- anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   )
 head(age_mo)
 ```
@@ -169,10 +171,11 @@ Or we can chain all previous functions using the pipe operator:
 #| eval: false
 
 x <- anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age, 
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -186,7 +189,7 @@ x <- anthro.01 |>
     weight = weight,
     height = height,
     flags = flag_wfhz,
-    area = area.
+    area = area
   )
 ```
 
@@ -198,10 +201,11 @@ The returned output is:
 #| eval: true
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -229,10 +233,11 @@ We can make this output more pretty and ready to share. We can achieve this by c
 #| eval: false
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -260,10 +265,11 @@ This will give us:
 #| eval: true
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_wfhz_data(
     sex = sex,
@@ -314,10 +320,11 @@ This is the job of `process_muac_data()` function. We use it as follows:
 #| eval: false
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -339,10 +346,11 @@ The above code returns:
 #| eval: true
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -372,10 +380,11 @@ library(dplyr)
 
 ## Check plausibility ----
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -403,10 +412,11 @@ And this will return:
 #| eval: true
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age, 
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -438,10 +448,11 @@ library(dplyr)
 
 ## Check plausibility ----
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,
@@ -471,10 +482,11 @@ This will return:
 #| eval: true
 
 anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
   ) |> 
   process_muac_data(
     sex = sex,

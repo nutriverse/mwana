@@ -60,10 +60,11 @@ local(
 local({
   #### Observed results ----
   processed_df <- anthro.01 |>
-    process_age(
-      svdate = "dos",
-      birdate = "dob",
-      age = age
+    mw_wrangle_age(
+      dos = dos,
+      dob = dob,
+      age = age,
+      .decimals = 2
     ) |>
     process_muac_data(
       sex = sex,
@@ -92,10 +93,11 @@ local({
 local({
   #### Observed results ----
   processed_df <- anthro.01 |>
-    process_age(
-      svdate = "dos",
-      birdate = "dob",
-      age = age
+    mw_wrangle_age(
+      dos = dos,
+      dob = dob,
+      age = age,
+      .decimals = 2
     ) |>
     process_muac_data(
       sex = sex,
@@ -174,21 +176,22 @@ local(
       sex = c(2, 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1),
       muac = c(165, 222, 176, 150, 219, 193, 196, 203, 203,
                129, 97, 158, 156, 215, 214),
-      age <- c(13, 56, 53, 23, 43, 55, 25,16, 44, 19, 45, 36, 11, 31,26)
+      age = c(13, 56, 53, 23, 43, 55, 25,16, 44, 19, 45, 36, 11, 31,26)
     )
 
     #### Expected results ----
     expected_results <- c(
-      1.757, 3.057, 0.902, 0.161, 3.786, 1.892, 3.249, 4.217,
+      1.757, 3.059, 0.902, 0.161, 3.786, 1.892, 3.249, 4.217,
       2.651, -1.484, -5.529, 0.117, 1.151, 4.151, 4.415
     )
 
     #### Observed results ----
     df <- df |>
-      process_age(
-        svdate = NULL,
-        birdate = NULL,
-        age = age
+      mw_wrangle_age(
+        dos = NULL,
+        dob = NULL,
+        age = age,
+        .decimals = 3
       ) |>
       process_muac_data(
         sex = sex,

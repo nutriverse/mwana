@@ -54,7 +54,7 @@ tell_muac_analysis_strategy <- function(age_ratio_class, sd_class) {
 #' @returns A vector of class `numeric` of length and size 1.
 #'
 #' @details
-#' This function is informed by the output of [age_ratio_test()].
+#' This function is informed by the output of [mw_stattest_ageratio()].
 #'
 #'
 apply_cdc_age_weighting <- function(muac, age,
@@ -237,7 +237,7 @@ compute_muac_prevalence <- function(df,
     x <- df |>
       group_by(!!.summary_by) |>
       summarise(
-        age_ratio = classify_age_sex_ratio(age_ratio_test(.data$age, .expectedP = 0.66)$p),
+        age_ratio = classify_age_sex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
         std = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
         analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std),
         .groups = "drop"
@@ -246,7 +246,7 @@ compute_muac_prevalence <- function(df,
     ## Non-grouped summary of analysis approach ----
     x <- df |>
       summarise(
-        age_ratio = classify_age_sex_ratio(age_ratio_test(.data$age, .expectedP = 0.66)$p),
+        age_ratio = classify_age_sex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
         std = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
         analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std)
       )

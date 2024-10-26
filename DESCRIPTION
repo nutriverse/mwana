@@ -24,7 +24,8 @@ Imports:
     srvyr,
     stats,
     zscorer,
-    tibble
+    tibble,
+    methods
 Suggests:
     knitr,
     rmarkdown,
