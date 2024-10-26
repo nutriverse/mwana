@@ -15,8 +15,10 @@ mw_wrangle_age(df, dos = NULL, dob = NULL, age, .decimals = 2)
 \item{dob}{A vector of class \code{Date} for child's date of birth from the \code{df}.
 Default is \code{NULL}.}
 
-\item{age}{A vector of class \code{numeric} of age in months, usually estimated
-using local event calendars.}
+\item{age}{A vector of class \code{numeric} of child's age in months. In most of
+the cases this will be estimated using local event calendars; in some other
+cases it can be a mix of the former and age in months based on date of birth
+and survey date.}
 
 \item{.decimals}{The number of decimals places to which the age should be rounded.
 Default is 2.}
@@ -37,22 +39,23 @@ to 60.0 months old.
 \examples{
 
 ## A sample data ----
-
 df <- data.frame(
-surv_date = as.Date(c(
-"2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),
-birth_date = as.Date(c(
-"2019-01-01", NA, "2018-03-20", "2019-11-05", "2021-04-25")),
-age = c(NA, 36, NA, NA, NA)
+  surv_date = as.Date(c(
+    "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01"
+  )),
+  birth_date = as.Date(c(
+    "2019-01-01", NA, "2018-03-20", "2019-11-05", "2021-04-25"
+  )),
+  age = c(NA, 36, NA, NA, NA)
 )
 
 ## Apply the function ----
 df |>
-mw_wrangle_age(
-dos = surv_date,
-dob = birth_date,
-age = age,
-.decimals = 3
-)
+  mw_wrangle_age(
+    dos = surv_date,
+    dob = birth_date,
+    age = age,
+    .decimals = 3
+  )
 
 }

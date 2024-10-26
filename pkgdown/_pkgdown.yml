@@ -60,10 +60,6 @@ home:
 #     - mw_wrangle_wfhz
 #     - mw_wrangle_muac
 
-#   - title: Recode variables
-#     contents:
-#     - mw_recode_muac
-
 #   - title: Statistical tests
 #     contents:
 #     - mw_stattest_ageratio
@@ -81,5 +77,10 @@ home:
 #   - title: Neat output tables
 #     contents:
 #     - mw_neat_output_table
+
+#   - title: Utilities
+#     contents:
+#     - get_age_months
+#     - recode_muac
 
 

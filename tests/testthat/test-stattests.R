@@ -12,4 +12,3 @@ testthat::test_that(
     testthat::expect_named(x, c("p", "observedR", "observedP"))
   }
 )
-

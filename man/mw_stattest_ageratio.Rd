@@ -34,8 +34,8 @@ between the observed and the expected.
 
 ## An example of application using `anthro.02` dataset ----
 mw_stattest_ageratio(
-age = anthro.02$age,
-.expectedP = 0.66
+  age = anthro.02$age,
+  .expectedP = 0.66
 )
 
 }

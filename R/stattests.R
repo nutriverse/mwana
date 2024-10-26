@@ -27,14 +27,13 @@
 #'
 #' ## An example of application using `anthro.02` dataset ----
 #' mw_stattest_ageratio(
-#' age = anthro.02$age,
-#' .expectedP = 0.66
+#'   age = anthro.02$age,
+#'   .expectedP = 0.66
 #' )
 #'
 #' @export
 #'
 mw_stattest_ageratio <- function(age, .expectedP = 0.66) {
-
   x <- ifelse(age >= 24, 1, 2)
   sum_o24 <- sum(na.omit(x == 1))
   sum_u24 <- sum(na.omit(x == 2))
