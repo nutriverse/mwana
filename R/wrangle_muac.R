@@ -32,8 +32,7 @@ mw_wrangle_muac <- function(df,
   )
 
   ## Difuse arguments to be evaluated later ----
-  age <- rlang::enquo(age)
-  age <- rlang::eval_tidy(age, df)
+  age <- rlang::eval_tidy(rlang::enquo(age), df)
 
   if (!is.null(age)) {
     ## Compute z-scores and identify flags on MFAZ ----
@@ -43,8 +42,8 @@ mw_wrangle_muac <- function(df,
         sex = !!recode_sex,
       ) |>
       addWGSR(
-        sex = "sex",
-        firstPart = "muac",
+        sex = {{ "sex" }},
+        firstPart = {{ "muac" }},
         secondPart = "age_days",
         index = "mfa",
         digits = .decimals

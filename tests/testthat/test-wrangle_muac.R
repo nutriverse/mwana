@@ -3,6 +3,7 @@ testthat::test_that(
   "process_muac_data() works well",
   {
 
+    ## Wrangle MUAC data ----
     df <- anthro.03 |>
       mw_wrangle_age(
         dos = NULL,

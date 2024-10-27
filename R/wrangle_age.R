@@ -60,21 +60,18 @@ mw_wrangle_age <- function(df,
                            dob = NULL,
                            age,
                            .decimals = 2) {
-  ## Difuse arguments ----
-  dos <- rlang::enquo(dos)
-  dob <- rlang::enquo(dob)
-  age <- rlang::enquo(age)
 
-  ## Evaluate quosures to get actual columns ----
-  x <- rlang::eval_tidy(dos, df)
-  y <- rlang::eval_tidy(dob, df)
-  z <- rlang::eval_tidy(age, df)
+  ## Difuse and lazy evaluate arguments ----
+  dos <- rlang::eval_tidy(rlang::enquo(dos), df)
+  dob <- rlang::eval_tidy(rlang::enquo(dob), df)
+  age <- rlang::eval_tidy(rlang::enquo(age), df)
+
 
   ## Calculate child's age in months then in days ----
-  if (!rlang::quo_is_null(dob) | !rlang::quo_is_null(dos)) {
+  if (!is.null(dob) | !is.null(dos)) {
 
-    ## Check if the class of vector "z" is "numeric" ----
-    if (!is.numeric(z)) {
+    ## Check if the class of vector "age" is "numeric" ----
+    if (!is.numeric(age)) {
       stop("Child's age should be of class 'numeric'. Please try again.")
     }
 
@@ -83,20 +80,20 @@ mw_wrangle_age <- function(df,
       mutate(
         age = ifelse(
           is.na(!!age),
-          get_age_months(dob = !!dob, dos = !!dos), !!age
+          get_age_months(dob = dob, dos = dos), age
         ),
         age_days = round(.data$age * (365.25 / 12), .decimals)
       )
   } else {
     ## Check if the class of vector "z" is "numeric" ----
-    if (!is.numeric(z)) {
+    if (!is.numeric(age)) {
       stop("Child's age should be of class 'numeric'. Please try again.")
     }
 
     ## Calculate age in months ----
     df <- df |>
       mutate(
-        age_days = round(!!age * (365.25 / 12), .decimals)
+        age_days = round(age * (365.25 / 12), .decimals)
       )
   }
 

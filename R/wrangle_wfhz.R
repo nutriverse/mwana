@@ -105,18 +105,16 @@ mw_wrangle_wfhz <- function(df,
                             .decimals = 3) {
 
   ## Difuse arguments to be evaluated later ----
-  weight <- rlang::enquo(weight)
-  w <- rlang::eval_tidy(weight, df)
-  height <- rlang::enquo(height)
-  h <- rlang::eval_tidy(height, df)
+  weight <- rlang::eval_tidy(rlang::enquo(weight), df)
+  height <- rlang::eval_tidy(rlang::enquo(height), df)
 
   ## Check if the class of vector weight is "double" ----
-  if(!is.double(w)) {
+  if(!is.double(weight)) {
     stop("Weight should be of class 'double'. Please try again")
   }
 
   ## Check if the class of vector height is "double" ----
-  if(!is.double(h)) {
+  if(!is.double(height)) {
     stop("Height should be of class 'double'. Please try again")
   }
 
