@@ -17,7 +17,7 @@ library(ipccheckr)
 This vignette demonstrates how to use the `mwana` package's functions to estimate the prevalence of wasting. The package allow users to estimate prevalence based on: 
 
   + The weight-for-height z-score (WFHZ) and/or edema;
-  + The absolute MUAC values and/or edema;
+  + The raw MUAC values and/or edema;
   + The combined prevalence and 
   + The MUAC-for-age z-score (MFAZ) and/or edema.
 
@@ -244,9 +244,9 @@ Can you spot the differences? 😎 Yes, you're absolutely correct! While in Caho
 
 The prevalence of wasting based on MFAZ can be estimated using the `compute_mfaz_prevalence()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in the [plausibility checks](https://nutriverse.io/mwana/articles/plausibility.html). In this way, to avoid redundancy, we will not demonstrate the workflow. 
 
-### Estimation of the prevalence of wasting based on the absolute MUAC values {#sec-prevalence-muac}
+### Estimation of the prevalence of wasting based on the raw MUAC values {#sec-prevalence-muac}
 
-This job is assigned to `compute_muac_prevalence()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the absolute values MUAC.
+This job is assigned to `compute_muac_prevalence()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the raw values MUAC.
 
 :::{.callout-important}
 Although the acceptability is evaluated on the basis of MFAZ, the actual prevalence is estimated on the basis of the absolute MUAC values. MFAZ is also used to detect outliers and flag them to be excluded from the prevalence analysis.
@@ -387,7 +387,7 @@ You may have noticed that in the above code block, we called the `recode_muac()`
 
 ### Estimation of the combined prevalence of wasting
 
-The estimation of the combined prevalence of wasting is a task attributed to the `compute_combined_prevalence()` function. The case-definition is based on the WFHZ, the absolute MUAC values and edema. From the workflow standpoint, it combines the workflow demonstrated in @sec-prevalence-wfhz and in @sec-prevalence-muac.
+The estimation of the combined prevalence of wasting is a task attributed to the `compute_combined_prevalence()` function. The case-definition is based on the WFHZ, the raw MUAC values and edema. From the workflow standpoint, it combines the workflow demonstrated in @sec-prevalence-wfhz and in @sec-prevalence-muac.
 
 To demonstrate it's implementation we will use the `anthro.01` dataset.
 

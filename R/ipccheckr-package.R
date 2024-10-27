@@ -8,9 +8,12 @@
 #' @importFrom methods is
 #' @importFrom nipnTK ageRatioTest digitPreference sexRatioTest skewKurt greensIndex
 #' @importFrom rlang .data sym
+#' @importFrom rlang enquo
+#' @importFrom rlang eval_tidy
 #' @importFrom scales label_percent label_pvalue
 #' @importFrom srvyr as_survey_design survey_mean
 #' @importFrom stats na.omit prop.test sd pnorm setNames
+#' @importFrom tibble as_tibble
 #' @importFrom zscorer addWGSR
 ## usethis namespace: end
 NULL

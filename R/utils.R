@@ -62,13 +62,13 @@ get_age_months <- function(dos, dob) {
 #' Outliers are extreme values that deviate remarkably from the survey mean, making
 #' them unlikely to be accurate measurements. This function identifies and signals
 #' them based on a criterion set for the WFHZ, the MFAZ and for the absolute MUAC
-#' values. For the absolute MUAC values, outliers are identified and flagged using
+#' values. For the raw MUAC values, outliers are identified and flagged using
 #' a different approach as described below.
 #'
-#' @param x A vector of class `numeric` of WFHZ or MFAZ or absolute MUAC values.
+#' @param x A vector of class `numeric` of WFHZ or MFAZ or raw MUAC values.
 #' The latter should be in millimeters.
 #'
-#' @param .from A choice between `zscores` and `absolute` for where outliers should be
+#' @param .from A choice between `zscores` and `raw_muac` for where outliers should be
 #' detected and flagged from.
 #'
 #' @return A vector of the same length as `x` of flagged observations that are
@@ -77,17 +77,17 @@ get_age_months <- function(dos, dob) {
 #' @details
 #' The flagging criterion used for the WFHZ and the MFAZ is as in
 #' [SMART plausibility check](https://smartmethodology.org/). A fixed flagging
-#' criterion is used for the absolute MUAC values. This is as recommended by
+#' criterion is used for the raw MUAC values. This is as recommended by
 #' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478)
 #'
 #'
 #' @examples
 #'
-#' ## Sample data for absolute MUAC values ----
+#' ## Sample data for raw MUAC values ----
 #' x <- anthro.01$muac
 #'
-#' ## Apply the function with type set to "absolute" ----
-#' flag_outliers(x, .from = "absolute")
+#' ## Apply the function with type set to "raw_muac" ----
+#' flag_outliers(x, .from = "raw_muac")
 #'
 #' ## Sample data for MFAZ or for WFHZ values ----
 #' x <- anthro.02$mfaz
@@ -98,7 +98,7 @@ get_age_months <- function(dos, dob) {
 #' @rdname outliers
 #' @export
 #'
-flag_outliers <- function(x, .from = c("zscores", "absolute")) {
+flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
   ## Ensure that only predefined options ----
   .from <- match.arg(.from)
 
@@ -110,11 +110,11 @@ flag_outliers <- function(x, .from = c("zscores", "absolute")) {
   ## Identify and flag outliers from zscores ----
   if (.from == "zscores") {
     mean_zscore <- mean(x, na.rm = TRUE)
-    flags <- ifelse((x < (mean_zscore - 3) | x > (mean_zscore + 3)), 1, 0)
+    flags <- ifelse(x < (mean_zscore - 3) | x > (mean_zscore + 3), 1, 0)
     flags <- ifelse(is.na(x), NA, flags)
     flags
 
-    ## Identify and flag outliers from absolute MUAC values ----
+    ## Identify and flag outliers from raw MUAC values ----
   } else {
     flags <- ifelse(x < 100 | x > 200, 1, 0)
     flags <- ifelse(is.na(x), NA, flags)
@@ -132,13 +132,13 @@ flag_outliers <- function(x, .from = c("zscores", "absolute")) {
 #' remove_flags(wfhz.01$wfhz, .from = "zscores")
 #'
 #' ## With .from set to "absolute" ----
-#' remove_flags(mfaz.01$muac, .from = "absolute")
+#' remove_flags(mfaz.01$muac, .from = "raw_muac")
 #'
 #' @rdname outliers
 #'
 #' @export
 #'
-remove_flags <- function(x, .from = c("zscores", "absolute")) {
+remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
   ## Match arguments ----
   .from <- match.arg(.from)
 
@@ -155,8 +155,8 @@ remove_flags <- function(x, .from = c("zscores", "absolute")) {
       zs <- ifelse((x < (mean_x - 3) | x > (mean_x + 3)) | is.na(x), NA_real_, x)
       zs
     },
-    ### Remove flags when .from = "absolute" ----
-    "absolute" = {
+    ### Remove flags when .from = "raw_muac" ----
+    "raw_muac" = {
       cr <- ifelse(x < 100 | x > 200 | is.na(x), NA_integer_, x)
       cr
     }
@@ -172,7 +172,7 @@ remove_flags <- function(x, .from = c("zscores", "absolute")) {
 #' @description
 #' Convert MUAC values to either centimeters or millimeters as required.
 #'
-#' @param x A vector of the absolute MUAC values. The class can either be
+#' @param x A vector of the raw MUAC values. The class can either be
 #' `double` or `numeric`.
 #'
 #' @param .to A choice of the unit to which the MUAC values should be converted.
@@ -195,12 +195,12 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
   ## Check if unit's arguments match ----
   .to <- match.arg(.to)
 
-  # ## Check if the class of vector "x" is "numeric" or "double" ----
-  # if (!is.numeric(x) | !is.double(x)) {
-  #   stop(
-  #     "MUAC should be of class 'numeric' or 'double'. Please try again."
-  #   )
-  # }
+  ## Check if the class of vector "x" is "numeric" or "double" ----
+  if (!is.numeric(x) | !is.double(x)) {
+    stop(
+      "MUAC should be of class 'numeric' or 'double'. Please try again."
+    )
+  }
 
   ## Recode muac conditionally ----
   switch(.to,

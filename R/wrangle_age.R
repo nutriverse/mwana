@@ -62,9 +62,9 @@ mw_wrangle_age <- function(df,
                            .decimals = 2) {
 
   ## Difuse and lazy evaluate arguments ----
-  dos <- rlang::eval_tidy(rlang::enquo(dos), df)
-  dob <- rlang::eval_tidy(rlang::enquo(dob), df)
-  age <- rlang::eval_tidy(rlang::enquo(age), df)
+  dos <- eval_tidy(enquo(dos), df)
+  dob <- eval_tidy(enquo(dob), df)
+  age <- eval_tidy(enquo(age), df)
 
 
   ## Calculate child's age in months then in days ----
@@ -98,5 +98,5 @@ mw_wrangle_age <- function(df,
   }
 
   ## Return df ----
-  tibble::as_tibble(df)
+  as_tibble(df)
 }

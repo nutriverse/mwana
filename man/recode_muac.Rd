@@ -7,7 +7,7 @@
 recode_muac(x, .to = c("cm", "mm"))
 }
 \arguments{
-\item{x}{A vector of the absolute MUAC values. The class can either be
+\item{x}{A vector of the raw MUAC values. The class can either be
 \code{double} or \code{numeric}.}
 
 \item{.to}{A choice of the unit to which the MUAC values should be converted.}

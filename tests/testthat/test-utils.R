@@ -74,9 +74,9 @@ testthat::test_that(
 )
 
 
-## flag_outliers() with '.from' set to "absolute" ----
+## flag_outliers() with '.from' set to "raw_muac" ----
 testthat::test_that(
-  "flag_outliers() works as expected when .from = 'absolute'",
+  "flag_outliers() works as expected when .from = 'raw_muac'",
   {
     ### Sample data ----
     muac <- seq(80, 270, by = 4) |>
@@ -88,18 +88,18 @@ testthat::test_that(
     x <- ifelse(muac < 100 | muac > 200, 1, 0)
 
     ### Observed results ----
-    y <- flag_outliers(muac, .from = "absolute")
+    y <- flag_outliers(muac, .from = "raw_muac")
 
     ### The tests ----
     testthat::expect_vector(y, size = 20)
     testthat::expect_equal(y, x)
     testthat::expect_true(is.numeric(y))
-    testthat::expect_error(flag_outliers(wrong_vector, .from = "absolute"))
+    testthat::expect_error(flag_outliers(wrong_vector, .from = "raw_muac"))
   }
 )
 
 # Test check: remove_flags() -----
-## With .from set to "absolute" ----
+## With .from set to "raw_muac" ----
 
 testthat::test_that(
   "remove_flags() assign NA's when flaggs are identified",
@@ -119,13 +119,13 @@ testthat::test_that(
     )
 
     ### Observed results ----
-    w <- remove_flags(muac, "absolute")
+    w <- remove_flags(muac, "raw_muac")
 
     ### Tests ----
     testthat::expect_length(w, 20)
     testthat::expect_equal(x, w)
     testthat::expect_true(is.numeric(w))
-    testthat::expect_error(remove_flags(wrong_vector, "absolute"))
+    testthat::expect_error(remove_flags(wrong_vector, "raw_muac"))
   }
 )
 

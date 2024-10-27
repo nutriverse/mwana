@@ -5,15 +5,15 @@
 \alias{remove_flags}
 \title{Identify and flag outliers}
 \usage{
-flag_outliers(x, .from = c("zscores", "absolute"))
+flag_outliers(x, .from = c("zscores", "raw_muac"))
 
-remove_flags(x, .from = c("zscores", "absolute"))
+remove_flags(x, .from = c("zscores", "raw_muac"))
 }
 \arguments{
-\item{x}{A vector of class \code{numeric} of WFHZ or MFAZ or absolute MUAC values.
+\item{x}{A vector of class \code{numeric} of WFHZ or MFAZ or raw MUAC values.
 The latter should be in millimeters.}
 
-\item{.from}{A choice between \code{zscores} and \code{absolute} for where outliers should be
+\item{.from}{A choice between \code{zscores} and \code{raw_muac} for where outliers should be
 detected and flagged from.}
 }
 \value{
@@ -24,22 +24,22 @@ outliers: 1 for is a flag and 0 is not a flag.
 Outliers are extreme values that deviate remarkably from the survey mean, making
 them unlikely to be accurate measurements. This function identifies and signals
 them based on a criterion set for the WFHZ, the MFAZ and for the absolute MUAC
-values. For the absolute MUAC values, outliers are identified and flagged using
+values. For the raw MUAC values, outliers are identified and flagged using
 a different approach as described below.
 }
 \details{
 The flagging criterion used for the WFHZ and the MFAZ is as in
 \href{https://smartmethodology.org/}{SMART plausibility check}. A fixed flagging
-criterion is used for the absolute MUAC values. This is as recommended by
+criterion is used for the raw MUAC values. This is as recommended by
 \href{https://doi.org/10.1111/mcn.13478}{Bilukha, O., & Kianian, B. (2023).}
 }
 \examples{
 
-## Sample data for absolute MUAC values ----
+## Sample data for raw MUAC values ----
 x <- anthro.01$muac
 
-## Apply the function with type set to "absolute" ----
-flag_outliers(x, .from = "absolute")
+## Apply the function with type set to "raw_muac" ----
+flag_outliers(x, .from = "raw_muac")
 
 ## Sample data for MFAZ or for WFHZ values ----
 x <- anthro.02$mfaz
@@ -51,6 +51,6 @@ flag_outliers(x, .from = "zscores")
 remove_flags(wfhz.01$wfhz, .from = "zscores")
 
 ## With .from set to "absolute" ----
-remove_flags(mfaz.01$muac, .from = "absolute")
+remove_flags(mfaz.01$muac, .from = "raw_muac")
 
 }

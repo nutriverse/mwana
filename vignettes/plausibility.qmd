@@ -507,7 +507,7 @@ anthro.01 |>
 
 At this point, you have reached the end of your workflow ✨.
 
-## Plausibility check on the absolute MUAC values
+## Plausibility check on the raw MUAC values
 
 We will assess the plausibility of the MUAC data through it's absolute values when the variable age is not available in the dataset. This is a job assigned to `check_plausibility_muac()`. The workflow for this check is the shortest one.
 

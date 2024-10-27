@@ -207,7 +207,7 @@ check_plausibility_muac <- function(df, flags, sex, muac) {
       sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
       dps = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dps"]],
       dps_class = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dpsClass"]],
-      sd = sd(remove_flags({{ muac }}, .from = "absolute"), na.rm = TRUE),
+      sd = sd(remove_flags({{ muac }}, .from = "raw_muac"), na.rm = TRUE),
       sd_class = classify_sd(.data$sd, type = "crude"),
       .groups = "drop"
     )
