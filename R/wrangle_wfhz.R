@@ -3,20 +3,22 @@
 #' Wrangle weight-for-height and MUAC data
 #'
 #' @description
-#' This function performs data wrangling by calculating weight-for-height
-#' and MUAC-for-age z-scores, followed by the detection and flagging of outliers.
-#' For MUAC data, if age is not supplies, z-scores do not get computed. In such
-#' cases, outlier detection and flagging are based on the absolute MUAC values.
+#' This function performs data wrangling by calculating the weight-for-height
+#' and the MUAC-for-age z-scores, followed by the detection and flagging of outliers.
+#' For MUAC data, if age is not supplied, z-scores do not get computed. In such
+#' cases, outlier detection and flagging will be based on the absolute MUAC values.
 #'
 #' @param df A dataset of class `data.frame` to wrangle data from.
 #'
-#' @param sex A numeric or character vector of child's sex. Code values should
+#' @param sex A `numeric` or `character` vector of child's sex. Code values should
 #' be 1 or "m" for boy and 2 or "f" for girl. The variable name must be sex,
 #' otherwise it will not work.
 #'
 #' @param .recode_sex Logical. Default is `FALSE`. Setting to `TRUE` assumes that
 #' the sex variable is a character vector of values "m" for boys and "f" for girls
 #' and will recode them to 1 and 2 respectively.
+#'
+#' @param age A vector of class `numeric` of child's age in months.
 #'
 #' @param muac A vector of class `numeric` of child's age in months.
 #'
@@ -26,12 +28,12 @@
 #' @param .to A choice of the unit to which the MUAC values should be converted.
 #' "cm" for centimeters, "mm" for millimeters and "none" to leave as it is.
 #'
-#' @param age A double vector of child's age in months. It must be named age,
-#' otherwise it will not work.
-#'
 #' @param weight A vector of class `double` of child's weight in kilograms.
 #'
 #' @param height A vector of class `double` of child's height in centimeters.
+#'
+#' @param .decimals The number of decimals places the z-scores should have.
+#' Default is 3.
 #'
 #' @returns A data frame based on `df`. New variables named `wfhz` and
 #' `flag_wfhz`, of child's weight-for-height z-scores and flags, or `mfaz` and
@@ -49,17 +51,16 @@
 #' @examples
 #'
 #' ## An example application of `mw_wrangle_wfhz()` ----
-#'
 #' anthro.01 |>
 #'   mw_wrangle_wfhz(
 #'     sex = sex,
 #'     weight = weight,
 #'     height = height,
-#'     .recode_sex = TRUE
+#'     .recode_sex = TRUE,
+#'     .decimals = 2
 #'   )
 #'
 #' ## An example application of `mw_wrangle_muac()` ----
-#'
 #' ### Sample data ----
 #' df <- data.frame(
 #'   survey_date = as.Date(c(
@@ -74,7 +75,6 @@
 #' )
 #'
 #' ### The application of the function ----
-#'
 #' df |>
 #'   mw_wrangle_age(
 #'     dos = survey_date,
@@ -88,7 +88,8 @@
 #'     muac = muac,
 #'     .recode_sex = TRUE,
 #'     .recode_muac = TRUE,
-#'     .to = "cm"
+#'     .to = "cm",
+#'     .decimals = 3
 #'   )
 #'
 #' @rdname wrangler
@@ -100,16 +101,24 @@ mw_wrangle_wfhz <- function(df,
                             sex,
                             weight,
                             height,
-                            .recode_sex = TRUE) {
-  # ## Check if the class of vector weight is "double" ----
-  # if(!is.double(weight)) {
-  #   stop("Weight should be of class 'double'. Please try again")
-  # }
-  #
-  # ## Check if the class of vector height is "double" ----
-  # if(!is.double(height)) {
-  #   stop("Height should be of class 'double'. Please try again")
-  # }
+                            .recode_sex = TRUE,
+                            .decimals = 3) {
+
+  ## Difuse arguments to be evaluated later ----
+  weight <- rlang::enquo(weight)
+  w <- rlang::eval_tidy(weight, df)
+  height <- rlang::enquo(height)
+  h <- rlang::eval_tidy(height, df)
+
+  ## Check if the class of vector weight is "double" ----
+  if(!is.double(w)) {
+    stop("Weight should be of class 'double'. Please try again")
+  }
+
+  ## Check if the class of vector height is "double" ----
+  if(!is.double(h)) {
+    stop("Height should be of class 'double'. Please try again")
+  }
 
   ## Capture expressions to evaluate later ----
   recode_sex <- quote(
@@ -124,79 +133,16 @@ mw_wrangle_wfhz <- function(df,
       sex = !!recode_sex
     ) |>
     addWGSR(
-      sex = {{ "sex" }},
-      firstPart = {{ "weight" }},
-      secondPart = {{ "height" }},
+      sex = "sex",
+      firstPart = "weight",
+      secondPart = "height",
       index = "wfh",
-      digits = 3
+      digits = .decimals
     ) |>
     ## Identify and flag outliers ----
     mutate(
       flag_wfhz = do.call(flag_outliers, list(.data$wfhz, .from = "zscores"))
     )
   ## Return ---
-  tibble::as_tibble(df)
-}
-
-
-
-#'
-#' @rdname wrangler
-#'
-#' @export
-#'
-mw_wrangle_muac <- function(df,
-                            sex,
-                            muac,
-                            age = NULL,
-                            .recode_sex = TRUE,
-                            .recode_muac = TRUE,
-                            .to = c("cm", "mm", "none")) {
-  ## Enforce options in argument .to ----
-  .to <- match.arg(.to)
-
-  ## Capture expressions to evaluate later ----
-  recode_sex <- quote(
-    if (.recode_sex) {
-      sex <- ifelse({{ sex }} == "m", 1, 2)
-    } else {{{ sex }}}
-  )
-
-  ## Capture expressions to evaluate later ----
-  rec_muac <- quote(
-    if (.recode_muac && .to == "cm") {
-      muac <- recode_muac({{ muac }}, .to = "cm")
-    } else if (.recode_muac && .to == "mm") {
-      muac <- recode_muac({{ muac }}, .to = "mm")
-    } else {{{ muac }}}
-  )
-
-
-  if (!is.null({{ age }})) {
-    ## Compute z-scores and identify flags on MFAZ ----
-    df <- df |>
-      mutate(
-        muac = !!rec_muac,
-        sex = !!recode_sex,
-      ) |>
-      addWGSR(
-        sex = "sex",
-        firstPart = "muac",
-        secondPart = "age_days",
-        index = "mfa",
-        digits = 3
-      ) |>
-      mutate(
-        flag_mfaz = do.call(flag_outliers, list(.data$mfaz, .from = "zscores"))
-      )
-  } else {
-    ## Identify flags on the absolute MUAC values ----
-    df <- df |>
-      mutate(
-        sex = !!recode_sex,
-        flag_muac = do.call(flag_outliers, list({{ muac }}, .from = "absolute"))
-      )
-  }
-  ## Return ----
   tibble::as_tibble(df)
 }

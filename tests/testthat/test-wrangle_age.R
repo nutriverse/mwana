@@ -1,10 +1,9 @@
-
-### Test check: mw_wrangle_age() ----
+# Test check: mw_wrangle_age() ----
 
 testthat::test_that(
   "mw_wrangle_age() works as expected",
   {
-    #### Sample data ----
+    ## Sample data ----
     df <- data.frame(
       surdate = as.Date(c(
         "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01"
@@ -18,10 +17,10 @@ testthat::test_that(
       svdate = c("2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")
     )
 
-    #### Expected results ----
+    ## Expected results ----
     w <- c(1461.00, 1095.75, 1748.00, 1153.00, 616.00)
 
-    #### Observed results ----
+    ## Observed results ----
     x <- df |>
       mw_wrangle_age(
         dos = surdate,
@@ -30,7 +29,7 @@ testthat::test_that(
         .decimals = 2
       )
 
-    #### The tests ----
+    ## Tests ----
     testthat::expect_type(x, "list")
     testthat::expect_vector(x[["age_days"]], size = 5)
     testthat::expect_equal(x[["age_days"]], w)

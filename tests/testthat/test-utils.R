@@ -1,9 +1,9 @@
-### Test check: get_age_months() ----
+# Test check: get_age_months() ----
 
 testthat::test_that(
   "calculate_age_in_months() does the job as expected",
   {
-    #### Sample data ----
+    ## Sample data ----
 
     df <- data.frame(
       surv_date = as.Date(
@@ -28,7 +28,7 @@ testthat::test_that(
       )
     )
 
-    #### Observed results ----
+    ## Observed results ----
     x <- df |>
       mutate(
         age_mo = get_age_months(dos = surv_date, dob = bir_date)
@@ -36,7 +36,7 @@ testthat::test_that(
 
     k <- get_age_months(dos = df[["surv_date"]], dob = df[["bir_date"]])
 
-    #### The tests ----
+    ## Tests ----
     testthat::expect_vector(x[["age_mo"]], size = 10)
     testthat::expect_error(get_age_months(df[["surv_date"]], df[["birdate"]]))
     testthat::expect_error(get_age_months(df[["svdate"]], df[["bir_date"]]))
@@ -44,28 +44,28 @@ testthat::test_that(
   }
 )
 
-## Test check: "flag_outliers()" ----
-### flag_outliers with '.from' set to "zscores" ----
+# Test check: "flag_outliers()" ----
+## flag_outliers with '.from' set to "zscores" ----
 
 testthat::test_that(
   "flag_outliers() works as expected when .from = 'zscore'",
   {
-    #### Sample data ----
+    ### Sample data ----
     mfaz <- seq(-0.6, 0.9, by = 0.003) |>
       sample(size = 50, replace = TRUE)
 
     wrong_vector <- as.character(mfaz)
 
-    #### Mean of mfaz ----
+    ### Mean of mfaz ----
     x <- mean(mfaz)
 
-    #### Expected results ----
+    ### Expected results ----
     y <- ifelse(mfaz < (x - 3) | mfaz > (x + 3), 1, 0)
 
-    #### Observed results ----
+    ### Observed results ----
     z <- flag_outliers(mfaz, .from = "zscores")
 
-    ### The tests ----
+    ### Tests ----
     testthat::expect_vector(z, size = 50)
     testthat::expect_equal(z, y)
     testthat::expect_true(is.numeric(z))
@@ -74,23 +74,23 @@ testthat::test_that(
 )
 
 
-### flag_outliers() with '.from' set to "absolute" ----
+## flag_outliers() with '.from' set to "absolute" ----
 testthat::test_that(
   "flag_outliers() works as expected when .from = 'absolute'",
   {
-    #### Sample data ----
+    ### Sample data ----
     muac <- seq(80, 270, by = 4) |>
       sample(size = 20, replace = TRUE)
 
     wrong_vector <- as.character(muac)
 
-    #### Expected results ----
+    ### Expected results ----
     x <- ifelse(muac < 100 | muac > 200, 1, 0)
 
-    #### Observed results ----
+    ### Observed results ----
     y <- flag_outliers(muac, .from = "absolute")
 
-    #### The tests ----
+    ### The tests ----
     testthat::expect_vector(y, size = 20)
     testthat::expect_equal(y, x)
     testthat::expect_true(is.numeric(y))
@@ -98,13 +98,13 @@ testthat::test_that(
   }
 )
 
-## Test check: remove_flags() -----
-### With .from set to "absolute" ----
+# Test check: remove_flags() -----
+## With .from set to "absolute" ----
 
 testthat::test_that(
   "remove_flags() assign NA's when flaggs are identified",
   {
-    #### Sample data ----
+    ### Sample data ----
     muac <- c(
       88, 160, 196, 260, 204, 232, 220, 128, 204,
       84, 160, 128, 88, 156, 96, 160, 204, 220, 120, 228
@@ -112,16 +112,16 @@ testthat::test_that(
 
     wrong_vector <- as.character(muac)
 
-    #### Expected results ----
+    ### Expected results ----
     x <- c(
       NA, 160, 196, NA, NA, NA, NA, 128, NA, NA,
       160, 128, NA, 156, NA, 160, NA, NA, 120, NA
     )
 
-    #### Observed results ----
+    ### Observed results ----
     w <- remove_flags(muac, "absolute")
 
-    #### The test ----
+    ### Tests ----
     testthat::expect_length(w, 20)
     testthat::expect_equal(x, w)
     testthat::expect_true(is.numeric(w))
@@ -129,21 +129,21 @@ testthat::test_that(
   }
 )
 
-### With .from set to "zscores" ----
+## With .from set to "zscores" ----
 
 testthat::test_that(
   "remove_flags() assign NA's when flaggs are identified",
   {
-    #### Sample data without NA's ----
+    ### Sample data without NA's ----
     zsc <- wfhz.01$wfhz
 
-    #### A Sample data of a wrong class for the function ----
+    ### A Sample data of a wrong class for the function ----
     wrong_vector <- as.character(zsc)
 
-    #### Observed results ----
+    ### Observed results ----
     w <- remove_flags(zsc, "zscores")
 
-    #### The test ----
+    ### Tests ----
     testthat::expect_length(w, 303)
     testthat::expect_contains(is.na(w), "TRUE")
     testthat::expect_true(is.numeric(w))
@@ -151,22 +151,22 @@ testthat::test_that(
   }
 )
 
-## Test check: recode_muac() ----
-### With .to set to "cm" ----
+# Test check: recode_muac() ----
+## With .to set to "cm" ----
 
 testthat::test_that(
   "recode_muac() works well when .to = 'cm'",
   {
-    #### Sample data ----
+    ### Sample data ----
     x <- anthro.02$muac
 
-    #### Expected results ----
+    ### Expected results ----
     p <- x / 10
 
     ### Observed results ----
     w <- recode_muac(x, .to = "cm")
 
-    #### The test ----
+    #### Tests ----
     testthat::expect_vector(w, 2267)
     testthat::expect_equal(w, p)
     testthat::expect_true(is.numeric(w))
@@ -174,22 +174,22 @@ testthat::test_that(
   }
 )
 
-### With .to set to "mm" ----
+## With .to set to "mm" ----
 
 testthat::test_that(
   "recode_muac() works well when .to = 'mm'",
   {
-    #### Sample data ----
+    ### Sample data ----
     x <- anthro.02$muac
 
-    #### Expected results ----
+    ### Expected results ----
     p <- x / 10
     m <- p * 10
 
     ### Observed results ----
     w <- recode_muac(p, .to = "mm")
 
-    #### The test ----
+    ### Tests ----
     testthat::expect_vector(w, 2267)
     testthat::expect_equal(w, m)
     testthat::expect_true(is.numeric(w))
