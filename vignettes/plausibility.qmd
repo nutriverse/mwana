@@ -60,7 +60,7 @@ Now let's wrangle the data.
 
 ### Data wrangling
 
-As mentioned somewhere above, before we supply data object to `check_plausibility_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `process_wfhz_data()`. Read more about the technical documentation by doing this `help(mw_wrangle_age)` or `help(process_wfhz_data)` in `R` console. 
+As mentioned somewhere above, before we supply data object to `check_plausibility_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing this `help(mw_wrangle_age)` or `help(mw_wrangle_wfhz)` in `R` console. 
 
 #### Age {#sec-age}
 
@@ -71,7 +71,7 @@ We use `mw_wrangle_age()` to calculate child's age in months based on the date o
 #| echo: true
 #| eval: false
 
-age_mo <- anthro.01 |> 
+age_mo <- anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
@@ -87,7 +87,7 @@ This will return:
 #| echo: false
 #| eval: true
 
-age_mo <- anthro.01 |> 
+age_mo <- anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
@@ -99,15 +99,15 @@ head(age_mo)
 
 #### Wrangling all other required variables 
 
-For this, we call `process_wfhz_data()` as follows: 
+For this, we call `mw_wrangle_wfhz()` as follows: 
 
 ```{r}
 #| label: wrangle_wfhz_data
 #| echo: true
 #| eval: false
 
-wrangled_df <- anthro.01 |> 
-  process_wfhz_data(
+wrangled_df <- anthro.01 |>
+  mw_wrangle_wfhz(
     sex = sex,
     weight = weight,
     height = height,
@@ -121,7 +121,7 @@ In this example, the argument `.recode_sex` was set to `TRUE`. That is because u
 If by any chance your sex variable is coded in any other different way than aforementioned, then you will have to recode it outside `mwana` utilities and then set `.recode_sex` accordingly.
 :::
 
-Under the hood, after recoding (or not) the sex variables, `process_wfhz_data()` computes the z-scores, then identifies outliers and flags them and adds them to the dataset through the `wfhz` and `flag_wfhz` variables. We can see this below: 
+Under the hood, after recoding (or not) the sex variables, `mw_wrangle_wfhz()` computes the z-scores, then identifies outliers and flags them and adds them to the dataset through the `wfhz` and `flag_wfhz` variables. We can see this below: 
 
 ```{r}
 #| label: view_df
@@ -129,15 +129,15 @@ Under the hood, after recoding (or not) the sex variables, `process_wfhz_data()`
 #| eval: true
 #| include: true
 
-wrangled_df <- anthro.01 |> 
-  process_wfhz_data(
+wrangled_df <- anthro.01 |>
+  mw_wrangle_wfhz(
     sex = sex,
     weight = weight,
     height = height,
     .recode_sex = TRUE
   )
 
-x <- wrangled_df |> 
+x <- wrangled_df |>
   dplyr::select(area, wfhz, flag_wfhz)
 
 head(x)
@@ -152,7 +152,7 @@ We now can check the plausibility of our data. We do that by calling `check_plau
 #| echo: true
 #| eval: false
 
-x <- wrangled_df |> 
+x <- wrangled_df |>
   check_plausibility_wfhz(
     sex = sex,
     age = age,
@@ -170,19 +170,19 @@ Or we can chain all previous functions using the pipe operator:
 #| echo: true
 #| eval: false
 
-x <- anthro.01 |> 
+x <- anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age, 
+    age = age,
     .decimals = 2
-  ) |> 
-  process_wfhz_data(
+  ) |>
+  mw_wrangle_wfhz(
     sex = sex,
     weight = weight,
     height = height,
     .recode_sex = TRUE
-  ) |> 
+  ) |>
   check_plausibility_wfhz(
     sex = sex,
     age = age,
@@ -200,26 +200,26 @@ The returned output is:
 #| echo: false
 #| eval: true
 
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_wfhz_data(
+  ) |>
+  mw_wrangle_wfhz(
     sex = sex,
     weight = weight,
     height = height,
     .recode_sex = TRUE
-  ) |> 
+  ) |>
   check_plausibility_wfhz(
     sex = sex,
     age = age,
     weight = weight,
     height = height,
     flags = flag_wfhz,
-    area = area         
+    area = area
   )
 ```
 
@@ -232,19 +232,19 @@ We can make this output more pretty and ready to share. We can achieve this by c
 #| echo: true
 #| eval: false
 
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_wfhz_data(
+  ) |>
+  mw_wrangle_wfhz(
     sex = sex,
     weight = weight,
     height = height,
     .recode_sex = TRUE
-  ) |> 
+  ) |>
   check_plausibility_wfhz(
     sex = sex,
     age = age,
@@ -252,9 +252,8 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz,
     area = area
-  ) |> 
+  ) |>
   generate_pretty_table_wfhz()
-
 ```
 
 This will give us: 
@@ -264,19 +263,19 @@ This will give us:
 #| echo: false
 #| eval: true
 
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_wfhz_data(
+  ) |>
+  mw_wrangle_wfhz(
     sex = sex,
     weight = weight,
     height = height,
     .recode_sex = TRUE
-  ) |> 
+  ) |>
   check_plausibility_wfhz(
     sex = sex,
     age = age,
@@ -284,9 +283,8 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz,
     area = area
-  ) |> 
+  ) |>
   generate_pretty_table_wfhz()
-
 ```
 
 An already formatted table, with scientific notations converted to standard notations, etc.
@@ -312,31 +310,31 @@ This is different in MFAZ. The test is done on children aged 6 to 23 months over
 
 ### Wrangling MFAZ data {#sec-wrangle_mfaz}
 
-This is the job of `process_muac_data()` function. We use it as follows:
+This is the job of `mw_wrangle_muac()` function. We use it as follows:
 
 ```{r}
 #| label: wrangle_mfaz_data
 #| echo: true
 #| eval: false
 
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_muac_data(
+  ) |>
+  mw_wrangle_muac(
     sex = sex,
-    muac = muac, 
+    muac = muac,
     age = "age",
     .recode_sex = TRUE,
     .recode_muac = TRUE,
-    unit = "cm"
+    .to = "cm"
   )
 ```
 
-Just as in WFHZ wrangler, under the hood, `process_muac_data()` computes the z-scores then identifies outliers and flags them. These are stored in the `mfaz` and `flag_mfaz` variables that are created and added to the dataset. 
+Just as in WFHZ wrangler, under the hood, `mw_wrangle_muac()` computes the z-scores then identifies outliers and flags them. These are stored in the `mfaz` and `flag_mfaz` variables that are created and added to the dataset. 
 
 The above code returns: 
 
@@ -345,25 +343,25 @@ The above code returns:
 #| echo: false
 #| eval: true
 
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_muac_data(
+  ) |>
+  mw_wrangle_muac(
     sex = sex,
-    muac = muac, 
+    muac = muac,
     age = "age",
     .recode_sex = TRUE,
     .recode_muac = TRUE,
-    unit = "cm"
+    .to = "cm"
   )
 ```
 
 :::{.callout-note}
-`process_muac_data()` accepts MUAC values in centimeters. This is why it takes the arguments `.recode_muac` and `unit` to control whether there is need to transform the variable `muac`function or not. Read the function documentation to learn how to control these two arguments.
+`mw_wrangle_muac()` accepts MUAC values in centimeters. This is why it takes the arguments `.recode_muac` and `.to` to control whether there is need to transform the variable `muac`function or not. Read the function documentation to learn how to control these two arguments.
 :::
 
 ### On to *de facto* MFAZ plausibility check
@@ -379,22 +377,22 @@ We achieve this by calling the `check_plausibility_mfaz()` function:
 library(dplyr)
 
 ## Check plausibility ----
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_muac_data(
+  ) |>
+  mw_wrangle_muac(
     sex = sex,
-    muac = muac, 
+    muac = muac,
     age = "age",
     .recode_sex = TRUE,
     .recode_muac = TRUE,
-    unit = "cm"
-  ) |> 
-  mutate(muac = recode_muac(muac, unit = "mm")) |> 
+    .to = "cm"
+  ) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
   check_plausibility_mfaz(
     sex = sex,
     muac = muac,
@@ -411,22 +409,22 @@ And this will return:
 #| echo: false
 #| eval: true
 
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
-    age = age, 
+    age = age,
     .decimals = 2
-  ) |> 
-  process_muac_data(
+  ) |>
+  mw_wrangle_muac(
     sex = sex,
-    muac = muac, 
+    muac = muac,
     age = "age",
     .recode_sex = TRUE,
     .recode_muac = TRUE,
-    unit = "cm"
-  ) |> 
-  dplyr::mutate(muac = recode_muac(muac, unit = "mm")) |> 
+    .to = "cm"
+  ) |>
+  dplyr::mutate(muac = recode_muac(muac, .to = "mm")) |>
   check_plausibility_mfaz(
     sex = sex,
     muac = muac,
@@ -447,29 +445,29 @@ We can also make this output pretty and ready to share it out. We just need to c
 library(dplyr)
 
 ## Check plausibility ----
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_muac_data(
+  ) |>
+  mw_wrangle_muac(
     sex = sex,
-    muac = muac, 
+    muac = muac,
     age = "age",
     .recode_sex = TRUE,
     .recode_muac = TRUE,
-    unit = "cm"
-  ) |> 
-  mutate(muac = recode_muac(muac, unit = "mm")) |> 
+    .to = "cm"
+  ) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
   check_plausibility_mfaz(
     sex = sex,
     muac = muac,
     age = age,
     flags = flag_mfaz,
     area = area
-  ) |> 
+  ) |>
   generate_pretty_table_mfaz()
 ```
 
@@ -481,29 +479,29 @@ This will return:
 #| message: false
 #| eval: true
 
-anthro.01 |> 
+anthro.01 |>
   mw_wrangle_age(
     dos = dos,
     dob = dob,
     age = age,
     .decimals = 2
-  ) |> 
-  process_muac_data(
+  ) |>
+  mw_wrangle_muac(
     sex = sex,
-    muac = muac, 
+    muac = muac,
     age = "age",
     .recode_sex = TRUE,
     .recode_muac = TRUE,
-    unit = "cm"
-  ) |> 
-  dplyr::mutate(muac = recode_muac(muac, unit = "mm")) |> 
+    .to = "cm"
+  ) |>
+  dplyr::mutate(muac = recode_muac(muac, .to = "mm")) |>
   check_plausibility_mfaz(
     sex = sex,
     muac = muac,
     age = age,
     flags = flag_mfaz,
     area = area
-  ) |> 
+  ) |>
   generate_pretty_table_mfaz()
 ```
 
@@ -515,24 +513,24 @@ We will assess the plausibility of the MUAC data through it's absolute values wh
 
 ### Data wrangling
 
-As you can tell, z-scores cannot be computed in the absence of age. In this way, the data wrangling workflow would be quite minimal. You still set the arguments inside `process_muac_data()` as learned in @sec-wrangle_mfaz. The only difference is that here we will set `age` to `NULL`. Fundamentally, under the hood the function detects MUAC values that are outliers and flags them and stores them in `flag_muac` variable that is added to the dataset. 
+As you can tell, z-scores cannot be computed in the absence of age. In this way, the data wrangling workflow would be quite minimal. You still set the arguments inside `mw_wrangle_muac()` as learned in @sec-wrangle_mfaz. The only difference is that here we will set `age` to `NULL`. Fundamentally, under the hood the function detects MUAC values that are outliers and flags them and stores them in `flag_muac` variable that is added to the dataset. 
   
 We will continue using the same dataset:
 
-```{r usage.4, echo=TRUE, eval=FALSE}
+```{r}
 #| label: wrangle_muac
 #| echo: true
 #| eval: false
 
 anthro.01 |>
-process_muac_data(
-sex = sex,
-muac = muac,
-age = NULL,
-.recode_sex = TRUE,
-.recode_muac = FALSE,
-unit = "none"
-)
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  )
 ```
 
 This returns: 
@@ -543,14 +541,14 @@ This returns:
 #| eval: true
 
 anthro.01 |>
-process_muac_data(
-sex = sex,
-muac = muac,
-age = NULL,
-.recode_sex = TRUE,
-.recode_muac = FALSE,
-unit = "none"
-)
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  )
 ```
 
 ### On to *de facto* plausibility check
@@ -563,14 +561,14 @@ We just have to add `check_plausibility_muac()` to the above pipeline:
 #| eval: false
 
 anthro.01 |>
-process_muac_data(
-sex = sex,
-muac = muac,
-age = NULL,
-.recode_sex = TRUE,
-.recode_muac = FALSE,
-unit = "none"
-) |> 
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  ) |>
   check_plausibility_muac(
     sex = sex,
     flags = flag_muac,
@@ -586,14 +584,14 @@ And this will return:
 
 
 anthro.01 |>
-process_muac_data(
-sex = sex,
-muac = muac,
-age = NULL,
-.recode_sex = TRUE,
-.recode_muac = FALSE,
-unit = "none"
-) |> 
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  ) |>
   check_plausibility_muac(
     sex = sex,
     flags = flag_muac,
@@ -609,19 +607,19 @@ We can also return a formatted table with `generate_pretty_table_muac()`:
 #| eval: false
 
 anthro.01 |>
-process_muac_data(
-sex = sex,
-muac = muac,
-age = NULL,
-.recode_sex = TRUE,
-.recode_muac = FALSE,
-unit = "none"
-) |> 
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  ) |>
   check_plausibility_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
-  ) |> 
+  ) |>
   generate_pretty_table_muac()
 ```
 
@@ -632,26 +630,26 @@ And we get
 #| echo: false
 
 anthro.01 |>
-process_muac_data(
-sex = sex,
-muac = muac,
-age = NULL,
-.recode_sex = TRUE,
-.recode_muac = FALSE,
-unit = "none"
-) |> 
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  ) |>
   check_plausibility_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
-  ) |> 
+  ) |>
   generate_pretty_table_muac()
 ```
 
 
 When working on multiple-area data, we will have to approach it slightly different. We use `dplyr::group_by()`:
 
-```{r usage.4g, echo=TRUE, eval=FALSE}
+```{r}
 #| label: by_area
 #| echo: true
 #| eval: false
@@ -661,26 +659,26 @@ library(dplyr)
 
 ## Check plausibility ----
 anthro.01 |>
-  process_muac_data(
+  mw_wrangle_muac(
     sex = sex,
     muac = muac,
     age = NULL,
     .recode_sex = TRUE,
     .recode_muac = FALSE,
-    unit = "none"
-    ) |> 
-    group_by(area) |> 
+    .to = "none"
+  ) |>
+  group_by(area) |>
   check_plausibility_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
-    ) |> 
+  ) |>
   generate_pretty_table_muac()
 ```
 
 And we get:
 
-```{r usage.4h, echo=FALSE, message=FALSE}
+```{r}
 #| label: view_by_area
 #| echo: false
 #| message: false
@@ -688,19 +686,19 @@ And we get:
 library(dplyr)
 
 anthro.01 |>
-  process_muac_data(
+  mw_wrangle_muac(
     sex = sex,
     muac = muac,
     age = NULL,
     .recode_sex = TRUE,
     .recode_muac = FALSE,
-    unit = "none"
-    ) |> 
-    group_by(area) |> 
+    .to = "none"
+  ) |>
+  group_by(area) |>
   check_plausibility_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
-    ) |> 
+  ) |>
   generate_pretty_table_muac()
 ```

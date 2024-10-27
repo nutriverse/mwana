@@ -122,7 +122,7 @@ compute_weighted_prevalence <- function(df, .edema=NULL, .summary_by = NULL) {
   } else {
     df <- df |>
       filter(.data$flag_mfaz == 0) |>
-      mutate(muac = recode_muac(.data$muac, unit = "mm")) |>
+      mutate(muac = recode_muac(.data$muac, .to = "mm")) |>
       summarise(
         sam = apply_cdc_age_weighting(.data$muac, .data$age, {{ .edema }}, status = "sam"),
         mam = apply_cdc_age_weighting(.data$muac, .data$age, {{ .edema }}, status = "mam"),
@@ -238,7 +238,7 @@ compute_muac_prevalence <- function(df,
       group_by(!!.summary_by) |>
       summarise(
         age_ratio = classify_age_sex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
-        std = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
+        std = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
         analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std),
         .groups = "drop"
       )
@@ -247,7 +247,7 @@ compute_muac_prevalence <- function(df,
     x <- df |>
       summarise(
         age_ratio = classify_age_sex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
-        std = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
+        std = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
         analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std)
       )
   }

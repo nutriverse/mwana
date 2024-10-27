@@ -37,7 +37,7 @@
 #' age = age,
 #' .decimals = 2
 #' ) |>
-#' process_wfhz_data(
+#' mw_wrangle_wfhz(
 #' sex = sex,
 #' weight = weight,
 #' height = height,
@@ -61,13 +61,13 @@
 #' age = age,
 #' .decimals = 2
 #' ) |>
-#' process_muac_data(
+#' mw_wrangle_muac(
 #' sex = sex,
 #' age = "age",
 #' muac = muac,
 #' .recode_sex = TRUE,
 #' .recode_muac = TRUE,
-#' unit = "cm"
+#' .to = "cm"
 #' ) |>
 #' check_plausibility_mfaz(
 #' flags = flag_mfaz,
@@ -80,13 +80,13 @@
 #' ## Check the plausibility of the absolute MUAC values ----
 #'
 #' anthro.01 |>
-#' process_muac_data(
+#' mw_wrangle_muac(
 #' sex = sex,
 #' muac = muac,
 #' age = NULL,
 #' .recode_sex = TRUE,
 #' .recode_muac = FALSE,
-#' unit = "none"
+#' .to = "none"
 #' ) |>
 #' check_plausibility_muac(
 #' flags = flag_muac,
@@ -113,11 +113,11 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
       age_ratio_class = classify_age_sex_ratio(.data$age_ratio),
       dps = digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
       dps_class = digitPreference({{ muac }}, digits = 1, values = 0:9)$dpsClass,
-      sd = sd(remove_flags(.data$mfaz, unit = "zscore"), na.rm = TRUE),
+      sd = sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
       sd_class = classify_sd(.data$sd, type = "zscore"),
-      skew = skewKurt(remove_flags(.data$mfaz, unit = "zscore"))$s,
+      skew = skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
       skew_class = classify_skew_kurt(.data$skew),
-      kurt = skewKurt(remove_flags(.data$mfaz, unit = "zscore"))$k,
+      kurt = skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
       kurt_class = classify_skew_kurt(.data$kurt),
       .groups = "drop"
     )
@@ -163,11 +163,11 @@ check_plausibility_wfhz <- function(df, sex, age, weight, height, flags, area) {
       dps_wgt_class = digitPreference({{ weight }}, digits = 1)$dpsClass,
       dps_hgt = digitPreference({{ height }}, digits = 1)$dps,
       dps_hgt_class = digitPreference({{ height }}, digits = 1)$dpsClass,
-      sd = sd(remove_flags(.data$wfhz, unit = "zscore"), na.rm = TRUE),
+      sd = sd(remove_flags(.data$wfhz, .from = "zscores"), na.rm = TRUE),
       sd_class = classify_sd(.data$sd, type = "zscore"),
-      skew = skewKurt(remove_flags(.data$wfhz, unit = "zscore"))$s,
+      skew = skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$s,
       skew_class = classify_skew_kurt(.data$skew),
-      kurt = skewKurt(remove_flags(.data$wfhz, unit = "zscore"))$k,
+      kurt = skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$k,
       kurt_class = classify_skew_kurt(.data$kurt),
       .groups = "drop"
     )
@@ -207,7 +207,7 @@ check_plausibility_muac <- function(df, flags, sex, muac) {
       sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
       dps = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dps"]],
       dps_class = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dpsClass"]],
-      sd = sd(remove_flags({{ muac }}, unit = "crude"), na.rm = TRUE),
+      sd = sd(remove_flags({{ muac }}, .from = "absolute"), na.rm = TRUE),
       sd_class = classify_sd(.data$sd, type = "crude"),
       .groups = "drop"
     )

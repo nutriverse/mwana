@@ -66,16 +66,16 @@ local({
   #### Input data ----
   x <- mfaz.01 |>
     mw_wrangle_age(age = age) |>
-    process_muac_data(
+    mw_wrangle_muac(
       sex = sex,
       muac = muac,
       age = "age",
       .recode_sex = TRUE,
       .recode_muac = TRUE,
-      unit = "cm"
+      .to = "cm"
     ) |>
     subset(flag_mfaz == 0) |>
-    dplyr::mutate(muac = recode_muac(muac, unit = "mm"))
+    dplyr::mutate(muac = recode_muac(muac, .to = "mm"))
 
 
   #### Expected results calculated in the CDC/SMART MUAC tool ----
@@ -118,17 +118,17 @@ local({
       age = age,
       .decimals = 2
       ) |>
-    process_muac_data(
+    mw_wrangle_muac(
       sex = sex,
       muac = muac,
       age = "age",
       .recode_sex = TRUE,
       .recode_muac = TRUE,
-      unit = "cm"
+      .to = "cm"
     ) |>
     subset(flag_mfaz == 0) |>
     dplyr::mutate(
-      muac = recode_muac(muac, unit = "mm"))
+      muac = recode_muac(muac, .to = "mm"))
 
 
   #### Expected results calculated in the CDC/SMART MUAC tool ----

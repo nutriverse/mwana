@@ -1,138 +1,5 @@
 #'
 #'
-#' Identify and flag outliers
-#'
-#' @description
-#' Outliers are extreme values that deviate remarkably from the survey mean, making
-#' them unlikely to be accurate measurements. This function detects and signals
-#' them based on a criterion set for the WFHZ, the MFAZ and for the absolute MUAC
-#' values.
-#'
-#' @param x A vector of class `double` of WFHZ or MFAZ or absolute MUAC values.
-#' The latter should be in millimeters.
-#'
-#' @param type A choice between `zscore` and `crude` for where outliers should be
-#' detected and flagged from.
-#'
-#' @param unit A choice between `zscore` and `crude` for where outliers should be
-#' detected and flagged from.
-#'
-#' @return A vector of the same length as `x` of flagged observations that are
-#' outliers: 1 for is a flag and 0 is not a flag.
-#'
-#' @details
-#' The flagging criterion used for the WFHZ and the MFAZ is as in
-#' [SMART plausibility check](https://smartmethodology.org/). A fixed flagging
-#' criterion is used for the absolute MUAC values. This is as recommended by
-#' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478)
-#'
-#'
-#' @examples
-#'
-#' ## Sample data for absolute MUAC values ----
-#' x <- anthro.01$muac
-#'
-#' ## Apply the function with type set to "crude" ----
-#' flag_outliers(x, type = "crude")
-#'
-#' ## Sample data for MFAZ or for WFHZ values ----
-#' x <- anthro.02$mfaz
-#'
-#' # Apply the function with type set to "zscore" ----
-#' flag_outliers(x, type = "zscore")
-#'
-#' @rdname outliers
-#' @export
-#'
-flag_outliers <- function(x, type = c("zscore", "crude")) {
-  type <- match.arg(type)
-
-  if (type == "zscore") {
-    mean_zscore <- mean(x, na.rm = TRUE)
-    flags <- ifelse((x < (mean_zscore - 3) | x > (mean_zscore + 3)), 1, 0)
-    flags <- ifelse(is.na(x), NA, flags)
-    flags
-
-  } else {
-    flags <- ifelse(x < 100 | x > 200, 1, 0)
-    flags <- ifelse(is.na(x), NA, flags)
-    flags
-  }
-}
-
-
-#'
-#'
-#' Remove outliers
-#'
-#' @rdname outliers
-#'
-remove_flags <- function(x, unit = c("zscore", "crude")) {
-
-  ## Match arguments ----
-  unit <- match.arg(unit)
-
-  ## Control flow based on unit ----
-  switch(
-    unit,
-    ### Remove flags when unit = "zscore" ----
-    "zscore" = {
-      mean_x <- mean(x, na.rm = TRUE)
-      zs <- ifelse((x < (mean_x - 3) | x > (mean_x + 3)) | is.na(x), NA_real_, x)
-    },
-    ### Remove flags when unit = "crude" ----
-    "crude" = {
-      cr <- ifelse(x < 100 | x > 200 | is.na(x), NA_integer_, x)
-    }
-  )
-}
-
-
-#'
-#'
-#'
-#' Convert MUAC values to either centimeters or millimeters
-#'
-#' @description
-#' Recode the MUAC values to either centimeters or millimeters as required.
-#'
-#' @param muac A vector of class `double` or `integer` of the absolute MUAC values.
-#'
-#' @param unit A choice of the unit to which the MUAC values should be converted.
-#'
-#' @returns A numeric vector of the same length `muac`, with values converted
-#' to the chosen unit.
-#'
-#' @examples
-#'
-#' ## Recode from millimeters to centimeters ----
-#' muac <- anthro.01$muac
-#' muac_cm <- recode_muac(muac, unit = "cm")
-#'
-#' ## Using the `muac_cm` object to recode it back to "mm" ----
-#' muac_mm <- recode_muac(muac_cm, unit = "mm")
-#'
-#' @export
-#'
-recode_muac <- function(muac, unit = c("cm", "mm")) {
-
-  ## Check if unit's arguments match ----
-  stopifnot(unit %in% c("cm", "mm"))
-
-  ## Recode muac conditionally ----
-  switch(
-    unit,
-    ### Recode to millimeters ----
-    "mm" = {muac <- muac * 10},
-    ### Recode to centimeters ----
-    "cm" = {muac <- muac / 10},
-    stop("Invalid 'units' argument. Please choose either 'cm' or 'mm'.")
-  )
-}
-
-
-#'
-#'
 #' Wrangle weight-for-height and MUAC data
 #'
 #' @description
@@ -151,12 +18,12 @@ recode_muac <- function(muac, unit = c("cm", "mm")) {
 #' the sex variable is a character vector of values "m" for boys and "f" for girls
 #' and will recode them to 1 and 2 respectively.
 #'
-#' @param muac A vector of class `double` or `integer` of the absolute MUAC values.
+#' @param muac A vector of class `numeric` of child's age in months.
 #'
 #' @param .recode_muac Logical. Default is `FALSE`. Set to `TRUE` if MUAC values
 #' should be converted to either centimeters or millimeters.
 #'
-#' @param unit A choice of the unit to which the MUAC values should be converted.
+#' @param .to A choice of the unit to which the MUAC values should be converted.
 #' "cm" for centimeters, "mm" for millimeters and "none" to leave as it is.
 #'
 #' @param age A double vector of child's age in months. It must be named age,
@@ -181,66 +48,77 @@ recode_muac <- function(muac, unit = c("cm", "mm")) {
 #'
 #' @examples
 #'
-#' ## An example application of `process_wfhz_data()` ----
+#' ## An example application of `mw_wrangle_wfhz()` ----
 #'
 #' anthro.01 |>
-#' process_wfhz_data(
-#' sex = sex,
-#' weight = weight,
-#' height = height,
-#' .recode_sex = TRUE
-#' )
+#'   mw_wrangle_wfhz(
+#'     sex = sex,
+#'     weight = weight,
+#'     height = height,
+#'     .recode_sex = TRUE
+#'   )
 #'
-#' ## An example application of `process_muac_data()` ----
+#' ## An example application of `mw_wrangle_muac()` ----
 #'
 #' ### Sample data ----
 #' df <- data.frame(
-#'  survey_date = as.Date(c(
-#'  "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01")),
-#'  birth_date = as.Date(c(
-#'  "2019-01-01", NA, "2018-03-20", "2019-11-05", "2021-04-25")),
-#'  age = c(NA, 36, NA, NA, NA),
-#'  sex = c("m", "f", "m", "m", "f"),
-#'  muac = c(110, 130, 300, 123, 125)
-#'  )
+#'   survey_date = as.Date(c(
+#'     "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01", "2023-01-01"
+#'   )),
+#'   birth_date = as.Date(c(
+#'     "2019-01-01", NA, "2018-03-20", "2019-11-05", "2021-04-25"
+#'   )),
+#'   age = c(NA, 36, NA, NA, NA),
+#'   sex = c("m", "f", "m", "m", "f"),
+#'   muac = c(110, 130, 300, 123, 125)
+#' )
 #'
-#'  ### The application of the function ----
+#' ### The application of the function ----
 #'
-#'  df |>
-#'  mw_wrangle_age(
-#'  dos = survey_date,
-#'  dob = birth_date,
-#'  age = age,
-#'  .decimals = 2
-#'  ) |>
-#'  process_muac_data(
-#'  sex = sex,
-#'  age = "age",
-#'  muac = muac,
-#'  .recode_sex = TRUE,
-#'  .recode_muac = TRUE,
-#'  unit = "cm"
-#'  )
+#' df |>
+#'   mw_wrangle_age(
+#'     dos = survey_date,
+#'     dob = birth_date,
+#'     age = age,
+#'     .decimals = 2
+#'   ) |>
+#'   mw_wrangle_muac(
+#'     sex = sex,
+#'     age = "age",
+#'     muac = muac,
+#'     .recode_sex = TRUE,
+#'     .recode_muac = TRUE,
+#'     .to = "cm"
+#'   )
 #'
 #' @rdname wrangler
 #'
 #' @export
 #'
 
-process_wfhz_data <- function(df,
-                              sex,
-                              weight,
-                              height,
-                              .recode_sex = TRUE) {
+mw_wrangle_wfhz <- function(df,
+                            sex,
+                            weight,
+                            height,
+                            .recode_sex = TRUE) {
+  # ## Check if the class of vector weight is "double" ----
+  # if(!is.double(weight)) {
+  #   stop("Weight should be of class 'double'. Please try again")
+  # }
+  #
+  # ## Check if the class of vector height is "double" ----
+  # if(!is.double(height)) {
+  #   stop("Height should be of class 'double'. Please try again")
+  # }
 
+  ## Capture expressions to evaluate later ----
   recode_sex <- quote(
     if (.recode_sex) {
       sex <- ifelse({{ sex }} == "m", 1, 2)
-    } else {
-      {{ sex }}
-    }
+    } else {{{ sex }}}
   )
 
+  ## Compute z-scores ----
   df <- df |>
     mutate(
       sex = !!recode_sex
@@ -252,9 +130,11 @@ process_wfhz_data <- function(df,
       index = "wfh",
       digits = 3
     ) |>
+    ## Identify and flag outliers ----
     mutate(
-      flag_wfhz = do.call(flag_outliers, list(.data$wfhz, type = "zscore"))
+      flag_wfhz = do.call(flag_outliers, list(.data$wfhz, .from = "zscores"))
     )
+  ## Return ---
   tibble::as_tibble(df)
 }
 
@@ -265,34 +145,35 @@ process_wfhz_data <- function(df,
 #'
 #' @export
 #'
-process_muac_data <- function(df,
-                              sex,
-                              muac,
-                              age = NULL,
-                              .recode_sex = TRUE,
-                              .recode_muac = TRUE,
-                              unit = c("cm", "mm", "none")) {
-  unit <- match.arg(unit)
+mw_wrangle_muac <- function(df,
+                            sex,
+                            muac,
+                            age = NULL,
+                            .recode_sex = TRUE,
+                            .recode_muac = TRUE,
+                            .to = c("cm", "mm", "none")) {
+  ## Enforce options in argument .to ----
+  .to <- match.arg(.to)
 
+  ## Capture expressions to evaluate later ----
   recode_sex <- quote(
     if (.recode_sex) {
       sex <- ifelse({{ sex }} == "m", 1, 2)
-    } else {
-      {{ sex }}
-    }
+    } else {{{ sex }}}
   )
 
+  ## Capture expressions to evaluate later ----
   rec_muac <- quote(
-    if (.recode_muac && unit == "cm") {
-      muac <- recode_muac({{ muac }}, unit = "cm")
-    } else if (.recode_muac && unit == "mm") {
-      muac <- recode_muac({{ muac }}, unit = "mm")
-    } else {
-      {{ muac }}
-    }
+    if (.recode_muac && .to == "cm") {
+      muac <- recode_muac({{ muac }}, .to = "cm")
+    } else if (.recode_muac && .to == "mm") {
+      muac <- recode_muac({{ muac }}, .to = "mm")
+    } else {{{ muac }}}
   )
+
 
   if (!is.null({{ age }})) {
+    ## Compute z-scores and identify flags on MFAZ ----
     df <- df |>
       mutate(
         muac = !!rec_muac,
@@ -304,16 +185,18 @@ process_muac_data <- function(df,
         secondPart = "age_days",
         index = "mfa",
         digits = 3
-      )|>
+      ) |>
       mutate(
-        flag_mfaz = do.call(flag_outliers, list(.data$mfaz, type = "zscore"))
+        flag_mfaz = do.call(flag_outliers, list(.data$mfaz, .from = "zscores"))
       )
   } else {
+    ## Identify flags on the absolute MUAC values ----
     df <- df |>
       mutate(
         sex = !!recode_sex,
-        flag_muac = do.call(flag_outliers, list({{ muac }}, type = "crude"))
+        flag_muac = do.call(flag_outliers, list({{ muac }}, .from = "absolute"))
       )
   }
+  ## Return ----
   tibble::as_tibble(df)
 }
