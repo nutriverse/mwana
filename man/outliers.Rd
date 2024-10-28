@@ -3,38 +3,49 @@
 \name{flag_outliers}
 \alias{flag_outliers}
 \alias{remove_flags}
-\title{Identify and flag outliers}
+\title{Identify, flag outliers and remove them}
 \usage{
 flag_outliers(x, .from = c("zscores", "raw_muac"))
 
 remove_flags(x, .from = c("zscores", "raw_muac"))
 }
 \arguments{
-\item{x}{A vector of class \code{numeric} of WFHZ or MFAZ or raw MUAC values.
-The latter should be in millimeters.}
+\item{x}{A vector of class \code{numeric} of WFHZ, MFAZ, HFAZ, WFAZ or raw MUAC values.
+The latter should be in millimeters. If the class is different than expected,
+the function will stop execution and return an error message indicating the
+type of mismatch.}
 
 \item{.from}{A choice between \code{zscores} and \code{raw_muac} for where outliers should be
 detected and flagged from.}
 }
 \value{
-A vector of the same length as \code{x} of flagged observations that are
-outliers: 1 for is a flag and 0 is not a flag.
+A vector of the same length as \code{x} for flagged records coded as
+\code{1} for is a flag and \code{0} not a flag.
 }
 \description{
-Outliers are extreme values that deviate remarkably from the survey mean, making
-them unlikely to be accurate measurements. This function identifies and signals
-them based on a criterion set for the WFHZ, the MFAZ and for the absolute MUAC
-values. For the raw MUAC values, outliers are identified and flagged using
-a different approach as described below.
+Identify outlier z-scores for weight-for-height (WFHZ) and MUAC-for-age (MFAZ)
+following the SMART methodology. The function can be used, as well, to detect
+outliers for height-for-age (HFAZ) and weight-for-age (WFAZ) z-scores
+following the same approach.
+
+For raw MUAC values, outliers are identified when a value is less than 100
+millimeters or greater than 200 millimeters.
+
+Removing outliers consists in setting the outlier record to \code{NA} and not necessarily
+to delete it from the dataset. This is useful in the analysis procedures
+where outliers must be removed, such as the analysis of the standard deviation.
 }
 \details{
-The flagging criterion used for the WFHZ and the MFAZ is as in
-\href{https://smartmethodology.org/}{SMART plausibility check}. A fixed flagging
-criterion is used for the raw MUAC values. This is as recommended by
-\href{https://doi.org/10.1111/mcn.13478}{Bilukha, O., & Kianian, B. (2023).}
+For z-score-based detection, flagged records represent outliers that deviate
+substantially from the sample's z-score mean, making them unlikely to reflect
+accurate measurements. For raw MUAC values, flagged records are those that fall
+outside the acceptable fixed range. Including such outliers in the analysis could
+compromise the accuracy and precision of the resulting estimates.
+
+The flagging criterion used for raw MUAC values is based on a recommendation
+by Bilukha, O., & Kianian, B. (2023).
 }
 \examples{
-
 ## Sample data for raw MUAC values ----
 x <- anthro.01$muac
 
@@ -50,7 +61,16 @@ flag_outliers(x, .from = "zscores")
 ## With .from set to "zscores" ----
 remove_flags(wfhz.01$wfhz, .from = "zscores")
 
-## With .from set to "absolute" ----
+## With .from set to "raw_muac" ----
 remove_flags(mfaz.01$muac, .from = "raw_muac")
 
+}
+\references{
+Bilukha, O., & Kianian, B. (2023). Considerations for assessment of measurement
+quality of mid‐upper arm circumference data in anthropometric surveys and
+mass nutritional screenings conducted in humanitarian and refugee settings.
+\emph{Maternal & Child Nutrition}, 19, e13478. Available at \url{https://doi.org/10.1111/mcn.13478}
+
+SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief
+and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
 }

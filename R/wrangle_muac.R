@@ -2,46 +2,56 @@
 #' Wrangle MUAC data
 #'
 #' @description
-#' This function performs data wrangling by calculating the MUAC-for-age z-scores,
-#' followed by the detection and flagging of outliers based on the SMART flagging
-#' criteria. When age is not supplied, z-scores do not get computed. Instead,
-#' outlier detection and flagging is based on the raw MUAC values.
+#' Calculate z-scores for MUAC-for-age (MFAZ) and identify outliers based on
+#' the SMART methodology. When age is not supplied, wrangling will consist only
+#' in detecting outliers from raw the MUAC values.
 #'
-#' @param df A dataset of class `data.frame` to wrangle data from.
+#' @param df A dataset object of class `data.frame` to wrangle data from.
 #'
 #' @param sex A `numeric` or `character` vector of child's sex. Code values should
-#' be 1 or "m" for boy and 2 or "f" for girl.
+#' only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
+#' are coded in either of the aforementioned before to call the function. If input
+#' codes are different than expected, the function will stop execution and
+#' return an error message with the type of mismatch.
 #'
 #' @param .recode_sex Logical. Set to `TRUE` if the values for `sex` are not coded
 #' as 1 (for males) or 2 (for females). Otherwise, set to `FALSE` (default).
 #'
 #' @param age A vector of class `numeric` of child's age in months.
 #'
-#' @param muac A vector of class `numeric` of child's age in months.
+#' @param muac A vector of class `numeric` of child's age in months. If the class
+#' is different than expected, the function will stop execution and return an error
+#' message indicating the type of mismatch.
 #'
-#' @param .recode_muac Logical. Set to `TRUE` if the raw MUAC values should be
+#' @param .recode_muac Logical. Set to `TRUE` if the values for raw MUAC should be
 #' converted to either centimeters or millimeters. Otherwise, set to `FALSE`
 #' (default)
 #'
-#' @param .to A choice of the unit to which the MUAC values should be converted.
+#' @param .to A choice of the unit to which the MUAC values should be converted;
 #' "cm" for centimeters, "mm" for millimeters and "none" to leave as it is.
 #'
 #' @param .decimals The number of decimals places the z-scores should have.
 #' Default is 3.
 #'
 #' @returns A data frame based on `df`. New variables named `mfaz` and
-#' `flag_mfaz`, of child's MUAC-for-age z-scores and flags will be created. For
-#' MUAC, when age is not supplied only `flag_muac` variable is created.
-#' This refers to flags based on the raw MUAC values as recommended by
-#' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478).
+#' `flag_mfaz`, of child's MFAZ and detected outliers, will be created. When age
+#' is not supplied, only `flag_muac` variable is created. This refers to outliers
+#' detected based on the raw MUAC values.
 #'
-#' @details
-#' A fixed flagging criterion is used for the raw MUAC values. This is as
-#' recommended by
-#' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478)
+#' @references
+#' Bilukha, O., & Kianian, B. (2023). Considerations for assessment of measurement
+#' quality of mid‐upper arm circumference data in anthropometric surveys and
+#' mass nutritional screenings conducted in humanitarian and refugee settings.
+#' *Maternal & Child Nutrition*, 19, e13478. <https://doi.org/10.1111/mcn.13478>
+#'
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
+#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
+#'
+#' @seealso
+#' [flag_outliers()] [remove_flags()] [mw_wrangle_age()]
+#'
 #'
 #' @examples
-#'
 #' ## When age is available ----
 #' anthro.02 |>
 #'   mw_wrangle_age(
@@ -86,6 +96,15 @@ mw_wrangle_muac <- function(df,
   ## Enforce options in argument .to ----
   .to <- match.arg(.to)
 
+  ## Difuse sex variable for NSE----
+  sex <- eval_tidy(enquo(sex), df)
+
+  ## Check if vector of sex is coded in either "m" and "f" or 1 and 2 ----
+  x <- as.factor(as.character(sex))
+  if(!(all(levels(x) %in% c("m", "f")) | all(levels(x) %in% c("1", "2")))) {
+    stop("Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively")
+  }
+
   ## Capture expressions to evaluate later ----
   recode_sex <- quote(
     if (.recode_sex) {
@@ -102,11 +121,11 @@ mw_wrangle_muac <- function(df,
     } else {{{ muac }}}
   )
 
-  ## Difuse arguments to be evaluated later ----
+  ## Difuse arguments for NSE ----
   age <- eval_tidy(enquo(age), df)
 
   if (!is.null(age)) {
-    ## Compute z-scores and identify flags on MFAZ ----
+    ## Calculate z-scores and identify outliers on MFAZ ----
     df <- df |>
       mutate(
         muac = !!rec_muac,
@@ -123,7 +142,7 @@ mw_wrangle_muac <- function(df,
         flag_mfaz = do.call(flag_outliers, list(.data$mfaz, .from = "zscores"))
       )
   } else {
-    ## Identify flags on the raw MUAC values ----
+    ## Identify outliers on raw MUAC values ----
     df <- df |>
       mutate(
         sex = !!recode_sex,

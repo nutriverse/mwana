@@ -18,9 +18,9 @@ library(ipccheckr)
 
 Plausibility check is a tool that evaluates the overall quality and acceptability of anthropometric data to ensure its suitability for informing decision-making process.  
 
-`mwana` provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or the absolute MUAC values.  
+`mwana` provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or the raw MUAC values.  
 
-In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on the absolute MUAC values. For demonstration, we will use a `mwana` built-in sample dataset named `anthro.01`. This dataset is about district level SMART surveys from anonymized locations. You can read more about it by calling `?anthro.01` in `R`console.
+In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on the raw MUAC values. For demonstration, we will use a `mwana` built-in sample dataset named `anthro.01`. This dataset is about district level SMART surveys from anonymized locations. You can read more about it by calling `?anthro.01` in `R`console.
 
 We will begin the demonstration with the plausibility check that you are most familiar with and then proceed to the ones you are less familiar with. 
 
@@ -159,7 +159,7 @@ x <- wrangled_df |>
     weight = weight,
     height = height,
     flags = flag_wfhz,
-    area = area # This is variable name with the geographical areas to summarise at.
+    area = area       # This is variable name with the geographical areas to summarise at.
   )
 ```
 
@@ -509,7 +509,7 @@ At this point, you have reached the end of your workflow ✨.
 
 ## Plausibility check on the raw MUAC values
 
-We will assess the plausibility of the MUAC data through it's absolute values when the variable age is not available in the dataset. This is a job assigned to `check_plausibility_muac()`. The workflow for this check is the shortest one.
+We will assess the plausibility of the MUAC data through it's raw values when the variable age is not available in the dataset. This is a job assigned to `check_plausibility_muac()`. The workflow for this check is the shortest one.
 
 ### Data wrangling
 

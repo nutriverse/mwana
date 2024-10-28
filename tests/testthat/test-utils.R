@@ -1,5 +1,4 @@
 # Test check: get_age_months() ----
-
 testthat::test_that(
   "calculate_age_in_months() does the job as expected",
   {
@@ -46,7 +45,6 @@ testthat::test_that(
 
 # Test check: "flag_outliers()" ----
 ## flag_outliers with '.from' set to "zscores" ----
-
 testthat::test_that(
   "flag_outliers() works as expected when .from = 'zscore'",
   {
@@ -100,7 +98,6 @@ testthat::test_that(
 
 # Test check: remove_flags() -----
 ## With .from set to "raw_muac" ----
-
 testthat::test_that(
   "remove_flags() assign NA's when flaggs are identified",
   {
@@ -130,7 +127,6 @@ testthat::test_that(
 )
 
 ## With .from set to "zscores" ----
-
 testthat::test_that(
   "remove_flags() assign NA's when flaggs are identified",
   {
@@ -153,12 +149,14 @@ testthat::test_that(
 
 # Test check: recode_muac() ----
 ## With .to set to "cm" ----
-
 testthat::test_that(
   "recode_muac() works well when .to = 'cm'",
   {
     ### Sample data ----
     x <- anthro.02$muac
+
+    ### A sample data in centimeters ----
+    e <- seq(10.3, 20.3, 0.7)
 
     ### Expected results ----
     p <- x / 10
@@ -171,11 +169,11 @@ testthat::test_that(
     testthat::expect_equal(w, p)
     testthat::expect_true(is.numeric(w))
     testthat::expect_error(recode_muac(as.character(x), .to = "cm"))
+    testthat::expect_error(recode_muac(e, .to = "cm"))
   }
 )
 
 ## With .to set to "mm" ----
-
 testthat::test_that(
   "recode_muac() works well when .to = 'mm'",
   {
@@ -194,5 +192,6 @@ testthat::test_that(
     testthat::expect_equal(w, m)
     testthat::expect_true(is.numeric(w))
     testthat::expect_error(recode_muac(as.character(m), .to = "mm"))
+    testthat::expect_error(recode_muac(x, .to = "mm"))
   }
 )

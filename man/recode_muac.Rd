@@ -8,9 +8,13 @@ recode_muac(x, .to = c("cm", "mm"))
 }
 \arguments{
 \item{x}{A vector of the raw MUAC values. The class can either be
-\code{double} or \code{numeric}.}
+\code{double} or \code{numeric} or \code{integer}. If different than expected, the function
+will stop execution and return an error message indicating the type of mismatch.}
 
-\item{.to}{A choice of the unit to which the MUAC values should be converted.}
+\item{.to}{The unit to convert MUAC values to. Defaults to \code{cm}. If set to \code{cm},
+the function checks if the values are in \code{mm}; if not, it throws an error.
+Similarly, if set to \code{mm}, the function ensures the values are in \code{cm} before
+to proceed.}
 }
 \value{
 A numeric vector of the same length as \code{x}, with values converted
@@ -18,9 +22,11 @@ to the chosen unit.
 }
 \description{
 Convert MUAC values to either centimeters or millimeters as required.
+Before to covert, the function checks if the supplied MUAC
+values are in the opposite unit of the intended conversion. If not,
+execution stops and an error message is returned.
 }
 \examples{
-
 ## Recode from millimeters to centimeters ----
 muac <- anthro.01$muac
 muac_cm <- recode_muac(muac, .to = "cm")

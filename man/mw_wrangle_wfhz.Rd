@@ -7,14 +7,21 @@
 mw_wrangle_wfhz(df, sex, weight, height, .recode_sex = TRUE, .decimals = 3)
 }
 \arguments{
-\item{df}{A dataset of class \code{data.frame} to wrangle data from.}
+\item{df}{A dataset object of class \code{data.frame} to wrangle data from.}
 
 \item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values should
-be 1 or "m" for boy and 2 or "f" for girl.}
+only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
+are coded in either of the aforementioned before to call the function. If input
+codes are neither of the above, the function will stop execution and
+return an error message with the type of mismatch.}
 
-\item{weight}{A vector of class \code{double} of child's weight in kilograms.}
+\item{weight}{A vector of class \code{double} of child's weight in kilograms. If the input
+is not of class \code{double}, the function will stop execution and return an error
+message indicating the type of mismatch.}
 
-\item{height}{A vector of class \code{double} of child's height in centimeters.}
+\item{height}{A vector of class \code{double} of child's height in centimeters. If the input
+is not of class \code{double}, the function will stop execution and return an error
+message indicating the type of mismatch.}
 
 \item{.recode_sex}{Logical. Set to \code{TRUE} if the values for \code{sex} are not coded
 as 1 (for males) or 2 (for females). Otherwise, set to \code{FALSE} (default).}
@@ -24,19 +31,13 @@ Default is 3.}
 }
 \value{
 A data frame based on \code{df}. New variables named \code{wfhz} and
-\code{flag_wfhz}, of child's weight-for-height z-scores and flags.
+\code{flag_wfhz}, of child's WFHZ and detected outliers, will be created.
 }
 \description{
-This function performs data wrangling by calculating the weight-for-height
-followed by the detection and flagging of outliers based on the SMART flagging
-criteria.
-}
-\details{
-The flagging criterion used for the WFHZ is as in
-\href{https://smartmethodology.org/}{SMART plausibility check}.
+Calculate z-scores for weight-for-height (WFHZ) and identify outliers based on
+the SMART methodology.
 }
 \examples{
-
 anthro.01 |>
   mw_wrangle_wfhz(
     sex = sex,
@@ -46,4 +47,11 @@ anthro.01 |>
     .decimals = 2
   )
 
+}
+\references{
+SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief
+and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
+}
+\seealso{
+\code{\link[=flag_outliers]{flag_outliers()}} \code{\link[=remove_flags]{remove_flags()}}
 }

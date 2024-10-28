@@ -65,9 +65,9 @@ digraph mwana {
   node3 [label = 'Indicator', shape = diamond, color = lightgoldenrod];
   node4 [label = 'WFHZ', shape = note];
   node5 [label = 'MFAZ', shape = note];
-  node6 [label = 'Absolute MUAC', shape = note];
-  node7 [label = 'Process age', shape = box];
-  node8 [label = 'Process anthro data', shape = box];
+  node6 [label = 'Raw MUAC', shape = note];
+  node7 [label = 'Wrangle age', shape = box];
+  node8 [label = 'Wrangle anthro data', shape = box];
   node9 [label = 'Check plausibility', shape = box];
   node10 [label = 'End of workflow', shape = oval, color = salmon];
 
@@ -105,7 +105,7 @@ digraph mwana {
 `mwana` computes prevalence for: 
 
   + Wasting on the basis of WFHZ and/edema (Read vignettes) 
-  + Wasting on the basis of the absolute values of MUAC and/or edema: here, when variable age is available, mwana applies MFAZ flags, otherwise it applies the flagging criteria around the absolute values of MUAC, to exclude outliers before computing prevalence, but the actual prevalence is done on the absolute values. (Read link to the specific section in the vignettes)
+  + Wasting on the basis of the raw MUAC values and/or edema: here, when variable age is available, mwana applies MFAZ flags, otherwise it applies the flagging criteria around the raw MUAC values, to exclude outliers before computing prevalence, but the actual prevalence is done on the raw values. (Read link to the specific section in the vignettes)
   + Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ flags. (Read link to the specific section in the vignettes)
   + Combined prevalence of wasting: here a concept of combined flags is used to streamline the flags removed in WFHZ and those in MUAC. (Read link to the specific section in the vignettes).
 
@@ -114,7 +114,7 @@ digraph mwana {
 In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met on the basis of the methodology used to collect the data: survey, screening or sentinel sites. (Check out the vignette).
 
 :::{.callout-tip}
-If you are undertaking a research and you want to censor your data before including in your statistical models, etc, `mwana` is a great helper, as it identifies flags out of your anthro data.
+If you are undertaking a research and you want to wrangle your data before including in your statistical models, etc, `mwana` is a great helper.
 :::
 
 :::{.callout-warning}

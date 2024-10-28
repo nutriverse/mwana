@@ -4,7 +4,7 @@
 #'
 #' @description
 #' Wrangle child's age for downstream analysis. This includes calculating age
-#' in months based on the date of data collection and the child's date of birth and
+#' in months based on the date of data collection and the child's date of birth, and
 #' setting to `NA` the age values that are less than 6.0 and greater than or equal
 #' to 60.0 months old.
 #'
@@ -61,7 +61,7 @@ mw_wrangle_age <- function(df,
                            age,
                            .decimals = 2) {
 
-  ## Difuse and lazy evaluate arguments ----
+  ## Difuse and evaluate arguments ----
   dos <- eval_tidy(enquo(dos), df)
   dob <- eval_tidy(enquo(dob), df)
   age <- eval_tidy(enquo(age), df)
@@ -72,7 +72,7 @@ mw_wrangle_age <- function(df,
 
     ## Check if the class of vector "age" is "numeric" ----
     if (!is.numeric(age)) {
-      stop("Child's age should be of class 'numeric'. Please try again.")
+      stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
     }
 
     ## Calculate age in months ----
@@ -87,7 +87,7 @@ mw_wrangle_age <- function(df,
   } else {
     ## Check if the class of vector "z" is "numeric" ----
     if (!is.numeric(age)) {
-      stop("Child's age should be of class 'numeric'. Please try again.")
+      stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
     }
 
     ## Calculate age in months ----

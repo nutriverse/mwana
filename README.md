@@ -101,12 +101,12 @@ result.
 `mwana` computes prevalence for:
 
 - Wasting on the basis of WFHZ and/edema (Read vignettes)
-- Wasting on the basis of the absolute values of MUAC and/or edema:
-  here, when variable age is available, mwana applies MFAZ flags,
-  otherwise it applies the flagging criteria around the absolute values
-  of MUAC, to exclude outliers before computing prevalence, but the
-  actual prevalence is done on the absolute values. (Read link to the
-  specific section in the vignettes)
+- Wasting on the basis of the raw MUAC values and/or edema: here, when
+  variable age is available, mwana applies MFAZ flags, otherwise it
+  applies the flagging criteria around the raw MUAC values, to exclude
+  outliers before computing prevalence, but the actual prevalence is
+  done on the raw values. (Read link to the specific section in the
+  vignettes)
 - Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ
   flags. (Read link to the specific section in the vignettes)
 - Combined prevalence of wasting: here a concept of combined flags is
@@ -125,9 +125,9 @@ sites. (Check out the vignette).
 
 > [!TIP]
 >
-> If you are undertaking a research and you want to censor your data
+> If you are undertaking a research and you want to wrangle your data
 > before including in your statistical models, etc, `mwana` is a great
-> helper, as it identifies flags out of your anthro data.
+> helper.
 
 > [!WARNING]
 >

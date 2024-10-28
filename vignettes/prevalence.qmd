@@ -129,7 +129,7 @@ anthro.02 |>
   compute_wfhz_prevalence(
     .wt = NULL,
     .edema = edema,
-    .summary_by = province ## province is the variable's name holding data on where the survey was conducted.
+    .summary_by = province # province is the variable's name holding data on where the survey was conducted.
   )
 ```
 
@@ -160,7 +160,7 @@ To get the weighted prevalence, we make the use of the `.wt` argument. We pass t
 
 anthro.02 |>
   compute_wfhz_prevalence(
-    .wt = "wtfactor", ## Passing the wtfactor to .wt
+    .wt = "wtfactor", # Passing the wtfactor to .wt
     .edema = edema,
     .summary_by = province
   )
@@ -249,7 +249,7 @@ The prevalence of wasting based on MFAZ can be estimated using the `compute_mfaz
 This job is assigned to `compute_muac_prevalence()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the raw values MUAC.
 
 :::{.callout-important}
-Although the acceptability is evaluated on the basis of MFAZ, the actual prevalence is estimated on the basis of the absolute MUAC values. MFAZ is also used to detect outliers and flag them to be excluded from the prevalence analysis.
+Although the acceptability is evaluated on the basis of MFAZ, the actual prevalence is estimated on the basis of the raw MUAC values. MFAZ is also used to detect outliers and flag them to be excluded from the prevalence analysis.
 :::
  
 The MFAZ standard deviation and the age ratio test results are used to control the prevalence analysis flow in this way: 

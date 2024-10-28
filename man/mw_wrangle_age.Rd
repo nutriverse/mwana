@@ -33,7 +33,7 @@ be created.
 }
 \description{
 Wrangle child's age for downstream analysis. This includes calculating age
-in months based on the date of data collection and the child's date of birth and
+in months based on the date of data collection and the child's date of birth, and
 setting to \code{NA} the age values that are less than 6.0 and greater than or equal
 to 60.0 months old.
 }

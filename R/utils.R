@@ -5,15 +5,18 @@
 #' Calculate child's age in months based on the date of birth and the date of
 #' data collection.
 #'
-#' @param dos A vector of class `Date` for the date of data collection.
+#' @param dos A vector of class `Date` for the date of data collection. If the class
+#' is different than expected, the function will stop execution and return an error
+#' message indicating the type of mismatch.
 #'
-#' @param dob A vector of class `Date` for the child's date of birth.
+#' @param dob A vector of class `Date` for the child's date of birth. If the class
+#' is different than expected, the function will stop execution and return an error
+#' message indicating the type of mismatch.
 #'
 #' @returns A vector of class `numeric` for child's age in months. Any value less
 #' than 6.0 and greater than or equal to 60.0 months will be set to `NA`.
 #'
 #' @examples
-#'
 #' ## Take two vectors of class "Date" ----
 #' surv_date <- as.Date(
 #'   c(
@@ -35,15 +38,16 @@
 #' )
 #'
 #' @export
+#'
 get_age_months <- function(dos, dob) {
   ## Check if the class of vector "dos" is "Date" ----
   if (!is(dos, "Date")) {
-    stop("Child's date of birth should be of class 'Date'. Please try again.")
+    stop("`dos` must be a vector of class 'Date'; not ", shQuote(class(dos)), ". Please try again.")
   }
 
   ## Check if the class of vector "dob" is "Date" ----
   if (!is(dob, "Date")) {
-    stop("The date of data collection should be of class 'Date'. Please try again.")
+    stop("`dob` must be a vector of class 'Date'; not ", shQuote(class(dob)), ". Please try again.")
   }
 
   ## Calculate age in months ----
@@ -56,33 +60,53 @@ get_age_months <- function(dos, dob) {
 
 #'
 #'
-#' Identify and flag outliers
+#' Identify, flag outliers and remove them
 #'
 #' @description
-#' Outliers are extreme values that deviate remarkably from the survey mean, making
-#' them unlikely to be accurate measurements. This function identifies and signals
-#' them based on a criterion set for the WFHZ, the MFAZ and for the absolute MUAC
-#' values. For the raw MUAC values, outliers are identified and flagged using
-#' a different approach as described below.
+#' Identify outlier z-scores for weight-for-height (WFHZ) and MUAC-for-age (MFAZ)
+#' following the SMART methodology. The function can be used, as well, to detect
+#' outliers for height-for-age (HFAZ) and weight-for-age (WFAZ) z-scores
+#' following the same approach.
 #'
-#' @param x A vector of class `numeric` of WFHZ or MFAZ or raw MUAC values.
-#' The latter should be in millimeters.
+#' For raw MUAC values, outliers are identified when a value is less than 100
+#' millimeters or greater than 200 millimeters.
+#'
+#' Removing outliers consists in setting the outlier record to `NA` and not necessarily
+#' to delete it from the dataset. This is useful in the analysis procedures
+#' where outliers must be removed, such as the analysis of the standard deviation.
+#'
+#' @param x A vector of class `numeric` of WFHZ, MFAZ, HFAZ, WFAZ or raw MUAC values.
+#' The latter should be in millimeters. If the class is different than expected,
+#' the function will stop execution and return an error message indicating the
+#' type of mismatch.
 #'
 #' @param .from A choice between `zscores` and `raw_muac` for where outliers should be
 #' detected and flagged from.
 #'
-#' @return A vector of the same length as `x` of flagged observations that are
-#' outliers: 1 for is a flag and 0 is not a flag.
+#' @return A vector of the same length as `x` for flagged records coded as
+#' `1` for is a flag and `0` not a flag.
 #'
 #' @details
-#' The flagging criterion used for the WFHZ and the MFAZ is as in
-#' [SMART plausibility check](https://smartmethodology.org/). A fixed flagging
-#' criterion is used for the raw MUAC values. This is as recommended by
-#' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478)
+#' For z-score-based detection, flagged records represent outliers that deviate
+#' substantially from the sample's z-score mean, making them unlikely to reflect
+#' accurate measurements. For raw MUAC values, flagged records are those that fall
+#' outside the acceptable fixed range. Including such outliers in the analysis could
+#' compromise the accuracy and precision of the resulting estimates.
+#'
+#' The flagging criterion used for raw MUAC values is based on a recommendation
+#' by Bilukha, O., & Kianian, B. (2023).
+#'
+#' @references
+#' Bilukha, O., & Kianian, B. (2023). Considerations for assessment of measurement
+#' quality of mid‐upper arm circumference data in anthropometric surveys and
+#' mass nutritional screenings conducted in humanitarian and refugee settings.
+#' *Maternal & Child Nutrition*, 19, e13478. Available at <https://doi.org/10.1111/mcn.13478>
+#'
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
+#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
 #'
 #'
 #' @examples
-#'
 #' ## Sample data for raw MUAC values ----
 #' x <- anthro.01$muac
 #'
@@ -99,12 +123,12 @@ get_age_months <- function(dos, dob) {
 #' @export
 #'
 flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
-  ## Ensure that only predefined options ----
+  ## Ensure that only predefined options are supplied ----
   .from <- match.arg(.from)
 
   ## Check if the class of vector "x" is "numeric" ----
   if (!is.numeric(x)) {
-    stop("Vector supplied should be of class 'numeric'. Please try again.")
+    stop("`x` must be of class numeric; not a ", shQuote(class(x)), ". Please try again.")
   }
 
   ## Identify and flag outliers from zscores ----
@@ -131,7 +155,7 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 #' ## With .from set to "zscores" ----
 #' remove_flags(wfhz.01$wfhz, .from = "zscores")
 #'
-#' ## With .from set to "absolute" ----
+#' ## With .from set to "raw_muac" ----
 #' remove_flags(mfaz.01$muac, .from = "raw_muac")
 #'
 #' @rdname outliers
@@ -144,7 +168,7 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 
   ## Check if the class of vector "x" is "numeric" ----
   if (!is.numeric(x)) {
-    stop("Vector supplied should be of class 'numeric'. Please try again.")
+    stop("`x` must be of class numeric; not a ", shQuote(class(x)), ". Please try again.")
   }
 
   ## Control flow based on .from ----
@@ -171,17 +195,23 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #'
 #' @description
 #' Convert MUAC values to either centimeters or millimeters as required.
+#' Before to covert, the function checks if the supplied MUAC
+#' values are in the opposite unit of the intended conversion. If not,
+#' execution stops and an error message is returned.
 #'
 #' @param x A vector of the raw MUAC values. The class can either be
-#' `double` or `numeric`.
+#' `double` or `numeric` or `integer`. If different than expected, the function
+#' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @param .to A choice of the unit to which the MUAC values should be converted.
+#' @param .to The unit to convert MUAC values to. Defaults to `cm`. If set to `cm`,
+#' the function checks if the values are in `mm`; if not, it throws an error.
+#' Similarly, if set to `mm`, the function ensures the values are in `cm` before
+#' to proceed.
 #'
 #' @returns A numeric vector of the same length as `x`, with values converted
 #' to the chosen unit.
 #'
 #' @examples
-#'
 #' ## Recode from millimeters to centimeters ----
 #' muac <- anthro.01$muac
 #' muac_cm <- recode_muac(muac, .to = "cm")
@@ -196,22 +226,33 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
   .to <- match.arg(.to)
 
   ## Check if the class of vector "x" is "numeric" or "double" ----
-  if (!is.numeric(x) | !is.double(x)) {
+  if (!(is.numeric(x) | is.double(x) | is.integer(x))) {
     stop(
-      "MUAC should be of class 'numeric' or 'double'. Please try again."
+      "`x` must be of class 'numeric' or `integer` or 'double'; not ", shQuote(class(x)), ". Please try again."
     )
   }
 
   ## Recode muac conditionally ----
   switch(.to,
-    ### Recode to millimeters ----
-    "mm" = {
-      z <- (x * 10)
-      z
-    },
     ### Recode to centimeters ----
     "cm" = {
+      #### Ensure that vector supplied is in "mm" ----
+      if(any(grepl("\\.", as.character(x)))) {
+        stop("MUAC values are not in millimeters. Please try again.")
+      }
+      #### Convert MUAC to cm ----
       z <- (x / 10)
+      z
+    },
+
+    ### Recode to millimeters ----
+    "mm" = {
+      #### Ensure that vector supplied is in  "cm" ----
+      if(all(!grepl("\\.", as.character(x)))) {
+        stop("MUAC values are not in centimeter. Please try again.")
+      }
+      #### Convert MUAC to mm ----
+      z <- (x * 10)
       z
     }
   )
