@@ -16,11 +16,11 @@ codes are neither of the above, the function will stop execution and
 return an error message with the type of mismatch.}
 
 \item{weight}{A vector of class \code{double} of child's weight in kilograms. If the input
-is not of class \code{double}, the function will stop execution and return an error
+is of a different class, the function will stop execution and return an error
 message indicating the type of mismatch.}
 
 \item{height}{A vector of class \code{double} of child's height in centimeters. If the input
-is not of class \code{double}, the function will stop execution and return an error
+is of a different class, the function will stop execution and return an error
 message indicating the type of mismatch.}
 
 \item{.recode_sex}{Logical. Set to \code{TRUE} if the values for \code{sex} are not coded

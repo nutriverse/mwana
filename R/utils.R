@@ -64,14 +64,14 @@ get_age_months <- function(dos, dob) {
 #'
 #' @description
 #' Identify outlier z-scores for weight-for-height (WFHZ) and MUAC-for-age (MFAZ)
-#' following the SMART methodology. The function can be used, as well, to detect
+#' following the SMART methodology. The function can also be used to detect
 #' outliers for height-for-age (HFAZ) and weight-for-age (WFAZ) z-scores
 #' following the same approach.
 #'
-#' For raw MUAC values, outliers are identified when a value is less than 100
+#' For raw MUAC values, outliers constitute values that are less than 100
 #' millimeters or greater than 200 millimeters.
 #'
-#' Removing outliers consists in setting the outlier record to `NA` and not necessarily
+#' Removing outliers consist in setting the outlier record to `NA` and not necessarily
 #' to delete it from the dataset. This is useful in the analysis procedures
 #' where outliers must be removed, such as the analysis of the standard deviation.
 #'
@@ -107,16 +107,16 @@ get_age_months <- function(dos, dob) {
 #'
 #'
 #' @examples
-#' ## Sample data for raw MUAC values ----
+#' ## Sample data of raw MUAC values ----
 #' x <- anthro.01$muac
 #'
-#' ## Apply the function with type set to "raw_muac" ----
+#' ## Apply the function with `.from` set to "raw_muac" ----
 #' flag_outliers(x, .from = "raw_muac")
 #'
-#' ## Sample data for MFAZ or for WFHZ values ----
+#' ## Sample data of z-scores (be it WFHZ, MFAZ, HFAZ or WFAZ) ----
 #' x <- anthro.02$mfaz
 #'
-#' # Apply the function with type set to "zscores" ----
+#' # Apply the function with `.from` set to "zscores" ----
 #' flag_outliers(x, .from = "zscores")
 #'
 #' @rdname outliers
@@ -152,10 +152,10 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 #' Remove outliers
 #'
 #' @examples
-#' ## With .from set to "zscores" ----
+#' ## With `.from` set to "zscores" ----
 #' remove_flags(wfhz.01$wfhz, .from = "zscores")
 #'
-#' ## With .from set to "raw_muac" ----
+#' ## With `.from` set to "raw_muac" ----
 #' remove_flags(mfaz.01$muac, .from = "raw_muac")
 #'
 #' @rdname outliers
@@ -203,13 +203,14 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #' `double` or `numeric` or `integer`. If different than expected, the function
 #' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @param .to The unit to convert MUAC values to. Defaults to `cm`. If set to `cm`,
-#' the function checks if the values are in `mm`; if not, it throws an error.
-#' Similarly, if set to `mm`, the function ensures the values are in `cm` before
-#' to proceed.
+#' @param .to A choice between `cm` (centimeters) and `mm` (millimeters) for the
+#' measuring unit to convert MUAC values to. Before to execute the conversion,
+#' the function checks if values are in the opposite unit; in case not, the
+#' execution stops and an error message is returned. Strive to address the error
+#' and try again.
 #'
-#' @returns A numeric vector of the same length as `x`, with values converted
-#' to the chosen unit.
+#' @returns A `numeric` vector of the same length as `x`, with values converted
+#' to the chosen measuring unit.
 #'
 #' @examples
 #' ## Recode from millimeters to centimeters ----

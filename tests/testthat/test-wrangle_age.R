@@ -38,7 +38,7 @@ testthat::test_that(
   }
 )
 
-## When data collection date and date of birth are not available ----
+## When date of data collection and date of birth are not available ----
 testthat::test_that(
   "mw_wrangle_age() works as expected",
   {
@@ -74,7 +74,7 @@ testthat::test_that(
 
 ## Test check: mw_wrangle_age() ----
 testthat::test_that(
-  "mw_wrangle_age() works as expected",
+  "mw_wrangle_age() works as expected when a vector of wrong class if supplied",
   {
     ### Sample data ----
     df <- data.frame(age = as.character(c(6, 36, 40, 39.6, 10)))

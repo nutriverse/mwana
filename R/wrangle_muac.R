@@ -4,7 +4,7 @@
 #' @description
 #' Calculate z-scores for MUAC-for-age (MFAZ) and identify outliers based on
 #' the SMART methodology. When age is not supplied, wrangling will consist only
-#' in detecting outliers from raw the MUAC values.
+#' in detecting outliers from the raw MUAC values.
 #'
 #' @param df A dataset object of class `data.frame` to wrangle data from.
 #'
@@ -27,7 +27,7 @@
 #' converted to either centimeters or millimeters. Otherwise, set to `FALSE`
 #' (default)
 #'
-#' @param .to A choice of the unit to which the MUAC values should be converted;
+#' @param .to A choice of the measuring unit to which the MUAC values should be converted;
 #' "cm" for centimeters, "mm" for millimeters and "none" to leave as it is.
 #'
 #' @param .decimals The number of decimals places the z-scores should have.

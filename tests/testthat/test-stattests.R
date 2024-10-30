@@ -1,5 +1,4 @@
 # Test check: mw_stattest_ageratio() ----
-
 testthat::test_that(
   "mw_stattest_ageratio() works as expected",
   {

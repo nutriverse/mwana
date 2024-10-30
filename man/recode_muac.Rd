@@ -11,14 +11,15 @@ recode_muac(x, .to = c("cm", "mm"))
 \code{double} or \code{numeric} or \code{integer}. If different than expected, the function
 will stop execution and return an error message indicating the type of mismatch.}
 
-\item{.to}{The unit to convert MUAC values to. Defaults to \code{cm}. If set to \code{cm},
-the function checks if the values are in \code{mm}; if not, it throws an error.
-Similarly, if set to \code{mm}, the function ensures the values are in \code{cm} before
-to proceed.}
+\item{.to}{A choice between \code{cm} (centimeters) and \code{mm} (millimeters) for the
+measuring unit to convert MUAC values to. Before to execute the conversion,
+the function checks if values are in the opposite unit; in case not, the
+execution stops and an error message is returned. Strive to address the error
+and try again.}
 }
 \value{
-A numeric vector of the same length as \code{x}, with values converted
-to the chosen unit.
+A \code{numeric} vector of the same length as \code{x}, with values converted
+to the chosen measuring unit.
 }
 \description{
 Convert MUAC values to either centimeters or millimeters as required.

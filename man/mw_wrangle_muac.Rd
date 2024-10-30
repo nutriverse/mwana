@@ -37,7 +37,7 @@ as 1 (for males) or 2 (for females). Otherwise, set to \code{FALSE} (default).}
 converted to either centimeters or millimeters. Otherwise, set to \code{FALSE}
 (default)}
 
-\item{.to}{A choice of the unit to which the MUAC values should be converted;
+\item{.to}{A choice of the measuring unit to which the MUAC values should be converted;
 "cm" for centimeters, "mm" for millimeters and "none" to leave as it is.}
 
 \item{.decimals}{The number of decimals places the z-scores should have.
@@ -52,7 +52,7 @@ detected based on the raw MUAC values.
 \description{
 Calculate z-scores for MUAC-for-age (MFAZ) and identify outliers based on
 the SMART methodology. When age is not supplied, wrangling will consist only
-in detecting outliers from raw the MUAC values.
+in detecting outliers from the raw MUAC values.
 }
 \examples{
 ## When age is available ----

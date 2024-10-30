@@ -17,11 +17,11 @@
 #' as 1 (for males) or 2 (for females). Otherwise, set to `FALSE` (default).
 #'
 #' @param weight A vector of class `double` of child's weight in kilograms. If the input
-#' is not of class `double`, the function will stop execution and return an error
+#' is of a different class, the function will stop execution and return an error
 #' message indicating the type of mismatch.
 #'
 #' @param height A vector of class `double` of child's height in centimeters. If the input
-#' is not of class `double`, the function will stop execution and return an error
+#' is of a different class, the function will stop execution and return an error
 #' message indicating the type of mismatch.
 #'
 #' @param .decimals The number of decimals places the z-scores should have.

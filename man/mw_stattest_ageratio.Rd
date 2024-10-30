@@ -8,34 +8,37 @@
 mw_stattest_ageratio(age, .expectedP = 0.66)
 }
 \arguments{
-\item{age}{A vector of class \code{numeric} of child's age in months.}
+\item{age}{A vector of class \code{numeric} of child's age in months. If different
+than expected, the function will stop execution and return an error message
+indicating the type of mismatch.}
 
 \item{.expectedP}{The expected proportion of children aged 24 to 59 months
-old over those aged 6 to 23 months old. This is estimated to be 0.66 as in the
-\href{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}{SMART MUAC tool}.}
+old over those aged 6 to 23 months old. This is estimated to be 0.66.}
 }
 \value{
 A vector of class \code{list} of three statistics: \code{p} for p-value of the
 statistical difference between the observed and the expected proportion of
 children aged 24 to 59 months old over those aged 6 to 23 months old;
 \code{observedR} and \code{observedP} for the observed ratio and proportion respectively.
-
-@details
-This function should be used specifically for assessing MUAC data. For
-age ratio tests of children aged 6 to 29 months old over 30 to 59 months old, as
-performed in the SMART plausibility check, use \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}} instead.
 }
 \description{
 Calculate the observed age ratio of children aged 24 to 59 months old over
 those aged 6 to 23 months old and test if there is a statistical difference
 between the observed and the expected.
 }
+\details{
+This function should be used specifically when assessing the quality of MUAC data.
+For age ratio test of children aged 6 to 29 months old over 30 to 59 months old, as
+performed in the SMART plausibility check, use \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}} instead.
+}
 \examples{
-
-## An example of application using `anthro.02` dataset ----
 mw_stattest_ageratio(
   age = anthro.02$age,
   .expectedP = 0.66
 )
 
+}
+\references{
+SMART Initiative. \emph{Updated MUAC data collection tool}. Available at:
+\url{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}
 }

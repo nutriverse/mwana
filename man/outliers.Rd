@@ -24,14 +24,14 @@ A vector of the same length as \code{x} for flagged records coded as
 }
 \description{
 Identify outlier z-scores for weight-for-height (WFHZ) and MUAC-for-age (MFAZ)
-following the SMART methodology. The function can be used, as well, to detect
+following the SMART methodology. The function can also be used to detect
 outliers for height-for-age (HFAZ) and weight-for-age (WFAZ) z-scores
 following the same approach.
 
-For raw MUAC values, outliers are identified when a value is less than 100
+For raw MUAC values, outliers constitute values that are less than 100
 millimeters or greater than 200 millimeters.
 
-Removing outliers consists in setting the outlier record to \code{NA} and not necessarily
+Removing outliers consist in setting the outlier record to \code{NA} and not necessarily
 to delete it from the dataset. This is useful in the analysis procedures
 where outliers must be removed, such as the analysis of the standard deviation.
 }
@@ -46,22 +46,22 @@ The flagging criterion used for raw MUAC values is based on a recommendation
 by Bilukha, O., & Kianian, B. (2023).
 }
 \examples{
-## Sample data for raw MUAC values ----
+## Sample data of raw MUAC values ----
 x <- anthro.01$muac
 
-## Apply the function with type set to "raw_muac" ----
+## Apply the function with `.from` set to "raw_muac" ----
 flag_outliers(x, .from = "raw_muac")
 
-## Sample data for MFAZ or for WFHZ values ----
+## Sample data of z-scores (be it WFHZ, MFAZ, HFAZ or WFAZ) ----
 x <- anthro.02$mfaz
 
-# Apply the function with type set to "zscores" ----
+# Apply the function with `.from` set to "zscores" ----
 flag_outliers(x, .from = "zscores")
 
-## With .from set to "zscores" ----
+## With `.from` set to "zscores" ----
 remove_flags(wfhz.01$wfhz, .from = "zscores")
 
-## With .from set to "raw_muac" ----
+## With `.from` set to "raw_muac" ----
 remove_flags(mfaz.01$muac, .from = "raw_muac")
 
 }

@@ -13,9 +13,9 @@ testthat::test_that(
         .decimals = 3
       )
 
-    ## Weight of wrong class ----
+    ## Weight of a wrong class ----
     df$w <- as.character(anthro.01$weight)
-    ## Height of wrong class ----
+    ## Height of a wrong class ----
     df$h <- as.character(anthro.01$height)
 
 
@@ -32,7 +32,7 @@ testthat::test_that(
 
 ## Check if function errors when wrong input for sex is supplied ----
 testthat::test_that(
-  "mw_wrangle_wfhz() throws error when wrong sex input is supplied",
+  "mw_wrangle_wfhz() throws error when a wrong input is supplied",
   {
     ### Sample data of sex code as "m" and "f" ----
     df <- data.frame(
@@ -58,7 +58,7 @@ testthat::test_that(
 
 ## Check if function errors when wrong input for sex is supplied ----
 testthat::test_that(
-  "mw_wrangle_wfhz() throws error when wrong sex input is supplied",
+  "mw_wrangle_wfhz() throws error when a wrong input is supplied",
   {
     ### Sample data of sex code as "m" and "f" ----
     df <- data.frame(

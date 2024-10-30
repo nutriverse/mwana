@@ -54,7 +54,7 @@ testthat::test_that(
 
     wrong_vector <- as.character(mfaz)
 
-    ### Mean of mfaz ----
+    ### Mean MFAZ ----
     x <- mean(mfaz)
 
     ### Expected results ----
@@ -88,7 +88,7 @@ testthat::test_that(
     ### Observed results ----
     y <- flag_outliers(muac, .from = "raw_muac")
 
-    ### The tests ----
+    ### Tests ----
     testthat::expect_vector(y, size = 20)
     testthat::expect_equal(y, x)
     testthat::expect_true(is.numeric(y))
@@ -133,7 +133,7 @@ testthat::test_that(
     ### Sample data without NA's ----
     zsc <- wfhz.01$wfhz
 
-    ### A Sample data of a wrong class for the function ----
+    ### A Sample data of a wrong class ----
     wrong_vector <- as.character(zsc)
 
     ### Observed results ----

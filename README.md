@@ -76,11 +76,12 @@ summaries of the outputs.
 
 - It performs, as well, plausibility checks on MUAC data. For this,
   `mwana` integrates recent advances in using MUAC-for-age z-score
-  (MFAZ) for auditing the plausibility of MUAC data. In this way, when
-  the variable age is available: `mwana` performs plausibility checks
-  similar to those in WFHZ, however with few differences in the scoring.
-  Otherwise, when the variables age is missing, a similar test suit used
-  in the current version of ENA is performed. Read details here.
+  (MFAZ) for assessing the plausibility and the acceptability of MUAC
+  data. In this way, when the variable age is available: `mwana`
+  performs plausibility checks similar to those in WFHZ, with a few
+  differences in the scoring criteria for flagged data. Otherwise, when
+  the variables age is missing, a similar test suit used in the current
+  version of ENA is performed. Read details here.
 
 #### A useful workflow for plausibility check using `mwana`
 
