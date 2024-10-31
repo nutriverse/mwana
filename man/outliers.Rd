@@ -59,10 +59,16 @@ x <- anthro.02$mfaz
 flag_outliers(x, .from = "zscores")
 
 ## With `.from` set to "zscores" ----
-remove_flags(wfhz.01$wfhz, .from = "zscores")
+remove_flags(
+  x = wfhz.01$wfhz,
+  .from = "zscores"
+)
 
 ## With `.from` set to "raw_muac" ----
-remove_flags(mfaz.01$muac, .from = "raw_muac")
+remove_flags(
+  x = mfaz.01$muac,
+  .from = "raw_muac"
+)
 
 }
 \references{

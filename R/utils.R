@@ -153,10 +153,16 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 #'
 #' @examples
 #' ## With `.from` set to "zscores" ----
-#' remove_flags(wfhz.01$wfhz, .from = "zscores")
+#' remove_flags(
+#'   x = wfhz.01$wfhz,
+#'   .from = "zscores"
+#' )
 #'
 #' ## With `.from` set to "raw_muac" ----
-#' remove_flags(mfaz.01$muac, .from = "raw_muac")
+#' remove_flags(
+#'   x = mfaz.01$muac,
+#'   .from = "raw_muac"
+#' )
 #'
 #' @rdname outliers
 #'
@@ -214,11 +220,16 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #'
 #' @examples
 #' ## Recode from millimeters to centimeters ----
-#' muac <- anthro.01$muac
-#' muac_cm <- recode_muac(muac, .to = "cm")
+#' muac_cm <- recode_muac(
+#'   x = anthro.01$muac,
+#'   .to = "cm"
+#' )
 #'
 #' ## Using the `muac_cm` object to recode it back to "mm" ----
-#' muac_mm <- recode_muac(muac_cm, .to = "mm")
+#' muac_mm <- recode_muac(
+#'   x = muac_cm,
+#'   .to = "mm"
+#' )
 #'
 #' @export
 #'
@@ -238,7 +249,7 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
     ### Recode to centimeters ----
     "cm" = {
       #### Ensure that vector supplied is in "mm" ----
-      if(any(grepl("\\.", as.character(x)))) {
+      if (any(grepl("\\.", as.character(x)))) {
         stop("MUAC values are not in millimeters. Please try again.")
       }
       #### Convert MUAC to cm ----
@@ -249,7 +260,7 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
     ### Recode to millimeters ----
     "mm" = {
       #### Ensure that vector supplied is in  "cm" ----
-      if(all(!grepl("\\.", as.character(x)))) {
+      if (all(!grepl("\\.", as.character(x)))) {
         stop("MUAC values are not in centimeter. Please try again.")
       }
       #### Convert MUAC to mm ----
