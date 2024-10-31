@@ -52,7 +52,8 @@ It automates plausibility checks and prevalence analyses and respective summarie
 #### A useful workflow for plausibility check using `mwana`
 ```{r}
 #| label: workflow
-#| echo: false 
+#| echo: false
+#| warning: false
 #| fig-align: center
 
 DiagrammeR::grViz("
