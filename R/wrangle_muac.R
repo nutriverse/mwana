@@ -96,13 +96,14 @@ mw_wrangle_muac <- function(df,
                             .recode_muac = TRUE,
                             .to = c("cm", "mm", "none"),
                             .decimals = 3) {
-  ## Enforce options in argument .to ----
+
+  ## Enforce options in `.to` ----
   .to <- match.arg(.to)
 
   ## Difuse sex variable for NSE----
   sex <- eval_tidy(enquo(sex), df)
 
-  ## Check if vector of sex is coded in either "m" and "f" or 1 and 2 ----
+  ## Enforce code values in `sex` ----
   x <- as.factor(as.character(sex))
   if (!(all(levels(x) %in% c("m", "f")) | all(levels(x) %in% c("1", "2")))) {
     stop("Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively")

@@ -1,40 +1,34 @@
 #'
-#' Rate the acceptability of the standard deviation and the percentage of flagged
-#' data
+#' Rate the acceptability of the standard deviation
 #'
 #' @description
-#' Rate how much high is the standard deviation and the percentage of flagged
-#' data in the dataset, hence it's acceptability.
+#' Rate the acceptability of the standard deviation in WFHZ, MFAZ, and raw MUAC data.
 #'
-#' @param p A vector of class `double` of the proportions of flagged values in
-#' the dataset.
+#' @param p A vector of class `double`, containing proportions of flagged records in
+#' the dataset. If the class does not match the expected type, the function will stop
+#' execution and return an error message indicating the type of mismatch.
 #'
-#' @param sd A vector of class `double` of the values of the standard deviation.
+#' @param .in Specifies the dataset where the rating should be done, with options: "wfhz",
+#' "mfaz", or "raw_muac".
 #'
-#' @param type A choice between "wfhz", "mfaz" and "crude" for the basis on which
-#' the rating should be done.
+#' @returns A vector of class `factor` of the same length as input, for the
+#' acceptability rate.
 #'
-#' @returns A vector of class `character` for the acceptability rate.
+#' @keywords internal
 #'
-#' @details
-#' The ranges of acceptability are: "Excellent", "Good", "Acceptable", "Problematic".
-#' The cut-offs for WFHZ are as in the [SMART Methodology](https://smartmethodology.org/).
-#' For the MFAZ and the absolute MUAC values, the maximum acceptable limit for
-#' outliers is 2%, as recommended by
-#' [Bilukha, O., & Kianian, B. (2023).](https://doi.org/10.1111/mcn.13478).
-#' Cut-offs for the standard deviation of the absolute MUAC values are based on the
-#' [IPC AMN guidelines](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/).
-#'
-#'
-#' @rdname raters
-#'
-classify_percent_flagged <-  function(p, type = c("mfaz", "whz", "crude")) {
+rate_propof_flagged <- function(p, .in = c("mfaz", "wfhz", "raw_muac")) {
 
-  type <- match.arg(type)
+  ## Enforce options of `.in` ----
+  .in <- match.arg(.in)
 
-  if (type == "mfaz" || type == "crude") {
+  ## Enforce the class of `p` ----
+  if (!is.double(p)) {
+    stop("`p` must be of class double; not a ", shQuote(class(p)), ". Please try again.")
+  }
 
-    ## classify percent of outliers in MFAZ ----
+  ## Rate the acceptability of the proportion of flagged records ----
+  if (.in == "mfaz" || .in == "raw_muac") {
+    ## In MFAZ or WFHZ ----
     x <- cut(
       x = p,
       breaks = c(0, 0.01, 0.015, 0.02, Inf),
@@ -44,9 +38,8 @@ classify_percent_flagged <-  function(p, type = c("mfaz", "whz", "crude")) {
     )
   }
 
-  if (type == "whz") {
-
-    ## classify percent of outliers in WHZ ----
+  if (.in == "wfhz") {
+    ## In raw MUAC values ----
     x <- cut(
       x = p,
       breaks = c(0, 0.025, 0.05, 0.075, Inf),
@@ -58,17 +51,41 @@ classify_percent_flagged <-  function(p, type = c("mfaz", "whz", "crude")) {
   x
 }
 
+
+
 #'
 #'
-#' @rdname raters
+#' Rate the acceptability of the proportion of flagged records
 #'
-classify_sd <-  function(sd, type = c("zscore", "crude")) {
+#' @description
+#' Rate the acceptability of the proportion of flagged records in WFHZ, MFAZ,
+#' and raw MUAC data.
+#'
+#' @param sd A vector of class `double`, containing values of the standard deviation
+#' from the dataset. If the class does not match the expected type, the function
+#' will stop execution and return an error message indicating the type of mismatch.
+#'
+#' @param .of Specifies the dataset where the rating should be done, with options:
+#' "wfhz", "mfaz", or "raw_muac".
+#'
+#' @returns A vector of class `factor` of the same length as input, for the
+#' acceptability rate.
+#'
+#' @keywords internal
+#'
+#'
+rate_std <- function(sd, .of = c("zscores", "raw_muac")) {
 
-  type <- match.arg(type)
+  ## Enforce options of `.of` ----
+  .of <- match.arg(.of)
 
-  if (type == "zscore") {
+  ## Enforce the class of `sd` ----
+  if (!is.double(sd)) {
+    stop("`sd` must be of class double; not a ", shQuote(class(sd)), ". Please try again.")
+  }
 
-    ## Classify WHZ and MFAZ-based standard deviation ----
+  if (.of == "zscores") {
+    ## Rate the standard deviation of z-scores ----
     x <- case_when(
       sd > 0.9 & sd < 1.1 ~ "Excellent",
       sd > 0.85 & sd < 1.15 ~ "Good",
@@ -77,9 +94,8 @@ classify_sd <-  function(sd, type = c("zscore", "crude")) {
     )
   }
 
-  if (type == "crude") {
-
-    ## Classify crude MUAC-based standard deviation ----
+  if (.of == "raw_muac") {
+    ## Rate the standard deviation of raw MUAC values ----
     x <- cut(
       x = sd,
       breaks = c(-Inf, 13, 14, 15, Inf),
@@ -96,12 +112,23 @@ classify_sd <-  function(sd, type = c("zscore", "crude")) {
 #' Rate the acceptability of the age and sex ratio test p-values
 #'
 #' @param p A vector of class `double` of the age or sex ratio test p-values.
+#' If the class does not match the expected type, the function
+#' will stop execution and return an error message indicating the type of mismatch.
 #'
 #' @returns A vector of class `character` of the same length as `p` for the
 #' acceptability rate.
 #'
 #'
-classify_age_sex_ratio <- function(p) {
+#' @keywords internal
+#'
+rate_agesex_ratio <- function(p) {
+
+  ## Enforce the class of `p` ----
+  if (!is.double(p)) {
+    stop("`p` must be of class double; not a ", shQuote(class(p)), ". Please try again.")
+  }
+
+  ## Rate ----
   case_when(
     p > 0.1 ~ "Excellent",
     p > 0.05 ~ "Good",
@@ -115,12 +142,22 @@ classify_age_sex_ratio <- function(p) {
 #' Rate the acceptability of the skewness and kurtosis test results
 #'
 #' @param sk A vector of class `double` for skewness or kurtosis test results.
+#' If the class does not match the expected type, the function
+#' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @returns A vector of class `character` of the same length as `sk` for the
+#' @returns A vector of class `factor` of the same length as `sk` for the
 #' acceptability rate.
 #'
+#' @keywords internal
 #'
-classify_skew_kurt <- function(sk) {
+rate_skewkurt <- function(sk) {
+
+  ## Enforce the class of `sk` ----
+  if (!is.double(sk)) {
+    stop("`sk` must be of class double; not a ", shQuote(class(sk)), ". Please try again.")
+  }
+
+  ## Rate ----
   cut(
     x = sk,
     breaks = c(-Inf, 0.2, 0.4, 0.6, Inf),
@@ -132,43 +169,34 @@ classify_skew_kurt <- function(sk) {
 
 #'
 #'
-#' Rate the overall acceptability score
+#' Rate the overall data acceptability score
 #'
 #' @description
-#' Rate the overall acceptability score into "Excellent", "Good", "Acceptable" and
-#' "Problematic".
+#' Rate the overall data acceptability score into "Excellent", "Good", "Acceptable"
+#' or "Problematic".
 #'
-#' @param df A dataset of class `data.frame` containing a vector of the overall
-#' acceptability score as yielded from [compute_quality_score()].
+#' @param p A vector of class `numeric` or `integer` of data acceptability scores.
+#' If the class does not match the expected type, the function
+#' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @returns A `data.frame` based on `df`. A new column `quality_class` for the
-#' overall acceptability rate is created and added to `df`.
+#' @returns A vector of class `factor` of the same length as `p`, providing an overall
+#' rating of data acceptability.
 #'
-#' @examples
-#' ## A sample data ----
+#' @keywords internal
 #'
-#' df <- data.frame(
-#' quality_score = 29
-#' )
-#'
-#' ## Apply the function ----
-#' classify_overall_quality(df)
-#'
-#' @export
-#'
-classify_overall_quality <- function(df) {
+rate_overall_quality <- function(q) {
 
-  qclass <- with(
-    df,
-    data.frame(
-      quality_class <- cut(
-        x = quality_score,
-        breaks = c(0, 9, 14, 24, Inf),
-        labels = c("Excellent", "Good", "Acceptable", "Problematic"),
-        include.lowest = TRUE,
-        right = TRUE
-      )
-    )
+  ## Enforce the class of `q` ----
+  if (!(is.numeric(q)) | is.integer(q)) {
+    stop("`q` must be of class numeric or integer; not a ", shQuote(class(q)), ". Please try again.")
+  }
+
+  ## Rate ----
+  cut(
+    x = q,
+    breaks = c(0, 9, 14, 24, Inf),
+    labels = c("Excellent", "Good", "Acceptable", "Problematic"),
+    include.lowest = TRUE,
+    right = TRUE
   )
-  qclass$quality_class
 }

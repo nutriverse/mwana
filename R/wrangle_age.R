@@ -68,7 +68,7 @@ mw_wrangle_age <- function(df,
 
   ## Calculate child's age in months then in days ----
   if (!is.null(dob) | !is.null(dos)) {
-    ## Check if the class of vector "age" is "numeric" ----
+    ## Enforce the class of `age` ----
     if (!is.numeric(age)) {
       stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
     }
@@ -83,7 +83,7 @@ mw_wrangle_age <- function(df,
         age_days = round(.data$age * (365.25 / 12), .decimals)
       )
   } else {
-    ## Check if the class of vector "z" is "numeric" ----
+    ## Enforce the class of `age` ----
     if (!is.numeric(age)) {
       stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
     }

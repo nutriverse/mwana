@@ -106,19 +106,20 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
     dplyr::summarise(
       n = n(),
       flagged = sum({{ flags }}, na.rm = TRUE) / n(),
-      flagged_class = classify_percent_flagged(.data$flagged, type = "mfaz"),
+      flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
       sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-      sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
+      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
       age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
-      age_ratio_class = classify_age_sex_ratio(.data$age_ratio),
+      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
       dps = digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
       dps_class = digitPreference({{ muac }}, digits = 1, values = 0:9)$dpsClass,
       sd = sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
-      sd_class = classify_sd(.data$sd, type = "zscore"),
+      sd_class = rate_std(.data$sd, .of = "zscores"),
       skew = skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
-      skew_class = classify_skew_kurt(.data$skew),
+      skew_class = rate_skewkurt(.data$skew),
       kurt = skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
-      kurt_class = classify_skew_kurt(.data$kurt),
+      kurt_class = rate_skewkurt(.data$kurt),
+      #quality_class = rate_overall_quality(quality_score)
       .groups = "drop"
     )
 
@@ -154,21 +155,21 @@ check_plausibility_wfhz <- function(df, sex, age, weight, height, flags, area) {
     summarise(
       n = n(),
       flagged = sum({{ flags }}, na.rm = TRUE) / n(),
-      flagged_class = classify_percent_flagged(.data$flagged, type = "whz"),
+      flagged_class = rate_propof_flagged(.data$flagged, .in = "wfhz"),
       sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-      sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
+      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
       age_ratio = ageRatioTest({{ age }}, ratio = 0.85)$p,
-      age_ratio_class = classify_age_sex_ratio(.data$age_ratio),
+      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
       dps_wgt = digitPreference({{ weight }}, digits = 1)$dps,
       dps_wgt_class = digitPreference({{ weight }}, digits = 1)$dpsClass,
       dps_hgt = digitPreference({{ height }}, digits = 1)$dps,
       dps_hgt_class = digitPreference({{ height }}, digits = 1)$dpsClass,
       sd = sd(remove_flags(.data$wfhz, .from = "zscores"), na.rm = TRUE),
-      sd_class = classify_sd(.data$sd, type = "zscore"),
+      sd_class = rate_std(.data$sd, .of = "zscores"),
       skew = skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$s,
-      skew_class = classify_skew_kurt(.data$skew),
+      skew_class = rate_skewkurt(.data$skew),
       kurt = skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$k,
-      kurt_class = classify_skew_kurt(.data$kurt),
+      kurt_class = rate_skewkurt(.data$kurt),
       .groups = "drop"
     )
 
@@ -202,13 +203,13 @@ check_plausibility_muac <- function(df, flags, sex, muac) {
     summarise(
       n = n(),
       flagged = sum({{ flags }}, na.rm = TRUE) / n(),
-      flagged_class = classify_percent_flagged(.data$flagged, type = "crude"),
+      flagged_class = rate_propof_flagged(.data$flagged, .in = "raw_muac"),
       sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))[["p"]],
-      sex_ratio_class = classify_age_sex_ratio(.data$sex_ratio),
+      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
       dps = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dps"]],
       dps_class = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dpsClass"]],
       sd = sd(remove_flags({{ muac }}, .from = "raw_muac"), na.rm = TRUE),
-      sd_class = classify_sd(.data$sd, type = "crude"),
+      sd_class = rate_std(.data$sd, .of = "raw_muac"),
       .groups = "drop"
     )
 

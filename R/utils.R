@@ -40,12 +40,13 @@
 #' @export
 #'
 get_age_months <- function(dos, dob) {
-  ## Check if the class of vector "dos" is "Date" ----
+
+  ## Enforce the class of `dos` ----
   if (!is(dos, "Date")) {
     stop("`dos` must be a vector of class 'Date'; not ", shQuote(class(dos)), ". Please try again.")
   }
 
-  ## Check if the class of vector "dob" is "Date" ----
+  ## Enforce the class of `dob` ----
   if (!is(dob, "Date")) {
     stop("`dob` must be a vector of class 'Date'; not ", shQuote(class(dob)), ". Please try again.")
   }
@@ -123,10 +124,11 @@ get_age_months <- function(dos, dob) {
 #' @export
 #'
 flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
-  ## Ensure that only predefined options are supplied ----
+
+  ## Enforce the options in `.from` ----
   .from <- match.arg(.from)
 
-  ## Check if the class of vector "x" is "numeric" ----
+  ## Enforce the class of `x` ----
   if (!is.numeric(x)) {
     stop("`x` must be of class numeric; not a ", shQuote(class(x)), ". Please try again.")
   }
@@ -169,23 +171,24 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 #' @export
 #'
 remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
-  ## Match arguments ----
+
+  ## Enforce options in `.from` ----
   .from <- match.arg(.from)
 
-  ## Check if the class of vector "x" is "numeric" ----
+  ## Enforce the class of `x` ----
   if (!is.numeric(x)) {
     stop("`x` must be of class numeric; not a ", shQuote(class(x)), ". Please try again.")
   }
 
-  ## Control flow based on .from ----
+  ## Control flow based on `.from` ----
   switch(.from,
-    ### Remove flags when .from = "zscores" ----
+    ### Remove flags when `.from` = "zscores" ----
     "zscores" = {
       mean_x <- mean(x, na.rm = TRUE)
       zs <- ifelse((x < (mean_x - 3) | x > (mean_x + 3)) | is.na(x), NA_real_, x)
       zs
     },
-    ### Remove flags when .from = "raw_muac" ----
+    ### Remove flags when `.from` = "raw_muac" ----
     "raw_muac" = {
       cr <- ifelse(x < 100 | x > 200 | is.na(x), NA_integer_, x)
       cr
@@ -234,10 +237,11 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #' @export
 #'
 recode_muac <- function(x, .to = c("cm", "mm")) {
-  ## Check if unit's arguments match ----
+
+  ## Enfornce the options in `.to` ----
   .to <- match.arg(.to)
 
-  ## Check if the class of vector "x" is "numeric" or "double" ----
+  ## Enforce the class of `x` ----
   if (!(is.numeric(x) | is.double(x) | is.integer(x))) {
     stop(
       "`x` must be of class 'numeric' or `integer` or 'double'; not ", shQuote(class(x)), ". Please try again."
@@ -248,7 +252,7 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
   switch(.to,
     ### Recode to centimeters ----
     "cm" = {
-      #### Ensure that vector supplied is in "mm" ----
+      #### Enforce measuring unit is in "cm" ----
       if (any(grepl("\\.", as.character(x)))) {
         stop("MUAC values are not in millimeters. Please try again.")
       }
@@ -259,7 +263,7 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
 
     ### Recode to millimeters ----
     "mm" = {
-      #### Ensure that vector supplied is in  "cm" ----
+      #### Enforce measuring unit is in "cm" ----
       if (all(!grepl("\\.", as.character(x)))) {
         stop("MUAC values are not in centimeter. Please try again.")
       }
