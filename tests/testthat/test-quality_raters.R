@@ -195,7 +195,7 @@ testthat::test_that(
     )
 
     ### Observed results ----
-    rp <- rate_agesex_ratio(pval)
+    rp <- rate_agesexr_dps(pval)
 
     ### Tests ----
     testthat::expect_vector(

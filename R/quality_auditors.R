@@ -102,8 +102,8 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
 
   ## Summarise statistics  ----
   df <- df |>
-    dplyr::group_by({{ area  }}) |>
-    dplyr::summarise(
+    group_by({{ area  }}) |>
+    summarise(
       n = n(),
       flagged = sum({{ flags }}, na.rm = TRUE) / n(),
       flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
@@ -119,23 +119,19 @@ check_plausibility_mfaz <- function(df, sex, muac, age, flags, area) {
       skew_class = rate_skewkurt(.data$skew),
       kurt = skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
       kurt_class = rate_skewkurt(.data$kurt),
-      #quality_class = rate_overall_quality(quality_score)
+      quality_score = score_overall_quality(
+        cl_flags = .data$flagged_class,
+        cl_sex = .data$sex_ratio_class,
+        cl_age = .data$age_ratio_class,
+        cl_dps_m = .data$dps_class,
+        cl_std = .data$sd_class,
+        cl_skw = .data$skew_class,
+        cl_kurt = .data$kurt_class,
+        .for = "mfaz"),
+      quality_class = rate_overall_quality(quality_score),
       .groups = "drop"
     )
-
-  ## Add quality score to the data frame ----
-
-  df[["quality_score"]] <- df |>
-    group_by({{ area }}) |>
-    compute_quality_score(type = "mfaz")
-
-  ## Add quality class to the data frame ----
-
-  df[["quality_class"]] <- df |>
-    group_by({{ area }}) |>
-    classify_overall_quality()
-
-  ## Return data frame ----
+  ## Return ----
   df
 }
 
@@ -170,20 +166,19 @@ check_plausibility_wfhz <- function(df, sex, age, weight, height, flags, area) {
       skew_class = rate_skewkurt(.data$skew),
       kurt = skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$k,
       kurt_class = rate_skewkurt(.data$kurt),
+      quality_score = score_overall_quality(
+        cl_flags = .data$flagged_class,
+        cl_sex = .data$sex_ratio_class,
+        cl_age = .data$age_ratio_class,
+        cl_dps_h = .data$dps_hgt_class,
+        cl_dps_w = .data$dps_wgt_class,
+        cl_std = .data$sd_class,
+        cl_skw = .data$skew_class,
+        cl_kurt = .data$kurt_class,
+        .for = "wfhz"),
+      quality_class = rate_overall_quality(quality_score),
       .groups = "drop"
     )
-
-  ## Add quality score to the data frame ----
-
-  df[["quality_score"]] <- df |>
-    group_by({{ area }}) |>
-    compute_quality_score(type = "whz")
-
-  ## Add quality class to the data frame ----
-
-  df[["quality_class"]] <- df |>
-    group_by({{ area }}) |>
-    classify_overall_quality()
 
   ## Return data frame ----
   df

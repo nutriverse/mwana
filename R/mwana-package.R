@@ -4,6 +4,8 @@
 ## usethis namespace: start
 #' @importFrom dplyr across case_when group_by mutate n n_distinct rename summarise
 #' @importFrom dplyr ends_with everything filter mutate
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
 #' @importFrom lubridate ymd
 #' @importFrom methods is
 #' @importFrom nipnTK ageRatioTest digitPreference sexRatioTest skewKurt greensIndex

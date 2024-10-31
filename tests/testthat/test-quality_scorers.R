@@ -1,72 +1,84 @@
-# Tests check: Quality scorers -------------------------------------------------
-
-## Test check: assign_penalty_points_flags_and_sd() ----
-
-local(
+# Tests check: score_std_flags() ----
+testthat::test_that(
+  "Quality scorer works well",
   {
-    ### Sample data ----
-    class_sd_mfaz <- c(
-      "Problematic", "Excellent", "Good", "Good", "Problematic",
-      "Excellent", "Problematic", "Excellent", "Problematic", "Problematic",
-      "Good", "Good", "Excellent", "Problematic", "Good"
-    )
+    ## Sample data ----
+    std <-  c("Problematic", "Excellent", "Good", "Good", "Problematic",
+    "Excellent", "Problematic", "Excellent", "Problematic", "Problematic",
+    "Good", "Good", "Excellent", "Problematic", "Good")
 
-    ### Expected results ----
-    expected_sd_mfaz_scores <- c(
-      20, 0, 5, 5, 20, 0, 20,
-      0, 20, 20, 5, 5, 0, 20, 5
-      )
+    ## Expected results ----
+    exp <- c(20, 0, 5, 5, 20, 0, 20, 0, 20, 20, 5, 5, 0, 20, 5)
 
-    ### Observed results ----
-    scores_sd_mfaz <- assign_penalty_points_flags_and_sd(class_sd_mfaz)
+    ## Observed results ----
+    cl <- score_std_flags(std)
 
-    ### The test ----
-    testthat::test_that(
-      "scores are equal to expected",
-      {
-        testthat::expect_equal(scores_sd_mfaz, expected_sd_mfaz_scores)
-        testthat::expect_type(scores_sd_mfaz, "double")
-      }
-    )
+    ## Tests ----
+    testthat::expect_vector(cl, ptype = numeric(), 15)
+    testthat::expect_equal(cl, exp)
+    testthat::expect_error(score_std_flags(as.factor(std)))
+    testthat::expect_error(score_std_flags(as.numeric(std)))
   }
 )
 
-
-## Test check: assign_penalty_points_skew_kurt() ----
-
-local(
+# Test check: score_agesex_ratio() ----
+testthat::test_that(
+  "score_agesexr_dps() works as expected",
   {
-    class_skew_kurt <- c(
+    ## Sample data ----
+    cl <- c(
+      "Problematic", "Problematic", "Acceptable", "Acceptable", "Excellent",
+      "Acceptable", "Acceptable", "Acceptable", "Acceptable", "Good",
+      "Acceptable", "Acceptable", "Acceptable", "Problematic", "Good"
+    )
+
+    ## Expected results ----
+    e <- c(10, 10, 4, 4, 0, 4, 4, 4, 4, 2, 4, 4, 4, 10, 2)
+
+    ## Observed results ----
+    o <- score_agesexr_dps(cl)
+
+    ## Tests ----
+    testthat::expect_vector(o, numeric(), 15)
+    testthat::expect_equal(o, e)
+    testthat::expect_error(score_agesexr_dps(as.factor(cl)))
+    testthat::expect_error(score_ageser_dps(as.numeric(cl)))
+  }
+)
+
+# Test check: score_skewkurt() ----
+testthat::test_that(
+  "score_skewkurt() works fine",
+  {
+    ## Sample data ----
+    sk <- c(
       "Excellent", "Excellent", "Good", "Excellent", "Good",
       "Problematic", "Acceptable", "Excellent", "Problematic",
       "Good", "Problematic", "Problematic", "Problematic",
       "Excellent", "Problematic"
     )
 
-    ### Expected results ----
-    expected_skew_kurt_scores <- c(
-      0, 0, 1, 0, 1, 5, 3,
-      0, 5, 1, 5, 5, 5, 0, 5
-      )
+    ## Expected results ----
+    exp <- c(0, 0, 1, 0, 1, 5, 3, 0, 5, 1, 5, 5, 5, 0, 5)
 
-    ### Observed results ----
-    scores_skew_kurt <- assign_penalty_points_skew_kurt(class_skew_kurt)
+    ## Observed results ----
+    o <- score_skewkurt(sk)
 
-    ### The test ----
-    testthat::test_that(
-      "scores are equal to expected",
-      {
-        testthat::expect_equal(scores_skew_kurt, expected_skew_kurt_scores)
-        testthat::expect_type(scores_skew_kurt, "double")
-      }
-    )
+    ## Tests ----
+    testthat::expect_vector(o, numeric(), 15)
+    testthat::expect_equal(o, exp)
+    testthat::expect_error(score_skewkurt(as.numeric(sk)))
+    testthat::expect_error(score_skewkurt(as.factor(sk)))
   }
 )
 
-## Test check: get_quality_score() ----
-local(
+
+# Test check: score_overall_quality() ----
+## With `.for` set to "mfaz" ----
+testthat::test_that(
+  "score_overall_quality() return the correct values for a given classification",
   {
-    ### Sample data ----
+    ## Sample data ----
     df <- data.frame(
       flagged_class = "Problematic",
       sd_class = "Good",
@@ -77,20 +89,63 @@ local(
       sex_ratio_class = "Problematic"
     )
 
-    ### Expected results ----
-   expected_score <- 41
+    ## Expected results ----
+    score <- 41
 
-    ### Observed results ----
-    overall_score <- compute_quality_score(df, type = "mfaz")
-
-    ### The test ----
-    testthat::test_that(
-      "get_quality_score() return the correct values for a given classification",
-      {
-        testthat::expect_vector(overall_score)
-        testthat::expect_equal(overall_score, expected_score)
-
-      }
+    ## Observed results ----
+    obs <- score_overall_quality(
+      cl_flags = df$flagged_class,
+      cl_sex = df$sex_ratio_class,
+      cl_age = df$age_ratio_class,
+      cl_dps_m = df$dps_class,
+      cl_std = df$sd_class,
+      cl_skw = df$skew_class,
+      cl_kurt = df$kurt_class,
+      .for = "mfaz"
     )
+
+    ## Tests ----
+    testthat::expect_vector(object = obs, ptype = numeric(), size = 1)
+    testthat::expect_equal(obs, score)
   }
 )
+
+## With `.for` set to "mfaz" ----
+testthat::test_that(
+  "score_overall_quality() return the correct values for a given classification",
+  {
+    ## Sample data ----
+    df <- data.frame(
+      flagged_class = "Good",
+      sd_class = "Good",
+      skew_class = "Excellent",
+      kurt_class = "Excellent",
+      age_ratio_class = "Good",
+      sex_ratio_class = "Problematic",
+      dps_h_class = "Excellent",
+      dps_w_class = "Excellent"
+    )
+
+    ## Expected results ----
+    score <- 22
+
+    ## Observed results ----
+    obs <- score_overall_quality(
+      cl_flags = df$flagged_class,
+      cl_sex = df$sex_ratio_class,
+      cl_age = df$age_ratio_class,
+      cl_dps_m = NULL,
+      cl_std = df$sd_class,
+      cl_skw = df$skew_class,
+      cl_kurt = df$kurt_class,
+      cl_dps_w = df$dps_h_class,
+      cl_dps_h = df$dps_h_class,
+      .for = "wfhz"
+    )
+
+    ## Tests ----
+    testthat::expect_vector(object = obs, ptype = numeric(), size = 1)
+    testthat::expect_equal(obs, score)
+  }
+)
+
