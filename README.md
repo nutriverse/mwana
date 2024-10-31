@@ -88,8 +88,9 @@ summaries of the outputs.
 
 #### A useful workflow for plausibility check using `mwana`
 
-<img src="README_files/figure-commonmark/workflow-1.png"
-data-fig-align="center" />
+    #> PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
+
+<img src="man/figures/README-workflow-1.png" data-fig-align="center" />
 
 ### Prevalence analysis
 

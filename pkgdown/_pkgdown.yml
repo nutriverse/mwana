@@ -7,9 +7,11 @@ development:
 
 template:
   bootstrap: 5
-  bootswatch: cosmo
-  theme: pygments
+  bootswatch: pulse
+  theme: breeze-light
   ganalytics: G-94YZ36XGLH
+  bslib:
+    pkgdown-nav-height: 100px
 
 navbar:
   bg: success

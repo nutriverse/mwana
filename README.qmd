@@ -1,9 +1,10 @@
 ---
 format: gfm
-knitr: 
+knitr:
   opts_chunk: 
     collapse: true
     comment: "#>"
+    fig.path: "man/figures/README-"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
