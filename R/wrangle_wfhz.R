@@ -55,17 +55,16 @@ mw_wrangle_wfhz <- function(df,
                             height,
                             .recode_sex = TRUE,
                             .decimals = 3) {
-
   ## Difuse arguments to be evaluated later ----
   weight <- eval_tidy(enquo(weight), df)
   height <- eval_tidy(enquo(height), df)
 
-  ## Enforce the class of `weight` ----
+  ## Check if the class of vector weight is "double" ----
   if (!is.double(weight)) {
     stop("`weight` must be of class 'double'; not ", shQuote(class(weight)), ". Please try again.")
   }
 
-  ## Enforce the class of `height` ----
+  ## Check if the class of vector height is "double" ----
   if (!is.double(height)) {
     stop("`height` must be of class 'double'; not ", shQuote(class(height)), ". Please try again.")
   }
