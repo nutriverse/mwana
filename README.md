@@ -85,8 +85,9 @@ summaries of the outputs.
 
 #### A useful workflow for plausibility check using `mwana`
 
-<img src="README_files/figure-commonmark/workflow-1.png"
-data-fig-align="center" />
+    #> PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
+
+<img src="man/figures/README-workflow-1.png" data-fig-align="center" />
 
 ### Prevalence analysis
 
@@ -163,23 +164,22 @@ function as follows:
 
 ``` r
 citation("ipccheckr")
+#> To cite ipccheckr: in publications use:
+#> 
+#>   Tomás Zaba, Ernest Guevarra (2024). _ipccheckr: Toolkit for
+#>   Performing IPC Acute Malnutrition-related Data Checks_. R package
+#>   version 0.0.0.9000, <https://github.com/tomaszaba/ipccheckr>.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks},
+#>     author = {{Tomás Zaba} and {Ernest Guevarra}},
+#>     year = {2024},
+#>     note = {R package version 0.0.0.9000},
+#>     url = {https://github.com/tomaszaba/ipccheckr},
+#>   }
 ```
-
-    To cite ipccheckr: in publications use:
-
-      Tomás Zaba, Ernest Guevarra (2024). _ipccheckr: Toolkit for
-      Performing IPC Acute Malnutrition-related Data Checks_. R package
-      version 0.0.0.9000, <https://github.com/tomaszaba/ipccheckr>.
-
-    A BibTeX entry for LaTeX users is
-
-      @Manual{,
-        title = {ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks},
-        author = {{Tomás Zaba} and {Ernest Guevarra}},
-        year = {2024},
-        note = {R package version 0.0.0.9000},
-        url = {https://github.com/tomaszaba/ipccheckr},
-      }
 
 # Community guidelines
 

@@ -1,14 +1,15 @@
 ---
 format: gfm
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>"
+    fig.path: "man/figures/README-"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r}
-#| label: global_setup
-#| include: false
-#| collapse: true
-
+```{r, include = FALSE}
 library(ipccheckr)
 ```
 
