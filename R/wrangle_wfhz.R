@@ -38,14 +38,14 @@
 #' [flag_outliers()] [remove_flags()]
 #'
 #' @examples
-#' anthro.01 |>
-#'   mw_wrangle_wfhz(
-#'     sex = sex,
-#'     weight = weight,
-#'     height = height,
-#'     .recode_sex = TRUE,
-#'     .decimals = 2
-#'   )
+#' mw_wrangle_wfhz(
+#'   df = anthro.01,
+#'   sex = sex,
+#'   weight = weight,
+#'   height = height,
+#'   .recode_sex = TRUE,
+#'   .decimals = 2
+#' )
 #'
 #' @export
 #'
@@ -55,18 +55,17 @@ mw_wrangle_wfhz <- function(df,
                             height,
                             .recode_sex = TRUE,
                             .decimals = 3) {
-
   ## Difuse arguments to be evaluated later ----
   weight <- eval_tidy(enquo(weight), df)
   height <- eval_tidy(enquo(height), df)
 
   ## Check if the class of vector weight is "double" ----
-  if(!is.double(weight)) {
+  if (!is.double(weight)) {
     stop("`weight` must be of class 'double'; not ", shQuote(class(weight)), ". Please try again.")
   }
 
   ## Check if the class of vector height is "double" ----
-  if(!is.double(height)) {
+  if (!is.double(height)) {
     stop("`height` must be of class 'double'; not ", shQuote(class(height)), ". Please try again.")
   }
 
@@ -75,7 +74,7 @@ mw_wrangle_wfhz <- function(df,
 
   ## Check if vector of sex is coded in either "m" and "f" or 1 and 2 ----
   x <- as.factor(as.character(sex))
-  if(!(all(levels(x) %in% c("m", "f")) | all(levels(x) %in% c("1", "2")))) {
+  if (!(all(levels(x) %in% c("m", "f")) | all(levels(x) %in% c("1", "2")))) {
     stop("Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively")
   }
 

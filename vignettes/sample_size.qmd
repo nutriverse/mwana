@@ -10,7 +10,7 @@ vignette: >
 ```{r}
 #| label: global-setup
 
-library(ipccheckr)
+library(mwana)
 ```
 Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrition (IPC AMN) can come from different sources with data collected in different ways:  representative surveys, screenings or community-based surveillance system (known as sentinel sites). The IPC set minimum sample size requirements for each of these sources. Details can be read from the [IPC Manual version 3.1 ](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/). 
 

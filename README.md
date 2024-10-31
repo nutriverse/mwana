@@ -152,7 +152,7 @@ install.packages(
 Then load to in memory with
 
 ``` r
-library(ipccheckr)
+library(mwana)
 ```
 
 # Citation
@@ -162,24 +162,23 @@ cite using the suggested citation provided by a call to `citation`
 function as follows:
 
 ``` r
-citation("ipccheckr")
+citation("mwana")
+#> To cite ipccheckr: in publications use:
+#> 
+#>   Tomás Zaba, Ernest Guevarra (2024). _ipccheckr: Toolkit for
+#>   Performing IPC Acute Malnutrition-related Data Checks_. R package
+#>   version 0.0.0.9000, <https://github.com/tomaszaba/ipccheckr>.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks},
+#>     author = {{Tomás Zaba} and {Ernest Guevarra}},
+#>     year = {2024},
+#>     note = {R package version 0.0.0.9000},
+#>     url = {https://github.com/tomaszaba/ipccheckr},
+#>   }
 ```
-
-    To cite ipccheckr: in publications use:
-
-      Tomás Zaba, Ernest Guevarra (2024). _ipccheckr: Toolkit for
-      Performing IPC Acute Malnutrition-related Data Checks_. R package
-      version 0.0.0.9000, <https://github.com/tomaszaba/ipccheckr>.
-
-    A BibTeX entry for LaTeX users is
-
-      @Manual{,
-        title = {ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks},
-        author = {{Tomás Zaba} and {Ernest Guevarra}},
-        year = {2024},
-        note = {R package version 0.0.0.9000},
-        url = {https://github.com/tomaszaba/ipccheckr},
-      }
 
 # Community guidelines
 

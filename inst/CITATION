@@ -1,9 +1,9 @@
 bibentry(
   bibtype  = "Manual",
-  header   = "To cite ipccheckr: in publications use:",
-  title    = "ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks",
+  header   = "To cite mwana: in publications use:",
+  title    = "mwana: Utilities for Analysing Children's Nutritional Status",
   author   = c(person("Tomás Zaba"), person("Ernest Guevarra")),
   year     = 2024,
   note     = "R package version 0.0.0.9000",
-  url      = "https://github.com/tomaszaba/ipccheckr",
+  url      = "https://github.com/nutriverse/mwana",
 )

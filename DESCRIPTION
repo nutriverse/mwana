@@ -1,5 +1,5 @@
 Type: Package
-Package: ipccheckr
+Package: mwana
 Title: Utilities for Analysing Children's Nutritional Status 
 Version: 0.0.0.9000
 Authors@R: c(

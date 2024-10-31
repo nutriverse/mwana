@@ -51,12 +51,12 @@ df <- data.frame(
 )
 
 ## Apply the function ----
-df |>
-  mw_wrangle_age(
-    dos = surv_date,
-    dob = birth_date,
-    age = age,
-    .decimals = 3
-  )
+mw_wrangle_age(
+  df = df,
+  dos = surv_date,
+  dob = birth_date,
+  age = age,
+  .decimals = 3
+)
 
 }

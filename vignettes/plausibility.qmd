@@ -11,7 +11,7 @@ vignette: >
 #| label: setup
 #| collapse: true
 
-library(ipccheckr)
+library(mwana)
 ```
 
 # Introduction

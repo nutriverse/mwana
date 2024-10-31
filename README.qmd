@@ -1,15 +1,18 @@
 ---
 format: gfm
+knitr: 
+  opts_chunk: 
+    collapse: true
+    comment: "#>"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r}
-#| label: global_setup
+#| label: load_library
 #| include: false
-#| collapse: true
 
-library(ipccheckr)
+library(mwana)
 ```
 
 # `mwana`: Utilities for analysing children's nutritional status 
@@ -139,7 +142,7 @@ Then load to in memory with
 ```{r}
 #| label: example
 
-library(ipccheckr)
+library(mwana)
 ```
 
 # Citation
@@ -150,7 +153,7 @@ If you were enticed to use `mwana` package and found it useful, please cite usin
 #| label: citation
 #| eval: true
 
-citation("ipccheckr")
+citation("mwana")
 ```
 
 # Community guidelines  

@@ -38,14 +38,14 @@ Calculate z-scores for weight-for-height (WFHZ) and identify outliers based on
 the SMART methodology.
 }
 \examples{
-anthro.01 |>
-  mw_wrangle_wfhz(
-    sex = sex,
-    weight = weight,
-    height = height,
-    .recode_sex = TRUE,
-    .decimals = 2
-  )
+mw_wrangle_wfhz(
+  df = anthro.01,
+  sex = sex,
+  weight = weight,
+  height = height,
+  .recode_sex = TRUE,
+  .decimals = 2
+)
 
 }
 \references{
