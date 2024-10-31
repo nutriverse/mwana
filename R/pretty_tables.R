@@ -16,7 +16,7 @@
 #' ## Check the plausibility of WFHZ data ----
 #'
 #' anthro.01 |>
-#' process_wfhz_data(
+#' mw_wrangle_wfhz(
 #' sex = sex,
 #' weight = weight,
 #' height = height,
@@ -35,13 +35,13 @@
 #' ## Check the plausibility of MUAC data ----
 #'
 #' anthro.01 |>
-#' process_muac_data(
+#' mw_wrangle_muac(
 #' sex = sex,
 #' muac = muac,
 #' age = NULL,
 #' .recode_sex = TRUE,
 #' .recode_muac = FALSE,
-#' unit = "none"
+#' .to = "none"
 #' ) |>
 #' check_plausibility_muac(
 #' flags = flag_muac,
@@ -59,13 +59,13 @@
 #' age = age,
 #' .decimals = 2
 #' ) |>
-#' process_muac_data(
+#' mw_wrangle_muac(
 #' sex = sex,
 #' age = "age",
 #' muac = muac,
 #' .recode_sex = TRUE,
 #' .recode_muac = TRUE,
-#' unit = "cm"
+#' .to = "cm"
 #' ) |>
 #' check_plausibility_mfaz(
 #' flags = flag_mfaz,

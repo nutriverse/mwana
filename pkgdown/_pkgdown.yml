@@ -82,5 +82,7 @@ home:
 #     contents:
 #     - get_age_months
 #     - recode_muac
+#     - flag_outliers
+#     - remove_flags
 
 

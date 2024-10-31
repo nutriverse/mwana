@@ -76,11 +76,12 @@ summaries of the outputs.
 
 - It performs, as well, plausibility checks on MUAC data. For this,
   `mwana` integrates recent advances in using MUAC-for-age z-score
-  (MFAZ) for auditing the plausibility of MUAC data. In this way, when
-  the variable age is available: `mwana` performs plausibility checks
-  similar to those in WFHZ, however with few differences in the scoring.
-  Otherwise, when the variables age is missing, a similar test suit used
-  in the current version of ENA is performed. Read details here.
+  (MFAZ) for assessing the plausibility and the acceptability of MUAC
+  data. In this way, when the variable age is available: `mwana`
+  performs plausibility checks similar to those in WFHZ, with a few
+  differences in the scoring criteria for flagged data. Otherwise, when
+  the variables age is missing, a similar test suit used in the current
+  version of ENA is performed. Read details here.
 
 #### A useful workflow for plausibility check using `mwana`
 
@@ -101,12 +102,12 @@ result.
 `mwana` computes prevalence for:
 
 - Wasting on the basis of WFHZ and/edema (Read vignettes)
-- Wasting on the basis of the absolute values of MUAC and/or edema:
-  here, when variable age is available, mwana applies MFAZ flags,
-  otherwise it applies the flagging criteria around the absolute values
-  of MUAC, to exclude outliers before computing prevalence, but the
-  actual prevalence is done on the absolute values. (Read link to the
-  specific section in the vignettes)
+- Wasting on the basis of the raw MUAC values and/or edema: here, when
+  variable age is available, mwana applies MFAZ flags, otherwise it
+  applies the flagging criteria around the raw MUAC values, to exclude
+  outliers before computing prevalence, but the actual prevalence is
+  done on the raw values. (Read link to the specific section in the
+  vignettes)
 - Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ
   flags. (Read link to the specific section in the vignettes)
 - Combined prevalence of wasting: here a concept of combined flags is
@@ -125,9 +126,9 @@ sites. (Check out the vignette).
 
 > [!TIP]
 >
-> If you are undertaking a research and you want to censor your data
+> If you are undertaking a research and you want to wrangle your data
 > before including in your statistical models, etc, `mwana` is a great
-> helper, as it identifies flags out of your anthro data.
+> helper.
 
 > [!WARNING]
 >

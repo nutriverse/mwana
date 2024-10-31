@@ -27,7 +27,7 @@
 #'
 #' ### When .summary_by = NULL ----
 #' anthro.03 |>
-#' process_wfhz_data(
+#' mw_wrangle_wfhz(
 #' sex = sex,
 #' weight = weight,
 #' height = height,
@@ -42,7 +42,7 @@
 #' ### When .summary_by is not set to NULL ----
 #'
 #' anthro.03 |>
-#' process_wfhz_data(
+#' mw_wrangle_wfhz(
 #' sex = sex,
 #' weight = weight,
 #' height = height,
@@ -82,14 +82,14 @@ compute_wfhz_prevalence <- function(df,
     ## Grouped summary of standard deviation classification ----
     x <- summarise(
       df,
-      std = classify_sd(sd(remove_flags(.data$wfhz, "zscore"), na.rm = TRUE)),
+      std = classify_sd(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)),
       .by = !!.summary_by
     )
   } else {
     ## Non-grouped summary ----
     x <- summarise(
       df,
-      std = classify_sd(sd(remove_flags(.data$wfhz, "zscore"), na.rm = TRUE))
+      std = classify_sd(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE))
     )
   }
 
@@ -216,7 +216,7 @@ compute_pps_based_wfhz_prevalence <- function(df,
 #'
 apply_probit_approach <- function(x, .status = c("gam", "sam")) {
   .status <- match.arg(.status)
-  mean <- mean(remove_flags(x, "zscore"), na.rm = TRUE)
+  mean <- mean(remove_flags(x, "zscores"), na.rm = TRUE)
   ## Return GAM and SAM prevalence with a SD = 1
   switch(
     .status,

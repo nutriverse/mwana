@@ -55,7 +55,7 @@ Or we can also choose to chain the data object to the function using the pipe op
 #| echo: true
 #| eval: false
 
-anthro.01 |> 
+anthro.01 |>
   check_sample_size(
     .group = cluster,
     .data_type = "survey"
@@ -67,7 +67,7 @@ Either way, the returned output will be:
 #| label: view_check
 #| echo: false
 
-anthro.01 |> 
+anthro.01 |>
   check_sample_size(
     .group = cluster,
     .data_type = "survey"
@@ -90,8 +90,8 @@ The above output is not quite useful yet, as we often deal with multi-area datas
 library(dplyr)
 
 ## Use the group_by() function ----
-anthro.01 |> 
-  group_by(area) |> 
+anthro.01 |>
+  group_by(area) |>
   check_sample_size(
     .group = cluster,
     .data_type = "survey"
@@ -107,8 +107,8 @@ This will return:
 
 library(dplyr)
 
-anthro.01 |> 
-  group_by(area) |> 
+anthro.01 |>
+  group_by(area) |>
   check_sample_size(
     .group = cluster,
     .data_type = "survey"

@@ -50,7 +50,7 @@ dob = dob,
 age = age,
 .decimals = 2
 ) |>
-process_wfhz_data(
+mw_wrangle_wfhz(
 sex = sex,
 weight = weight,
 height = height,
@@ -74,13 +74,13 @@ dob = dob,
 age = age,
 .decimals = 2
 ) |>
-process_muac_data(
+mw_wrangle_muac(
 sex = sex,
 age = "age",
 muac = muac,
 .recode_sex = TRUE,
 .recode_muac = TRUE,
-unit = "cm"
+.to = "cm"
 ) |>
 check_plausibility_mfaz(
 flags = flag_mfaz,
@@ -93,13 +93,13 @@ area = area
 ## Check the plausibility of the absolute MUAC values ----
 
 anthro.01 |>
-process_muac_data(
+mw_wrangle_muac(
 sex = sex,
 muac = muac,
 age = NULL,
 .recode_sex = TRUE,
 .recode_muac = FALSE,
-unit = "none"
+.to = "none"
 ) |>
 check_plausibility_muac(
 flags = flag_muac,

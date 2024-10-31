@@ -4,7 +4,7 @@
 #'
 #' @description
 #' Wrangle child's age for downstream analysis. This includes calculating age
-#' in months based on the date of data collection and the child's date of birth and
+#' in months based on the date of data collection and the child's date of birth, and
 #' setting to `NA` the age values that are less than 6.0 and greater than or equal
 #' to 60.0 months old.
 #'
@@ -60,22 +60,19 @@ mw_wrangle_age <- function(df,
                            dob = NULL,
                            age,
                            .decimals = 2) {
-  ## Difuse arguments ----
-  dos <- rlang::enquo(dos)
-  dob <- rlang::enquo(dob)
-  age <- rlang::enquo(age)
 
-  ## Evaluate quosures to get actual columns ----
-  x <- rlang::eval_tidy(dos, df)
-  y <- rlang::eval_tidy(dob, df)
-  z <- rlang::eval_tidy(age, df)
+  ## Difuse and evaluate arguments ----
+  dos <- eval_tidy(enquo(dos), df)
+  dob <- eval_tidy(enquo(dob), df)
+  age <- eval_tidy(enquo(age), df)
+
 
   ## Calculate child's age in months then in days ----
-  if (!rlang::quo_is_null(dob) | !rlang::quo_is_null(dos)) {
+  if (!is.null(dob) | !is.null(dos)) {
 
-    ## Check if the class of vector "z" is "numeric" ----
-    if (!is.numeric(z)) {
-      stop("Child's age should be of class 'numeric'. Please try again.")
+    ## Check if the class of vector "age" is "numeric" ----
+    if (!is.numeric(age)) {
+      stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
     }
 
     ## Calculate age in months ----
@@ -83,23 +80,23 @@ mw_wrangle_age <- function(df,
       mutate(
         age = ifelse(
           is.na(!!age),
-          get_age_months(dob = !!dob, dos = !!dos), !!age
+          get_age_months(dob = dob, dos = dos), age
         ),
         age_days = round(.data$age * (365.25 / 12), .decimals)
       )
   } else {
     ## Check if the class of vector "z" is "numeric" ----
-    if (!is.numeric(z)) {
-      stop("Child's age should be of class 'numeric'. Please try again.")
+    if (!is.numeric(age)) {
+      stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
     }
 
     ## Calculate age in months ----
     df <- df |>
       mutate(
-        age_days = round(!!age * (365.25 / 12), .decimals)
+        age_days = round(age * (365.25 / 12), .decimals)
       )
   }
 
   ## Return df ----
-  tibble::as_tibble(df)
+  as_tibble(df)
 }

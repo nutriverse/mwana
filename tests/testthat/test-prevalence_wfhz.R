@@ -1,7 +1,7 @@
 # Test check: apply_probit_approach() ----
 local({
   x <- anthro.03 |>
-    process_wfhz_data(sex, weight, height, .recode_sex = TRUE) |>
+    mw_wrangle_wfhz(sex, weight, height, .recode_sex = TRUE) |>
     subset(district == "Metuge")
 
     p_gam <- apply_probit_approach(x$wfhz, .status = "gam")
@@ -19,7 +19,7 @@ local({
 # Test check: compute_probit_prevalence() ----
 local({
   p <- anthro.03 |>
-    process_wfhz_data(sex, weight, height, .recode_sex = TRUE) |>
+    mw_wrangle_wfhz(sex, weight, height, .recode_sex = TRUE) |>
     subset(district == "Metuge") |>
     compute_probit_prevalence()
 
@@ -37,7 +37,7 @@ local({
 # Test check: compute_probit_prevalence(.summary_by = district) ----
 local({
   p <- anthro.03 |>
-    process_wfhz_data(sex, weight, height, .recode_sex = TRUE) |>
+    mw_wrangle_wfhz(sex, weight, height, .recode_sex = TRUE) |>
     subset(district == "Metuge" | district == "Maravia") |>
     compute_probit_prevalence(.summary_by = district)
 
@@ -267,7 +267,7 @@ local({
 
   ### Get the prevalence estimates ----
   p <- anthro.03 |>
-    process_wfhz_data(sex, weight, height, .recode_sex = TRUE) |>
+    mw_wrangle_wfhz(sex, weight, height, .recode_sex = TRUE) |>
     compute_wfhz_prevalence(.edema = edema, .summary_by = district)
 
   ### Subset the dataframe for the district "Metuge" with problematic SD ----

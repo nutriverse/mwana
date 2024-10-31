@@ -7,9 +7,13 @@
 get_age_months(dos, dob)
 }
 \arguments{
-\item{dos}{A vector of class \code{Date} for the date of data collection.}
+\item{dos}{A vector of class \code{Date} for the date of data collection. If the class
+is different than expected, the function will stop execution and return an error
+message indicating the type of mismatch.}
 
-\item{dob}{A vector of class \code{Date} for the child's date of birth.}
+\item{dob}{A vector of class \code{Date} for the child's date of birth. If the class
+is different than expected, the function will stop execution and return an error
+message indicating the type of mismatch.}
 }
 \value{
 A vector of class \code{numeric} for child's age in months. Any value less
@@ -20,7 +24,6 @@ Calculate child's age in months based on the date of birth and the date of
 data collection.
 }
 \examples{
-
 ## Take two vectors of class "Date" ----
 surv_date <- as.Date(
   c(
