@@ -23,6 +23,7 @@ library(ipccheckr)
 [![test-coverage](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/gh/nutriverse/mwana/graph/badge.svg?token=kUUp1WOlSi)](https://codecov.io/gh/nutriverse/mwana)
 [![CodeFactor](https://www.codefactor.io/repository/github/nutriverse/mwana/badge)](https://www.codefactor.io/repository/github/nutriverse/mwana)
+[![DOI](https://zenodo.org/badge/867609177.svg)](https://zenodo.org/badge/latestdoi/867609177)
 <!-- badges: end -->
 
 Child anthropometric assessments, implemented routinely in most countries worldwide, are the cornerstones of child nutrition and food security surveillance around the world. Ensuring the quality of child anthropometric data, the accuracy of child undernutrition prevalence estimates, and the timeliness of reporting is therefore critical in establishing accurate, robust, and up-to-date child undernutrition status globally.  
