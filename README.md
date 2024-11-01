@@ -2,7 +2,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `mwana`: Utilities for analysing children’s nutritional status
+# `mwana`: Utilities for analysing children’s nutritional status <a href="https://nutriverse.io/mwana/"><img src="man/figures/logo.png" align="right" height="138" alt="mwana website" /></a>
 
 <!-- badges: start -->
 
