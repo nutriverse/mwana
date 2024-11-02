@@ -40,7 +40,7 @@ mw_stattest_ageratio <- function(age, .expectedP = 0.66) {
 
   ## Enforce the class of `age` ----
   if(!is.numeric(age)) {
-    stop("`x` must be of class 'numeric'; not ", shQuote(class(x)), ". Please try again.")
+    stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
   }
 
   ## Calculate observed proportion and ratio ----

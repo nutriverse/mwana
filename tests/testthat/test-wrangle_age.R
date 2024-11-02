@@ -34,7 +34,13 @@ testthat::test_that(
     testthat::expect_vector(x[["age_days"]], size = 5)
     testthat::expect_equal(x[["age_days"]], w)
     testthat::expect_true(is.double(x[["age_days"]]))
-    testthat::expect_error(mw_wrangle_age(df, surdate, birdate, age_, 2))
+    testthat::expect_error(
+      mw_wrangle_age(df, surdate, birdate, age_, 2),
+      regexp = paste0(
+        "age` must be of class 'numeric'; not ",
+        shQuote(class(df[["age_"]])), ". Please try again."
+      )
+    )
   }
 )
 
@@ -66,7 +72,11 @@ testthat::test_that(
     testthat::expect_equal(x[["age_days"]], w)
     testthat::expect_true(is.double(x[["age_days"]]))
     testthat::expect_error(
-      mw_wrangle_age(df, dos = NULL, dob = NULL, age = month, 2)
+      mw_wrangle_age(df, dos = NULL, dob = NULL, age = month, 2),
+      regexp = paste0(
+        "age` must be of class 'numeric'; not ",
+        shQuote(class(df[["month"]])), ". Please try again."
+      )
     )
   }
 )
@@ -81,7 +91,11 @@ testthat::test_that(
 
     ### Tests ----
     testthat::expect_error(
-      mw_wrangle_age(df, dos = NULL, dob = NULL, age = age, 2)
+      mw_wrangle_age(df, dos = NULL, dob = NULL, age = age, 2),
+      regexp = paste0(
+        "age` must be of class 'numeric'; not ",
+        shQuote(class(df[["age"]])), ". Please try again."
+      )
     )
   }
 )

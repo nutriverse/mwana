@@ -16,8 +16,12 @@ testthat::test_that(
     ## Tests ----
     testthat::expect_vector(cl, ptype = numeric(), 15)
     testthat::expect_equal(cl, exp)
-    testthat::expect_error(score_std_flags(as.factor(std)))
-    testthat::expect_error(score_std_flags(as.numeric(std)))
+    testthat::expect_error(
+      score_std_flags(as.numeric(exp)),
+      regexp = paste0(
+        "`x` must be of class `character` or `factor`; not ", shQuote(class(exp)), ". Please try again."
+      )
+    )
   }
 )
 
@@ -41,8 +45,12 @@ testthat::test_that(
     ## Tests ----
     testthat::expect_vector(o, numeric(), 15)
     testthat::expect_equal(o, e)
-    testthat::expect_error(score_agesexr_dps(as.factor(cl)))
-    testthat::expect_error(score_ageser_dps(as.numeric(cl)))
+    testthat::expect_error(
+      score_agesexr_dps(e),
+      regexp = paste0(
+        "`x` must be of class `character` or `factor`; not ", shQuote(class(e)), ". Please try again."
+        )
+    )
   }
 )
 
@@ -67,8 +75,12 @@ testthat::test_that(
     ## Tests ----
     testthat::expect_vector(o, numeric(), 15)
     testthat::expect_equal(o, exp)
-    testthat::expect_error(score_skewkurt(as.numeric(sk)))
-    testthat::expect_error(score_skewkurt(as.factor(sk)))
+    testthat::expect_error(
+      score_skewkurt(exp),
+      regexp = paste0(
+        "`x` must be of class `character` or `factor`; not ", shQuote(class(exp)), ". Please try again."
+      )
+    )
   }
 )
 

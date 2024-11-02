@@ -20,8 +20,8 @@
 #'
 score_std_flags <- function(x) {
   ## Enforce the class of `x` ----
-  if (!is.character(x)) {
-    stop("`x` must be of class `character`; not ", shQuote(class(x)), ". Please try again.")
+  if (!(is.character(x) | is.factor(x))) {
+    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
   }
 
   ## Score ----
@@ -42,8 +42,8 @@ score_std_flags <- function(x) {
 #'
 score_agesexr_dps <- function(x) {
   ## Enforce the class of `x` ----
-  if (!is.character(x)) {
-    stop("`x` must be of class `character`; not ", shQuote(class(x)), ". Please try again.")
+  if (!(is.character(x) | is.factor(x))) {
+    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
   }
 
   ## Score ----
@@ -63,8 +63,8 @@ score_agesexr_dps <- function(x) {
 #'
 score_skewkurt <- function(x) {
   ## Enforce the class of `x` ----
-  if (!is.character(x)) {
-    stop("`x` must be of class `character`; not ", shQuote(class(x)), ". Please try again.")
+  if (!(is.character(x) | is.factor(x))) {
+    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
   }
 
   ## Score ----
