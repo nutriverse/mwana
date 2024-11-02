@@ -2,15 +2,14 @@
 % Please edit documentation in R/plausibility_check_wfhz.R
 \name{mw_plausibility_check_wfhz}
 \alias{mw_plausibility_check_wfhz}
-\title{Check the plausibility and acceptability of a weight-for-height data}
+\title{Check the plausibility and acceptability of weight-for-height z-score (WFHZ) data}
 \usage{
 mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to check. It should have been
-wrangled using this package's wranglers.}
+\item{df}{A dataset object of class \code{data.frame} to check.}
 
-\item{sex}{A vector of class \code{numeric} of child's sex: 1 for boy and 2 for girl.}
+\item{sex}{A vector of class \code{numeric} of child's sex.}
 
 \item{age}{A vector of class \code{double} of child's age in months.}
 
@@ -18,9 +17,58 @@ wrangled using this package's wranglers.}
 
 \item{height}{A vector of class \code{double} of child's height in centimeters.}
 
-\item{flags}{A vector of class \code{numeric} of flagged observations.}
+\item{flags}{A vector of class \code{numeric} of flagged records.}
+}
+\value{
+A summarised table of class \code{data.frame}, of length 19 and nrow 1, for
+the plausibility test results and their respective acceptability ratings.
 }
 \description{
-Verify the overall acceptability of the data through a set of
-structured tests around sampling and measurement-related biases in the data.
+Check the overall plausibility and acceptability of WFHZ data through
+structured test suite encompassing sampling and measurement-related biases in
+the dataset. This test suite, including the criteria and corresponding rating of
+acceptability, follows the standards in the  SMART plausibility check. The only
+exception is the exclusion of MUAC checks. MUAC is checked separately using more
+comprehensive test suite as well.
+
+The function works on a data frame returned from this package's wrangling
+function for age and for WFHZ data.
+}
+\examples{
+## First wrangle age data ----
+data <- mw_wrangle_age(
+  df = anthro.01,
+  dos = dos,
+  dob = dob,
+  age = age,
+  .decimals = 2
+)
+
+## Then wrangle WFHZ data ----
+data_wfhz <- mw_wrangle_wfhz(
+  df = data,
+  sex = sex,
+  weight = weight,
+  height = height,
+  .recode_sex = TRUE
+)
+
+## Now run the plausibility check ----
+mw_plausibility_check_wfhz(
+  df = data_wfhz,
+  sex = sex,
+  age = age,
+  weight = weight,
+  height = height,
+  flags = flag_wfhz,
+)
+
+}
+\references{
+SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief
+and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
+}
+\seealso{
+\code{\link[=mw_plausibility_check_mfaz]{mw_plausibility_check_mfaz()}} \code{\link[=mw_plausibility_check_muac]{mw_plausibility_check_muac()}}
+\code{\link[=mw_wrangle_age]{mw_wrangle_age()}}
 }

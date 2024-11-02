@@ -1,15 +1,20 @@
-
 #'
-#' Check the plausibility and acceptability of a weight-for-height data
+#' Check the plausibility and acceptability of weight-for-height z-score (WFHZ) data
 #'
 #' @description
-#' Verify the overall acceptability of the data through a set of
-#' structured tests around sampling and measurement-related biases in the data.
+#' Check the overall plausibility and acceptability of WFHZ data through
+#' structured test suite encompassing sampling and measurement-related biases in
+#' the dataset. This test suite, including the criteria and corresponding rating of
+#' acceptability, follows the standards in the  SMART plausibility check. The only
+#' exception is the exclusion of MUAC checks. MUAC is checked separately using more
+#' comprehensive test suite as well.
 #'
-#' @param df A dataset object of class `data.frame` to check. It should have been
-#' wrangled using this package's wranglers.
+#' The function works on a data frame returned from this package's wrangling
+#' function for age and for WFHZ data.
 #'
-#' @param sex A vector of class `numeric` of child's sex: 1 for boy and 2 for girl.
+#' @param df A dataset object of class `data.frame` to check.
+#'
+#' @param sex A vector of class `numeric` of child's sex.
 #'
 #' @param age A vector of class `double` of child's age in months.
 #'
@@ -17,42 +22,56 @@
 #'
 #' @param height A vector of class `double` of child's height in centimeters.
 #'
-#' @param flags A vector of class `numeric` of flagged observations.
+#' @param flags A vector of class `numeric` of flagged records.
+#'
+#' @returns
+#' A summarised table of class `data.frame`, of length 19 and nrow 1, for
+#' the plausibility test results and their respective acceptability ratings.
+#'
+#' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
+#' [mw_wrangle_age()]
+#'
+#' @references
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
+#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
+#'
+#' @examples
+#' ## First wrangle age data ----
+#' data <- mw_wrangle_age(
+#'   df = anthro.01,
+#'   dos = dos,
+#'   dob = dob,
+#'   age = age,
+#'   .decimals = 2
+#' )
+#'
+#' ## Then wrangle WFHZ data ----
+#' data_wfhz <- mw_wrangle_wfhz(
+#'   df = data,
+#'   sex = sex,
+#'   weight = weight,
+#'   height = height,
+#'   .recode_sex = TRUE
+#' )
+#'
+#' ## Now run the plausibility check ----
+#' mw_plausibility_check_wfhz(
+#'   df = data_wfhz,
+#'   sex = sex,
+#'   age = age,
+#'   weight = weight,
+#'   height = height,
+#'   flags = flag_wfhz,
+#' )
 #'
 #' @export
 #'
-#' @examples
-#' ## Check the plausibility of WFHZ data ----
-#'
-#' anthro.01 |>
-#' mw_wrangle_age(
-#' dos = dos,
-#' dob = dob,
-#' age = age,
-#' .decimals = 2
-#' ) |>
-#' mw_wrangle_wfhz(
-#' sex = sex,
-#' weight = weight,
-#' height = height,
-#' .recode_sex = TRUE
-#' ) |>
-#' check_plausibility_wfhz(
-#' sex = sex,
-#' age = age,
-#' weight = weight,
-#' height = height,
-#' flags = flag_wfhz,
-#' )
-#'
-
 mw_plausibility_check_wfhz <- function(df,
                                        sex,
                                        age,
                                        weight,
                                        height,
                                        flags) {
-
   ## Summarise statistics  ----
   df <- df |>
     summarise(
@@ -82,7 +101,8 @@ mw_plausibility_check_wfhz <- function(df,
         cl_std = .data$sd_class,
         cl_skw = .data$skew_class,
         cl_kurt = .data$kurt_class,
-        .for = "wfhz"),
+        .for = "wfhz"
+      ),
       quality_class = rate_overall_quality(quality_score),
       .groups = "drop"
     )

@@ -1,0 +1,73 @@
+#'
+#' Check the plausibility and acceptability of raw MUAC data
+#'
+#' @description
+#' Check the overall plausibility and acceptability of raw MUAC data through
+#' structured test suite encompassing sampling and measurement-related biases in
+#' the dataset. The test suite in this function follows the recommendation made
+#' by recommnded by Bilukha, O., & Kianian, B. (2023).
+#'
+#' @param df A dataset object of class `data.frame` to check. It should have been
+#' wrangled using this package's wranglers.
+#'
+#' @param sex A vector of class `numeric` of child's sex.
+#'
+#' @param muac A vector of class `double` of child's MUAC in centimeters.
+#'
+#' @param flags A vector of class `numeric` of flagged records.
+#'
+#' @returns A summarised `data.frame` of plausibility test results and their
+#' respective acceptability ratings.
+#'
+#' @references
+#' Bilukha, O., & Kianian, B. (2023). Considerations for assessment of measurement
+#' quality of mid‐upper arm circumference data in anthropometric surveys and
+#' mass nutritional screenings conducted in humanitarian and refugee settings.
+#' *Maternal & Child Nutrition*, 19, e13478. <https://doi.org/10.1111/mcn.13478>
+#'
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
+#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
+#'
+#' @seealso [mw_wrangle_muac()] [flag_outliers()]
+#'
+#' @examples
+#' ## First wranlge MUAC data ----
+#' df_muac <- mw_wrangle_muac(
+#'   df = anthro.01,
+#'   sex = sex,
+#'   muac = muac,
+#'   age = NULL,
+#'   .recode_sex = TRUE,
+#'   .recode_muac = FALSE,
+#'   .to = "none"
+#' )
+#'
+#' ## Then run the plausibility check ----
+#' mw_plausibility_check_muac(
+#'   df = data_muac,
+#'   flags = flag_muac,
+#'   sex = sex,
+#'   muac = muac
+#' )
+#'
+#' @export
+#'
+mw_plausibility_check_muac <- function(df, sex, muac, flags) {
+  ## Summarise statistics  ----
+  df <- df |>
+    summarise(
+      n = n(),
+      flagged = sum({{ flags }}, na.rm = TRUE) / n(),
+      flagged_class = rate_propof_flagged(.data$flagged, .in = "raw_muac"),
+      sex_ratio = sexRatioTest({{ sex }}, codes = c(1, 2))[["p"]],
+      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
+      dps = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dps"]],
+      dps_class = digitPreference({{ muac }}, digits = 0, values = 0:9)[["dpsClass"]],
+      sd = sd(remove_flags({{ muac }}, .from = "raw_muac"), na.rm = TRUE),
+      sd_class = rate_std(.data$sd, .of = "raw_muac"),
+      .groups = "drop"
+    )
+
+  ## Return data frame ----
+  df
+}

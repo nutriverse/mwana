@@ -26,13 +26,13 @@ We will begin the demonstration with the plausibility check that you are most fa
 
 ## Plausibility check on WFHZ data
 
-We check the plausibility of WFHZ data by calling the `check_plausibility_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to help you understand some key features about this function. 
+We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to help you understand some key features about this function. 
 
-`check_plausibility_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria as well. Beware though that there some small differences to have in mind: 
+`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria as well. Beware though that there some small differences to have in mind: 
 
-  (i) `check_plausibility_wfhz()` does not include MUAC in its test suit. This is simply due the fact that now you can run a more comprehensive test suit on MUAC;
+  (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suit. This is simply due the fact that now you can run a more comprehensive test suit on MUAC;
   
-  (ii) `check_plausibility_wfhz()` allows user to run checks on a multiple-area dataset at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
+  (ii) `mw_plausibility_check_wfhz()` allows user to run checks on a multiple-area dataset at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
 
 That is it! Now we can begin delving into the "how to". 
 
@@ -60,7 +60,7 @@ Now let's wrangle the data.
 
 ### Data wrangling
 
-As mentioned somewhere above, before we supply data object to `check_plausibility_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing this `help(mw_wrangle_age)` or `help(mw_wrangle_wfhz)` in `R` console. 
+As mentioned somewhere above, before we supply data object to `mw_plausibility_check_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing this `help(mw_wrangle_age)` or `help(mw_wrangle_wfhz)` in `R` console. 
 
 #### Age {#sec-age}
 
@@ -145,7 +145,7 @@ head(x)
 
 ### On to *de facto* WFHZ plausibility check
 
-We now can check the plausibility of our data. We do that by calling `check_plausibility_wfhz()` function as demonstrated below: 
+We now can check the plausibility of our data. We do that by calling `mw_plausibility_check_wfhz()` function as demonstrated below: 
 
 ```{r}
 #| label: pl_wfhz
@@ -153,13 +153,12 @@ We now can check the plausibility of our data. We do that by calling `check_plau
 #| eval: false
 
 x <- wrangled_df |>
-  check_plausibility_wfhz(
+  mw_plausibility_check_wfhz(
     sex = sex,
     age = age,
     weight = weight,
     height = height,
-    flags = flag_wfhz,
-    area = area       # This is variable name with the geographical areas to summarise at.
+    flags = flag_wfhz
   )
 ```
 
@@ -183,13 +182,12 @@ x <- anthro.01 |>
     height = height,
     .recode_sex = TRUE
   ) |>
-  check_plausibility_wfhz(
+  mw_plausibility_check_wfhz(
     sex = sex,
     age = age,
     weight = weight,
     height = height,
-    flags = flag_wfhz,
-    area = area
+    flags = flag_wfhz
   )
 ```
 
@@ -213,13 +211,12 @@ anthro.01 |>
     height = height,
     .recode_sex = TRUE
   ) |>
-  check_plausibility_wfhz(
+  mw_plausibility_check_wfhz(
     sex = sex,
     age = age,
     weight = weight,
     height = height,
-    flags = flag_wfhz,
-    area = area
+    flags = flag_wfhz
   )
 ```
 
@@ -245,13 +242,12 @@ anthro.01 |>
     height = height,
     .recode_sex = TRUE
   ) |>
-  check_plausibility_wfhz(
+  mw_plausibility_check_wfhz(
     sex = sex,
     age = age,
     weight = weight,
     height = height,
-    flags = flag_wfhz,
-    area = area
+    flags = flag_wfhz
   ) |>
   generate_pretty_table_wfhz()
 ```
@@ -276,13 +272,12 @@ anthro.01 |>
     height = height,
     .recode_sex = TRUE
   ) |>
-  check_plausibility_wfhz(
+  mw_plausibility_check_wfhz(
     sex = sex,
     age = age,
     weight = weight,
     height = height,
-    flags = flag_wfhz,
-    area = area
+    flags = flag_wfhz
   ) |>
   generate_pretty_table_wfhz()
 ```
@@ -299,7 +294,7 @@ We will assess the plausibility of MUAC data through MFAZ if we have age variabl
 The MFAZ plausibility check was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that in WFHZ for MFAZ, with a difference in the amount of flags to be considered: maximum of 2%.
 :::
 
-We can run MFAZ plausibility check by calling `check_plausibility_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with processing age; for this, we approach the same way as in @sec-age.
+We can run MFAZ plausibility check by calling `mw_plausibility_check_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with processing age; for this, we approach the same way as in @sec-age.
 
 :::{.callout-important}
 ## Age ratio test in MFAZ
@@ -366,7 +361,7 @@ anthro.01 |>
 
 ### On to *de facto* MFAZ plausibility check
 
-We achieve this by calling the `check_plausibility_mfaz()` function: 
+We achieve this by calling the `mw_plausibility_check_mfaz()` function: 
 
 ```{r}
 #| label: pl_mfaz
@@ -393,12 +388,11 @@ anthro.01 |>
     .to = "cm"
   ) |>
   mutate(muac = recode_muac(muac, .to = "mm")) |>
-  check_plausibility_mfaz(
+  mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
     age = age,
-    flags = flag_mfaz,
-    area = area
+    flags = flag_mfaz
   )
 ```
 
@@ -425,12 +419,11 @@ anthro.01 |>
     .to = "cm"
   ) |>
   dplyr::mutate(muac = recode_muac(muac, .to = "mm")) |>
-  check_plausibility_mfaz(
+  mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
     age = age,
-    flags = flag_mfaz,
-    area = area
+    flags = flag_mfaz
   )
 ```
 
@@ -461,12 +454,11 @@ anthro.01 |>
     .to = "cm"
   ) |>
   mutate(muac = recode_muac(muac, .to = "mm")) |>
-  check_plausibility_mfaz(
+  mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
     age = age,
-    flags = flag_mfaz,
-    area = area
+    flags = flag_mfaz
   ) |>
   generate_pretty_table_mfaz()
 ```
@@ -495,12 +487,11 @@ anthro.01 |>
     .to = "cm"
   ) |>
   dplyr::mutate(muac = recode_muac(muac, .to = "mm")) |>
-  check_plausibility_mfaz(
+  mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
     age = age,
-    flags = flag_mfaz,
-    area = area
+    flags = flag_mfaz
   ) |>
   generate_pretty_table_mfaz()
 ```
@@ -509,7 +500,7 @@ At this point, you have reached the end of your workflow ✨.
 
 ## Plausibility check on the raw MUAC values
 
-We will assess the plausibility of the MUAC data through it's raw values when the variable age is not available in the dataset. This is a job assigned to `check_plausibility_muac()`. The workflow for this check is the shortest one.
+We will assess the plausibility of the MUAC data through it's raw values when the variable age is not available in the dataset. This is a job assigned to `mw_plausibility_check_muac()`. The workflow for this check is the shortest one.
 
 ### Data wrangling
 
@@ -553,7 +544,7 @@ anthro.01 |>
 
 ### On to *de facto* plausibility check
 
-We just have to add `check_plausibility_muac()` to the above pipeline:
+We just have to add `mw_plausibility_check_muac()` to the above pipeline:
 
 ```{r}
 #| label: pl_muac
@@ -569,7 +560,7 @@ anthro.01 |>
     .recode_muac = FALSE,
     .to = "none"
   ) |>
-  check_plausibility_muac(
+  mw_plausibility_check_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
@@ -592,7 +583,7 @@ anthro.01 |>
     .recode_muac = FALSE,
     .to = "none"
   ) |>
-  check_plausibility_muac(
+  mw_plausibility_check_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
@@ -615,7 +606,7 @@ anthro.01 |>
     .recode_muac = FALSE,
     .to = "none"
   ) |>
-  check_plausibility_muac(
+  mw_plausibility_check_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
@@ -638,7 +629,7 @@ anthro.01 |>
     .recode_muac = FALSE,
     .to = "none"
   ) |>
-  check_plausibility_muac(
+  mw_plausibility_check_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
@@ -668,7 +659,7 @@ anthro.01 |>
     .to = "none"
   ) |>
   group_by(area) |>
-  check_plausibility_muac(
+  mw_plausibility_check_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
@@ -695,7 +686,7 @@ anthro.01 |>
     .to = "none"
   ) |>
   group_by(area) |>
-  check_plausibility_muac(
+  mw_plausibility_check_muac(
     sex = sex,
     flags = flag_muac,
     muac = muac
