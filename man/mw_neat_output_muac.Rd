@@ -8,8 +8,8 @@ for improved clarity and readability.}
 mw_neat_output_muac(df)
 }
 \arguments{
-\item{df}{A data frame containing the summary table returned by the package's
-plausibility checker function for raw MUAC data. Must be of class \code{data.frame}.}
+\item{df}{A data frame containing the summary table returned by this package's
+plausibility check function for raw MUAC data. Must be of class \code{data.frame}.}
 }
 \value{
 A data frame of the same length and width as \code{df}, with column names and

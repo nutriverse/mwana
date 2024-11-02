@@ -21,12 +21,12 @@ mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
 }
 \value{
 A summarised table of class \code{data.frame}, of length 19 and width 1, for
-the plausibility test results and their respective acceptability ratings.
+the plausibility test results and their respective acceptability rates.
 }
 \description{
-Check the overall plausibility and acceptability of WFHZ data through
-structured test suite encompassing sampling and measurement-related biases in
-the dataset. This test suite, including the criteria and corresponding rating of
+Check the overall plausibility and acceptability of WFHZ data through a
+structured test suite encompassing sampling and measurement-related biases checks
+in the dataset. The test suite, including the criteria and corresponding rating of
 acceptability, follows the standards in the  SMART plausibility check. The only
 exception is the exclusion of MUAC checks. MUAC is checked separately using more
 comprehensive test suite as well.
@@ -62,6 +62,7 @@ mw_plausibility_check_wfhz(
   height = height,
   flags = flag_wfhz
 )
+
 
 }
 \references{

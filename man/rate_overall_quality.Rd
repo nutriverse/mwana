@@ -2,7 +2,7 @@
 % Please edit documentation in R/quality_raters.R
 \name{rate_overall_quality}
 \alias{rate_overall_quality}
-\title{Rate the overall data acceptability score}
+\title{Rate the overall acceptability of the data}
 \usage{
 rate_overall_quality(q)
 }
@@ -13,7 +13,7 @@ will stop execution and return an error message indicating the type of mismatch.
 }
 \value{
 A vector of class \code{factor} of the same length as \code{q}, providing an overall
-rating of data acceptability.
+rate of acceptability of the data.
 }
 \description{
 Rate the overall data acceptability score into "Excellent", "Good", "Acceptable"

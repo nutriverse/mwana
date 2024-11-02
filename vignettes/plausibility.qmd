@@ -18,25 +18,25 @@ library(mwana)
 
 Plausibility check is a tool that evaluates the overall quality and acceptability of anthropometric data to ensure its suitability for informing decision-making process.  
 
-`mwana` provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or the raw MUAC values.  
+`mwana` provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or raw MUAC values.  
 
-In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on the raw MUAC values. For demonstration, we will use a `mwana` built-in sample dataset named `anthro.01`. This dataset is about district level SMART surveys from anonymized locations. You can read more about it by calling `?anthro.01` in `R`console.
+In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on raw MUAC values. For demonstration, we will use a `mwana` built-in sample dataset named `anthro.01`. This dataset is contains district level SMART surveys from anonymized locations. Do `?anthro.01` in `R` console to read more about the dataset.
 
 We will begin the demonstration with the plausibility check that you are most familiar with and then proceed to the ones you are less familiar with. 
 
 ## Plausibility check of WFHZ data
 
-We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to help you understand some key features about this function. 
+We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to walk you through some key features about this function. 
 
 `mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
 
-  (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC;
+  (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC.
   
-  (ii) `mw_plausibility_check_wfhz()` allows user to run checks on a multiple-area dataset at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
+  (ii) `mw_plausibility_check_wfhz()` allows user to run checks on a multiple area dataset at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
 
 That is it! Now we can begin delving into the "how to". 
 
-It is always a good practice to start off by inspecting the dataset. Let's check the first 6 rows of the dataset:
+It is always a good practice to start off by inspecting the dataset. Let's check the first 6 rows of our dataset:
 
 ```{r}
 #| label: data
@@ -54,7 +54,7 @@ head(anthro.01)
 head(anthro.01)
 ```
 
-As you see, the dataset has eleven variables and the way how their respective values are presented. This is useful to inform the data wrangling workflow. 
+We can see that the dataset has eleven variables, and the way how their respective values are presented. This is useful to inform the data wrangling workflow. 
 
 ### Data wrangling
 
@@ -143,7 +143,7 @@ head(x)
 
 ### On to *de facto* plausibility check of WFHZ data
 
-We now can check the plausibility of our data. We do that by calling `mw_plausibility_check_wfhz()` function as demonstrated below: 
+We can check the plausibility of our data by calling `mw_plausibility_check_wfhz()` function as demonstrated below: 
 
 ```{r}
 #| label: pl_wfhz
@@ -160,7 +160,7 @@ x <- wrangled_df |>
   )
 ```
 
-Or we can chain all previous functions using the pipe operator:
+Or we can chain all previous functions in this way:
 
 ```{r}
 #| label: pipe_workflow
@@ -219,7 +219,7 @@ anthro.01 |>
 ```
 
 As we can see, the returned output is a summary table of statistics and ratings. 
-We can make this output more pretty and ready to share. We can achieve this by chaining `mw_neat_output_wfhz()` to the previous pipeline: 
+We can neat it for more clarity and readability. We can achieve this by chaining `mw_neat_output_wfhz()` to the previous pipeline: 
 
 ```{r}
 #| label: neat_table
@@ -281,7 +281,7 @@ anthro.01 |>
 
 An already formatted table, with scientific notations converted to standard notations, etc.
 
-When working on a multiple area dataset, for instance districts, we can check the plausibility of all districts in the dataset at once by simply chaining the previous workflow with `group_by()` function from the `dplyr` package. 
+When working on a multiple area dataset, for instance districts, we can check the plausibility of all districts in the dataset at once by simply chaining the previous workflow with `group_by()` function from the `dplyr` package: 
 
 ```{r}
 #| label: pl_group_by
@@ -292,6 +292,7 @@ When working on a multiple area dataset, for instance districts, we can check th
 ## Load library ----
 library(dplyr)
 
+## The workflow ----
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -354,7 +355,7 @@ At this point, you have reached the end of your workflow 🎉 .
 
 ## Plausibility check of MFAZ data
 
-We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our data.
+We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our dataset.
 
 :::{.callout-note}
 The plausibility check for MFAZ data was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that in WFHZ for MFAZ, with a difference in the amount of flags to be considered: maximum of 2%.
@@ -437,7 +438,7 @@ We achieve this by calling the `mw_plausibility_check_mfaz()` function:
 ## Load dplyr library ----
 library(dplyr)
 
-## Check plausibility ----
+## The workflow ----
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -496,7 +497,7 @@ anthro.01 |>
   )
 ```
 
-We can also make this output pretty and ready to share it out. We just need to call `mw_neat_output_mfaz()` and chain it to the pipeline:
+We can also neat this output. We just need to call `mw_neat_output_mfaz()` and chain it to the pipeline:
 
 ```{r}
 #| label: pretty_mfaz
@@ -506,7 +507,7 @@ We can also make this output pretty and ready to share it out. We just need to c
 ## Load dplyr library ----
 library(dplyr)
 
-## Check plausibility ----
+## The workflow ----
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -575,7 +576,7 @@ We can also run checks on a multiple area dataset as follows:
 ## Load dplyr library ----
 library(dplyr)
 
-## Check plausibility ----
+## The workflow ----
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -640,9 +641,9 @@ anthro.01 |>
 
 At this point, you have reached the end of your workflow ✨.
 
-## Plausibility check on the raw MUAC values
+## Plausibility check of raw MUAC values
 
-We will assess the plausibility of the MUAC data through it's raw values when the variable age is not available in the dataset. This is a job assigned to `mw_plausibility_check_muac()`. The workflow for this check is the shortest one.
+We will assess the plausibility of raw MUAC data through it's raw values when the variable age is not available in the dataset. This is a job assigned to `mw_plausibility_check_muac()`. The workflow for this check is the shortest one.
 
 ### Data wrangling
 
@@ -780,7 +781,7 @@ anthro.01 |>
 ```
 
 
-When working on multiple-area data, we approach the task the same way as demonstrated above:
+When working on multiple area data, we approach the task the same way as demonstrated above:
 
 ```{r}
 #| label: by_area

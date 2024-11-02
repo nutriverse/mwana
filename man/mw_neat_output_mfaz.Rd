@@ -3,20 +3,20 @@
 \name{mw_neat_output_mfaz}
 \alias{mw_neat_output_mfaz}
 \title{Clean and format the output table returned from the MFAZ plausibility check
-for improved clarity and readability.}
+for improved clarity and readability}
 \usage{
 mw_neat_output_mfaz(df)
 }
 \arguments{
-\item{df}{A data frame containing the summary table returned by the package's
-MFAZ plausibility checker function. Must be of class \code{data.frame}.}
+\item{df}{A data frame containing the summary table returned by this package's
+MFAZ plausibility check function. Must be of class \code{data.frame}.}
 }
 \value{
 A data frame of the same length and width as \code{df}, with column names and
 values formatted for clarity.
 }
 \description{
-Clean and format the output table returned from the WFHZ plausibility check
+Clean and format the output table returned from the MFAZ plausibility check
 for improved clarity and readability. It converts scientific notations to standard
 notations, round values and rename columns to meaningful names.
 }

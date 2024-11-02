@@ -7,8 +7,8 @@
 mw_plausibility_check_muac(df, sex, muac, flags)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to check. It should have been
-wrangled using this package's wranglers.}
+\item{df}{A dataset object of class \code{data.frame} to check. It must have been
+wrangled using this package's wrangling function for MUAC.}
 
 \item{sex}{A vector of class \code{numeric} of child's sex.}
 
@@ -21,9 +21,9 @@ A summarised table of class \code{data.frame}, of length 9 and width 1, for
 the plausibility test results and their respective acceptability ratings..
 }
 \description{
-Check the overall plausibility and acceptability of raw MUAC data through
-structured test suite encompassing sampling and measurement-related biases in
-the dataset. The test suite in this function follows the recommendation made
+Check the overall plausibility and acceptability of raw MUAC data through a
+structured test suite encompassing sampling and measurement-related biases checks
+in the dataset. The test suite in this function follows the recommendation made
 by Bilukha, O., & Kianian, B. (2023).
 }
 \examples{

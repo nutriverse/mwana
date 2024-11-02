@@ -2,7 +2,7 @@
 % Please edit documentation in R/quality_scorers.R
 \name{score_overall_quality}
 \alias{score_overall_quality}
-\title{Get the overall acceptability score from the acceptability classification scores}
+\title{Get the overall acceptability score from the acceptability rate scores}
 \usage{
 score_overall_quality(
   cl_flags,
@@ -22,10 +22,10 @@ score_overall_quality(
 calculations should be made.}
 }
 \value{
-A vector of class \code{numeric}, of length 1, for the quality score.
+A vector of class \code{numeric}, of length 1, for the overall
+data quality (acceptability) score.
 }
 \description{
-Calculate the total amount of penalty points based on each plausibility test
-result acceptability classification for WFHZ and MFAZ.
+Get the overall acceptability score from the acceptability rate scores
 }
 \keyword{internal}

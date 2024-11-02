@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A streamlined and comprehensive implementation of the Standardized Monitoring and Assessment of Relief and Transition (SMART) Methodology \url{https://smartmethodology.org/} guidelines for data quality checks and prevalence estimation, with enhanced programmable process particularly when handling large multiple datasets.
+A streamlined and comprehensive implementation of the Standardized Monitoring and Assessment of Relief and Transition (SMART) Methodology \url{https://smartmethodology.org/} guidelines for data quality checks and prevalence estimation, with enhanced programmable process particularly when handling multiple area datasets.
 }
 \seealso{
 Useful links:

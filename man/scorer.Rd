@@ -4,8 +4,8 @@
 \alias{score_std_flags}
 \alias{score_agesexr_dps}
 \alias{score_skewkurt}
-\title{Score the acceptability classification of the standard deviation and percentage
-of flagged data test results}
+\title{Score the acceptability rating of the check results that constitutes the
+plausibility check suite}
 \usage{
 score_std_flags(x)
 
@@ -14,17 +14,24 @@ score_agesexr_dps(x)
 score_skewkurt(x)
 }
 \arguments{
-\item{x}{A vector of class \code{character} of acceptability classification of the
-plausibility test results.}
+\item{x}{A vector of class \code{character} containing the acceptability rate of
+a given test check. If the class does not match the expected type, the function
+will stop execution and return an error message indicating the type of mismatch.}
 }
 \value{
-A vector of class \code{integer} of the same length as \code{x} for the score.
+A vector of class \code{integer} of the same length as \code{x} for the
+acceptability score.
 }
 \description{
-Attribute a penalty point based on the acceptability classification in which
-the plausibility test result falls.
+Attribute a score, also known as penalty point, for a given rate of acceptability
+of the standard deviation, proportion of flagged records, age and sex ratio,
+skewness, kurtosis and digit preference score check results.
+
+The scoring criteria and thresholds follows the standards in the SMART
+plausibility check.
 }
-\details{
-The scoring criteria is as in \href{https://smartmethodology.org/}{SMART Plausibility checks}.
+\references{
+SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief
+and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
 }
 \keyword{internal}

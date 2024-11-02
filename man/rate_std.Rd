@@ -2,7 +2,7 @@
 % Please edit documentation in R/quality_raters.R
 \name{rate_std}
 \alias{rate_std}
-\title{Rate the acceptability of the proportion of flagged records}
+\title{Rate the acceptability of the standard deviation}
 \usage{
 rate_std(sd, .of = c("zscores", "raw_muac"))
 }
@@ -19,7 +19,7 @@ A vector of class \code{factor} of the same length as input, for the
 acceptability rate.
 }
 \description{
-Rate the acceptability of the proportion of flagged records in WFHZ, MFAZ,
-and raw MUAC data.
+Rate the acceptability of the standard deviation of WFHZ, MFAZ, and raw MUAC data.
+Rating follows the SMART methodology criteria.
 }
 \keyword{internal}

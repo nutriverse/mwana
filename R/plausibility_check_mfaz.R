@@ -3,9 +3,9 @@
 #' Check the plausibility and acceptability of muac-for-age z-score (MFAZ) data
 #'
 #' @description
-#' Check the overall plausibility and acceptability of MFAZ data through
-#' structured test suite encompassing sampling and measurement-related biases in
-#' the dataset. The test suite in this function follows the recommendation made
+#' Check the overall plausibility and acceptability of MFAZ data through a
+#' structured test suite encompassing sampling and measurement-related biases checks
+#' in the dataset. The test suite in this function follows the recommendation made
 #' by Bilukha, O., & Kianian, B. (2023) on the plausibility of
 #' constructing a comprehensive plausibility check similar to WFHZ to evaluate the
 #' acceptability of MUAC data when the variable age exists in the dataset.
@@ -69,8 +69,8 @@
 #'   age = age
 #' )
 #'
-#' @export
 #'
+#' @export
 mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
   ## Summarise statistics  ----
   df <- df |>
@@ -111,15 +111,15 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #'
 #'
 #' Clean and format the output table returned from the MFAZ plausibility check
-#' for improved clarity and readability.
+#' for improved clarity and readability
 #'
 #' @description
-#' Clean and format the output table returned from the WFHZ plausibility check
+#' Clean and format the output table returned from the MFAZ plausibility check
 #' for improved clarity and readability. It converts scientific notations to standard
 #' notations, round values and rename columns to meaningful names.
 #'
-#' @param df A data frame containing the summary table returned by the package's
-#' MFAZ plausibility checker function. Must be of class `data.frame`.
+#' @param df A data frame containing the summary table returned by this package's
+#' MFAZ plausibility check function. Must be of class `data.frame`.
 #'
 #' @returns
 #' A data frame of the same length and width as `df`, with column names and
@@ -160,8 +160,6 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #'
 #' @export
 #'
-#'
-
 mw_neat_output_mfaz <- function(df) {
 
   ## Format data frame ----

@@ -2,13 +2,13 @@
 #' Check the plausibility and acceptability of raw MUAC data
 #'
 #' @description
-#' Check the overall plausibility and acceptability of raw MUAC data through
-#' structured test suite encompassing sampling and measurement-related biases in
-#' the dataset. The test suite in this function follows the recommendation made
+#' Check the overall plausibility and acceptability of raw MUAC data through a
+#' structured test suite encompassing sampling and measurement-related biases checks
+#' in the dataset. The test suite in this function follows the recommendation made
 #' by Bilukha, O., & Kianian, B. (2023).
 #'
-#' @param df A dataset object of class `data.frame` to check. It should have been
-#' wrangled using this package's wranglers.
+#' @param df A dataset object of class `data.frame` to check. It must have been
+#' wrangled using this package's wrangling function for MUAC.
 #'
 #' @param sex A vector of class `numeric` of child's sex.
 #'
@@ -85,8 +85,8 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
 #' MUAC data for improved clarity and readability. It converts scientific notations
 #' to standard notations, round values and rename columns to meaningful names.
 #'
-#' @param df A data frame containing the summary table returned by the package's
-#' plausibility checker function for raw MUAC data. Must be of class `data.frame`.
+#' @param df A data frame containing the summary table returned by this package's
+#' plausibility check function for raw MUAC data. Must be of class `data.frame`.
 #'
 #' @returns
 #' A data frame of the same length and width as `df`, with column names and

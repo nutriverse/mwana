@@ -1,15 +1,18 @@
 #'
-#' Rate the acceptability of the standard deviation
+#'
+#' Rate the acceptability of the proportion of flagged records
 #'
 #' @description
-#' Rate the acceptability of the standard deviation in WFHZ, MFAZ, and raw MUAC data.
+#' Rate the acceptability of the proportion of flagged records in WFHZ, MFAZ,
+#' and raw MUAC data following the SMART methodology criteria.
 #'
-#' @param p A vector of class `double`, containing proportions of flagged records in
-#' the dataset. If the class does not match the expected type, the function will stop
-#' execution and return an error message indicating the type of mismatch.
+#' @param p A vector of class `double`, containing the proportions of flagged
+#' records in the dataset. If the class does not match the expected type, the
+#' function will stop execution and return an error message indicating the type
+#'  of mismatch.
 #'
-#' @param .in Specifies the dataset where the rating should be done, with options: "wfhz",
-#' "mfaz", or "raw_muac".
+#' @param .in Specifies the dataset where the rating should be done,
+#' with options: "wfhz", "mfaz", or "raw_muac".
 #'
 #' @returns A vector of class `factor` of the same length as input, for the
 #' acceptability rate.
@@ -54,12 +57,11 @@ rate_propof_flagged <- function(p, .in = c("mfaz", "wfhz", "raw_muac")) {
 
 
 #'
-#'
-#' Rate the acceptability of the proportion of flagged records
+#' Rate the acceptability of the standard deviation
 #'
 #' @description
-#' Rate the acceptability of the proportion of flagged records in WFHZ, MFAZ,
-#' and raw MUAC data.
+#' Rate the acceptability of the standard deviation of WFHZ, MFAZ, and raw MUAC data.
+#' Rating follows the SMART methodology criteria.
 #'
 #' @param sd A vector of class `double`, containing values of the standard deviation
 #' from the dataset. If the class does not match the expected type, the function
@@ -169,7 +171,7 @@ rate_skewkurt <- function(sk) {
 
 #'
 #'
-#' Rate the overall data acceptability score
+#' Rate the overall acceptability of the data
 #'
 #' @description
 #' Rate the overall data acceptability score into "Excellent", "Good", "Acceptable"
@@ -180,7 +182,7 @@ rate_skewkurt <- function(sk) {
 #' will stop execution and return an error message indicating the type of mismatch.
 #'
 #' @returns A vector of class `factor` of the same length as `q`, providing an overall
-#' rating of data acceptability.
+#' rate of acceptability of the data.
 #'
 #' @keywords internal
 #'

@@ -72,7 +72,9 @@ summaries of the outputs.
 
 - `mwana` performs plausibility checks on weight-for-height z-score
   (WFHZ)-based data by mimicking the SMART plausibility checkers in ENA
-  for SMART software, their scoring and classification criterion.
+  for SMART software, their scoring and classification criterion. Read
+  guide
+  [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-wfhz-data).
 
 - It performs, as well, plausibility checks on MUAC data. For this,
   `mwana` integrates recent advances in using MUAC-for-age z-score
@@ -81,7 +83,8 @@ summaries of the outputs.
   performs plausibility checks similar to those in WFHZ, with a few
   differences in the scoring criteria for flagged data. Otherwise, when
   the variables age is missing, a similar test suit used in the current
-  version of ENA is performed. Read details here.
+  version of ENA is performed. Read guide
+  [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-mfaz-data).
 
 #### A useful workflow for plausibility check using `mwana`
 
@@ -101,18 +104,21 @@ result.
 
 `mwana` computes prevalence for:
 
-- Wasting on the basis of WFHZ and/edema (Read vignettes)
-- Wasting on the basis of the raw MUAC values and/or edema: here, when
+- Wasting on the basis of WFHZ and/edema; read the guide
+  [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-wfhz)
+- Wasting on the basis of raw MUAC values and/or edema: here, when
   variable age is available, mwana applies MFAZ flags, otherwise it
   applies the flagging criteria around the raw MUAC values, to exclude
   outliers before computing prevalence, but the actual prevalence is
-  done on the raw values. (Read link to the specific section in the
-  vignettes)
+  done on the raw values; read the guide
+  [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-muac).
 - Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ
-  flags. (Read link to the specific section in the vignettes)
+  flags; read guide
+  [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz).
 - Combined prevalence of wasting: here a concept of combined flags is
-  used to streamline the flags removed in WFHZ and those in MUAC. (Read
-  link to the specific section in the vignettes).
+  used to streamline the flags removed in WFHZ and those in MUAC; read
+  guide
+  [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
 
 `mwana` provides weighted prevalence analysis, if needed. And this is
 controlled by the user. This is possible in all calculators, including
@@ -122,7 +128,8 @@ In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow,
 `mwana` provides a handy function for checking if the minimum sample
 size requirements in a given area were met on the basis of the
 methodology used to collect the data: survey, screening or sentinel
-sites. (Check out the vignette).
+sites. Read guide
+[here](https://nutriverse.io/mwana/articles/sample_size.html).
 
 > [!TIP]
 >
@@ -163,20 +170,20 @@ function as follows:
 
 ``` r
 citation("mwana")
-#> To cite ipccheckr: in publications use:
+#> To cite mwana: in publications use:
 #> 
-#>   Tomás Zaba, Ernest Guevarra (2024). _ipccheckr: Toolkit for
-#>   Performing IPC Acute Malnutrition-related Data Checks_. R package
-#>   version 0.0.0.9000, <https://github.com/tomaszaba/ipccheckr>.
+#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: Utilities for Analysing
+#>   Children's Nutritional Status_. R package version 0.0.0.9000,
+#>   <https://github.com/nutriverse/mwana>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     title = {ipccheckr: Toolkit for Performing IPC Acute Malnutrition-related Data Checks},
+#>     title = {mwana: Utilities for Analysing Children's Nutritional Status},
 #>     author = {{Tomás Zaba} and {Ernest Guevarra}},
 #>     year = {2024},
 #>     note = {R package version 0.0.0.9000},
-#>     url = {https://github.com/tomaszaba/ipccheckr},
+#>     url = {https://github.com/nutriverse/mwana},
 #>   }
 ```
 

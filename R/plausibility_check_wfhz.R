@@ -2,9 +2,9 @@
 #' Check the plausibility and acceptability of weight-for-height z-score (WFHZ) data
 #'
 #' @description
-#' Check the overall plausibility and acceptability of WFHZ data through
-#' structured test suite encompassing sampling and measurement-related biases in
-#' the dataset. This test suite, including the criteria and corresponding rating of
+#' Check the overall plausibility and acceptability of WFHZ data through a
+#' structured test suite encompassing sampling and measurement-related biases checks
+#' in the dataset. The test suite, including the criteria and corresponding rating of
 #' acceptability, follows the standards in the  SMART plausibility check. The only
 #' exception is the exclusion of MUAC checks. MUAC is checked separately using more
 #' comprehensive test suite as well.
@@ -26,7 +26,7 @@
 #'
 #' @returns
 #' A summarised table of class `data.frame`, of length 19 and width 1, for
-#' the plausibility test results and their respective acceptability ratings.
+#' the plausibility test results and their respective acceptability rates.
 #'
 #' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
 #' [mw_wrangle_age()]
@@ -63,6 +63,7 @@
 #'   height = height,
 #'   flags = flag_wfhz
 #' )
+#'
 #'
 #' @export
 #'
@@ -114,15 +115,15 @@ mw_plausibility_check_wfhz <- function(df,
 #'
 #'
 #' Clean and format the output table returned from the WFHZ plausibility check
-#' for improved clarity and readability.
+#' for improved clarity and readability
 #'
 #' @description
 #' Clean and format the output table returned from the WFHZ plausibility check
 #' for improved clarity and readability. It converts scientific notations to standard
 #' notations, round values and rename columns to meaningful names.
 #'
-#' @param df A data frame containing the summary table returned by the package's
-#' WFHZ plausibility checker function. Must be of class `data.frame`.
+#' @param df A data frame containing the summary table returned by this package's
+#' WFHZ plausibility check function. Must be of class `data.frame`.
 #'
 #' @returns
 #' A data frame of the same length and width as `df`, with column names and
@@ -160,8 +161,8 @@ mw_plausibility_check_wfhz <- function(df,
 #' ## Now neat the output table ----
 #' mw_neat_output_wfhz(df = pl)
 #'
-#' @export
 #'
+#' @export
 mw_neat_output_wfhz <- function(df) {
 
 ## Format data frame ----

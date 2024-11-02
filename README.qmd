@@ -47,9 +47,9 @@ It automates plausibility checks and prevalence analyses and respective summarie
 
 ### Plausibility checks. 
 
-  + `mwana` performs plausibility checks on weight-for-height z-score (WFHZ)-based data by mimicking the SMART plausibility checkers in ENA for SMART software, their scoring and classification criterion.  
+  + `mwana` performs plausibility checks on weight-for-height z-score (WFHZ)-based data by mimicking the SMART plausibility checkers in ENA for SMART software, their scoring and classification criterion. Read guide [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-wfhz-data).
 
-  + It performs, as well, plausibility checks on MUAC data. For this, `mwana` integrates recent advances in using MUAC-for-age z-score (MFAZ) for assessing the plausibility and the acceptability of MUAC data. In this way, when the variable age is available: `mwana` performs plausibility checks similar to those in WFHZ, with a few differences in the scoring criteria for flagged data. Otherwise, when the variables age is missing, a similar test suit used in the current version of ENA is performed. Read details here.
+  + It performs, as well, plausibility checks on MUAC data. For this, `mwana` integrates recent advances in using MUAC-for-age z-score (MFAZ) for assessing the plausibility and the acceptability of MUAC data. In this way, when the variable age is available: `mwana` performs plausibility checks similar to those in WFHZ, with a few differences in the scoring criteria for flagged data. Otherwise, when the variables age is missing, a similar test suit used in the current version of ENA is performed. Read guide [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-mfaz-data).
 
 #### A useful workflow for plausibility check using `mwana`
 ```{r}
@@ -107,14 +107,14 @@ digraph mwana {
 
 `mwana` computes prevalence for: 
 
-  + Wasting on the basis of WFHZ and/edema (Read vignettes) 
-  + Wasting on the basis of the raw MUAC values and/or edema: here, when variable age is available, mwana applies MFAZ flags, otherwise it applies the flagging criteria around the raw MUAC values, to exclude outliers before computing prevalence, but the actual prevalence is done on the raw values. (Read link to the specific section in the vignettes)
-  + Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ flags. (Read link to the specific section in the vignettes)
-  + Combined prevalence of wasting: here a concept of combined flags is used to streamline the flags removed in WFHZ and those in MUAC. (Read link to the specific section in the vignettes).
+  + Wasting on the basis of WFHZ and/edema; read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-wfhz) 
+  + Wasting on the basis of raw MUAC values and/or edema: here, when variable age is available, mwana applies MFAZ flags, otherwise it applies the flagging criteria around the raw MUAC values, to exclude outliers before computing prevalence, but the actual prevalence is done on the raw values; read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-muac).
+  + Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ flags; read guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz).
+  + Combined prevalence of wasting: here a concept of combined flags is used to streamline the flags removed in WFHZ and those in MUAC; read guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
 
 `mwana` provides weighted prevalence analysis, if needed. And this is controlled by the user. This is possible in all calculators, including for MUAC, combined, which is not currently available in ENA for SMART. 
 
-In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met on the basis of the methodology used to collect the data: survey, screening or sentinel sites. (Check out the vignette).
+In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met on the basis of the methodology used to collect the data: survey, screening or sentinel sites. Read guide [here](https://nutriverse.io/mwana/articles/sample_size.html).
 
 :::{.callout-tip}
 If you are undertaking a research and you want to wrangle your data before including in your statistical models, etc, `mwana` is a great helper.

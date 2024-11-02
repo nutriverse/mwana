@@ -22,9 +22,9 @@ A summarised table of class \code{data.frame}, of length 17 and width 1, for
 the plausibility test results and their respective acceptability ratings.
 }
 \description{
-Check the overall plausibility and acceptability of MFAZ data through
-structured test suite encompassing sampling and measurement-related biases in
-the dataset. The test suite in this function follows the recommendation made
+Check the overall plausibility and acceptability of MFAZ data through a
+structured test suite encompassing sampling and measurement-related biases checks
+in the dataset. The test suite in this function follows the recommendation made
 by Bilukha, O., & Kianian, B. (2023) on the plausibility of
 constructing a comprehensive plausibility check similar to WFHZ to evaluate the
 acceptability of MUAC data when the variable age exists in the dataset.
@@ -61,6 +61,7 @@ mw_plausibility_check_mfaz(
   muac = muac,
   age = age
 )
+
 
 }
 \references{

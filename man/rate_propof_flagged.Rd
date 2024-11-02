@@ -2,23 +2,25 @@
 % Please edit documentation in R/quality_raters.R
 \name{rate_propof_flagged}
 \alias{rate_propof_flagged}
-\title{Rate the acceptability of the standard deviation}
+\title{Rate the acceptability of the proportion of flagged records}
 \usage{
 rate_propof_flagged(p, .in = c("mfaz", "wfhz", "raw_muac"))
 }
 \arguments{
-\item{p}{A vector of class \code{double}, containing proportions of flagged records in
-the dataset. If the class does not match the expected type, the function will stop
-execution and return an error message indicating the type of mismatch.}
+\item{p}{A vector of class \code{double}, containing the proportions of flagged
+records in the dataset. If the class does not match the expected type, the
+function will stop execution and return an error message indicating the type
+of mismatch.}
 
-\item{.in}{Specifies the dataset where the rating should be done, with options: "wfhz",
-"mfaz", or "raw_muac".}
+\item{.in}{Specifies the dataset where the rating should be done,
+with options: "wfhz", "mfaz", or "raw_muac".}
 }
 \value{
 A vector of class \code{factor} of the same length as input, for the
 acceptability rate.
 }
 \description{
-Rate the acceptability of the standard deviation in WFHZ, MFAZ, and raw MUAC data.
+Rate the acceptability of the proportion of flagged records in WFHZ, MFAZ,
+and raw MUAC data following the SMART methodology criteria.
 }
 \keyword{internal}

@@ -3,13 +3,13 @@
 \name{mw_neat_output_wfhz}
 \alias{mw_neat_output_wfhz}
 \title{Clean and format the output table returned from the WFHZ plausibility check
-for improved clarity and readability.}
+for improved clarity and readability}
 \usage{
 mw_neat_output_wfhz(df)
 }
 \arguments{
-\item{df}{A data frame containing the summary table returned by the package's
-WFHZ plausibility checker function. Must be of class \code{data.frame}.}
+\item{df}{A data frame containing the summary table returned by this package's
+WFHZ plausibility check function. Must be of class \code{data.frame}.}
 }
 \value{
 A data frame of the same length and width as \code{df}, with column names and
@@ -51,5 +51,6 @@ pl <- mw_plausibility_check_wfhz(
 
 ## Now neat the output table ----
 mw_neat_output_wfhz(df = pl)
+
 
 }

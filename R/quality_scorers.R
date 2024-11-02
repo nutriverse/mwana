@@ -1,24 +1,32 @@
 #'
-#' Score the acceptability classification of the standard deviation and percentage
-#' of flagged data test results
+#' Score the acceptability rating of the check results that constitutes the
+#' plausibility check suite
 #'
 #' @description
-#' Attribute a penalty point based on the acceptability classification in which
-#' the plausibility test result falls.
+#' Attribute a score, also known as penalty point, for a given rate of acceptability
+#' of the standard deviation, proportion of flagged records, age and sex ratio,
+#' skewness, kurtosis and digit preference score check results.
 #'
-#' @param x A vector of class `character` of acceptability classification of the
-#' plausibility test results.
+#' The scoring criteria and thresholds follows the standards in the SMART
+#' plausibility check.
 #'
-#' @returns A vector of class `integer` of the same length as `x` for the score.
+#' @param x A vector of class `character` containing the acceptability rate of
+#' a given test check. If the class does not match the expected type, the function
+#' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @details
-#' The scoring criteria is as in [SMART Plausibility checks](https://smartmethodology.org/).
+#' @returns A vector of class `integer` of the same length as `x` for the
+#' acceptability score.
+#'
+#' @references
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
+#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
 #'
 #' @rdname scorer
 #'
 #' @keywords internal
 #'
 score_std_flags <- function(x) {
+
   ## Enforce the class of `x` ----
   if (!(is.character(x) | is.factor(x))) {
     stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
@@ -78,16 +86,13 @@ score_skewkurt <- function(x) {
 
 #'
 #'
-#' Get the overall acceptability score from the acceptability classification scores
-#'
-#' @description
-#' Calculate the total amount of penalty points based on each plausibility test
-#' result acceptability classification for WFHZ and MFAZ.
+#' Get the overall acceptability score from the acceptability rate scores
 #'
 #' @param .for A choice between "wfhz" and "mfaz" for the basis on which the
 #' calculations should be made.
 #'
-#' @returns A vector of class `numeric`, of length 1, for the quality score.
+#' @returns A vector of class `numeric`, of length 1, for the overall
+#' data quality (acceptability) score.
 #'
 #' @keywords internal
 #'

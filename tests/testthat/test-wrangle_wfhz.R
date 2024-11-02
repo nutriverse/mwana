@@ -2,7 +2,7 @@
 testthat::test_that(
   "mw_wrangle_wfhz() works as designed",
   {
-    ## Wrangle WFHZ data ---
+    ## Wrangle WFHZ data ----
     df <- anthro.01 |>
       mw_wrangle_wfhz(
         sex = sex,
