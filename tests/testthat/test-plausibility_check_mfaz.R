@@ -25,8 +25,7 @@ testthat::test_that(
         flags = flag_mfaz,
         sex = sex,
         muac = muac,
-        age = age,
-        area = area
+        age = age
       )
 
     ## Tests ----
@@ -41,6 +40,52 @@ testthat::test_that(
         "dps", "dps_class", "sd", "sd_class", "skew", "skew_class",
         "kurt", "kurt_class", "quality_score", "quality_class"
       ) %in% names(pl))
+    )
+  }
+)
+
+# Test check: mw_neat_output_mfaz() ----
+testthat::test_that(
+  "mw_neat_output_mfaz() works",
+  {
+    ## Workflow ----
+    quality <- anthro.01 |>
+      mw_wrangle_age(
+        dos = dos,
+        dob = dob,
+        age = age,
+        .decimals = 2
+      ) |>
+      mw_wrangle_muac(
+        sex = sex,
+        age = age,
+        muac = muac,
+        .recode_sex = TRUE,
+        .recode_muac = TRUE,
+        .to = "cm"
+      ) |>
+      mw_plausibility_check_mfaz(
+        flags = flag_mfaz,
+        sex = sex,
+        muac = muac,
+        age = age
+      ) |>
+      mw_neat_output_mfaz()
+
+    ## Tests ----
+    testthat::expect_s3_class(quality, "tbl_df")
+    testthat::expect_equal(ncol(quality), 17)
+    testthat::expect_equal(nrow(quality), 1)
+    testthat::expect_true(
+      all(c("Total children", "Flagged data (%)",
+            "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
+            "Age ratio (p)", "Class. of age ratio", "DPS (#)",
+            "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
+            "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
+            "Class. of kurtosis", "Overall score", "Overall quality"
+      ) %in% names(quality)
+
+      )
     )
   }
 )

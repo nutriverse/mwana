@@ -41,13 +41,15 @@ testthat::test_that(
     testthat::expect_error(
       get_age_months(df[["surv_date"]], df[["birdate"]]),
       regexp = paste0(
-        "`dob` must be a vector of class 'Date'; not ", shQuote(class(df[["birdate"]])), ". Please try again."
+        "`dob` must be a vector of class 'Date'; not ",
+        shQuote(class(df[["birdate"]])), ". Please try again."
       )
     )
     testthat::expect_error(
       get_age_months(df[["svdate"]], df[["bir_date"]]),
       regexp = paste0(
-        "`dos` must be a vector of class 'Date'; not ", shQuote(class(df[["svdate"]])), ". Please try again."
+        "`dos` must be a vector of class 'Date'; not ",
+        shQuote(class(df[["svdate"]])), ". Please try again."
       )
     )
   }
@@ -80,7 +82,8 @@ testthat::test_that(
     testthat::expect_error(
       flag_outliers(wrong_vector, .from = "zscores"),
       regexp = paste0(
-        "`x` must be of class numeric; not a ", shQuote(class(wrong_vector)), ". Please try again."
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
       )
     )
   }
@@ -110,7 +113,8 @@ testthat::test_that(
     testthat::expect_error(
       flag_outliers(wrong_vector, .from = "raw_muac"),
       regexp = paste0(
-        "`x` must be of class numeric; not a ", shQuote(class(wrong_vector)), ". Please try again."
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
       )
     )
   }
@@ -145,7 +149,8 @@ testthat::test_that(
     testthat::expect_error(
       remove_flags(wrong_vector, "raw_muac"),
       regexp = paste0(
-        "`x` must be of class numeric; not a ", shQuote(class(wrong_vector)), ". Please try again."
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
       )
     )
   }
@@ -171,7 +176,8 @@ testthat::test_that(
     testthat::expect_error(
       remove_flags(wrong_vector, "zscores"),
       regexp = paste0(
-        "`x` must be of class numeric; not a ", shQuote(class(wrong_vector)), ". Please try again."
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
       )
     )
   }

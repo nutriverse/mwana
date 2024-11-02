@@ -5,7 +5,7 @@
 #' Check the overall plausibility and acceptability of raw MUAC data through
 #' structured test suite encompassing sampling and measurement-related biases in
 #' the dataset. The test suite in this function follows the recommendation made
-#' by recommnded by Bilukha, O., & Kianian, B. (2023).
+#' by Bilukha, O., & Kianian, B. (2023).
 #'
 #' @param df A dataset object of class `data.frame` to check. It should have been
 #' wrangled using this package's wranglers.
@@ -16,8 +16,8 @@
 #'
 #' @param flags A vector of class `numeric` of flagged records.
 #'
-#' @returns A summarised `data.frame` of plausibility test results and their
-#' respective acceptability ratings.
+#' @returns A summarised table of class `data.frame`, of length 9 and width 1, for
+#' the plausibility test results and their respective acceptability ratings..
 #'
 #' @references
 #' Bilukha, O., & Kianian, B. (2023). Considerations for assessment of measurement
@@ -44,7 +44,7 @@
 #'
 #' ## Then run the plausibility check ----
 #' mw_plausibility_check_muac(
-#'   df = data_muac,
+#'   df = df_muac,
 #'   flags = flag_muac,
 #'   sex = sex,
 #'   muac = muac
@@ -68,6 +68,73 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
       .groups = "drop"
     )
 
+  ## Return data frame ----
+  df
+}
+
+
+
+#'
+#'
+#'
+#' Clean and format the output table returned from the MUAC plausibility check
+#' for improved clarity and readability.
+#'
+#' @description
+#' Clean and format the output table returned from the plausibility check of raw
+#' MUAC data for improved clarity and readability. It converts scientific notations
+#' to standard notations, round values and rename columns to meaningful names.
+#'
+#' @param df A data frame containing the summary table returned by the package's
+#' plausibility checker function for raw MUAC data. Must be of class `data.frame`.
+#'
+#' @returns
+#' A data frame of the same length and width as `df`, with column names and
+#' values formatted for clarity.
+#'
+#' @examples
+#' ## First wranlge MUAC data ----
+#' df_muac <- mw_wrangle_muac(
+#'   df = anthro.01,
+#'   sex = sex,
+#'   muac = muac,
+#'   age = NULL,
+#'   .recode_sex = TRUE,
+#'   .recode_muac = FALSE,
+#'   .to = "none"
+#' )
+#'
+#' ## Then run the plausibility check ----
+#' pl_muac <- mw_plausibility_check_muac(
+#'   df = df_muac,
+#'   flags = flag_muac,
+#'   sex = sex,
+#'   muac = muac
+#' )
+#'
+#' ## Neat the output table ----
+#'
+#' mw_neat_output_muac(df = pl_muac)
+#'
+#' @export
+#'
+mw_neat_output_muac <- function(df) {
+
+  ## Format data frame ----
+  df <- df |>
+    mutate(
+      flagged = .data$flagged |>
+        label_percent(accuracy = 0.1, suffix = "%", decimal.mark = ".")(),
+      sex_ratio = .data$sex_ratio  |>  scales::label_pvalue()(),
+      sd = round(.data$sd, digits = 2),
+      dps = round(.data$dps)
+    ) |>
+    ## Rename columns ----
+  setNames(
+    c("Total children", "Flagged data (%)", "Class. of flagged data", "Sex ratio (p)",
+      "Class. of sex ratio", "DPS(#)", "Class. of DPS", "Standard Dev* (#)",
+      "Class. of standard dev")
+  )
   ## Return data frame ----
   df
 }

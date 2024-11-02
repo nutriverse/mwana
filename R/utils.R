@@ -130,7 +130,7 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 
   ## Enforce the class of `x` ----
   if (!is.numeric(x)) {
-    stop("`x` must be of class numeric; not a ", shQuote(class(x)), ". Please try again.")
+    stop("`x` must be of class numeric; not ", shQuote(class(x)), ". Please try again.")
   }
 
   ## Identify and flag outliers from zscores ----
@@ -177,7 +177,7 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 
   ## Enforce the class of `x` ----
   if (!is.numeric(x)) {
-    stop("`x` must be of class numeric; not a ", shQuote(class(x)), ". Please try again.")
+    stop("`x` must be of class numeric; not ", shQuote(class(x)), ". Please try again.")
   }
 
   ## Control flow based on `.from` ----

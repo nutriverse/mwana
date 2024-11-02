@@ -17,14 +17,14 @@ wrangled using this package's wranglers.}
 \item{flags}{A vector of class \code{numeric} of flagged records.}
 }
 \value{
-A summarised \code{data.frame} of plausibility test results and their
-respective acceptability ratings.
+A summarised table of class \code{data.frame}, of length 9 and width 1, for
+the plausibility test results and their respective acceptability ratings..
 }
 \description{
 Check the overall plausibility and acceptability of raw MUAC data through
 structured test suite encompassing sampling and measurement-related biases in
 the dataset. The test suite in this function follows the recommendation made
-by recommnded by Bilukha, O., & Kianian, B. (2023).
+by Bilukha, O., & Kianian, B. (2023).
 }
 \examples{
 ## First wranlge MUAC data ----
@@ -40,7 +40,7 @@ df_muac <- mw_wrangle_muac(
 
 ## Then run the plausibility check ----
 mw_plausibility_check_muac(
-  df = data_muac,
+  df = df_muac,
   flags = flag_muac,
   sex = sex,
   muac = muac

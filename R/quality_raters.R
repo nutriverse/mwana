@@ -23,7 +23,7 @@ rate_propof_flagged <- function(p, .in = c("mfaz", "wfhz", "raw_muac")) {
 
   ## Enforce the class of `p` ----
   if (!is.double(p)) {
-    stop("`p` must be of class double; not a ", shQuote(class(p)), ". Please try again.")
+    stop("`p` must be of class double; not ", shQuote(class(p)), ". Please try again.")
   }
 
   ## Rate the acceptability of the proportion of flagged records ----
@@ -81,7 +81,7 @@ rate_std <- function(sd, .of = c("zscores", "raw_muac")) {
 
   ## Enforce the class of `sd` ----
   if (!is.double(sd)) {
-    stop("`sd` must be of class double; not a ", shQuote(class(sd)), ". Please try again.")
+    stop("`sd` must be of class double; not ", shQuote(class(sd)), ". Please try again.")
   }
 
   if (.of == "zscores") {
@@ -125,7 +125,7 @@ rate_agesex_ratio <- function(p) {
 
   ## Enforce the class of `p` ----
   if (!is.double(p)) {
-    stop("`p` must be of class double; not a ", shQuote(class(p)), ". Please try again.")
+    stop("`p` must be of class double; not ", shQuote(class(p)), ". Please try again.")
   }
 
   ## Rate ----
@@ -154,7 +154,7 @@ rate_skewkurt <- function(sk) {
 
   ## Enforce the class of `sk` ----
   if (!is.double(sk)) {
-    stop("`sk` must be of class double; not a ", shQuote(class(sk)), ". Please try again.")
+    stop("`sk` must be of class double; not ", shQuote(class(sk)), ". Please try again.")
   }
 
   ## Rate ----
@@ -175,11 +175,11 @@ rate_skewkurt <- function(sk) {
 #' Rate the overall data acceptability score into "Excellent", "Good", "Acceptable"
 #' or "Problematic".
 #'
-#' @param p A vector of class `numeric` or `integer` of data acceptability scores.
+#' @param q A vector of class `numeric` or `integer` of data acceptability scores.
 #' If the class does not match the expected type, the function
 #' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @returns A vector of class `factor` of the same length as `p`, providing an overall
+#' @returns A vector of class `factor` of the same length as `q`, providing an overall
 #' rating of data acceptability.
 #'
 #' @keywords internal
@@ -188,7 +188,7 @@ rate_overall_quality <- function(q) {
 
   ## Enforce the class of `q` ----
   if (!(is.numeric(q)) | is.integer(q)) {
-    stop("`q` must be of class numeric or integer; not a ", shQuote(class(q)), ". Please try again.")
+    stop("`q` must be of class numeric or integer; not ", shQuote(class(q)), ". Please try again.")
   }
 
   ## Rate ----

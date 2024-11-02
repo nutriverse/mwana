@@ -20,12 +20,9 @@ score_overall_quality(
 \arguments{
 \item{.for}{A choice between "wfhz" and "mfaz" for the basis on which the
 calculations should be made.}
-
-\item{df}{A dataset object of class \code{data.frame} to calculate from.}
 }
 \value{
-A \code{data.frame} based on \code{df} with a new column named \code{"quality_score"}
-for the overall of acceptability (of quality) score.
+A vector of class \code{numeric}, of length 1, for the quality score.
 }
 \description{
 Calculate the total amount of penalty points based on each plausibility test

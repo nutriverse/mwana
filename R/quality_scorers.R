@@ -84,13 +84,10 @@ score_skewkurt <- function(x) {
 #' Calculate the total amount of penalty points based on each plausibility test
 #' result acceptability classification for WFHZ and MFAZ.
 #'
-#' @param df A dataset object of class `data.frame` to calculate from.
-#'
 #' @param .for A choice between "wfhz" and "mfaz" for the basis on which the
 #' calculations should be made.
 #'
-#' @returns A `data.frame` based on `df` with a new column named `"quality_score"`
-#' for the overall of acceptability (of quality) score.
+#' @returns A vector of class `numeric`, of length 1, for the quality score.
 #'
 #' @keywords internal
 #'

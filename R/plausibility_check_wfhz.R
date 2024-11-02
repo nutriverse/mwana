@@ -25,7 +25,7 @@
 #' @param flags A vector of class `numeric` of flagged records.
 #'
 #' @returns
-#' A summarised table of class `data.frame`, of length 19 and nrow 1, for
+#' A summarised table of class `data.frame`, of length 19 and width 1, for
 #' the plausibility test results and their respective acceptability ratings.
 #'
 #' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
@@ -61,7 +61,7 @@
 #'   age = age,
 #'   weight = weight,
 #'   height = height,
-#'   flags = flag_wfhz,
+#'   flags = flag_wfhz
 #' )
 #'
 #' @export
@@ -103,10 +103,93 @@ mw_plausibility_check_wfhz <- function(df,
         cl_kurt = .data$kurt_class,
         .for = "wfhz"
       ),
-      quality_class = rate_overall_quality(quality_score),
+      quality_class = rate_overall_quality(.data$quality_score),
       .groups = "drop"
     )
 
   ## Return data frame ----
   df
 }
+
+#'
+#'
+#' Clean and format the output table returned from the WFHZ plausibility check
+#' for improved clarity and readability.
+#'
+#' @description
+#' Clean and format the output table returned from the WFHZ plausibility check
+#' for improved clarity and readability. It converts scientific notations to standard
+#' notations, round values and rename columns to meaningful names.
+#'
+#' @param df A data frame containing the summary table returned by the package's
+#' WFHZ plausibility checker function. Must be of class `data.frame`.
+#'
+#' @returns
+#' A data frame of the same length and width as `df`, with column names and
+#' values formatted for clarity.
+#'
+#' @examples
+#' ## First wrangle age data ----
+#' data <- mw_wrangle_age(
+#'   df = anthro.01,
+#'   dos = dos,
+#'   dob = dob,
+#'   age = age,
+#'   .decimals = 2
+#' )
+#'
+#' ## Then wrangle WFHZ data ----
+#' data_wfhz <- mw_wrangle_wfhz(
+#'   df = data,
+#'   sex = sex,
+#'   weight = weight,
+#'   height = height,
+#'   .recode_sex = TRUE
+#' )
+#'
+#' ## Now run the plausibility check ----
+#' pl <- mw_plausibility_check_wfhz(
+#'   df = data_wfhz,
+#'   sex = sex,
+#'   age = age,
+#'   weight = weight,
+#'   height = height,
+#'   flags = flag_wfhz
+#' )
+#'
+#' ## Now neat the output table ----
+#' mw_neat_output_wfhz(df = pl)
+#'
+#' @export
+#'
+mw_neat_output_wfhz <- function(df) {
+
+## Format data frame ----
+df <- df |>
+  mutate(
+    flagged = .data$flagged |>
+      label_percent(accuracy = 0.1, suffix = "%", decimal.mark = ".")(),
+    sex_ratio = .data$sex_ratio |>
+      label_pvalue()(),
+    age_ratio = .data$age_ratio |>
+      label_pvalue()(),
+    sd = round(.data$sd, digits = 2),
+    dps_wgt = round(.data$dps_wgt),
+    dps_hgt = round(.data$dps_hgt),
+    skew = round(.data$skew, digits = 2),
+    kurt = round(.data$kurt, digits = 2)
+  ) |>
+  ## Rename columns ----
+setNames(
+  c("Total children", "Flagged data (%)", "Class. of flagged data",
+    "Sex ratio (p)", "Class. of sex ratio", "Age ratio (p)",
+    "Class. of age ratio", "DPS weight (#)", "Class. DPS weight",
+    "DPS height (#)", "Class. DPS height", "Standard Dev* (#)",
+    "Class. of standard dev", "Skewness* (#)", "Class. of skewness",
+    "Kurtosis* (#)", "Class. of kurtosis", "Overall score", "Overall quality"
+  )
+)
+## Return data frame ----
+df
+}
+

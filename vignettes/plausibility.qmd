@@ -24,19 +24,19 @@ In this vignette, we will learn how to use these functions and when to consider 
 
 We will begin the demonstration with the plausibility check that you are most familiar with and then proceed to the ones you are less familiar with. 
 
-## Plausibility check on WFHZ data
+## Plausibility check of WFHZ data
 
 We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to help you understand some key features about this function. 
 
-`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria as well. Beware though that there some small differences to have in mind: 
+`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
 
-  (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suit. This is simply due the fact that now you can run a more comprehensive test suit on MUAC;
+  (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC;
   
   (ii) `mw_plausibility_check_wfhz()` allows user to run checks on a multiple-area dataset at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
 
 That is it! Now we can begin delving into the "how to". 
 
-It is always a good practice to start off by inspecting the dataset. Let us check the first 6 rows of the dataset:
+It is always a good practice to start off by inspecting the dataset. Let's check the first 6 rows of the dataset:
 
 ```{r}
 #| label: data
@@ -54,13 +54,11 @@ head(anthro.01)
 head(anthro.01)
 ```
 
-As you see, the dataset has eleven variables and way how their respective values are presented. This is useful to inform the data wrangling workflow. 
-
-Now let's wrangle the data. 
+As you see, the dataset has eleven variables and the way how their respective values are presented. This is useful to inform the data wrangling workflow. 
 
 ### Data wrangling
 
-As mentioned somewhere above, before we supply data object to `mw_plausibility_check_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing this `help(mw_wrangle_age)` or `help(mw_wrangle_wfhz)` in `R` console. 
+As mentioned somewhere above, before we supply a data object to `mw_plausibility_check_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing  `help(mw_wrangle_age)` or `help(mw_wrangle_wfhz)` in `R` console. 
 
 #### Age {#sec-age}
 
@@ -97,7 +95,7 @@ age_mo <- anthro.01 |>
 head(age_mo)
 ```
 
-#### Wrangling all other required variables 
+#### Wrangling all other remaining variables 
 
 For this, we call `mw_wrangle_wfhz()` as follows: 
 
@@ -121,7 +119,7 @@ In this example, the argument `.recode_sex` was set to `TRUE`. That is because u
 If by any chance your sex variable is coded in any other different way than aforementioned, then you will have to recode it outside `mwana` utilities and then set `.recode_sex` accordingly.
 :::
 
-Under the hood, after recoding (or not) the sex variables, `mw_wrangle_wfhz()` computes the z-scores, then identifies outliers and flags them and adds them to the dataset through the `wfhz` and `flag_wfhz` variables. We can see this below: 
+Under the hood, after recoding (or not) the sex variables, `mw_wrangle_wfhz()` computes the z-scores, then identifies outliers and adds them to the dataset. Two new variables (`wfhz` and `flag_wfhz`) are created and added to the dataset. We can see this below: 
 
 ```{r}
 #| label: view_df
@@ -143,7 +141,7 @@ x <- wrangled_df |>
 head(x)
 ```
 
-### On to *de facto* WFHZ plausibility check
+### On to *de facto* plausibility check of WFHZ data
 
 We now can check the plausibility of our data. We do that by calling `mw_plausibility_check_wfhz()` function as demonstrated below: 
 
@@ -220,12 +218,11 @@ anthro.01 |>
   )
 ```
 
-As we can see, the returned output is a summary table of statistics and rating grouped by district. I think by now you do realize that this output is kind of what you used to construct through the extraction of details from each plausibility check reports from ENA for SMART software. You would do this district by district, jumping from ENA itself to Microsoft Word then to Excel spreadsheet - where you used to compile a table like the above back-and-forth.
-
-We can make this output more pretty and ready to share. We can achieve this by chaining `generate_pretty_table_wfhz()` to the previous pipeline: 
+As we can see, the returned output is a summary table of statistics and ratings. 
+We can make this output more pretty and ready to share. We can achieve this by chaining `mw_neat_output_wfhz()` to the previous pipeline: 
 
 ```{r}
-#| label: pretty_table
+#| label: neat_table
 #| echo: true
 #| eval: false
 
@@ -249,13 +246,13 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz
   ) |>
-  generate_pretty_table_wfhz()
+  mw_neat_output_wfhz()
 ```
 
 This will give us: 
 
 ```{r}
-#| label: view_pretty_table
+#| label: view_neat_table
 #| echo: false
 #| eval: true
 
@@ -279,19 +276,88 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz
   ) |>
-  generate_pretty_table_wfhz()
+  mw_neat_output_wfhz()
 ```
 
 An already formatted table, with scientific notations converted to standard notations, etc.
 
+When working on a multiple area dataset, for instance districts, we can check the plausibility of all districts in the dataset at once by simply chaining the previous workflow with `group_by()` function from the `dplyr` package. 
+
+```{r}
+#| label: pl_group_by
+#| echo: true
+#| eval: false
+#| message: false
+
+## Load library ----
+library(dplyr)
+
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |>
+  group_by(area) |> 
+  mw_plausibility_check_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz
+  ) |> 
+  mw_neat_output_wfhz()
+```
+
+This will return the following: 
+
+```{r}
+#| label: pl_group_by_view
+#| echo: false
+#| eval: true
+#| message: false
+
+library(dplyr)
+
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |>
+  group_by(area) |> 
+  mw_plausibility_check_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz
+  ) |> 
+  mw_neat_output_wfhz()
+```
+
 At this point, you have reached the end of your workflow 🎉 .
 
-## Plausibility check on MFAZ data
+## Plausibility check of MFAZ data
 
 We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our data.
 
 :::{.callout-note}
-The MFAZ plausibility check was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that in WFHZ for MFAZ, with a difference in the amount of flags to be considered: maximum of 2%.
+The plausibility check for MFAZ data was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that in WFHZ for MFAZ, with a difference in the amount of flags to be considered: maximum of 2%.
 :::
 
 We can run MFAZ plausibility check by calling `mw_plausibility_check_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with processing age; for this, we approach the same way as in @sec-age.
@@ -359,7 +425,7 @@ anthro.01 |>
 `mw_wrangle_muac()` accepts MUAC values in centimeters. This is why it takes the arguments `.recode_muac` and `.to` to control whether there is need to transform the variable `muac`function or not. Read the function documentation to learn how to control these two arguments.
 :::
 
-### On to *de facto* MFAZ plausibility check
+### On to *de facto* plausibility check of MFAZ data
 
 We achieve this by calling the `mw_plausibility_check_mfaz()` function: 
 
@@ -402,6 +468,9 @@ And this will return:
 #| label: view_pl_mfaz
 #| echo: false
 #| eval: true
+#| message: false
+
+library(dplyr)
 
 anthro.01 |>
   mw_wrangle_age(
@@ -418,7 +487,7 @@ anthro.01 |>
     .recode_muac = TRUE,
     .to = "cm"
   ) |>
-  dplyr::mutate(muac = recode_muac(muac, .to = "mm")) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
   mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
@@ -427,7 +496,7 @@ anthro.01 |>
   )
 ```
 
-We can also make this output pretty and ready to share it out. We just need to call `generate_pretty_table_mfaz()` and chain it to the pipeline:
+We can also make this output pretty and ready to share it out. We just need to call `mw_neat_output_mfaz()` and chain it to the pipeline:
 
 ```{r}
 #| label: pretty_mfaz
@@ -460,7 +529,7 @@ anthro.01 |>
     age = age,
     flags = flag_mfaz
   ) |>
-  generate_pretty_table_mfaz()
+  mw_neat_output_mfaz()
 ```
 
 This will return: 
@@ -493,7 +562,80 @@ anthro.01 |>
     age = age,
     flags = flag_mfaz
   ) |>
-  generate_pretty_table_mfaz()
+  mw_neat_output_mfaz()
+```
+
+We can also run checks on a multiple area dataset as follows: 
+
+```{r}
+#| label: grouped_mfaz
+#| echo: true
+#| eval: false
+
+## Load dplyr library ----
+library(dplyr)
+
+## Check plausibility ----
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    .to = "cm"
+  ) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
+  group_by(area) |> 
+  mw_plausibility_check_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz
+  ) |>
+  mw_neat_output_mfaz()
+```
+
+This will return: 
+
+```{r}
+#| label: grouped_mfaz_view
+#| echo: false
+#| message: false
+#| eval: true
+
+library(dplyr)
+
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    .to = "cm"
+  ) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
+  group_by(area) |> 
+  mw_plausibility_check_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz
+  ) |>
+  mw_neat_output_mfaz()
 ```
 
 At this point, you have reached the end of your workflow ✨.
@@ -590,10 +732,10 @@ anthro.01 |>
   )
 ```
 
-We can also return a formatted table with `generate_pretty_table_muac()`:
+We can also return a formatted table with `mw_neat_output_muac()`:
 
 ```{r}
-#| label: pretty_table_muac
+#| label: neat_table_muac
 #| echo: true
 #| eval: false
 
@@ -611,7 +753,7 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
-  generate_pretty_table_muac()
+  mw_neat_output_muac()
 ```
 
 And we get
@@ -634,11 +776,11 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
-  generate_pretty_table_muac()
+  mw_neat_output_muac()
 ```
 
 
-When working on multiple-area data, we will have to approach it slightly different. We use `dplyr::group_by()`:
+When working on multiple-area data, we approach the task the same way as demonstrated above:
 
 ```{r}
 #| label: by_area
@@ -664,7 +806,7 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
-  generate_pretty_table_muac()
+  mw_neat_output_muac()
 ```
 
 And we get:
@@ -691,5 +833,5 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
-  generate_pretty_table_muac()
+  mw_neat_output_muac()
 ```

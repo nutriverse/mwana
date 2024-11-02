@@ -20,7 +20,7 @@ mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
 \item{flags}{A vector of class \code{numeric} of flagged records.}
 }
 \value{
-A summarised table of class \code{data.frame}, of length 19 and nrow 1, for
+A summarised table of class \code{data.frame}, of length 19 and width 1, for
 the plausibility test results and their respective acceptability ratings.
 }
 \description{
@@ -60,7 +60,7 @@ mw_plausibility_check_wfhz(
   age = age,
   weight = weight,
   height = height,
-  flags = flag_wfhz,
+  flags = flag_wfhz
 )
 
 }

@@ -18,14 +18,14 @@ mw_plausibility_check_mfaz(df, sex, muac, age, flags)
 \item{flags}{A vector of class \code{numeric} of flagged records.}
 }
 \value{
-A summarised table of class \code{data.frame}, of length 17 and nrow 1, for
+A summarised table of class \code{data.frame}, of length 17 and width 1, for
 the plausibility test results and their respective acceptability ratings.
 }
 \description{
 Check the overall plausibility and acceptability of MFAZ data through
 structured test suite encompassing sampling and measurement-related biases in
 the dataset. The test suite in this function follows the recommendation made
-by recommnded by Bilukha, O., & Kianian, B. (2023) on the plausibility of
+by Bilukha, O., & Kianian, B. (2023) on the plausibility of
 constructing a comprehensive plausibility check similar to WFHZ to evaluate the
 acceptability of MUAC data when the variable age exists in the dataset.
 
