@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(ipccheckr)
+library(mwana)
 
-test_check("ipccheckr")
+test_check("mwana")
