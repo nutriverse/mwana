@@ -20,7 +20,7 @@ mw_wrangle_muac(
 
 \item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values should
 only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
-are coded in either of the aforementioned before to call the function. If input
+are coded in either of the aforementioned before calling the function. If input
 codes are different than expected, the function will stop execution and
 return an error message with the type of mismatch.}
 
@@ -52,38 +52,42 @@ detected based on the raw MUAC values.
 \description{
 Calculate z-scores for MUAC-for-age (MFAZ) and identify outliers based on
 the SMART methodology. When age is not supplied, wrangling will consist only
-in detecting outliers from the raw MUAC values.
+in detecting outliers from the raw MUAC values. The function only works after
+the age has been wrangled.
 }
 \examples{
-## When age is available ----
-anthro.02 |>
-  mw_wrangle_age(
-    dos = NULL,
-    dob = NULL,
-    age = age,
-    .decimals = 2
-  ) |>
-  mw_wrangle_muac(
-    sex = sex,
-    age = age,
-    muac = muac,
-    .recode_sex = TRUE,
-    .recode_muac = TRUE,
-    .to = "cm",
-    .decimals = 3
-  )
+## When age is available, wrangle it first before calling the function ----
+w <- mw_wrangle_age(
+  df = anthro.02,
+  dos = NULL,
+  dob = NULL,
+  age = age,
+  .decimals = 2
+)
+
+### Then apply the function to wrangle MUAC data ----
+mw_wrangle_muac(
+  df = w,
+  sex = sex,
+  age = age,
+  muac = muac,
+  .recode_sex = TRUE,
+  .recode_muac = TRUE,
+  .to = "cm",
+  .decimals = 3
+)
 
 ## When age is not available ----
-anthro.02 |>
-  mw_wrangle_muac(
-    sex = sex,
-    age = NULL,
-    muac = muac,
-    .recode_sex = TRUE,
-    .recode_muac = TRUE,
-    .to = "cm",
-    .decimals = 3
-  )
+mw_wrangle_muac(
+  df = anthro.02,
+  sex = sex,
+  age = NULL,
+  muac = muac,
+  .recode_sex = TRUE,
+  .recode_muac = TRUE,
+  .to = "cm",
+  .decimals = 3
+)
 
 }
 \references{

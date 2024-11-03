@@ -45,13 +45,13 @@
 #' )
 #'
 #' ## Apply the function ----
-#' df |>
-#'   mw_wrangle_age(
-#'     dos = surv_date,
-#'     dob = birth_date,
-#'     age = age,
-#'     .decimals = 3
-#'   )
+#' mw_wrangle_age(
+#'   df = df,
+#'   dos = surv_date,
+#'   dob = birth_date,
+#'   age = age,
+#'   .decimals = 3
+#' )
 #'
 #' @export
 #'
@@ -60,7 +60,6 @@ mw_wrangle_age <- function(df,
                            dob = NULL,
                            age,
                            .decimals = 2) {
-
   ## Difuse and evaluate arguments ----
   dos <- eval_tidy(enquo(dos), df)
   dob <- eval_tidy(enquo(dob), df)
@@ -69,7 +68,6 @@ mw_wrangle_age <- function(df,
 
   ## Calculate child's age in months then in days ----
   if (!is.null(dob) | !is.null(dos)) {
-
     ## Check if the class of vector "age" is "numeric" ----
     if (!is.numeric(age)) {
       stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
@@ -85,7 +83,7 @@ mw_wrangle_age <- function(df,
         age_days = round(.data$age * (365.25 / 12), .decimals)
       )
   } else {
-    ## Check if the class of vector "z" is "numeric" ----
+    ## Enforce the class of `age` ----
     if (!is.numeric(age)) {
       stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
     }

@@ -37,9 +37,21 @@ testthat::test_that(
 
     ## Tests ----
     testthat::expect_vector(x[["age_mo"]], size = 10)
-    testthat::expect_error(get_age_months(df[["surv_date"]], df[["birdate"]]))
-    testthat::expect_error(get_age_months(df[["svdate"]], df[["bir_date"]]))
     testthat::expect_true(is.numeric(k))
+    testthat::expect_error(
+      get_age_months(df[["surv_date"]], df[["birdate"]]),
+      regexp = paste0(
+        "`dob` must be a vector of class 'Date'; not ",
+        shQuote(class(df[["birdate"]])), ". Please try again."
+      )
+    )
+    testthat::expect_error(
+      get_age_months(df[["svdate"]], df[["bir_date"]]),
+      regexp = paste0(
+        "`dos` must be a vector of class 'Date'; not ",
+        shQuote(class(df[["svdate"]])), ". Please try again."
+      )
+    )
   }
 )
 
@@ -67,7 +79,13 @@ testthat::test_that(
     testthat::expect_vector(z, size = 50)
     testthat::expect_equal(z, y)
     testthat::expect_true(is.numeric(z))
-    testthat::expect_error(flag_outliers(wrong_vector, .from = "zscores"))
+    testthat::expect_error(
+      flag_outliers(wrong_vector, .from = "zscores"),
+      regexp = paste0(
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
+      )
+    )
   }
 )
 
@@ -92,7 +110,13 @@ testthat::test_that(
     testthat::expect_vector(y, size = 20)
     testthat::expect_equal(y, x)
     testthat::expect_true(is.numeric(y))
-    testthat::expect_error(flag_outliers(wrong_vector, .from = "raw_muac"))
+    testthat::expect_error(
+      flag_outliers(wrong_vector, .from = "raw_muac"),
+      regexp = paste0(
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
+      )
+    )
   }
 )
 
@@ -122,7 +146,13 @@ testthat::test_that(
     testthat::expect_length(w, 20)
     testthat::expect_equal(x, w)
     testthat::expect_true(is.numeric(w))
-    testthat::expect_error(remove_flags(wrong_vector, "raw_muac"))
+    testthat::expect_error(
+      remove_flags(wrong_vector, "raw_muac"),
+      regexp = paste0(
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
+      )
+    )
   }
 )
 
@@ -143,7 +173,13 @@ testthat::test_that(
     testthat::expect_length(w, 303)
     testthat::expect_contains(is.na(w), "TRUE")
     testthat::expect_true(is.numeric(w))
-    testthat::expect_error(remove_flags(wrong_vector, "zscores"))
+    testthat::expect_error(
+      remove_flags(wrong_vector, "zscores"),
+      regexp = paste0(
+        "`x` must be of class numeric; not ",
+        shQuote(class(wrong_vector)), ". Please try again."
+      )
+    )
   }
 )
 
@@ -168,8 +204,17 @@ testthat::test_that(
     testthat::expect_vector(w, 2267)
     testthat::expect_equal(w, p)
     testthat::expect_true(is.numeric(w))
-    testthat::expect_error(recode_muac(as.character(x), .to = "cm"))
-    testthat::expect_error(recode_muac(e, .to = "cm"))
+    testthat::expect_error(
+      recode_muac(as.character(x), .to = "cm"),
+      regexp = paste0(
+        "`x` must be of class 'numeric' or `integer` or 'double'; not ",
+        shQuote(class(as.character(x))), ". Please try again."
+      )
+    )
+    testthat::expect_error(
+      recode_muac(e, .to = "cm"),
+      regexp = paste0("MUAC values are not in millimeters. Please try again.")
+    )
   }
 )
 
@@ -191,7 +236,16 @@ testthat::test_that(
     testthat::expect_vector(w, 2267)
     testthat::expect_equal(w, m)
     testthat::expect_true(is.numeric(w))
-    testthat::expect_error(recode_muac(as.character(m), .to = "mm"))
-    testthat::expect_error(recode_muac(x, .to = "mm"))
+    testthat::expect_error(
+      recode_muac(as.character(m), .to = "mm"),
+      regexp = paste0(
+        "`x` must be of class 'numeric' or `integer` or 'double'; not ",
+        shQuote(class(as.character(x))), ". Please try again."
+      )
+    )
+    testthat::expect_error(
+      recode_muac(x, .to = "mm"),
+      regexp = "MUAC values are not in centimeter. Please try again."
+    )
   }
 )

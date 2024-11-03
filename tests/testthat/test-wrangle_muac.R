@@ -3,7 +3,6 @@
 testthat::test_that(
   "mw_wrangle_muac() works well when age is supplied",
   {
-
     ### Wrangle MUAC data ----
     df <- anthro.03 |>
       mw_wrangle_age(
@@ -36,7 +35,6 @@ testthat::test_that(
 testthat::test_that(
   "mw_wrangle_muac() works well when age is not supplied",
   {
-
     ### Wrangle MUAC data ----
     df <- anthro.03 |>
       mw_wrangle_muac(
@@ -84,7 +82,7 @@ testthat::test_that(
           .recode_muac = TRUE,
           .to = "cm",
           .decimals = 3
-      ),
+        ),
       regexp = "Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively"
     )
   }
@@ -124,4 +122,3 @@ testthat::test_that(
     )
   }
 )
-

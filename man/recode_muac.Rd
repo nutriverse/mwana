@@ -29,10 +29,15 @@ execution stops and an error message is returned.
 }
 \examples{
 ## Recode from millimeters to centimeters ----
-muac <- anthro.01$muac
-muac_cm <- recode_muac(muac, .to = "cm")
+muac_cm <- recode_muac(
+  x = anthro.01$muac,
+  .to = "cm"
+)
 
 ## Using the `muac_cm` object to recode it back to "mm" ----
-muac_mm <- recode_muac(muac_cm, .to = "mm")
+muac_mm <- recode_muac(
+  x = muac_cm,
+  .to = "mm"
+)
 
 }

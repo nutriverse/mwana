@@ -1,5 +1,5 @@
 Type: Package
-Package: ipccheckr
+Package: mwana
 Title: Utilities for Analysing Children's Nutritional Status 
 Version: 0.0.0.9000
 Authors@R: c(
@@ -12,7 +12,7 @@ Description: A streamlined and comprehensive implementation of the Standardized
   Monitoring and Assessment of Relief and Transition (SMART) Methodology
   <https://smartmethodology.org/> guidelines for data quality checks and 
   prevalence estimation, with enhanced programmable process particularly when 
-  handling large multiple datasets.
+  handling multiple area datasets.
 License: GPL (>= 3)
 URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana
 Imports: 

@@ -1,22 +1,37 @@
 #'
-#' Score the acceptability classification of the standard deviation and percentage
-#' of flagged data test results
+#' Score the acceptability rating of the check results that constitutes the
+#' plausibility check suite
 #'
 #' @description
-#' Attribute a penalty point based on the acceptability classification in which
-#' the plausibility test result falls.
+#' Attribute a score, also known as penalty point, for a given rate of acceptability
+#' of the standard deviation, proportion of flagged records, age and sex ratio,
+#' skewness, kurtosis and digit preference score check results.
 #'
-#' @param x A vector of class `character` of acceptability classification of the
-#' plausibility test results.
+#' The scoring criteria and thresholds follows the standards in the SMART
+#' plausibility check.
 #'
-#' @returns A vector of class `integer` of the same length as `x` for the score.
+#' @param x A vector of class `character` containing the acceptability rate of
+#' a given test check. If the class does not match the expected type, the function
+#' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @details
-#' The scoring criteria is as in [SMART Plausibility checks](https://smartmethodology.org/).
+#' @returns A vector of class `integer` of the same length as `x` for the
+#' acceptability score.
+#'
+#' @references
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
+#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
 #'
 #' @rdname scorer
 #'
-assign_penalty_points_flags_and_sd <- function(x) {
+#' @keywords internal
+#'
+score_std_flags <- function(x) {
+  ## Enforce the class of `x` ----
+  if (!(is.character(x) | is.factor(x))) {
+    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
+  }
+
+  ## Score ----
   case_when(
     x == "Excellent" ~ 0,
     x == "Good" ~ 5,
@@ -30,7 +45,15 @@ assign_penalty_points_flags_and_sd <- function(x) {
 #'
 #' @rdname scorer
 #'
-assign_penalty_points_age_sex_ratio <- function(x) {
+#' @keywords internal
+#'
+score_agesexr_dps <- function(x) {
+  ## Enforce the class of `x` ----
+  if (!(is.character(x) | is.factor(x))) {
+    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
+  }
+
+  ## Score ----
   case_when(
     x == "Excellent" ~ 0,
     x == "Good" ~ 2,
@@ -43,7 +66,15 @@ assign_penalty_points_age_sex_ratio <- function(x) {
 #'
 #' @rdname scorer
 #'
-assign_penalty_points_skew_kurt <- function(x) {
+#' @keywords internal
+#'
+score_skewkurt <- function(x) {
+  ## Enforce the class of `x` ----
+  if (!(is.character(x) | is.factor(x))) {
+    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
+  }
+
+  ## Score ----
   case_when(
     x == "Excellent" ~ 0,
     x == "Good" ~ 1,
@@ -54,105 +85,52 @@ assign_penalty_points_skew_kurt <- function(x) {
 
 #'
 #'
-#' Get the overall acceptability score from the acceptability classification scores
+#' Get the overall acceptability score from the acceptability rate scores
 #'
-#' @description
-#' Calculate the total amount of penalty points based on each plausibility test
-#' result acceptability classification for WFHZ and MFAZ.
-#'
-#' @param df A dataset object of class `data.frame` to calculate from.
-#'
-#' @param type A choice between "wfhz" and "mfaz" for the basis on which the
+#' @param .for A choice between "wfhz" and "mfaz" for the basis on which the
 #' calculations should be made.
 #'
-#' @returns A `data.frame` based on `df` with a new column named `"quality_score"`
-#' for the overall of acceptability (of quality) score.
+#' @returns A vector of class `numeric`, of length 1, for the overall
+#' data quality (acceptability) score.
 #'
-#' @examples
+#' @keywords internal
 #'
-#' ## A sample data ----
-#'
-#' df <- data.frame(
-#' flagged_class = "Excellent",
-#' age_ratio_class = "Good",
-#' sex_ratio_class = "Problematic",
-#' dps_class = "Excellent",
-#' sd_class = "Excellent",
-#' skew_class = "Good",
-#' kurt_class = "Acceptable"
-#' )
-#'
-#' ## Apply the function ----
-#' compute_quality_score(df, type = "mfaz")
-#'
-#' @export
-#'
-compute_quality_score <- function(df, type = c("mfaz", "whz")) {
-  type <- match.arg(type)
+score_overall_quality <- function(cl_flags,
+                                  cl_sex,
+                                  cl_age,
+                                  cl_dps_m = NULL,
+                                  cl_dps_w = NULL,
+                                  cl_dps_h = NULL,
+                                  cl_std,
+                                  cl_skw,
+                                  cl_kurt,
+                                  .for = c("wfhz", "mfaz")) {
+  ## Enforce options in `.for` ----
+  .for <- match.arg(.for)
 
-  if (type == "mfaz") {
-
-    ### Get MFAZ's quality score ----
-    qscore <- df |>
-      summarise(
-        quality_score = sum(
-          across(
-            .cols = c(
-              .data$flagged_class,
-              .data$sd_class
-              ),
-            .fns = assign_penalty_points_flags_and_sd
-          ),
-          across(
-            .cols = c(
-              .data$sex_ratio_class,
-              .data$age_ratio_class,
-              .data$dps_class
-              ),
-            .fns = assign_penalty_points_age_sex_ratio
-          ),
-          across(
-            .cols = c(
-              .data$skew_class,
-              .data$kurt_class
-              ),
-            .fns = assign_penalty_points_skew_kurt
-          )
-        )
+  switch(.for,
+    "wfhz" = {
+      qs <- sum(
+        score_std_flags(cl_flags),
+        score_agesexr_dps(cl_sex),
+        score_agesexr_dps(cl_age),
+        score_agesexr_dps(cl_dps_w),
+        score_agesexr_dps(cl_dps_h),
+        score_std_flags(cl_std),
+        score_skewkurt(cl_skw),
+        score_skewkurt(cl_kurt)
       )
-    qscore[["quality_score"]]
-
-  } else {
-    ### Get WHZ's quality score (REVISE)----
-    qscore <- df |>
-      summarise(
-        quality_score = sum(
-          across(
-            .cols = c(
-              .data$flagged_class,
-              .data$sd_class
-              ),
-            .fns = assign_penalty_points_flags_and_sd
-          ),
-          across(
-            .cols = c(
-              .data$sex_ratio_class,
-              .data$age_ratio_class,
-              .data$dps_wgt_class,
-              .data$dps_hgt_class
-              ),
-            .fns = assign_penalty_points_age_sex_ratio
-          ),
-          across(
-            .cols = c(
-              .data$skew_class,
-              .data$kurt_class
-              ),
-            .fns = assign_penalty_points_skew_kurt
-          )
-        )
+    },
+    "mfaz" = {
+      sum(
+        score_std_flags(cl_flags),
+        score_agesexr_dps(cl_sex),
+        score_agesexr_dps(cl_age),
+        score_agesexr_dps(cl_dps_m),
+        score_std_flags(cl_std),
+        score_skewkurt(cl_skw),
+        score_skewkurt(cl_kurt)
       )
-    qscore[["quality_score"]]
-  }
+    }
+  )
 }
-

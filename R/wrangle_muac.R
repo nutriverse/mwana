@@ -4,13 +4,14 @@
 #' @description
 #' Calculate z-scores for MUAC-for-age (MFAZ) and identify outliers based on
 #' the SMART methodology. When age is not supplied, wrangling will consist only
-#' in detecting outliers from the raw MUAC values.
+#' in detecting outliers from the raw MUAC values. The function only works after
+#' the age has been wrangled.
 #'
 #' @param df A dataset object of class `data.frame` to wrangle data from.
 #'
 #' @param sex A `numeric` or `character` vector of child's sex. Code values should
 #' only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
-#' are coded in either of the aforementioned before to call the function. If input
+#' are coded in either of the aforementioned before calling the function. If input
 #' codes are different than expected, the function will stop execution and
 #' return an error message with the type of mismatch.
 #'
@@ -52,35 +53,38 @@
 #'
 #'
 #' @examples
-#' ## When age is available ----
-#' anthro.02 |>
-#'   mw_wrangle_age(
-#'     dos = NULL,
-#'     dob = NULL,
-#'     age = age,
-#'     .decimals = 2
-#'   ) |>
-#'   mw_wrangle_muac(
-#'     sex = sex,
-#'     age = age,
-#'     muac = muac,
-#'     .recode_sex = TRUE,
-#'     .recode_muac = TRUE,
-#'     .to = "cm",
-#'     .decimals = 3
-#'   )
+#' ## When age is available, wrangle it first before calling the function ----
+#' w <- mw_wrangle_age(
+#'   df = anthro.02,
+#'   dos = NULL,
+#'   dob = NULL,
+#'   age = age,
+#'   .decimals = 2
+#' )
+#'
+#' ### Then apply the function to wrangle MUAC data ----
+#' mw_wrangle_muac(
+#'   df = w,
+#'   sex = sex,
+#'   age = age,
+#'   muac = muac,
+#'   .recode_sex = TRUE,
+#'   .recode_muac = TRUE,
+#'   .to = "cm",
+#'   .decimals = 3
+#' )
 #'
 #' ## When age is not available ----
-#' anthro.02 |>
-#'   mw_wrangle_muac(
-#'     sex = sex,
-#'     age = NULL,
-#'     muac = muac,
-#'     .recode_sex = TRUE,
-#'     .recode_muac = TRUE,
-#'     .to = "cm",
-#'     .decimals = 3
-#'   )
+#' mw_wrangle_muac(
+#'   df = anthro.02,
+#'   sex = sex,
+#'   age = NULL,
+#'   muac = muac,
+#'   .recode_sex = TRUE,
+#'   .recode_muac = TRUE,
+#'   .to = "cm",
+#'   .decimals = 3
+#' )
 #'
 #' @export
 #'
@@ -93,15 +97,15 @@ mw_wrangle_muac <- function(df,
                             .to = c("cm", "mm", "none"),
                             .decimals = 3) {
 
-  ## Enforce options in argument .to ----
+  ## Enforce options in `.to` ----
   .to <- match.arg(.to)
 
   ## Difuse sex variable for NSE----
   sex <- eval_tidy(enquo(sex), df)
 
-  ## Check if vector of sex is coded in either "m" and "f" or 1 and 2 ----
+  ## Enforce code values in `sex` ----
   x <- as.factor(as.character(sex))
-  if(!(all(levels(x) %in% c("m", "f")) | all(levels(x) %in% c("1", "2")))) {
+  if (!(all(levels(x) %in% c("m", "f")) | all(levels(x) %in% c("1", "2")))) {
     stop("Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively")
   }
 

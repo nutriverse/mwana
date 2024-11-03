@@ -72,13 +72,15 @@ home:
 
 #   - title: Check plausibility
 #     contents:
-#     - mw_check_plausibility_wfhz
-#     - mw_check_plausibility_mfaz
-#     - mw_check_plausibility_muac
+#     - mw_plausibility_check_wfhz
+#     - mw_plausibility_check_mfaz
+#     - mw_plausibility_check_muac
 
 #   - title: Neat output tables
 #     contents:
-#     - mw_neat_output_table
+#     - mw_neat_output_wfhz
+#     - mw_neat_output_mfaz
+#     - mw_neat_output_muac
 
 #   - title: Utilities
 #     contents:
