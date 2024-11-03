@@ -23,31 +23,31 @@ notations, round values and rename columns to meaningful names.
 \examples{
 ## First wrangle age data ----
 data <- mw_wrangle_age(
-df = anthro.01,
-dos = dos,
-dob = dob,
-age = age,
-.decimals = 2
+  df = anthro.01,
+  dos = dos,
+  dob = dob,
+  age = age,
+  .decimals = 2
 )
 
 ## Then wrangle MUAC data ----
 data_mfaz <- mw_wrangle_muac(
-df = data,
-sex = sex,
-age = age,
-muac = muac,
-.recode_sex = TRUE,
-.recode_muac = TRUE,
-.to = "cm"
+  df = data,
+  sex = sex,
+  age = age,
+  muac = muac,
+  .recode_sex = TRUE,
+  .recode_muac = TRUE,
+  .to = "cm"
 )
 
 ## Then run plausibility check ----
 pl <- mw_plausibility_check_mfaz(
-df = data_mfaz,
-flags = flag_mfaz,
-sex = sex,
-muac = muac,
-age = age
+  df = data_mfaz,
+  flags = flag_mfaz,
+  sex = sex,
+  muac = muac,
+  age = age
 )
 
 ## Now neat the output table ----

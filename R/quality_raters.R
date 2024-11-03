@@ -20,7 +20,6 @@
 #' @keywords internal
 #'
 rate_propof_flagged <- function(p, .in = c("mfaz", "wfhz", "raw_muac")) {
-
   ## Enforce options of `.in` ----
   .in <- match.arg(.in)
 
@@ -77,7 +76,6 @@ rate_propof_flagged <- function(p, .in = c("mfaz", "wfhz", "raw_muac")) {
 #'
 #'
 rate_std <- function(sd, .of = c("zscores", "raw_muac")) {
-
   ## Enforce options of `.of` ----
   .of <- match.arg(.of)
 
@@ -124,7 +122,6 @@ rate_std <- function(sd, .of = c("zscores", "raw_muac")) {
 #' @keywords internal
 #'
 rate_agesex_ratio <- function(p) {
-
   ## Enforce the class of `p` ----
   if (!is.double(p)) {
     stop("`p` must be of class double; not ", shQuote(class(p)), ". Please try again.")
@@ -153,7 +150,6 @@ rate_agesex_ratio <- function(p) {
 #' @keywords internal
 #'
 rate_skewkurt <- function(sk) {
-
   ## Enforce the class of `sk` ----
   if (!is.double(sk)) {
     stop("`sk` must be of class double; not ", shQuote(class(sk)), ". Please try again.")
@@ -187,7 +183,6 @@ rate_skewkurt <- function(sk) {
 #' @keywords internal
 #'
 rate_overall_quality <- function(q) {
-
   ## Enforce the class of `q` ----
   if (!(is.numeric(q)) | is.integer(q)) {
     stop("`q` must be of class numeric or integer; not ", shQuote(class(q)), ". Please try again.")

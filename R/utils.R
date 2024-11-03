@@ -40,7 +40,6 @@
 #' @export
 #'
 get_age_months <- function(dos, dob) {
-
   ## Enforce the class of `dos` ----
   if (!is(dos, "Date")) {
     stop("`dos` must be a vector of class 'Date'; not ", shQuote(class(dos)), ". Please try again.")
@@ -124,7 +123,6 @@ get_age_months <- function(dos, dob) {
 #' @export
 #'
 flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
-
   ## Enforce the options in `.from` ----
   .from <- match.arg(.from)
 
@@ -171,7 +169,6 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 #' @export
 #'
 remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
-
   ## Enforce options in `.from` ----
   .from <- match.arg(.from)
 
@@ -237,7 +234,6 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #' @export
 #'
 recode_muac <- function(x, .to = c("cm", "mm")) {
-
   ## Enfornce the options in `.to` ----
   .to <- match.arg(.to)
 

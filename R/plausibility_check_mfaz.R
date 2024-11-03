@@ -69,7 +69,6 @@
 #'   age = age
 #' )
 #'
-#'
 #' @export
 mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
   ## Summarise statistics  ----
@@ -128,31 +127,31 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #' @examples
 #' ## First wrangle age data ----
 #' data <- mw_wrangle_age(
-#' df = anthro.01,
-#' dos = dos,
-#' dob = dob,
-#' age = age,
-#' .decimals = 2
+#'   df = anthro.01,
+#'   dos = dos,
+#'   dob = dob,
+#'   age = age,
+#'   .decimals = 2
 #' )
 #'
 #' ## Then wrangle MUAC data ----
 #' data_mfaz <- mw_wrangle_muac(
-#' df = data,
-#' sex = sex,
-#' age = age,
-#' muac = muac,
-#' .recode_sex = TRUE,
-#' .recode_muac = TRUE,
-#' .to = "cm"
+#'   df = data,
+#'   sex = sex,
+#'   age = age,
+#'   muac = muac,
+#'   .recode_sex = TRUE,
+#'   .recode_muac = TRUE,
+#'   .to = "cm"
 #' )
 #'
 #' ## Then run plausibility check ----
 #' pl <- mw_plausibility_check_mfaz(
-#' df = data_mfaz,
-#' flags = flag_mfaz,
-#' sex = sex,
-#' muac = muac,
-#' age = age
+#'   df = data_mfaz,
+#'   flags = flag_mfaz,
+#'   sex = sex,
+#'   muac = muac,
+#'   age = age
 #' )
 #'
 #' ## Now neat the output table ----
@@ -161,7 +160,6 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #' @export
 #'
 mw_neat_output_mfaz <- function(df) {
-
   ## Format data frame ----
   df <- df |>
     mutate(
@@ -177,15 +175,16 @@ mw_neat_output_mfaz <- function(df) {
       kurt = round(.data$kurt, digits = 2)
     ) |>
     ## Rename columns ----
-  setNames(
-    c("Total children", "Flagged data (%)",
-      "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
-      "Age ratio (p)", "Class. of age ratio", "DPS (#)",
-      "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
-      "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
-      "Class. of kurtosis", "Overall score", "Overall quality"
+    setNames(
+      c(
+        "Total children", "Flagged data (%)",
+        "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
+        "Age ratio (p)", "Class. of age ratio", "DPS (#)",
+        "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
+        "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
+        "Class. of kurtosis", "Overall score", "Overall quality"
+      )
     )
-  )
   ## Return data frame ----
   df
 }

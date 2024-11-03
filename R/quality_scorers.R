@@ -26,7 +26,6 @@
 #' @keywords internal
 #'
 score_std_flags <- function(x) {
-
   ## Enforce the class of `x` ----
   if (!(is.character(x) | is.factor(x))) {
     stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")

@@ -37,9 +37,8 @@
 #' @export
 #'
 mw_stattest_ageratio <- function(age, .expectedP = 0.66) {
-
   ## Enforce the class of `age` ----
-  if(!is.numeric(age)) {
+  if (!is.numeric(age)) {
     stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
   }
 

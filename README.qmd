@@ -74,7 +74,7 @@ digraph mwana {
   node6 [label = 'Raw MUAC', shape = note];
   node7 [label = 'Wrangle age', shape = box];
   node8 [label = 'Wrangle anthro data', shape = box];
-  node9 [label = 'Check plausibility', shape = box];
+  node9 [label = 'Plausibility check', shape = box];
   node10 [label = 'End of workflow', shape = oval, color = salmon];
 
   ## Data process ----
