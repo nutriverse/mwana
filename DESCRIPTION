@@ -1,7 +1,7 @@
 Type: Package
 Package: mwana
 Title: Utilities for Analysing Children's Nutritional Status 
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Tomás", "Zaba", , "tomas.zaba@outlook.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-7079-3574")),
