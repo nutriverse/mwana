@@ -29,7 +29,7 @@ navbar:
       - text: "Estimating the prevalence of wasting"
         href: articles/prevalence.html
       - text: "Checking if IPC Acute Malnutrition sample size requirements were met"
-        href: articles/sample_size.html
+        href: articles/ipc_amn_check.html
     website:
       icon: "fa globe fa-lg"
       href: https://nutriverse.io
