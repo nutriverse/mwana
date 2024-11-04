@@ -1,18 +1,21 @@
 ---
 format: gfm
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>"
+    fig.path: "man/figures/README-"
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r}
-#| label: global_setup
+#| label: load_library
 #| include: false
-#| collapse: true
 
-library(ipccheckr)
+library(mwana)
 ```
 
-# `mwana`: Utilities for analysing children's nutritional status 
+# `mwana`: Utilities for analysing children's nutritional status <img src="man/figures/logo.png" align="right" width="200px" />
 
 <!-- badges: start -->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
@@ -22,6 +25,7 @@ library(ipccheckr)
 [![test-coverage](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/gh/nutriverse/mwana/graph/badge.svg?token=kUUp1WOlSi)](https://codecov.io/gh/nutriverse/mwana)
 [![CodeFactor](https://www.codefactor.io/repository/github/nutriverse/mwana/badge)](https://www.codefactor.io/repository/github/nutriverse/mwana)
+[![DOI](https://zenodo.org/badge/867609177.svg)](https://zenodo.org/badge/latestdoi/867609177)
 <!-- badges: end -->
 
 Child anthropometric assessments, implemented routinely in most countries worldwide, are the cornerstones of child nutrition and food security surveillance around the world. Ensuring the quality of child anthropometric data, the accuracy of child undernutrition prevalence estimates, and the timeliness of reporting is therefore critical in establishing accurate, robust, and up-to-date child undernutrition status globally.  
@@ -44,14 +48,15 @@ It automates plausibility checks and prevalence analyses and respective summarie
 
 ### Plausibility checks. 
 
-  + `mwana` performs plausibility checks on weight-for-height z-score (WFHZ)-based data by mimicking the SMART plausibility checkers in ENA for SMART software, their scoring and classification criterion.  
+  + `mwana` performs plausibility checks on weight-for-height z-score (WFHZ)-based data by mimicking the SMART plausibility checkers in ENA for SMART software, their scoring and classification criterion. Read guide [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-wfhz-data).
 
-  + It performs, as well, plausibility checks on MUAC data. For this, `mwana` integrates recent advances in using MUAC-for-age z-score (MFAZ) for auditing the plausibility of MUAC data. In this way, when the variable age is available: `mwana` performs plausibility checks similar to those in WFHZ, however with few differences in the scoring. Otherwise, when the variables age is missing, a similar test suit used in the current version of ENA is performed. Read details here.
+  + It performs, as well, plausibility checks on MUAC data. For this, `mwana` integrates recent advances in using MUAC-for-age z-score (MFAZ) for assessing the plausibility and the acceptability of MUAC data. In this way, when the variable age is available: `mwana` performs plausibility checks similar to those in WFHZ, with a few differences in the scoring criteria for flagged data. Otherwise, when the variables age is missing, a similar test suit used in the current version of ENA is performed. Read guide [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-mfaz-data).
 
 #### A useful workflow for plausibility check using `mwana`
 ```{r}
 #| label: workflow
-#| echo: false 
+#| echo: false
+#| warning: false
 #| fig-align: center
 
 DiagrammeR::grViz("
@@ -65,10 +70,10 @@ digraph mwana {
   node3 [label = 'Indicator', shape = diamond, color = lightgoldenrod];
   node4 [label = 'WFHZ', shape = note];
   node5 [label = 'MFAZ', shape = note];
-  node6 [label = 'Absolute MUAC', shape = note];
-  node7 [label = 'Process age', shape = box];
-  node8 [label = 'Process anthro data', shape = box];
-  node9 [label = 'Check plausibility', shape = box];
+  node6 [label = 'Raw MUAC', shape = note];
+  node7 [label = 'Wrangle age', shape = box];
+  node8 [label = 'Wrangle anthro data', shape = box];
+  node9 [label = 'Plausibility check', shape = box];
   node10 [label = 'End of workflow', shape = oval, color = salmon];
 
   ## Data process ----
@@ -104,17 +109,17 @@ digraph mwana {
 
 `mwana` computes prevalence for: 
 
-  + Wasting on the basis of WFHZ and/edema (Read vignettes) 
-  + Wasting on the basis of the absolute values of MUAC and/or edema: here, when variable age is available, mwana applies MFAZ flags, otherwise it applies the flagging criteria around the absolute values of MUAC, to exclude outliers before computing prevalence, but the actual prevalence is done on the absolute values. (Read link to the specific section in the vignettes)
-  + Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ flags. (Read link to the specific section in the vignettes)
-  + Combined prevalence of wasting: here a concept of combined flags is used to streamline the flags removed in WFHZ and those in MUAC. (Read link to the specific section in the vignettes).
+  + Wasting on the basis of WFHZ and/edema; read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-wfhz) 
+  + Wasting on the basis of raw MUAC values and/or edema: here, when variable age is available, mwana applies MFAZ flags, otherwise it applies the flagging criteria around the raw MUAC values, to exclude outliers before computing prevalence, but the actual prevalence is done on the raw values; read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-muac).
+  + Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ flags; read guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz).
+  + Combined prevalence of wasting: here a concept of combined flags is used to streamline the flags removed in WFHZ and those in MUAC; read guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
 
 `mwana` provides weighted prevalence analysis, if needed. And this is controlled by the user. This is possible in all calculators, including for MUAC, combined, which is not currently available in ENA for SMART. 
 
-In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met on the basis of the methodology used to collect the data: survey, screening or sentinel sites. (Check out the vignette).
+In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking if the minimum sample size requirements in a given area were met on the basis of the methodology used to collect the data: survey, screening or sentinel sites. Read guide [here](https://nutriverse.io/mwana/articles/sample_size.html).
 
 :::{.callout-tip}
-If you are undertaking a research and you want to censor your data before including in your statistical models, etc, `mwana` is a great helper, as it identifies flags out of your anthro data.
+If you are undertaking a research and you want to wrangle your data before including in your statistical models, etc, `mwana` is a great helper.
 :::
 
 :::{.callout-warning}
@@ -123,7 +128,7 @@ Please note that `mwana` is still highly experimental and is undergoing a lot of
 
 ## Installation
 
-`mwana` is not yet on CRAN but can be installed fromthe [nutriverse R Universe](https://nutriverse.r-universe.dev) as follows:
+`mwana` is not yet on CRAN but can be installed from the [nutriverse R Universe](https://nutriverse.r-universe.dev) as follows:
 
 ```{r}
 #| label: installation
@@ -139,7 +144,7 @@ Then load to in memory with
 ```{r}
 #| label: example
 
-library(ipccheckr)
+library(mwana)
 ```
 
 # Citation
@@ -150,7 +155,7 @@ If you were enticed to use `mwana` package and found it useful, please cite usin
 #| label: citation
 #| eval: true
 
-citation("ipccheckr")
+citation("mwana")
 ```
 
 # Community guidelines  

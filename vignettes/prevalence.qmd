@@ -10,14 +10,14 @@ vignette: >
 ```{r}
 #| label: load_library
 
-library(ipccheckr)
+library(mwana)
 ```
 
 ## Introduction 
 This vignette demonstrates how to use the `mwana` package's functions to estimate the prevalence of wasting. The package allow users to estimate prevalence based on: 
 
   + The weight-for-height z-score (WFHZ) and/or edema;
-  + The absolute MUAC values and/or edema;
+  + The raw MUAC values and/or edema;
   + The combined prevalence and 
   + The MUAC-for-age z-score (MFAZ) and/or edema.
 
@@ -37,7 +37,7 @@ Now we can begin delving into each function.
 
 ### Estimation of the prevalence of wasting based on WFHZ {#sec-prevalence-wfhz}
 
-To estimate the prevalence of wasting based on WFHZ we use the `compute_wfhz_prevalence()` function. The dataset to supply must have been wrangled by `process_wfhz_data()`. 
+To estimate the prevalence of wasting based on WFHZ we use the `compute_wfhz_prevalence()` function. The dataset to supply must have been wrangled by `mw_wrangle_wfhz()`. 
 
 As usual, we start off by inspecting our dataset:
 
@@ -66,12 +66,12 @@ To achieve this we do:
 #| echo: true
 #| eval: false
 
-anthro.02 |> 
+anthro.02 |>
   compute_wfhz_prevalence(
     .wt = NULL,
-    .edema = edema, 
+    .edema = edema,
     .summary_by = NULL
-    )
+  )
 ```
 
 This will return: 
@@ -82,7 +82,7 @@ This will return:
 compute_wfhz_prevalence(
   df = anthro.02,
   .wt = NULL,
-  .edema = edema, 
+  .edema = edema,
   .summary_by = NULL
 )
 ```
@@ -94,13 +94,12 @@ If for some reason the variable edema is not available in the dataset, or it's t
 #| echo: true
 #| eval: false
 
-anthro.02 |> 
+anthro.02 |>
   compute_wfhz_prevalence(
     .wt = NULL,
-    .edema = NULL,            # Setting .edema to NULL
+    .edema = NULL, # Setting .edema to NULL
     .summary_by = NULL
-    )
-
+  )
 ```
 
 And we get: 
@@ -112,7 +111,7 @@ And we get:
 compute_wfhz_prevalence(
   df = anthro.02,
   .wt = NULL,
-  .edema = NULL, 
+  .edema = NULL,
   .summary_by = NULL
 )
 ```
@@ -126,12 +125,12 @@ The above output summary does not show results by province. We can control that 
 #| echo: true
 #| eval: false
 
-anthro.02 |> 
+anthro.02 |>
   compute_wfhz_prevalence(
     .wt = NULL,
-    .edema = edema, 
-    .summary_by = province     ## province is the variable's name holding data on where the survey was conducted. 
-)
+    .edema = edema,
+    .summary_by = province # province is the variable's name holding data on where the survey was conducted.
+  )
 ```
 
 And _voila_ : 
@@ -140,12 +139,12 @@ And _voila_ :
 #| label: view_unwt_wast_wfhz_province
 #| echo: false
 
-anthro.02 |> 
+anthro.02 |>
   compute_wfhz_prevalence(
     .wt = NULL,
-    .edema = edema, 
+    .edema = edema,
     .summary_by = province
-)
+  )
 ```
 
 A table with two rows is returned with each province's statistics.
@@ -159,12 +158,12 @@ To get the weighted prevalence, we make the use of the `.wt` argument. We pass t
 #| echo: true
 #| eval: false
 
-anthro.02 |> 
+anthro.02 |>
   compute_wfhz_prevalence(
-    .wt = "wtfactor",        ## Passing the wtfactor to .wt
-    .edema = edema, 
+    .wt = "wtfactor", # Passing the wtfactor to .wt
+    .edema = edema,
     .summary_by = province
-)
+  )
 ```
 
 And you get: 
@@ -173,12 +172,12 @@ And you get:
 #| label: view_wt_wasting_wfhz
 #| echo: true
 
-anthro.02 |> 
+anthro.02 |>
   compute_wfhz_prevalence(
     .wt = "wtfactor",
-    .edema = edema, 
+    .edema = edema,
     .summary_by = province
-)
+  )
 ```
 
 :::{.callout-note}
@@ -205,15 +204,15 @@ Now let's apply the prevalence function:
 #| echo: true
 #| eval: false
 
-anthro.03 |> 
-  process_wfhz_data(
+anthro.03 |>
+  mw_wrangle_wfhz(
     sex = sex,
     .recode_sex = TRUE,
     height = height,
     weight = weight
-  ) |> 
+  ) |>
   compute_wfhz_prevalence(
-    .wt = NULL, 
+    .wt = NULL,
     .edema = edema,
     .summary_by = district
   )
@@ -225,15 +224,15 @@ The returned output will be:
 #| label: view_anthro.3_prev
 #| echo: false
 
-anthro.03 |> 
-  process_wfhz_data(
+anthro.03 |>
+  mw_wrangle_wfhz(
     sex = sex,
     .recode_sex = TRUE,
     height = height,
     weight = weight
-  ) |> 
+  ) |>
   compute_wfhz_prevalence(
-    .wt = NULL, 
+    .wt = NULL,
     .edema = edema,
     .summary_by = district
   )
@@ -243,14 +242,14 @@ Can you spot the differences? 😎 Yes, you're absolutely correct! While in Caho
 
 ### Estimation of the prevalence of wasting based on MFAZ 
 
-The prevalence of wasting based on MFAZ can be estimated using the `compute_mfaz_prevalence()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in **ADD LINK TO PLAUSIBILITY MUAC**. In this way, to avoid redundancy, we will not demonstrate the workflow. 
+The prevalence of wasting based on MFAZ can be estimated using the `compute_mfaz_prevalence()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in the [plausibility checks](https://nutriverse.io/mwana/articles/plausibility.html). In this way, to avoid redundancy, we will not demonstrate the workflow. 
 
-### Estimation of the prevalence of wasting based on the absolute MUAC values {#sec-prevalence-muac}
+### Estimation of the prevalence of wasting based on the raw MUAC values {#sec-prevalence-muac}
 
-This job is assigned to `compute_muac_prevalence()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the absolute values MUAC.
+This job is assigned to `compute_muac_prevalence()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the raw values MUAC.
 
 :::{.callout-important}
-Although the acceptability is evaluated on the basis of MFAZ, the actual prevalence is estimated on the basis of the absolute MUAC values. MFAZ is also used to detect outliers and flag them to be excluded from the prevalence analysis.
+Although the acceptability is evaluated on the basis of MFAZ, the actual prevalence is estimated on the basis of the raw MUAC values. MFAZ is also used to detect outliers and flag them to be excluded from the prevalence analysis.
 :::
  
 The MFAZ standard deviation and the age ratio test results are used to control the prevalence analysis flow in this way: 
@@ -288,9 +287,9 @@ As in ENA Software, make sure you run the plausibility check before you call the
 #| echo: true
 #| eval: false
 
-anthro.04 |> 
+anthro.04 |>
   compute_muac_prevalence(
-    .wt = NULL, 
+    .wt = NULL,
     .edema = edema,
     .summary_by = province
   )
@@ -302,9 +301,9 @@ This will return:
 #| label: view_prev_muac
 #| echo: false
 
-anthro.04 |> 
+anthro.04 |>
   compute_muac_prevalence(
-    .wt = NULL, 
+    .wt = NULL,
     .edema = edema,
     .summary_by = province
   )
@@ -327,21 +326,24 @@ We approach this task as follows:
 library(dplyr)
 
 ## Compute prevalence ----
-anthro.02 |> 
-  process_age(age = age) |> 
-  process_muac_data(
-    sex = sex, 
+anthro.02 |>
+  mw_wrangle_age(
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
     .recode_sex = FALSE,
     muac = muac,
-    .recode_muac = TRUE, 
-    unit = "cm", 
+    .recode_muac = TRUE,
+    .to = "cm",
     age = "age"
-  ) |> 
+  ) |>
   mutate(
-    muac = recode_muac(muac, unit = "mm")
-    ) |> 
+    muac = recode_muac(muac, .to = "mm")
+  ) |>
   compute_muac_prevalence(
-    .wt = "wtfactor", 
+    .wt = "wtfactor",
     .edema = edema,
     .summary_by = province
   )
@@ -356,33 +358,36 @@ This will return:
 
 library(dplyr)
 
-anthro.02 |> 
-  process_age(age = age) |> 
-  process_muac_data(
-    sex = sex, 
+anthro.02 |>
+  mw_wrangle_age(
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
     .recode_sex = FALSE,
     muac = muac,
-    .recode_muac = TRUE, 
-    unit = "cm", 
+    .recode_muac = TRUE,
+    .to = "cm",
     age = "age"
-  ) |> 
+  ) |>
   mutate(
-    muac = recode_muac(muac, unit = "mm")
-    ) |> 
+    muac = recode_muac(muac, .to = "mm")
+  ) |>
   compute_muac_prevalence(
-    .wt = "wtfactor", 
+    .wt = "wtfactor",
     .edema = edema,
     .summary_by = province
   )
 ```
 
 :::{.callout-warning}
-You may have noticed that in the above code block, we called the `recode_muac()` function inside `mutate()`. This is because after you use `process_muac_data()`, it puts the MUAC variable in centimeters. The `compute_muac_prevalence()` function was defined to accept MUAC in millimeters. Therefore, it must be converted to millimeters. 
+You may have noticed that in the above code block, we called the `recode_muac()` function inside `mutate()`. This is because after you use `mw_wrangle_muac()`, it puts the MUAC variable in centimeters. The `compute_muac_prevalence()` function was defined to accept MUAC in millimeters. Therefore, it must be converted to millimeters. 
 :::
 
 ### Estimation of the combined prevalence of wasting
 
-The estimation of the combined prevalence of wasting is a task attributed to the `compute_combined_prevalence()` function. The case-definition is based on the WFHZ, the absolute MUAC values and edema. From the workflow standpoint, it combines the workflow demonstrated in @sec-prevalence-wfhz and in @sec-prevalence-muac.
+The estimation of the combined prevalence of wasting is a task attributed to the `compute_combined_prevalence()` function. The case-definition is based on the WFHZ, the raw MUAC values and edema. From the workflow standpoint, it combines the workflow demonstrated in @sec-prevalence-wfhz and in @sec-prevalence-muac.
 
 To demonstrate it's implementation we will use the `anthro.01` dataset.
 
@@ -406,25 +411,26 @@ Fundamentally, it combines the wrangling workflow of WFHZ and MUAC data:
 library(dplyr)
 
 ## Apply the wrangling workflow ----
-anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
-  ) |> 
-  process_muac_data(
-    sex = sex, 
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
     .recode_sex = TRUE,
     muac = muac,
-    .recode_muac = TRUE, 
-    unit = "cm", 
+    .recode_muac = TRUE,
+    .to = "cm",
     age = "age"
-  ) |> 
+  ) |>
   mutate(
-    muac = recode_muac(muac, unit = "mm")
-    ) |> 
-  process_wfhz_data(
-    sex = sex, 
+    muac = recode_muac(muac, .to = "mm")
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
     weight = weight,
     height = height,
     .recode_sex = FALSE
@@ -440,29 +446,30 @@ This is to get the `wfhz` and `flag_wfhz` the `mfaz` and `flag_mfaz` added to th
 
 library(dplyr)
 
-anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
-  ) |> 
-  process_muac_data(
-    sex = sex, 
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
     .recode_sex = TRUE,
     muac = muac,
-    .recode_muac = TRUE, 
-    unit = "cm", 
+    .recode_muac = TRUE,
+    .to = "cm",
     age = "age"
-  ) |> 
+  ) |>
   mutate(
-    muac = recode_muac(muac, unit = "mm")
-    ) |> 
-  process_wfhz_data(
-    sex = sex, 
+    muac = recode_muac(muac, .to = "mm")
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
     weight = weight,
     height = height,
     .recode_sex = FALSE
-  ) |> 
+  ) |>
   select(area, wfhz, flag_wfhz, mfaz, flag_mfaz)
 ```
 
@@ -498,70 +505,72 @@ Now that we understand what happens under the hood, we can now proceed to implem
 library(dplyr)
 
 ## Apply the workflow ----
-anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
-  ) |> 
-  process_muac_data(
-    sex = sex, 
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
     .recode_sex = TRUE,
     muac = muac,
-    .recode_muac = TRUE, 
-    unit = "cm", 
-    age = "age"
-  ) |> 
+    .recode_muac = TRUE,
+    unit = "cm",
+    .to = "age"
+  ) |>
   mutate(
-    muac = recode_muac(muac, unit = "mm")
-    ) |> 
-  process_wfhz_data(
-    sex = sex, 
+    muac = recode_muac(muac, .to = "mm")
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
     weight = weight,
     height = height,
     .recode_sex = FALSE
-  ) |> 
+  ) |>
   compute_combined_prevalence(
-    .wt = NULL, 
-    .edema = edema, 
+    .wt = NULL,
+    .edema = edema,
     .summary_by = area
   )
 ```
 
 We get this: 
 
-```{r wfhz.4c, echo = FALSE, message=FALSE}
+```{r}
 #| label: view_cwasting
 #| echo: false
 
 library(dplyr)
 
-anthro.01 |> 
-  process_age(
-    svdate = "dos",
-    birdate = "dob",
-    age = age
-  ) |> 
-  process_muac_data(
-    sex = sex, 
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
     .recode_sex = TRUE,
     muac = muac,
-    .recode_muac = TRUE, 
-    unit = "cm", 
+    .recode_muac = TRUE,
+    .to = "cm",
     age = "age"
-  ) |> 
+  ) |>
   mutate(
-    muac = recode_muac(muac, unit = "mm")
-    ) |> 
-  process_wfhz_data(
-    sex = sex, 
+    muac = recode_muac(muac, .to = "mm")
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
     weight = weight,
     height = height,
     .recode_sex = FALSE
-  ) |> 
+  ) |>
   compute_combined_prevalence(
-    .wt = NULL, 
-    .edema = edema, 
+    .wt = NULL,
+    .edema = edema,
     .summary_by = area
   )
 ```

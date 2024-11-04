@@ -66,7 +66,7 @@ print(p)
 
 ### When .summary_by = NULL ----
 anthro.03 |>
-process_wfhz_data(
+mw_wrangle_wfhz(
 sex = sex,
 weight = weight,
 height = height,
@@ -81,7 +81,7 @@ compute_wfhz_prevalence(
 ### When .summary_by is not set to NULL ----
 
 anthro.03 |>
-process_wfhz_data(
+mw_wrangle_wfhz(
 sex = sex,
 weight = weight,
 height = height,

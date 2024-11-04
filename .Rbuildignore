@@ -1,4 +1,3 @@
-^ipccheckr\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
@@ -14,6 +13,9 @@
 ^README_files$
 ^mwana\.Rproj$
 ^vignettes/plausibility_files$
+ˆvingettes/plausibility.html$
 ^vignettes/prevalence_files$
+ˆvignettes/prevalence.html$
 ^vignettes/sample_size_files$
+ˆvignettes/sample_size.html$
 ^CODE_OF_CONDUCT\.md$

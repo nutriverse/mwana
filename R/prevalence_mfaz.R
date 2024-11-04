@@ -76,14 +76,14 @@ compute_mfaz_prevalence <- function(df,
     ## Grouped summary of standard deviation classification ----
     x <- summarise(
       df,
-      std = classify_sd(sd(remove_flags(.data$mfaz, "zscore"), na.rm = TRUE)),
+      std = rate_std(sd(remove_flags(.data$mfaz, "zscores"), na.rm = TRUE)),
       .by = !!.summary_by
     )
   } else {
     ## Non-grouped summary ----
     x <- summarise(
       df,
-      std = classify_sd(sd(remove_flags(.data$mfaz, "zscore"), na.rm = TRUE))
+      std = rate_std(sd(remove_flags(.data$mfaz, "zscores"), na.rm = TRUE))
     )
   }
 

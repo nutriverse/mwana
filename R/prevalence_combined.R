@@ -127,17 +127,22 @@ compute_pps_based_combined_prevalence <- function(df,
 #'
 #' ## When working on data frame with multiple survey areas ----
 #' s <- anthro.03 |>
-#' process_age(age = age) |>
-#' process_muac_data(
+#' mw_wrangle_age(
+#' dos = NULL,
+#' dob = NULL,
+#' age = age,
+#' .decimals = 2
+#' ) |>
+#' mw_wrangle_muac(
 #' sex = sex,
 #' muac = muac,
 #' age = "age",
 #' .recode_sex = TRUE,
 #' .recode_muac = TRUE,
-#' unit = "cm"
+#' .to = "cm"
 #' ) |>
-#' dplyr::mutate(muac = recode_muac(muac, unit = "mm")) |>
-#' process_wfhz_data(
+#' dplyr::mutate(muac = recode_muac(muac, .to = "mm")) |>
+#' mw_wrangle_wfhz(
 #' sex = sex,
 #' weight = weight,
 #' height = height,
@@ -167,9 +172,9 @@ compute_combined_prevalence <- function(df,
     ## Grouped summary of standard deviation classification ----
     x <- summarise(
       df,
-      std_wfhz = classify_sd(sd(remove_flags(as.numeric(.data$wfhz), "zscore"), na.rm = TRUE)),
-      age_ratio = classify_age_sex_ratio(age_ratio_test(.data$age, .expectedP = 0.66)$p),
-      std_mfaz = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
+      std_wfhz = rate_std(sd(remove_flags(as.numeric(.data$wfhz), "zscores"), na.rm = TRUE)),
+      age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
+      std_mfaz = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
       muac_analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std_mfaz),
       .by = !!.summary_by
     )
@@ -177,9 +182,9 @@ compute_combined_prevalence <- function(df,
     ## Non-grouped summary ----
     x <- summarise(
       df,
-      std_wfhz = classify_sd(sd(remove_flags(as.numeric(.data$wfhz), "zscore"), na.rm = TRUE)),
-      age_ratio = classify_age_sex_ratio(age_ratio_test(.data$age, .expectedP = 0.66)$p),
-      std_mfaz = classify_sd(sd(remove_flags(as.numeric(.data$mfaz), "zscore"), na.rm = TRUE)),
+      std_wfhz = rate_std(sd(remove_flags(as.numeric(.data$wfhz), "zscores"), na.rm = TRUE)),
+      age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
+      std_mfaz = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
       muac_analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std_mfaz),
     )
   }

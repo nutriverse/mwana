@@ -25,5 +25,5 @@ children under 2 years to twice the proportion of children over 2 and then
 dividing by 3.
 }
 \details{
-This function is informed by the output of \code{\link[=age_ratio_test]{age_ratio_test()}}.
+This function is informed by the output of \code{\link[=mw_stattest_ageratio]{mw_stattest_ageratio()}}.
 }

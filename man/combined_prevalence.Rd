@@ -78,17 +78,22 @@ print(x)
 
 ## When working on data frame with multiple survey areas ----
 s <- anthro.03 |>
-process_age(age = age) |>
-process_muac_data(
+mw_wrangle_age(
+dos = NULL,
+dob = NULL,
+age = age,
+.decimals = 2
+) |>
+mw_wrangle_muac(
 sex = sex,
 muac = muac,
 age = "age",
 .recode_sex = TRUE,
 .recode_muac = TRUE,
-unit = "cm"
+.to = "cm"
 ) |>
-dplyr::mutate(muac = recode_muac(muac, unit = "mm")) |>
-process_wfhz_data(
+dplyr::mutate(muac = recode_muac(muac, .to = "mm")) |>
+mw_wrangle_wfhz(
 sex = sex,
 weight = weight,
 height = height,
