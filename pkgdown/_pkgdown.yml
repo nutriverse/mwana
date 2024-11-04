@@ -68,7 +68,7 @@ home:
 
 #   - title: Check IPC AMN sample size requirements
 #     contents:
-#     - mw_check_ipc_ssreq
+#     - mw_check_ipcamn_ssreq
 
 #   - title: Check plausibility
 #     contents:
