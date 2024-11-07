@@ -13,7 +13,7 @@ compute_pps_based_mfaz_prevalence <- function(df,
       df,
       zscore = .data$mfaz,
       edema = {{ .edema }},
-      base = "wfhz"
+      .by = "zscores"
     )
   )
   ## Create a survey object ----
@@ -103,10 +103,10 @@ compute_mfaz_prevalence <- function(df,
     } else {
       ### Compute grouped PROBIT based prevalence ----
       if (!rlang::quo_is_null(.summary_by)) {
-        result <- compute_probit_prevalence(data, !!.summary_by, .for = "mfaz")
+        result <- estimate_probit_prevalence(data, !!.summary_by, .for = "mfaz")
       } else {
         ### Compute non-grouped PROBIT based prevalence ----
-        result <- compute_probit_prevalence(data, .for = "mfaz")
+        result <- estimate_probit_prevalence(data, .for = "mfaz")
       }
     }
     results[[i]] <- result

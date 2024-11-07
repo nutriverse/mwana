@@ -14,7 +14,7 @@ compute_pps_based_combined_prevalence <- function(df,
       zscore = .data$wfhz,
       muac = .data$muac,
       edema = {{ .edema }},
-      base = "combined"
+      .by = "combined"
     ) |>
       mutate(
         cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)

@@ -4,26 +4,26 @@
 \name{compute_mfaz_prevalence}
 \alias{compute_mfaz_prevalence}
 \alias{compute_muac_prevalence}
-\alias{compute_wfhz_prevalence}
+\alias{mw_estimate_wfhz_prevalence}
 \title{Compute the prevalence estimates of wasting on the basis of WFHZ, MFAZ or MUAC}
 \usage{
 compute_mfaz_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 
 compute_muac_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
 
-compute_wfhz_prevalence(df, .wt = NULL, .edema = NULL, .summary_by = NULL)
+mw_estimate_wfhz_prevalence(df, wt = NULL, edema = NULL, .by = NULL)
 }
 \arguments{
 \item{df}{An already wrangled dataset object of class \code{data.frame} to use.}
 
-\item{.wt}{A vector of class \code{double} of the final survey weights. Default is
+\item{wt}{A vector of class \code{double} of the final survey weights. Default is
 \code{NULL} assuming a self weighted survey, as in the ENA for SMART software;
 otherwise, when a vector of weights if supplied, weighted analysis is computed.}
 
-\item{.edema}{A vector of class \code{character} of edema. Code should be
+\item{edema}{A vector of class \code{character} of edema. Code should be
 "y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
 
-\item{.summary_by}{A vector of class \code{character} of the geographical areas
+\item{.by}{A vector of class \code{character} of the geographical areas
 where the data was collected and for which the analysis should be performed.}
 }
 \value{
@@ -64,42 +64,42 @@ print(p)
 
 ## An example of application of `compute_wfhz_prevalence()` ----
 
-### When .summary_by = NULL ----
+### When .by = NULL ----
 anthro.03 |>
-mw_wrangle_wfhz(
-sex = sex,
-weight = weight,
-height = height,
-.recode_sex = TRUE
-) |>
-compute_wfhz_prevalence(
-.wt = NULL,
-.edema = edema,
-.summary_by = NULL
-)
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |>
+  mw_estimate_wfhz_prevalence(
+    wt = NULL,
+    edema = edema,
+    .by = NULL
+  )
 
-### When .summary_by is not set to NULL ----
+### When .by is not set to NULL ----
 
 anthro.03 |>
-mw_wrangle_wfhz(
-sex = sex,
-weight = weight,
-height = height,
-.recode_sex = TRUE
-) |>
-compute_wfhz_prevalence(
-.wt = NULL,
-.edema = edema,
-.summary_by = district
-)
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |>
+  mw_estimate_wfhz_prevalence(
+    wt = NULL,
+    edema = edema,
+    .by = district
+  )
 
 ### When a weighted analysis is needed ----
 
 anthro.02 |>
-compute_wfhz_prevalence(
-.wt = "wtfactor",
-.edema = edema,
-.summary_by = province
-)
+  mw_estimate_wfhz_prevalence(
+    wt = "wtfactor",
+    edema = edema,
+    .by = province
+  )
 
 }
