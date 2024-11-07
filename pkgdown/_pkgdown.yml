@@ -91,5 +91,7 @@ home:
 #     - recode_muac
 #     - flag_outliers
 #     - remove_flags
+#.    - define_wasting
+
 
 

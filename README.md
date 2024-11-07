@@ -102,27 +102,26 @@ whilst performing quality appraisal and taking decisions on the
 appropriate prevalence analysis procedure to follow on the basis of the
 result.
 
-`mwana` computes prevalence for:
+`mwana` calculates wasting prevalence estimates on the basis of:
 
-- Wasting on the basis of WFHZ and/edema; read the guide
+- WFHZ and/edema - read the guide
   [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-wfhz)
-- Wasting on the basis of raw MUAC values and/or edema: here, when
-  variable age is available, mwana applies MFAZ flags, otherwise it
-  applies the flagging criteria around the raw MUAC values, to exclude
-  outliers before computing prevalence, but the actual prevalence is
-  done on the raw values; read the guide
+- Raw MUAC values and/or edema: here, when variable age is available,
+  mwana applies MFAZ flags, otherwise it applies the flagging criteria
+  around the raw MUAC values, to exclude outliers before computing
+  prevalence, but the actual prevalence is done on the raw values; read
+  the guide
   [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-muac).
-- Wasting on the basis of MFAZ and/edema: outliers excluded using MFAZ
-  flags; read guide
+- MFAZ and/edema - read guide
   [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz).
-- Combined prevalence of wasting: here a concept of combined flags is
-  used to streamline the flags removed in WFHZ and those in MUAC; read
-  guide
+- Combined prevalence: here a concept of combined flags is used to
+  streamline the flags removed in WFHZ and those in MUAC; read guide
   [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
 
-`mwana` provides weighted prevalence analysis, if needed. And this is
-controlled by the user. This is possible in all calculators, including
-for MUAC, combined, which is not currently available in ENA for SMART.
+`mwana` enables users to calculate weighted prevalence estimates of
+wasting either based on WFHZ, MUAC, combined or MFAZ, as required and as
+applicable. This is controlled by the user by simply supplying a vector
+of survey weights to be used.
 
 In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow,
 `mwana` provides a handy function for checking if the minimum sample
@@ -173,7 +172,7 @@ citation("mwana")
 #> To cite mwana: in publications use:
 #> 
 #>   Tomás Zaba, Ernest Guevarra (2024). _mwana: Utilities for Analysing
-#>   Children's Nutritional Status_. R package version 0.0.0.9000,
+#>   Children's Nutritional Status_. R package version 0.1.0,
 #>   <https://github.com/nutriverse/mwana>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -182,7 +181,7 @@ citation("mwana")
 #>     title = {mwana: Utilities for Analysing Children's Nutritional Status},
 #>     author = {{Tomás Zaba} and {Ernest Guevarra}},
 #>     year = {2024},
-#>     note = {R package version 0.0.0.9000},
+#>     note = {R package version 0.1.0},
 #>     url = {https://github.com/nutriverse/mwana},
 #>   }
 ```
