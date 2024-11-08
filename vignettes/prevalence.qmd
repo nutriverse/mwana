@@ -116,9 +116,9 @@ mw_estimate_wfhz_prevalence(
 )
 ```
 
-If we inspect the `gam_n` and `gam_p` columns of this output table and the previous, we notice differences in the numbers. This occurs because edema cases were excluded in the second implementation. Note that you will observed a change if there are positive cases of edema in the dataset; otherwise, setting `.edema = NULL` will have no effect whatsoever. 
+If we inspect the `gam_n` and `gam_p` columns of this output table and the previous, we notice differences in the numbers. This occurs because edema cases were excluded in the second implementation. Note that you will observed a change if there are positive cases of edema in the dataset; otherwise, setting `edema = NULL` will have no effect whatsoever. 
 
-The above output summary does not show results by province. We can control that using the `.summary_by` argument. In the above examples, it was set to `NULL`; now let's pass the name of the column containing the locations where the data was collected. In our case, the column is `province`: 
+The above output summary does not show results by province. We can control that using the `.by` argument. In the above examples, it was set to `NULL`; now let's pass the name of the column containing the locations where the data was collected. In our case, the column is `province`: 
 
 ```{r}
 #| label: unwt_wast_wfhz_province
@@ -151,7 +151,7 @@ A table with two rows is returned with each province's statistics.
 
 #### Estimation of weighted prevalence 
 
-To get the weighted prevalence, we make the use of the `.wt` argument. We pass to it the column name containing the final survey weights. In our case, the column name is `wtfactor`. We pass it in quotation `" "`:
+To get the weighted prevalence, we make the use of the `.wt` argument. We pass to it the column name containing the final survey weights. In our case, the column name is `wtfactor`:
 
 ```{r}
 #| label: wt_wasting_wfhz
@@ -160,7 +160,7 @@ To get the weighted prevalence, we make the use of the `.wt` argument. We pass t
 
 anthro.02 |>
   mw_estimate_wfhz_prevalence(
-    wt = "wtfactor", # Passing the wtfactor to .wt
+    wt = wtfactor, # Passing the wtfactor to .wt
     edema = edema,
     .by = province
   )
@@ -174,7 +174,7 @@ And you get:
 
 anthro.02 |>
   mw_estimate_wfhz_prevalence(
-    wt = "wtfactor",
+    wt = wtfactor,
     edema = edema,
     .by = province
   )

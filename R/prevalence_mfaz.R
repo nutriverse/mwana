@@ -58,7 +58,6 @@ compute_pps_based_mfaz_prevalence <- function(df,
 
 #'
 #'
-#' @rdname prevalence
 #'
 #'
 compute_mfaz_prevalence <- function(df,

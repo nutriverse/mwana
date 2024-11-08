@@ -190,8 +190,7 @@ compute_pps_based_muac_prevalence <- function(df,
 
 
 #'
-#'
-#' @rdname prevalence
+#' This is to be revised
 #'
 #' @examples
 #'

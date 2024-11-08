@@ -50,10 +50,14 @@ estimate_probit_prevalence <- function(df,
             .by = !!.by
           ) |>
           mutate(
-            gam_p = .data$gam, sam_p = .data$sam, mam_p = .data$mam,
-            gam = NA, sam = NA, mam = NA
+            gam_p = .data$gam,
+            sam_p = .data$sam,
+            mam_p = .data$mam,
+            gam = NA,
+            sam = NA,
+            mam = NA
           ) |>
-          select(!1:3)
+          select(!2:4) # Make it fit in structure of the returned df in the main function
       } else {
         df <- df |>
           summarise(
@@ -62,10 +66,14 @@ estimate_probit_prevalence <- function(df,
             mam = .data$gam - .data$sam
           ) |>
           mutate(
-            gam_p = .data$gam, sam_p = .data$sam, mam_p = .data$mam,
-            gam = NA, sam = NA, mam = NA
+            gam_p = .data$gam,
+            sam_p = .data$sam,
+            mam_p = .data$mam,
+            gam = NA,
+            sam = NA,
+            mam = NA
           ) |>
-          select(!1:3) ## To make it fit in the structure of the df
+          select(!2:4) # Make it fit in structure of the returned df in the main function
       }
       df
     },
@@ -79,10 +87,14 @@ estimate_probit_prevalence <- function(df,
             .by = !!.by
           ) |>
           mutate(
-            gam_p = .data$gam, sam_p = .data$sam, mam_p = .data$mam,
-            gam = NA, sam = NA, mam = NA
+            gam_p = .data$gam,
+            sam_p = .data$sam,
+            mam_p = .data$mam,
+            gam = NA,
+            sam = NA,
+            mam = NA
           ) |>
-          select(!1:3)
+          select(!2:4) # Make it fit in structure of the returned df in the main function
       } else {
         df <- df |>
           summarise(
@@ -91,10 +103,14 @@ estimate_probit_prevalence <- function(df,
             mam = .data$gam - .data$sam
           ) |>
           mutate(
-            gam_p = .data$gam, sam_p = .data$sam, mam_p = .data$mam,
-            gam = NA, sam = NA, mam = NA
+            gam_p = .data$gam,
+            sam_p = .data$sam,
+            mam_p = .data$mam,
+            gam = NA,
+            sam = NA,
+            mam = NA
           ) |>
-          select(!1:3) ## To make it fit in the structure of the df
+          select(!2:4)## To make it fit in the structure of the df
       }
       df
     }

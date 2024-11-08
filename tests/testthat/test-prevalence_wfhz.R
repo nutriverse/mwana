@@ -194,37 +194,3 @@ testthat::test_that(
     testthat::expect_false(all(sapply(chiuta_df[columns_to_check], \(.) all(is.na(.)))))
   }
 )
-
-# ## When std == problematic & is.null(wt) ----
-# testthat::test_that(
-#   "mw_estimate_wfhz_prevalence() works well on a multi-area dataset with
-#   wfhz standard deviation taking different rates",
-#   {
-#     ### Get the prevalence estimates ----
-#     p <- anthro.03 |>
-#       mw_wrangle_wfhz(
-#         sex,
-#         weight,
-#         height,
-#         .recode_sex = TRUE) |>
-#       #subset(district == "Metuge") |>
-#       mw_estimate_wfhz_prevalence(
-#         edema = edema,
-#         .by = NULL)
-#
-#     ### Select a district where standard deviation is rated as problematic ----
-#     metuge_df <- subset(p, district == "Metuge")
-#
-#
-#     columns_to_check <- c("gam_n", "gam_p_low", "gam_p_upp", "sam_n",
-#                           "sam_p_low", "sam_p_upp", "mam_n", "mam_p_low",
-#                           "mam_p_upp", "wt_pop")
-#
-#     ### Tests ----
-#     testthat::expect_vector(dplyr::select(p, !district), size = 4, ncol(17))
-#     testthat::expect_s3_class(p, "tbl")
-#     testthat::expect_true(all(sapply(metuge_df[columns_to_check], \(.) all(is.na(.)))))
-#     testthat::expect_true(all(sapply(maravia_df[columns_to_check], \(.) all(is.na(.)))))
-#     testthat::expect_false(all(sapply(chiuta_df[columns_to_check], \(.) all(is.na(.)))))
-#   }
-# )
