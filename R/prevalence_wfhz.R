@@ -6,6 +6,9 @@ get_complex_sample_estimates <- function(df,
                                          wt = NULL,
                                          edema = NULL,
                                          .by) {
+  ## Difuse ----
+  wt <- enquo(wt)
+
   ## Define wasting and add to the data frame ----
   df <- with(
     df,
@@ -18,13 +21,13 @@ get_complex_sample_estimates <- function(df,
   )
 
   ## Create a survey object ----
-  if (!is.null(wt)) {
+  if (!quo_is_null(wt)) {
     srvy <- df |>
       as_survey_design(
         ids = .data$cluster,
         pps = "brewer",
         variance = "YG",
-        weights = {{ wt }}
+        weights = !!wt
       )
   } else {
     ## Create a vector filled of 1 for self-weights ----
@@ -64,71 +67,72 @@ get_complex_sample_estimates <- function(df,
 
 
 #'
-#' Compute the prevalence estimates of wasting on the basis of WFHZ, MFAZ or MUAC
+#'
+#' Estimate the prevalence of wasting based on z-scores of weight-for-height (WFHZ)
 #'
 #' @description
-#' The prevalence is calculated in accordance with the complex sample design
-#' properties inherent to surveys. This includes weighting the survey data where
-#' applicable and applying PROBIT method estimation (for WFHZ) when the standard
-#' deviation is problematic. This is as in the SMART Methodology.
+#' Calculate the prevalence estimates of wasting based on z-scores of
+#' weight-for-height and/or bilateral edema. The function allows users to
+#' get the prevalence estimates calculated in accordance with the complex sample
+#' design properties; this includes applying survey weights when needed or applicable.
+#' When the standard deviation of WFHZ is rated as problematic, the prevalence is
+#' estimated based on the PROBIT method. This is as in the SMART Methodology.
 #'
-#' @param df An already wrangled dataset object of class `data.frame` to use.
+#' @param df A dataset object of class `data.frame` to use. This must have been
+#' wrangled using this package's wrangling function for WFHZ data. The function
+#' uses a variable name called `cluster` where the primary sampling unit IDs
+#' are stored. Make sure to rename your cluster ID variable to `cluster`, otherwise
+#' the function will error and terminate the execution.
 #'
 #' @param wt A vector of class `double` of the final survey weights. Default is
 #'  `NULL` assuming a self weighted survey, as in the ENA for SMART software;
-#'  otherwise, when a vector of weights if supplied, weighted analysis is computed.
+#'  otherwise, when a vector of weights if supplied, weighted analysis is done.
 #'
 #' @param edema A vector of class `character` of edema. Code should be
 #' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
 #'
-#' @param .by A vector of class `character` of the geographical areas
-#' where the data was collected and for which the analysis should be performed.
+#' @param .by A vector of class `character` or `numeric` of the geographical areas
+#' or respective IDs for where the data was collected and for which the analysis
+#' should be summarised at.
 #'
 #' @returns A summarised table of class `data.frame` of the descriptive
 #' statistics about wasting.
 #'
 #' @examples
-#' ## An example of application of `compute_wfhz_prevalence()` ----
+#' # An example of application of `compute_wfhz_prevalence()` ----
+#' ## When .by = NULL ----
+#' ### Start off by wrangling the data ----
+#' data <- mw_wrangle_wfhz(
+#'   df = anthro.03,
+#'   sex = sex,
+#'   weight = weight,
+#'   height = height,
+#'   .recode_sex = TRUE
+#' )
 #'
-#' ### When .by = NULL ----
-#' anthro.03 |>
-#'   mw_wrangle_wfhz(
-#'     sex = sex,
-#'     weight = weight,
-#'     height = height,
-#'     .recode_sex = TRUE
-#'   ) |>
-#'   mw_estimate_wfhz_prevalence(
-#'     wt = NULL,
-#'     edema = edema,
-#'     .by = NULL
-#'   )
+#' ### Now run the prevalence function ----
+#' mw_estimate_wfhz_prevalence(
+#'   df = data,
+#'   wt = NULL,
+#'   edema = edema,
+#'   .by = NULL
+#' )
 #'
-#' ### When .by is not set to NULL ----
+#' ## Now when .by is not set to NULL ----
+#' mw_estimate_wfhz_prevalence(
+#'   df = data,
+#'   wt = NULL,
+#'   edema = edema,
+#'   .by = district
+#' )
 #'
-#' anthro.03 |>
-#'   mw_wrangle_wfhz(
-#'     sex = sex,
-#'     weight = weight,
-#'     height = height,
-#'     .recode_sex = TRUE
-#'   ) |>
-#'   mw_estimate_wfhz_prevalence(
-#'     wt = NULL,
-#'     edema = edema,
-#'     .by = district
-#'   )
-#'
-#' ### When a weighted analysis is needed ----
-#'
-#' anthro.02 |>
-#'   mw_estimate_wfhz_prevalence(
-#'     wt = "wtfactor",
-#'     edema = edema,
-#'     .by = province
-#'   )
-#'
-#' @rdname prevalence
+#' ## When a weighted analysis is needed ----
+#' mw_estimate_wfhz_prevalence(
+#'   df = anthro.02,
+#'   wt = "wtfactor",
+#'   edema = edema,
+#'   .by = province
+#' )
 #'
 #' @export
 #'
@@ -136,6 +140,7 @@ mw_estimate_wfhz_prevalence <- function(df,
                                         wt = NULL,
                                         edema = NULL,
                                         .by = NULL) {
+
   ## Difuse argument .by ----
   .by <- enquo(.by)
 

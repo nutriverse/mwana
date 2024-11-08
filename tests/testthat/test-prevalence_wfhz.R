@@ -7,7 +7,7 @@ testthat::test_that(
     p <- mw_estimate_wfhz_prevalence(
       df = anthro.02,
       edema = edema,
-      wt = "wtfactor",
+      wt = wtfactor,
       .by = NULL
     )
 
@@ -108,7 +108,7 @@ testthat::test_that(
     p <- mw_estimate_wfhz_prevalence(
       df = anthro.02,
       edema = edema,
-      wt = "wtfactor",
+      wt = wtfactor,
       .by = province
     )
 
