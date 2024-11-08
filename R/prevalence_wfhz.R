@@ -1,6 +1,6 @@
 #'
 #'
-#'
+#' @keywords internal
 #'
 get_complex_sample_estimates <- function(df,
                                          wt = NULL,
