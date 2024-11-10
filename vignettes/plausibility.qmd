@@ -358,7 +358,8 @@ At this point, you have reached the end of your workflow 🎉 .
 We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our dataset.
 
 :::{.callout-note}
-The plausibility check for MFAZ data was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that in WFHZ for MFAZ, with a difference in the amount of flags to be considered: maximum of 2%.
+The plausibility check for MFAZ data was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that of WFHZ for MFAZ, with a maximum acceptability of percent of flagged 
+records of 2.0%.
 :::
 
 We can run MFAZ plausibility check by calling `mw_plausibility_check_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with processing age; for this, we approach the same way as in @sec-age.
