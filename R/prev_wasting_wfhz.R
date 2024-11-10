@@ -6,6 +6,8 @@ get_complex_sample_estimates <- function(df,
                                          wt = NULL,
                                          edema = NULL,
                                          .by) {
+
+
   ## Difuse ----
   wt <- enquo(wt)
 
@@ -30,15 +32,12 @@ get_complex_sample_estimates <- function(df,
         weights = !!wt
       )
   } else {
-    ## Create a vector filled of 1 for self-weights ----
-    df$wt <- rep(1, length(df$cluster))
     ## Create survey object ----
     srvy <- df |>
       as_survey_design(
         ids = .data$cluster,
         pps = "brewer",
-        variance = "YG",
-        weights = wt
+        variance = "YG"
       )
   }
 
@@ -99,7 +98,6 @@ get_complex_sample_estimates <- function(df,
 #' statistics about wasting.
 #'
 #' @examples
-#' # An example of application of `compute_wfhz_prevalence()` ----
 #' ## When .by = NULL ----
 #' ### Start off by wrangling the data ----
 #' data <- mw_wrangle_wfhz(
@@ -111,7 +109,7 @@ get_complex_sample_estimates <- function(df,
 #' )
 #'
 #' ### Now run the prevalence function ----
-#' mw_estimate_wfhz_prevalence(
+#' mw_estimate_prev_wasting_wfhz(
 #'   df = data,
 #'   wt = NULL,
 #'   edema = edema,
@@ -119,7 +117,7 @@ get_complex_sample_estimates <- function(df,
 #' )
 #'
 #' ## Now when .by is not set to NULL ----
-#' mw_estimate_wfhz_prevalence(
+#' mw_estimate_prev_wasting_wfhz(
 #'   df = data,
 #'   wt = NULL,
 #'   edema = edema,
@@ -127,45 +125,45 @@ get_complex_sample_estimates <- function(df,
 #' )
 #'
 #' ## When a weighted analysis is needed ----
-#' mw_estimate_wfhz_prevalence(
+#' mw_estimate_prev_wasting_wfhz(
 #'   df = anthro.02,
-#'   wt = "wtfactor",
+#'   wt = wtfactor,
 #'   edema = edema,
 #'   .by = province
 #' )
 #'
 #' @export
 #'
-mw_estimate_wfhz_prevalence <- function(df,
+mw_estimate_prev_wasting_wfhz <- function(df,
                                         wt = NULL,
                                         edema = NULL,
                                         .by = NULL) {
 
-  ## Difuse argument .by ----
+  ## Difuse argument `.by` to be evaluated later and lazily ----
   .by <- enquo(.by)
 
   ## An empty vector type list ----
   results <- list()
 
-  if (!rlang::quo_is_null(.by)) {
+  if (!quo_is_null(.by)) {
     ## Grouped summary of standard deviation classification ----
-    x <- summarise(
-      df,
+    x <- df |>
+      summarise(
       std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)),
       .by = !!.by
     )
   } else {
     ## Non-grouped summary ----
-    x <- summarise(
-      df,
+    x <- df |>
+      summarise(
       std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE))
     )
   }
 
-  ## Iterate over data frame to compute prevalence according to the SD ----
+  ## Compute prevalence based on the rate of the SD ----
   for (i in seq_len(nrow(x))) {
     if (!quo_is_null(.by)) {
-      area <- dplyr::pull(x, !!.by)[i]
+      area <- pull(x, !!.by)[i]
       data <- filter(df, !!sym(quo_name(.by)) == !!area)
     } else {
       data <- df
@@ -173,14 +171,14 @@ mw_estimate_wfhz_prevalence <- function(df,
 
     std <- x$std[i]
     if (std != "Problematic") {
-      ### Compute standard complex sample based prevalence analysis ----
+      ### Compute complex sample-based prevalence estimates ----
       result <- get_complex_sample_estimates(data, {{ wt }}, {{ edema }}, !!.by)
     } else {
-      ### Compute grouped PROBIT based prevalence ----
+      ### Compute PROBIT-based prevalence estimates----
       if (!quo_is_null(.by)) {
         result <- estimate_probit_prevalence(data, !!.by, .for = "wfhz")
       } else {
-        ### Compute non-grouped PROBIT based prevalence ----
+        ### Compute PROBIT-based prevalence estimates ----
         result <- estimate_probit_prevalence(data, .for = "wfhz")
       }
     }

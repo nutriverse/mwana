@@ -1,10 +1,10 @@
-# Test check: mw_estimate_wfhz_prevalence() ----
+# Test check: mw_estimate_prev_wasting_wfhz() ----
 ## When std =! problematic & !is.null(wt) & !is.null(edema) ----
 testthat::test_that(
-  "mw_estimate_wfhz_prevalence() yields correct estimates",
+  "mw_estimate_prev_wasting_wfhz() yields correct estimates",
   {
     ### Get the prevalence estimates ----
-    p <- mw_estimate_wfhz_prevalence(
+    p <- mw_estimate_prev_wasting_wfhz(
       df = anthro.02,
       edema = edema,
       wt = wtfactor,
@@ -54,11 +54,11 @@ testthat::test_that(
 
 ## When std != problematic & is.null(wt) & !is.null(edema) ----
 testthat::test_that(
-  "mw_estimate_wfhz_prevalence() yields correct estimates when survey weights is
+  "mw_estimate_prev_wasting_wfhz() yields correct estimates when survey weights is
     NULL",
   {
     ### Get the prevalence estimates ----
-    p <- mw_estimate_wfhz_prevalence(
+    p <- mw_estimate_prev_wasting_wfhz(
       df = wfhz.01,
       edema = edema,
       .by = NULL
@@ -101,11 +101,11 @@ testthat::test_that(
 
 ## When std =! problematic & !is.null(wt) with .by = province ----
 testthat::test_that(
-  "mw_estimate_wfhz_prevalence() yields correct estimates when .by is
+  "mw_estimate_prev_wasting_wfhz() yields correct estimates when .by is
     used",
   {
     ### Get the prevalence estimates ----
-    p <- mw_estimate_wfhz_prevalence(
+    p <- mw_estimate_prev_wasting_wfhz(
       df = anthro.02,
       edema = edema,
       wt = wtfactor,
@@ -155,7 +155,7 @@ testthat::test_that(
 
 ## When std == problematic & is.null(wt) ----
 testthat::test_that(
-  "mw_estimate_wfhz_prevalence() works well on a multi-area dataset with
+  "mw_estimate_prev_wasting_wfhz() works well on a multi-area dataset with
   wfhz standard deviation taking different rates",
   {
     ### Get the prevalence estimates ----
@@ -166,8 +166,9 @@ testthat::test_that(
         height,
         .recode_sex = TRUE
       ) |>
-      mw_estimate_wfhz_prevalence(
+      mw_estimate_prev_wasting_wfhz(
         edema = edema,
+        wt = NULL,
         .by = district
       )
 
