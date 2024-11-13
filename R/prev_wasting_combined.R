@@ -175,7 +175,7 @@ compute_combined_prevalence <- function(df,
       std_wfhz = rate_std(sd(remove_flags(as.numeric(.data$wfhz), "zscores"), na.rm = TRUE)),
       age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
       std_mfaz = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
-      muac_analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std_mfaz),
+      muac_analysis_approach = set_analysis_path(.data$age_ratio, .data$std_mfaz),
       .by = !!.summary_by
     )
   } else {
@@ -185,7 +185,7 @@ compute_combined_prevalence <- function(df,
       std_wfhz = rate_std(sd(remove_flags(as.numeric(.data$wfhz), "zscores"), na.rm = TRUE)),
       age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
       std_mfaz = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
-      muac_analysis_approach = tell_muac_analysis_strategy(.data$age_ratio, .data$std_mfaz),
+      muac_analysis_approach = set_analysis_path(.data$age_ratio, .data$std_mfaz),
     )
   }
 

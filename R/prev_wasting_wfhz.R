@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-get_complex_sample_estimates <- function(df,
+complex_survey_estimates_wfhz <- function(df,
                                          wt = NULL,
                                          edema = NULL,
                                          .by) {
@@ -172,7 +172,7 @@ mw_estimate_prev_wasting_wfhz <- function(df,
     std <- x$std[i]
     if (std != "Problematic") {
       ### Compute complex sample-based prevalence estimates ----
-      result <- get_complex_sample_estimates(data, {{ wt }}, {{ edema }}, !!.by)
+      result <- complex_survey_estimates_wfhz(data, {{ wt }}, {{ edema }}, !!.by)
     } else {
       ### Compute PROBIT-based prevalence estimates----
       if (!quo_is_null(.by)) {

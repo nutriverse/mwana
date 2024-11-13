@@ -437,7 +437,7 @@ testthat::test_that(
     )
 
     ### Observed results ----
-    obs <- classify_wasting_for_cdc_approach(muac_values, edema)
+    obs <- smart_tool_case_definition(muac_values, edema)
 
     ## Tests ----
     testthat::expect_vector(obs, ptype = "character", size = 20)
@@ -462,7 +462,7 @@ testthat::test_that(
     )
 
     ### Observed results ----
-    obs <- classify_wasting_for_cdc_approach(muac_values)
+    obs <- smart_tool_case_definition(muac_values)
 
     ## Tests ----
     testthat::expect_vector(obs, ptype = "character", size = 20)

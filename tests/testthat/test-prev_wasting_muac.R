@@ -1,4 +1,4 @@
-### Test check: tell_muac_analysis_strategy() ----
+### Test check: set_analysis_path() ----
 
 local({
   ### Input data ----
@@ -13,13 +13,13 @@ local({
   expected_3 <- "unweighted"
 
   ### Observed results ----
-  obs_1 <- tell_muac_analysis_strategy(age_ratio_class_1, std_class_1)
-  obs_2 <- tell_muac_analysis_strategy(age_ratio_class_1, std_class_2)
-  obs_3 <- tell_muac_analysis_strategy(age_ratio_class_2, std_class_1)
+  obs_1 <- set_analysis_path(age_ratio_class_1, std_class_1)
+  obs_2 <- set_analysis_path(age_ratio_class_1, std_class_2)
+  obs_3 <- set_analysis_path(age_ratio_class_2, std_class_1)
 
   ### The test ----
   testthat::test_that(
-    "tell_muac_analysis_strategy() works",
+    "set_analysis_path() works",
     {
       testthat::expect_equal(obs_1, expected_1)
       testthat::expect_equal(obs_2, expected_2)
@@ -46,7 +46,7 @@ local({
   )
 
   #### Observed results ----
-  obs <- classify_wasting_for_cdc_approach(muac = muac_values, .edema = edema)
+  obs <- smart_tool_case_definition(muac = muac_values, edema = edema)
 
   #### The test ----
   testthat::test_that(
@@ -86,23 +86,23 @@ local({
 
   #### Observed results ----
   obs_sam <- with(x,
-                  apply_cdc_age_weighting(
+                  smart_age_weighting(
                     muac = muac,
-                    .edema = edema,
+                    edema = edema,
                     age = age,
-                    status = "sam")
+                    .form = "sam")
   )
   obs_mam <- with(x,
-                  apply_cdc_age_weighting(
+                  smart_age_weighting(
                     muac = muac,
-                    .edema = edema,
+                    edema = edema,
                     age = age,
-                    status = "mam")
+                    .form = "mam")
   )
 
   #### The test ----
   testthat::test_that(
-    "apply_cdc_age_weighting() works amazing",
+    "smart_age_weighting() works amazing",
     {
       testthat::expect_vector(obs_sam, size = 1)
       testthat::expect_vector(obs_mam, size = 1)
@@ -139,21 +139,21 @@ local({
 
   #### Observed results ----
   obs_sam <- with(x,
-                  apply_cdc_age_weighting(
+                  smart_age_weighting(
                     muac = muac,
                     age = age,
-                    status = "sam")
+                    .form = "sam")
   )
   obs_mam <- with(x,
-                  apply_cdc_age_weighting(
+                  smart_age_weighting(
                     muac = muac,
                     age = age,
-                    status = "mam")
+                    .form = "mam")
   )
 
   #### The test ----
   testthat::test_that(
-    "apply_cdc_age_weighting() works amazing",
+    "smart_age_weighting() works amazing",
     {
       testthat::expect_vector(obs_sam, size = 1)
       testthat::expect_vector(obs_mam, size = 1)
@@ -163,13 +163,13 @@ local({
   )
 })
 
-## Test check: compute_muac_prevalence() ----
-#### When age_ratio & std != problematic & !is.null(.wt) & !is.null(.edema) ----
+## Test check: mw_estimate_prev_wasting_muac() ----
+#### When age_ratio & std != problematic & !is.null(wt) & !is.null(edema) ----
 local({
 
   #### Get the prevalence estimates ----
   p <- anthro.02 |>
-    compute_muac_prevalence(.edema = edema, .wt = "wtfactor", .summary_by = NULL)
+    mw_estimate_prev_wasting_muac(edema = edema, wt = wtfactor, .by = NULL)
 
   #### Expected results ----
   ##### GAM estimates and uncertainty ----
@@ -193,7 +193,7 @@ local({
 
   #### The test ----
   testthat::test_that(
-    "compute_muac_prevalence() yields correct estimates when edema and survey
+    "mw_estimate_prev_wasting_muac() yields correct estimates when edema and survey
     weights are supplied",
     {
       testthat::expect_equal(p[[1]][1], n_gam)
@@ -212,12 +212,12 @@ local({
   )
 })
 
-#### When age_ratio & std != problematic & !is.null(.wt) & !is.null(.edema) ----
+#### When age_ratio & std != problematic & !is.null(wt) & !is.null(edema) ----
 local({
 
   #### Get the prevalence estimates ----
   p <- anthro.02 |>
-    compute_muac_prevalence(.edema = NULL, .wt = "wtfactor", .summary_by = NULL)
+    mw_estimate_prev_wasting_muac(edema = NULL, wt = wtfactor, .by = NULL)
 
   #### Expected results ----
   ##### GAM estimates and uncertainty ----
@@ -241,7 +241,7 @@ local({
 
   #### The test ----
   testthat::test_that(
-    "compute_muac_prevalence() yields correct estimates when edema is not
+    "mw_estimate_prev_wasting_muac() yields correct estimates when edema is not
     supplied",
     {
       testthat::expect_equal(p[[1]][1], n_gam)
@@ -262,12 +262,12 @@ local({
 
 
 
-#### When age_ratio & std != problematic & is.null(.wt) ----
+#### When age_ratio & std != problematic & is.null(wt) ----
 local({
 
   ##### Get prevalence estimates ----
   p <- anthro.02 |>
-    compute_muac_prevalence(.edema = edema, .summary_by = NULL)
+    mw_estimate_prev_wasting_muac(edema = edema, .by = NULL)
 
   #### Expected results ----
   ##### GAM estimates and uncertainty ----
@@ -290,7 +290,7 @@ local({
 
   #### The test ----
   testthat::test_that(
-    "compute_muac_prevalence() yields correct estimates when edema is supplied",
+    "mw_estimate_prev_wasting_muac() yields correct estimates when edema is supplied",
     {
       testthat::expect_equal(p[[1]][1], n_gam)
       testthat::expect_equal(round(p[[2]][1]*100, 1), p_gam)
@@ -308,15 +308,15 @@ local({
   )
 })
 
-### When age_ratio & std != problematic & !is.null(.wt) with .summary_by = province
+### When age_ratio & std != problematic & !is.null(wt) with .by = province
 local({
 
   #### Get prevalence estimates ----
   p <- anthro.02 |>
-    compute_muac_prevalence(
-      .edema = edema,
-      .wt = "wtfactor",
-      .summary_by = province
+    mw_estimate_prev_wasting_muac(
+      edema = edema,
+      wt = wtfactor,
+      .by = province
     )
 
   #### Expected results for Zambezia province ----
@@ -344,7 +344,7 @@ local({
 
   #### The test ----
   testthat::test_that(
-    "compute_muac_prevalence() yields correct estimates when .summary_by is
+    "mw_estimate_prev_wasting_muac() yields correct estimates when .by is
     used",
     {
       testthat::expect_equal(p[[2]][2], n_gam)
@@ -366,12 +366,12 @@ local({
 })
 
 
-### When !is.null(.summary_by) and analysis approach has different categories ----
+### When !is.null(.by) and analysis approach has different categories ----
 local({
 
   ## Get the prevalence estimates ----
   p <- anthro.04 |>
-    compute_muac_prevalence(.edema = edema, .summary_by = province)
+    mw_estimate_prev_wasting_muac(edema = edema, .by = province)
 
   ## Subset a province whose analysis approach is unweighted ---
   province_1 <- subset(p, province == "Province 1")
@@ -389,7 +389,7 @@ local({
   ## The test ----
 
   testthat::test_that(
-    "compute_muac_prevalence() works well on a dataframe with multiple survey areas with
+    "mw_estimate_prev_wasting_muac() works well on a dataframe with multiple survey areas with
     different categories on analysis_approach",
     {
       testthat::expect_vector(dplyr::select(p, !province), size = 3, ncol(17))
