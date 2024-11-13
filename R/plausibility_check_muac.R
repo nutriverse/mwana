@@ -17,7 +17,14 @@
 #' @param flags A vector of class `numeric` of flagged records.
 #'
 #' @returns A summarised table of class `data.frame`, of length 9 and width 1, for
-#' the plausibility test results and their respective acceptability ratings..
+#' the plausibility test results and their respective acceptability ratings.
+#'
+#' @details
+#' Cut-off points used for the percent of flagged records:
+#' |**Excellent** | **Good** | **Acceptable** | **Problematic** |
+#' | :---: | :---: | :---: | :---: |
+#' | 0.0 - 1.0 | >1.0 - 1.5| >1.5 - 2.0 | >2.0  |
+#'
 #'
 #' @references
 #' Bilukha, O., & Kianian, B. (2023). Considerations for assessment of measurement

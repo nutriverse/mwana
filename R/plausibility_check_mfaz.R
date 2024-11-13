@@ -7,8 +7,8 @@
 #' structured test suite encompassing sampling and measurement-related biases checks
 #' in the dataset. The test suite in this function follows the recommendation made
 #' by Bilukha, O., & Kianian, B. (2023) on the plausibility of
-#' constructing a comprehensive plausibility check similar to WFHZ to evaluate the
-#' acceptability of MUAC data when the variable age exists in the dataset.
+#' constructing a comprehensive plausibility check for MUAC data similar to WFHZ
+#' to evaluate its acceptability when the variable age exists in the dataset.
 #'
 #' The function works on a data frame returned from this package's wrangling
 #' function for age and for MFAZ data.
@@ -26,6 +26,15 @@
 #' @returns
 #' A summarised table of class `data.frame`, of length 17 and width 1, for
 #' the plausibility test results and their respective acceptability ratings.
+#'
+#' @details
+#' Whilst the function uses the same test checks and criteria as that of WFHZ
+#' in the SMART plausibility check, the percent of flagged data uses
+#' different cut-off points, with a maximum acceptability of 2.0%, as shown below:
+#'
+#' |**Excellent** | **Good** | **Acceptable** | **Problematic** |
+#' | :---: | :---: | :---: | :---: |
+#' | 0.0 - 1.0 | >1.0 - 1.5| >1.5 - 2.0 | >2.0  |
 #'
 #' @references
 #' Bilukha, O., & Kianian, B. (2023). Considerations for assessment of measurement

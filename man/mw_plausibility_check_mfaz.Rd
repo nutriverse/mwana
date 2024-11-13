@@ -26,11 +26,19 @@ Check the overall plausibility and acceptability of MFAZ data through a
 structured test suite encompassing sampling and measurement-related biases checks
 in the dataset. The test suite in this function follows the recommendation made
 by Bilukha, O., & Kianian, B. (2023) on the plausibility of
-constructing a comprehensive plausibility check similar to WFHZ to evaluate the
-acceptability of MUAC data when the variable age exists in the dataset.
+constructing a comprehensive plausibility check for MUAC data similar to WFHZ
+to evaluate its acceptability when the variable age exists in the dataset.
 
 The function works on a data frame returned from this package's wrangling
 function for age and for MFAZ data.
+}
+\details{
+Whilst the function uses the same test checks and criteria as that of WFHZ
+in the SMART plausibility check, the percent of flagged data uses
+different cut-off points, with a maximum acceptability of 2.0\%, as shown below:\tabular{cccc}{
+   \strong{Excellent} \tab \strong{Good} \tab \strong{Acceptable} \tab \strong{Problematic} \cr
+   0.0 - 1.0 \tab >1.0 - 1.5 \tab >1.5 - 2.0 \tab >2.0 \cr
+}
 }
 \examples{
 ## First wrangle age data ----

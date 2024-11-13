@@ -111,13 +111,15 @@ get_age_months <- function(dos, dob) {
 #' x <- anthro.01$muac
 #'
 #' ## Apply the function with `.from` set to "raw_muac" ----
-#' flag_outliers(x, .from = "raw_muac")
+#' m <- flag_outliers(x, .from = "raw_muac")
+#' head(m)
 #'
 #' ## Sample data of z-scores (be it WFHZ, MFAZ, HFAZ or WFAZ) ----
 #' x <- anthro.02$mfaz
 #'
 #' # Apply the function with `.from` set to "zscores" ----
-#' flag_outliers(x, .from = "zscores")
+#' z <- flag_outliers(x, .from = "zscores")
+#' tail(z)
 #'
 #' @rdname outliers
 #' @export
@@ -153,16 +155,20 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 #'
 #' @examples
 #' ## With `.from` set to "zscores" ----
-#' remove_flags(
+#' z <- remove_flags(
 #'   x = wfhz.01$wfhz,
 #'   .from = "zscores"
 #' )
 #'
+#' head(z)
+#'
 #' ## With `.from` set to "raw_muac" ----
-#' remove_flags(
+#' m <- remove_flags(
 #'   x = mfaz.01$muac,
 #'   .from = "raw_muac"
 #' )
+#'
+#' tail(m)
 #'
 #' @rdname outliers
 #'
@@ -224,12 +230,14 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #'   x = anthro.01$muac,
 #'   .to = "cm"
 #' )
+#' head(muac_cm)
 #'
 #' ## Using the `muac_cm` object to recode it back to "mm" ----
 #' muac_mm <- recode_muac(
 #'   x = muac_cm,
 #'   .to = "mm"
 #' )
+#' tail(muac_mm)
 #'
 #' @export
 #'

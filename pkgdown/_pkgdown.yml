@@ -69,11 +69,11 @@ home:
 #     contents:
 #     - mw_stattest_ageratio
 
-#   - title: Check IPC AMN sample size requirements
+#   - title: IPC Acute Malnutrition checks
 #     contents:
 #     - mw_check_ipcamn_ssreq
 
-#   - title: Check plausibility
+#   - title: Plausibility check
 #     contents:
 #     - mw_plausibility_check_wfhz
 #     - mw_plausibility_check_mfaz
@@ -85,11 +85,20 @@ home:
 #     - mw_neat_output_mfaz
 #     - mw_neat_output_muac
 
+#   - title: Estimate prevalence of wasting
+#     contents:
+#     - mw_estimate_prev_wasting_wfhz
+#     - mw_estimate_prev_wasting_muac
+#     - mw_estimate_prev_wasting_mfaz
+#     - mw_estimate_prev_wasting_combined
+
 #   - title: Utilities
 #     contents:
 #     - get_age_months
 #     - recode_muac
 #     - flag_outliers
 #     - remove_flags
+#.    - define_wasting
+
 
 

@@ -18,13 +18,19 @@ wrangled using this package's wrangling function for MUAC.}
 }
 \value{
 A summarised table of class \code{data.frame}, of length 9 and width 1, for
-the plausibility test results and their respective acceptability ratings..
+the plausibility test results and their respective acceptability ratings.
 }
 \description{
 Check the overall plausibility and acceptability of raw MUAC data through a
 structured test suite encompassing sampling and measurement-related biases checks
 in the dataset. The test suite in this function follows the recommendation made
 by Bilukha, O., & Kianian, B. (2023).
+}
+\details{
+Cut-off points used for the percent of flagged records:\tabular{cccc}{
+   \strong{Excellent} \tab \strong{Good} \tab \strong{Acceptable} \tab \strong{Problematic} \cr
+   0.0 - 1.0 \tab >1.0 - 1.5 \tab >1.5 - 2.0 \tab >2.0 \cr
+}
 }
 \examples{
 ## First wranlge MUAC data ----

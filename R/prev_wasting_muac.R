@@ -146,7 +146,7 @@ compute_pps_based_muac_prevalence <- function(df,
                                               .edema = NULL,
                                               .summary_by = NULL) {
   df <- df |>
-    define_wasting(muac = .data$muac, edema = {{ .edema }}, base = "muac")
+    define_wasting(muac = .data$muac, edema = {{ .edema }}, .by = "muac")
 
   ### Weighted survey analysis ----
   if (!is.null(.wt)) {
@@ -190,8 +190,7 @@ compute_pps_based_muac_prevalence <- function(df,
 
 
 #'
-#'
-#' @rdname prevalence
+#' This is to be revised
 #'
 #' @examples
 #'

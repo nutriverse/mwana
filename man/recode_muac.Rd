@@ -33,11 +33,13 @@ muac_cm <- recode_muac(
   x = anthro.01$muac,
   .to = "cm"
 )
+head(muac_cm)
 
 ## Using the `muac_cm` object to recode it back to "mm" ----
 muac_mm <- recode_muac(
   x = muac_cm,
   .to = "mm"
 )
+tail(muac_mm)
 
 }
