@@ -7,22 +7,38 @@ complex_survey_estimates_combined <- function(df,
                                               wt = NULL,
                                               edema = NULL,
                                               .by) {
-  ## Difuse argument `wt` ----
+  ## Difuse arguments ----
   wt <- enquo(wt)
+  edema <- enquo(edema)
 
-  ## Case definition ----
-  df <- with(
-    df,
-    define_wasting(df,
-      zscore = .data$wfhz,
-      muac = .data$muac,
-      edema = {{ edema }},
-      .by = "combined"
-    ) |>
-      mutate(
-        cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
-      )
-  )
+  ## Case definition when `edema` is null ----
+  if (!quo_is_null(edema)) {
+    df <- with(
+      df,
+      define_wasting(df,
+        zscore = .data$wfhz,
+        muac = .data$muac,
+        edema = !!edema,
+        .by = "combined"
+      ) |>
+        mutate(
+          cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
+        )
+    )
+  } else {
+    df <- with(
+      df,
+      define_wasting(df,
+        zscore = .data$wfhz,
+        muac = .data$muac,
+        .by = "combined"
+      ) |>
+        mutate(
+          cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
+        )
+    )
+  }
+
   ## Create survey object ----
   if (!quo_is_null(wt)) {
     srvy <- df |>
