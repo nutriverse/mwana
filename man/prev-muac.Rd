@@ -48,21 +48,19 @@ data set. Definition of workflow fit is done row-wise.
 .data <- anthro.04 |>
   subset(province == "Province 2")
 
-weighted_pr <- mw_estimate_smart_age_wt(
+mw_estimate_smart_age_wt(
   df = .data,
   edema = edema,
   .by = NULL
 )
-weighted_pr
 
-## When .summary.by = NULL ----
-prev <- mw_estimate_prevalence_muac(
+## When .by = NULL ----
+mw_estimate_prevalence_muac(
   df = anthro.04,
   wt = NULL,
   edema = edema,
   .by = NULL
 )
-prev
 
 ## When .by is not set to NULL ----
 p <- mw_estimate_prevalence_muac(
@@ -71,7 +69,6 @@ p <- mw_estimate_prevalence_muac(
   edema = edema,
   .by = province
 )
-p
 
 }
 \references{
@@ -79,5 +76,5 @@ SMART Initiative (no date). \emph{Updated MUAC data collection tool}. Available 
 \url{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}
 }
 \seealso{
-\code{\link[=mw_estimate_prevalence_mfaz]{mw_estimate_prevalence_mfaz()}} \code{\link[=mw_estimate_smart_age_wt]{mw_estimate_smart_age_wt()}}
+\code{\link[=mw_estimate_smart_age_wt]{mw_estimate_smart_age_wt()}}
 }

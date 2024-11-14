@@ -242,7 +242,7 @@ Can you spot the differences? 😎 Yes, you're absolutely correct! While in Caho
 
 ### Estimation of the prevalence of wasting based on MFAZ 
 
-The prevalence of wasting based on MFAZ can be estimated using the `compute_mfaz_prevalence()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in the [plausibility checks](https://nutriverse.io/mwana/articles/plausibility.html). In this way, to avoid redundancy, we will not demonstrate the workflow. 
+The prevalence of wasting based on MFAZ can be estimated using the `mw_estimate_prevalence_mfaz()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in the [plausibility checks](https://nutriverse.io/mwana/articles/plausibility.html). In this way, to avoid redundancy, we will not demonstrate the workflow. 
 
 ### Estimation of the prevalence of wasting based on the raw MUAC values {#sec-prevalence-muac}
 
