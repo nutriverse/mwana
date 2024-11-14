@@ -58,8 +58,22 @@ smart_age_weighting <- function(muac,
 #'
 #' @rdname prev-muac
 #'
+#' @examples
+#' ## An application of `mw_estimate_smart_age_wt()` ----
+#' .data <- anthro.04 |>
+#'   subset(province == "Province 2")
 #'
-mw_estimate_prev_smart_age_weigthig <- function(df, edema = NULL, .by = NULL) {
+#' weighted_pr <- mw_estimate_smart_age_wt(
+#'   df = .data,
+#'   edema = edema,
+#'   .by = NULL
+#' )
+#' weighted_pr
+#'
+#' @export
+#'
+#'
+mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
@@ -196,7 +210,7 @@ complex_survey_estimates_muac <- function(df,
 #' <https://smartmethodology.org/survey-planning-tools/updated-muac-tool/>
 #'
 #'
-#' @seealso [mw_estimate_prevalence_mfaz()] [mw_estimate_prev_smart_age_weigthig()]
+#' @seealso [mw_estimate_prevalence_mfaz()] [mw_estimate_smart_age_wt()]
 #'
 #' @examples
 #' ## When .summary.by = NULL ----
@@ -216,17 +230,6 @@ complex_survey_estimates_muac <- function(df,
 #'   .by = province
 #' )
 #' p
-#'
-#' ## An application of `mw_estimate_prev_smart_age_weigthig()` ----
-#' .data <- anthro.04 |>
-#'   subset(province == "Province 2")
-#'
-#' weighted_pr <- mw_estimate_prev_smart_age_weigthig(
-#'   df = .data,
-#'   edema = edema,
-#'   .by = NULL
-#' )
-#' weighted_pr
 #'
 #' @rdname prev-muac
 #'
@@ -280,14 +283,14 @@ mw_estimate_prevalence_muac <- function(df,
       ### Estimate age-weighted prevalence as per SMART MUAC tool ----
       if (!quo_is_null(.by)) {
         output <- data |>
-          mw_estimate_prev_smart_age_weigthig(
+          mw_estimate_smart_age_wt(
             edema = {{ edema }},
             .by = !!.by
           )
       } else {
         ### Estimate age-weighted prevalence as per SMART MUAC tool ----
         output <- data |>
-          mw_estimate_prev_smart_age_weigthig(edema = {{ edema }})
+          mw_estimate_smart_age_wt(edema = {{ edema }})
       }
     } else {
       ## Return NA's ----

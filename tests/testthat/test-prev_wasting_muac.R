@@ -474,14 +474,14 @@ testthat::test_that(
   }
 )
 
-# Test check: mw_estimate_prev_smart_age_weigthig() ----
+# Test check: mw_estimate_smart_age_wt() ----
 testthat::test_that(
-  "mw_estimate_prev_smart_age_weigthig() works well",
+  "mw_estimate_smart_age_wt() works well",
   {
     ## Observed results ----
     p <- anthro.04 |>
       subset(province == "Province 2") |>
-      mw_estimate_prev_smart_age_weigthig()
+      mw_estimate_smart_age_wt()
 
     ## Expected results ----
     gam <- 11.2
