@@ -11,8 +11,9 @@ complex_survey_estimates_combined <- function(df,
   wt <- enquo(wt)
   edema <- enquo(edema)
 
-  ## Case definition when `edema` is null ----
+  ## Defines case based on the availability of edema ----
   if (!quo_is_null(edema)) {
+    ### Case definition when `edema` is not null ----
     df <- with(
       df,
       define_wasting(df,
@@ -26,6 +27,7 @@ complex_survey_estimates_combined <- function(df,
         )
     )
   } else {
+    ### Case definition when `edema` is null ----
     df <- with(
       df,
       define_wasting(df,
@@ -85,25 +87,35 @@ complex_survey_estimates_combined <- function(df,
 #' Estimate the prevalence of combined wasting
 #'
 #' @description
-#' The prevalence is calculated in accordance with the complex sample design
-#' properties inherent to surveys. This includes weighting of survey data where
-#' applicable. When either the acceptability of the standard deviation of WFHZ or
-#' of the age ratio test is problematic, prevalence is not calculated.
+#' Estimate the prevalence of wasting based on the combined case-definition of
+#' weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows users to
+#' get the prevalence estimates calculated in accordance with the complex sample
+#' design properties; this includes applying survey weights when needed or applicable.
+#' Flagged records in WFHZ and in MUAC data set are excluded prior prevalence analysis.
+#' Alongside this, the function also checks for the quality of
+#' data set before computing the prevalence. If all standard deviations of
+#' WFHZ and MFAZ, as well the age ratio test are not problematic, analysis is done;
+#' otherwise, if any of the checks get rated as problematic, NAs get thrown.
 #'
-#' @param df An already wrangled dataset of class `data.frame` to use. Both
-#' wranglers (of WFHZ and of MUAC) need to be used sequentially, regardless of the
-#' order. Note that MUAC values should be converted to millimeters after using
-#' the MUAC wrangler.
+#' @param df A dataset object of class `data.frame` to use. This must have been
+#' wrangled using this package's wrangling functions for both WFHZ and MUAC data
+#' sequentially. The order does not matter. Note that MUAC values should be
+#' converted to millimeters after using the MUAC wrangler. If this is not done,
+#' the function will stop execution and return an error message. Moreover, the
+#' function uses a variable called `cluster` where the primary sampling unit IDs
+#' are stored. Make sure to rename your cluster ID variable to `cluster`, otherwise
+#' the function will error and terminate the execution.
 #'
 #' @param wt A vector of class `double` of the final survey weights. Default is
 #'  `NULL` assuming a self-weighted survey, as in the ENA for SMART software;
 #'  otherwise a weighted analysis is computed.
 #'
-#' @param edema A vector of class `character` of edema. Code should be
+#' @param edema A vector of class `character` of edema. Code will be
 #' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
 #'
-#' @param .by A vector of class `character` of the geographical areas
-#' where the data was collected and for which the analysis should be performed.
+#' @param .by A vector of class `character` or `numeric` of the geographical areas
+#' or respective IDs for where the data was collected and for which the analysis
+#' should be summarised at.
 #'
 #' @returns A summarised table of class `data.frame` for the descriptive
 #' statistics about combined wasting.
@@ -113,9 +125,9 @@ complex_survey_estimates_combined <- function(df,
 #' defining as flag any observation that is flagged in either `flag_wfhz` or
 #' `flag_mfaz` vectors. A new column `cflags` for combined flags is created and
 #' added to `df`. This ensures that all flagged observations from both WFHZ
-#' and MFAZ data are excluded from the combined prevalence analysis.
+#' and MFAZ data are excluded from the prevalence analysis.
 #'
-#' *The table below shows an overview of how `cflags` are defined*
+#' *A glimpse on how `cflags` are defined*
 #' | **flag_wfhz** | **flag_mfaz** | **cflags** |
 #' | :---: | :---: | :---: |
 #' | 1 | 0  | 1 |
@@ -123,7 +135,6 @@ complex_survey_estimates_combined <- function(df,
 #' | 0 | 0  | 0 |
 #'
 #' @examples
-#'
 #' ## When .by and wt are set to NULL ----
 #' mw_estimate_prevalence_combined(
 #'   df = anthro.02,
@@ -135,7 +146,7 @@ complex_survey_estimates_combined <- function(df,
 #' ## When wt is not set to NULL ----
 #' mw_estimate_prevalence_combined(
 #'   df = anthro.02,
-#'   wt = "wtfactor",
+#'   wt = wtfactor,
 #'   edema = edema,
 #'   .by = NULL
 #' )
@@ -149,6 +160,12 @@ mw_estimate_prevalence_combined <- function(df,
                                             .by = NULL) {
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
+
+  ## Enforce measuring unit is in "mm" ----
+  x <- as.character(pull(df, muac))
+  if (any(grepl("\\.", x))) {
+    stop("MUAC values must be in millimeters. Please try again.")
+  }
 
   ## Empty vector to store results ----
   results <- list()
