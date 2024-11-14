@@ -278,3 +278,34 @@ testthat::test_that(
   }
 )
 
+## When MUAC is not in millimeters the function errors ----
+testthat::test_that(
+  "When MUAC is not in centimeters, the function stop execution",
+  {
+    testthat::expect_error(
+      x <- anthro.01 |>
+        mw_wrangle_age(
+          age = age,
+          .decimals = 2
+          ) |>
+        mw_wrangle_muac(
+          sex = sex,
+          muac = muac,
+          age = age,
+          .recode_sex = FALSE,
+          .recode_muac = TRUE,
+          .to = "cm",
+          .decimals = 3
+          ) |>
+        mw_wrangle_wfhz(
+          sex = sex,
+          weight = weight,
+          height = height,
+          .recode_sex = F,
+          .decimals = 3
+          ) |>
+        mw_estimate_prevalence_combined(edema = edema),
+      regexp = "MUAC values must be in millimeters. Please try again."
+    )
+  }
+)
