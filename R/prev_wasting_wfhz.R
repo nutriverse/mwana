@@ -109,7 +109,7 @@ complex_survey_estimates_wfhz <- function(df,
 #' )
 #'
 #' ### Now run the prevalence function ----
-#' mw_estimate_prev_wasting_wfhz(
+#' mw_estimate_prevalence_wfhz(
 #'   df = data,
 #'   wt = NULL,
 #'   edema = edema,
@@ -117,7 +117,7 @@ complex_survey_estimates_wfhz <- function(df,
 #' )
 #'
 #' ## Now when .by is not set to NULL ----
-#' mw_estimate_prev_wasting_wfhz(
+#' mw_estimate_prevalence_wfhz(
 #'   df = data,
 #'   wt = NULL,
 #'   edema = edema,
@@ -125,7 +125,7 @@ complex_survey_estimates_wfhz <- function(df,
 #' )
 #'
 #' ## When a weighted analysis is needed ----
-#' mw_estimate_prev_wasting_wfhz(
+#' mw_estimate_prevalence_wfhz(
 #'   df = anthro.02,
 #'   wt = wtfactor,
 #'   edema = edema,
@@ -134,7 +134,7 @@ complex_survey_estimates_wfhz <- function(df,
 #'
 #' @export
 #'
-mw_estimate_prev_wasting_wfhz <- function(df,
+mw_estimate_prevalence_wfhz <- function(df,
                                         wt = NULL,
                                         edema = NULL,
                                         .by = NULL) {

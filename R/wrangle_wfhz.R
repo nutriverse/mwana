@@ -31,8 +31,8 @@
 #' `flag_wfhz`, of child's WFHZ and detected outliers, will be created.
 #'
 #' @references
-#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
-#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief*
+#' *and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
 #'
 #' @seealso
 #' [flag_outliers()] [remove_flags()]

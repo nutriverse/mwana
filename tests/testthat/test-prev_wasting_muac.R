@@ -189,15 +189,15 @@ testthat::test_that(
   }
 )
 
-# Test check: mw_estimate_prev_wasting_muac() ----
+# Test check: mw_estimate_prevalence_muac() ----
 ## When age_ratio & std != problematic & !is.null(wt) & !is.null(edema) ----
 testthat::test_that(
-  "mw_estimate_prev_wasting_muac() yields correct estimates when edema and survey
+  "mw_estimate_prevalence_muac() yields correct estimates when edema and survey
     weights are supplied",
   {
     ### Get the prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prev_wasting_muac(edema = edema, wt = wtfactor, .by = NULL)
+      mw_estimate_prevalence_muac(edema = edema, wt = wtfactor, .by = NULL)
 
     ### Expected results ----
     ### GAM estimates and uncertainty ----
@@ -238,12 +238,12 @@ testthat::test_that(
 
 ## When age_ratio & std != problematic & is.null(wt) & !is.null(edema) ----
 testthat::test_that(
-  "mw_estimate_prev_wasting_muac() yields correct estimates survey
+  "mw_estimate_prevalence_muac() yields correct estimates survey
     weights are not supplied",
   {
     ### Get the prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prev_wasting_muac(wt = NULL)
+      mw_estimate_prevalence_muac(wt = NULL)
 
     ### Expected results ----
     ### GAM estimates and uncertainty ----
@@ -283,12 +283,12 @@ testthat::test_that(
 
 ## When age_ratio & std != problematic & !is.null(wt) & !is.null(edema) ----
 testthat::test_that(
-  "mw_estimate_prev_wasting_muac() yields correct estimates when edema is not
+  "mw_estimate_prevalence_muac() yields correct estimates when edema is not
     supplied",
   {
     ### Get the prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prev_wasting_muac(edema = NULL, wt = wtfactor, .by = NULL)
+      mw_estimate_prevalence_muac(edema = NULL, wt = wtfactor, .by = NULL)
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
@@ -328,11 +328,11 @@ testthat::test_that(
 
 ## When age_ratio & std != problematic & is.null(wt) ----
 testthat::test_that(
-  "mw_estimate_prev_wasting_muac() yields correct estimates when edema is supplied",
+  "mw_estimate_prevalence_muac() yields correct estimates when edema is supplied",
   {
     ### Get prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prev_wasting_muac(edema = edema, .by = NULL)
+      mw_estimate_prevalence_muac(edema = edema, .by = NULL)
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
@@ -372,12 +372,12 @@ testthat::test_that(
 
 ## When age_ratio & std != problematic & !is.null(wt) with .by = province
 testthat::test_that(
-  "mw_estimate_prev_wasting_muac() yields correct estimates when .by is
+  "mw_estimate_prevalence_muac() yields correct estimates when .by is
     used",
   {
     ### Get prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prev_wasting_muac(
+      mw_estimate_prevalence_muac(
         edema = edema,
         wt = wtfactor,
         .by = province
@@ -427,12 +427,12 @@ testthat::test_that(
 
 ## When !is.null(.by) and analysis approach has different categories ----
 testthat::test_that(
-  "mw_estimate_prev_wasting_muac() works well on a dataframe with multiple survey areas with
+  "mw_estimate_prevalence_muac() works well on a dataframe with multiple survey areas with
     different categories on analysis_approach",
   {
     ### Get the prevalence estimates ----
     p <- anthro.04 |>
-      mw_estimate_prev_wasting_muac(edema = edema, .by = province)
+      mw_estimate_prevalence_muac(edema = edema, .by = province)
 
     ### Subset a province whose analysis approach is unweighted ---
     province_1 <- subset(p, province == "Province 1")
@@ -461,12 +461,12 @@ testthat::test_that(
 
 ## When is.null(.by) and analysis pah is add NA's ----
 testthat::test_that(
-  "mw_estimate_prev_wasting_muac() works as expected",
+  "mw_estimate_prevalence_muac() works as expected",
   {
     ### Get the prevalence estimates ----
     p <- anthro.04 |>
       subset(province == "Province 3") |>
-      mw_estimate_prev_wasting_muac(edema = edema, .by = NULL)
+      mw_estimate_prevalence_muac(edema = edema, .by = NULL)
 
     ### The test ----
     testthat::expect_s3_class(p, "tbl")
@@ -474,14 +474,14 @@ testthat::test_that(
   }
 )
 
-# Test check: smart_age_weighted_estimate() ----
+# Test check: mw_estimate_prev_smart_age_weigthig() ----
 testthat::test_that(
-  "smart_age_weighted_estimate() works well",
+  "mw_estimate_prev_smart_age_weigthig() works well",
   {
     ## Observed results ----
     p <- anthro.04 |>
       subset(province == "Province 2") |>
-      smart_age_weighted_estimate()
+      mw_estimate_prev_smart_age_weigthig()
 
     ## Expected results ----
     gam <- 11.2

@@ -49,8 +49,8 @@ mw_wrangle_wfhz(
 
 }
 \references{
-SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief
-and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
+SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief}
+\emph{and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
 }
 \seealso{
 \code{\link[=flag_outliers]{flag_outliers()}} \code{\link[=remove_flags]{remove_flags()}}

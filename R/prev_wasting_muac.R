@@ -56,10 +56,10 @@ smart_age_weighting <- function(muac,
 
 #'
 #'
-#' @keywords internal
+#' @rdname prev-muac
 #'
 #'
-smart_age_weighted_estimate <- function(df, edema = NULL, .by = NULL) {
+mw_estimate_prev_smart_age_weigthig <- function(df, edema = NULL, .by = NULL) {
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
@@ -102,11 +102,9 @@ smart_age_weighted_estimate <- function(df, edema = NULL, .by = NULL) {
 #'
 #'
 complex_survey_estimates_muac <- function(df,
-                                         wt = NULL,
-                                         edema = NULL,
-                                         .by = NULL) {
-
-
+                                          wt = NULL,
+                                          edema = NULL,
+                                          .by = NULL) {
   ## Difuse ----
   wt <- enquo(wt)
 
@@ -159,40 +157,85 @@ complex_survey_estimates_muac <- function(df,
 
 
 #'
-#' This is to be revised
+#' Estimate the prevalence of wasting based on MUAC
+#'
+#' @description
+#' Calculate the prevalence estimates of wasting based on MUAC and/or bilateral
+#' edema. The function first learns learns about the acceptability of the age
+#' ratio test and of the standard deviation of muac-for-age z-scores (MFAZ) in
+#' the data set, and then, depending on the observed results, it picks an analysis
+#' workflow that best fits the data, between standard cluster-based survey design
+#' including and weighted analysis, application of the age-weighting approach
+#' as in the SMART MUAC Tool.
+#'
+#' The function has considerable usefulness when working with a multiple-area
+#' data set. Definition of workflow fit is done row-wise.
+#'
+#' @param df A data set object of class `data.frame` to use. This must have been
+#' wrangled using this package's wrangling function for MUAC data.
+#' The function uses a variable name called `cluster` where the primary sampling unit IDs
+#' are stored. Make sure the data set has this variable and its name has been
+#' renamed to `cluster`, otherwise the function will error and terminate the execution.
+#'
+#' @param wt A vector of class `double` of the final survey weights. Default is
+#'  `NULL` assuming a self weighted survey, as in the ENA for SMART software;
+#'  otherwise, when a vector of weights if supplied, weighted analysis is done.
+#'
+#' @param edema A vector of class `character` of edema. Code should be
+#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
+#'
+#' @param .by A vector of class `character` or `numeric` of the geographical areas
+#' or respective IDs for where the data was collected and for which the analysis
+#' should be summarized at.
+#'
+#' @returns A summarized table of class `data.frame` of the descriptive
+#' statistics about wasting.
+#'
+#' @references
+#' SMART Initiative (no date). *Updated MUAC data collection tool*. Available at:
+#' <https://smartmethodology.org/survey-planning-tools/updated-muac-tool/>
+#'
+#'
+#' @seealso [mw_estimate_prevalence_mfaz()] [mw_estimate_prev_smart_age_weigthig()]
 #'
 #' @examples
-#'
-#' ## An example of application of `mw_estimate_prev_wasting_muac()` ----
-#'
-#' ### When .summary.by = NULL ----
-#'
-#' prev <- mw_estimate_prev_wasting_muac(
+#' ## When .summary.by = NULL ----
+#' prev <- mw_estimate_prevalence_muac(
 #'   df = anthro.04,
 #'   wt = NULL,
 #'   edema = edema,
 #'   .by = NULL
 #' )
+#' prev
 #'
-#' print(prev)
-#'
-#' ### When .by is not set to NULL ----
-#'
-#' p <- mw_estimate_prev_wasting_muac(
+#' ## When .by is not set to NULL ----
+#' p <- mw_estimate_prevalence_muac(
 #'   df = anthro.04,
 #'   wt = NULL,
 #'   edema = edema,
 #'   .by = province
 #' )
+#' p
 #'
-#' print(p)
+#' ## An application of `mw_estimate_prev_smart_age_weigthig()` ----
+#' .data <- anthro.04 |>
+#'   subset(province == "Province 2")
+#'
+#' weighted_pr <- mw_estimate_prev_smart_age_weigthig(
+#'   df = .data,
+#'   edema = edema,
+#'   .by = NULL
+#' )
+#' weighted_pr
+#'
+#' @rdname prev-muac
 #'
 #' @export
 #'
-mw_estimate_prev_wasting_muac <- function(df,
-                                          wt = NULL,
-                                          edema = NULL,
-                                          .by = NULL) {
+mw_estimate_prevalence_muac <- function(df,
+                                        wt = NULL,
+                                        edema = NULL,
+                                        .by = NULL) {
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
@@ -236,10 +279,15 @@ mw_estimate_prev_wasting_muac <- function(df,
     } else if (analysis_approach == "weighted") {
       ### Estimate age-weighted prevalence as per SMART MUAC tool ----
       if (!quo_is_null(.by)) {
-        output <- smart_age_weighted_estimate(data, edema = {{ edema }}, !!.by)
+        output <- data |>
+          mw_estimate_prev_smart_age_weigthig(
+            edema = {{ edema }},
+            .by = !!.by
+          )
       } else {
         ### Estimate age-weighted prevalence as per SMART MUAC tool ----
-        output <- smart_age_weighted_estimate(data, edema = {{ edema }})
+        output <- data |>
+          mw_estimate_prev_smart_age_weigthig(edema = {{ edema }})
       }
     } else {
       ## Return NA's ----
