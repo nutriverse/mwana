@@ -272,9 +272,9 @@ testthat::test_that(
       )
 
     ### Tests ----
-    testthat::expect_vector(select(p, !district), size = 1, ncol(3))
+    testthat::expect_vector(p, size = 1, ncol(3))
     testthat::expect_s3_class(p, "tbl")
-    testthat::expect_true(all(sapply(M[names(M)], \(.) all(is.na(.)))))
+    testthat::expect_true(all(sapply(p[names(p)], \(.) all(is.na(.)))))
   }
 )
 

@@ -77,7 +77,7 @@ mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
   .by <- enquo(.by)
 
   ## Enforce measuring unit is in "mm" ----
-  x <- as.character(pull(df, muac))
+  x <- as.character(pull(df, .data$muac))
   if (any(grepl("\\.", x))) {
     stop("MUAC values must be in millimeters. Please try again.")
   }
@@ -259,7 +259,7 @@ mw_estimate_prevalence_muac <- function(df,
 
 
   ## Enforce measuring unit is in "mm" ----
-  x <- as.character(pull(df, muac))
+  x <- as.character(pull(df, .data$muac))
   if (any(grepl("\\.", x))) {
     stop("MUAC values must be in millimeters. Please try again.")
   }

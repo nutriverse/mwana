@@ -162,7 +162,7 @@ mw_estimate_prevalence_combined <- function(df,
   .by <- enquo(.by)
 
   ## Enforce measuring unit is in "mm" ----
-  x <- as.character(pull(df, muac))
+  x <- as.character(pull(df, .data$muac))
   if (any(grepl("\\.", x))) {
     stop("MUAC values must be in millimeters. Please try again.")
   }
