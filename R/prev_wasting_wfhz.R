@@ -2,11 +2,11 @@
 #'
 #' @keywords internal
 #'
+#'
 complex_survey_estimates_wfhz <- function(df,
                                          wt = NULL,
                                          edema = NULL,
                                          .by) {
-
 
   ## Difuse ----
   wt <- enquo(wt)
@@ -139,21 +139,21 @@ mw_estimate_prevalence_wfhz <- function(df,
                                         edema = NULL,
                                         .by = NULL) {
 
-  ## Difuse argument `.by` to be evaluated later and lazily ----
+  ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
-  ## An empty vector type list ----
+  ## Empty vector type list ----
   results <- list()
 
   if (!quo_is_null(.by)) {
-    ## Grouped summary of standard deviation classification ----
+    ## Rate standard deviation ----
     x <- df |>
       summarise(
       std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)),
       .by = !!.by
     )
   } else {
-    ## Non-grouped summary ----
+    ## Rate standard deviation ----
     x <- df |>
       summarise(
       std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE))
@@ -172,11 +172,20 @@ mw_estimate_prevalence_wfhz <- function(df,
     std <- x$std[i]
     if (std != "Problematic") {
       ### Compute complex sample-based prevalence estimates ----
-      result <- complex_survey_estimates_wfhz(data, {{ wt }}, {{ edema }}, !!.by)
+      result <- data |>
+        complex_survey_estimates_wfhz(
+          wt = {{ wt }},
+          edema = {{ edema }},
+          .by = !!.by
+          )
     } else {
       ### Compute PROBIT-based prevalence estimates----
       if (!quo_is_null(.by)) {
-        result <- estimate_probit_prevalence(data, !!.by, .for = "wfhz")
+        result <- data |>
+          estimate_probit_prevalence(
+            .by = !!.by,
+            .for = "wfhz"
+            )
       } else {
         ### Compute PROBIT-based prevalence estimates ----
         result <- estimate_probit_prevalence(data, .for = "wfhz")
