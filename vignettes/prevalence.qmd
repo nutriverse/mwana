@@ -311,6 +311,32 @@ anthro.04 |>
 
 We see that in Province 1, all columns are filled with numbers; in Province 2, some columns are filled with numbers, while other columns are filled with `NA`s: this is where the age-weighting approach was applied. Lastly, in Province 3 a bunch of `NA` are filled everywhere - you know why 😉 . 
 
+Alternatively, we can choose to apply the function that calculates the age-weighted prevalence estimates inside `mw_estimate_prevalence_muac()` directly on to our data set. This can be done by calling the `mw_estimate_smart_age_wt()` function. It worth noting that although possible, we recommend to use the main function. This is simply due the fact that if we decide to use the function independently, then we must, before calling it, check the acceptability of the standard deviation of MFAZ and of the age ratio test, and then evaluate if the conditions that fits the use `mw_estimate_smart_age_wt()` are there. This introduces some kind of cumbersomeness in our workflow, and along with that, a risk of picking a wrong analysis workflow.
+
+Nonetheless, if for any reason we decide to go for it anyway, then we would apply the function as demonstrated below. We will continue using the `anthro.04` data set. For this demonstration, we will just pull out the data set from `Province 2` where we already know that the conditions to apply `mw_estimate_smart_age_wt()` are met, and then we will pipe it in to the function:
+```{r}
+#| label: smart_wt
+#| echo: true
+#| eval: false
+
+anthro.04 |>
+  subset(province == "Province 2") |>
+  mw_estimate_smart_age_wt(
+    edema = edema,
+    .by = NULL
+  )
+```
+
+This returns the following: 
+```{r}
+#| label: smart_wt_view
+#| echo: false
+
+anthro.04 |>
+  subset(province == "Province 2") |>
+  mw_estimate_smart_age_wt()
+```
+
 #### Estimation of weighted prevalence
 
 For this we go back `anthro.02` data set. 
