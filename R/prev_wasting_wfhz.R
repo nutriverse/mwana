@@ -2,25 +2,38 @@
 #'
 #' @keywords internal
 #'
+#'
 complex_survey_estimates_wfhz <- function(df,
-                                         wt = NULL,
-                                         edema = NULL,
-                                         .by) {
-
-
-  ## Difuse ----
+                                          wt = NULL,
+                                          edema = NULL,
+                                          .by) {
+  ## Difuse arguments ----
   wt <- enquo(wt)
+  edema <- enquo(edema)
 
-  ## Define wasting and add to the data frame ----
-  df <- with(
-    df,
-    define_wasting(
+  ## Defines case based on the availability of edema ----
+  if (!quo_is_null(edema)) {
+    ## When edema is available ----
+    df <- with(
       df,
-      zscores = .data$wfhz,
-      edema = {{ edema }},
-      .by = "zscores"
+      define_wasting(
+        df,
+        zscores = .data$wfhz,
+        edema = !!edema,
+        .by = "zscores"
+      )
     )
-  )
+  } else {
+    ## When edema is not available ----
+    df <- with(
+      df,
+      define_wasting(
+        df,
+        zscores = .data$wfhz,
+        .by = "zscores"
+      )
+    )
+  }
 
   ## Create a survey object ----
   if (!quo_is_null(wt)) {
@@ -138,26 +151,25 @@ mw_estimate_prevalence_wfhz <- function(df,
                                         wt = NULL,
                                         edema = NULL,
                                         .by = NULL) {
-
-  ## Difuse argument `.by` to be evaluated later and lazily ----
+  ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
-  ## An empty vector type list ----
+  ## Empty vector type list ----
   results <- list()
 
   if (!quo_is_null(.by)) {
-    ## Grouped summary of standard deviation classification ----
+    ## Rate standard deviation ----
     x <- df |>
       summarise(
-      std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)),
-      .by = !!.by
-    )
+        std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)),
+        .by = !!.by
+      )
   } else {
-    ## Non-grouped summary ----
+    ## Rate standard deviation ----
     x <- df |>
       summarise(
-      std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE))
-    )
+        std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE))
+      )
   }
 
   ## Compute prevalence based on the rate of the SD ----
@@ -172,11 +184,20 @@ mw_estimate_prevalence_wfhz <- function(df,
     std <- x$std[i]
     if (std != "Problematic") {
       ### Compute complex sample-based prevalence estimates ----
-      result <- complex_survey_estimates_wfhz(data, {{ wt }}, {{ edema }}, !!.by)
+      result <- data |>
+        complex_survey_estimates_wfhz(
+          wt = {{ wt }},
+          edema = {{ edema }},
+          .by = !!.by
+        )
     } else {
       ### Compute PROBIT-based prevalence estimates----
       if (!quo_is_null(.by)) {
-        result <- estimate_probit_prevalence(data, !!.by, .for = "wfhz")
+        result <- data |>
+          estimate_probit_prevalence(
+            .by = !!.by,
+            .for = "wfhz"
+          )
       } else {
         ### Compute PROBIT-based prevalence estimates ----
         result <- estimate_probit_prevalence(data, .for = "wfhz")

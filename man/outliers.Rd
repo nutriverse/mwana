@@ -32,7 +32,7 @@ For raw MUAC values, outliers constitute values that are less than 100
 millimeters or greater than 200 millimeters.
 
 Removing outliers consist in setting the outlier record to \code{NA} and not necessarily
-to delete it from the dataset. This is useful in the analysis procedures
+to delete it from the data set. This is useful in the analysis procedures
 where outliers must be removed, such as the analysis of the standard deviation.
 }
 \details{

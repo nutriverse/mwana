@@ -151,7 +151,7 @@ A table with two rows is returned with each province's statistics.
 
 #### Estimation of weighted prevalence 
 
-To get the weighted prevalence, we make the use of the `.wt` argument. We pass to it the column name containing the final survey weights. In our case, the column name is `wtfactor`:
+To get the weighted prevalence, we make the use of the `wt` argument. We pass to it the column name containing the final survey weights. In our case, the column name is `wtfactor`:
 
 ```{r}
 #| label: wt_wasting_wfhz
@@ -160,7 +160,7 @@ To get the weighted prevalence, we make the use of the `.wt` argument. We pass t
 
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
-    wt = wtfactor, # Passing the wtfactor to .wt
+    wt = wtfactor, # Passing the wtfactor to wt
     edema = edema,
     .by = province
   )
@@ -413,7 +413,7 @@ You may have noticed that in the above code block, we called the `recode_muac()`
 
 ### Estimation of the combined prevalence of wasting
 
-The estimation of the combined prevalence of wasting is a task attributed to the `compute_combined_prevalence()` function. The case-definition is based on the WFHZ, the raw MUAC values and edema. From the workflow standpoint, it combines the workflow demonstrated in @sec-prevalence-wfhz and in @sec-prevalence-muac.
+The estimation of the combined prevalence of wasting is a task attributed to the `mw_estimate_prevalence_combined()` function. The case-definition is based on the WFHZ, the raw MUAC values and edema. From the workflow standpoint, it combines the workflow demonstrated in @sec-prevalence-wfhz and in @sec-prevalence-muac.
 
 To demonstrate it's implementation we will use the `anthro.01` data set.
 
@@ -499,7 +499,7 @@ anthro.01 |>
   select(area, wfhz, flag_wfhz, mfaz, flag_mfaz)
 ```
 
-Under the hood, `compute_combined_prevalence()` applies the same analysis approach as in `mw_estimate_prevalence_wfhz` and in `mw_estimate_prevalence_muac()`. It checks the acceptability of the standard deviation of WFHZ and MFAZ and of the age ratio test. The following conditionals are checked and applied: 
+Under the hood, `mw_estimate_prevalence_combined()` applies the same analysis approach as in `mw_estimate_prevalence_wfhz` and in `mw_estimate_prevalence_muac()`. It checks the acceptability of the standard deviation of WFHZ and MFAZ and of the age ratio test. The following conditionals are checked and applied: 
 
   + If the standard deviation of WFHZ and of MFAZ, and the age ratio test are all concurrently not problematic, the standard complex sample-based estimation is applied.
   + If any of the above is rated problematic, the prevalence is not computed and `NA`s are thrown. 
@@ -555,10 +555,10 @@ anthro.01 |>
     height = height,
     .recode_sex = FALSE
   ) |>
-  compute_combined_prevalence(
-    .wt = NULL,
-    .edema = edema,
-    .summary_by = area
+  mw_estimate_prevalence_combined(
+    wt = NULL,
+    edema = edema,
+    .by = area
   )
 ```
 
@@ -594,10 +594,10 @@ anthro.01 |>
     height = height,
     .recode_sex = FALSE
   ) |>
-  compute_combined_prevalence(
-    .wt = NULL,
-    .edema = edema,
-    .summary_by = area
+  mw_estimate_prevalence_combined(
+    wt = NULL,
+    edema = edema,
+    .by = area
   )
 ```
 

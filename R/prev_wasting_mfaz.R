@@ -7,16 +7,34 @@ complex_survey_estimates_mfaz <- function(df,
                                           wt = NULL,
                                           edema = NULL,
                                           .by) {
-  ## Add acute malnutrition case-definitions to the data frame ----
-  df <- with(
-    df,
-    define_wasting(
+  ## Difuse arguments ----
+  wt <- enquo(wt)
+  edema <- enquo(edema)
+
+  ## Defines case based on the availability of edema ----
+  if (!quo_is_null(edema)) {
+    ## When edema is available ----
+    df <- with(
       df,
-      zscore = .data$mfaz,
-      edema = {{ edema }},
-      .by = "zscores"
+      define_wasting(
+        df,
+        zscores = .data$mfaz,
+        edema = !!edema,
+        .by = "zscores"
+      )
     )
-  )
+  } else {
+    ## When edema is not available ----
+    df <- with(
+      df,
+      define_wasting(
+        df,
+        zscores = .data$mfaz,
+        .by = "zscores"
+      )
+    )
+  }
+
   ## Create a survey object ----
   if (!is.null(wt)) {
     srvy <- df |>
