@@ -99,6 +99,53 @@ testthat::test_that(
   }
 )
 
+## When std != problematic & is.null(wt) & is.null(edema) ----
+testthat::test_that(
+  "mw_estimate_prevalence_wfhz() yields correct estimates when edema is
+    NULL",
+  {
+    ### Get the prevalence estimates ----
+    p <- mw_estimate_prevalence_wfhz(
+      df = anthro.02,
+      edema = NULL,
+      .by = NULL
+    )
+
+    ### Expected results ----
+    #### GAM estimates and uncertainty ----
+    n_gam <- 107
+    p_gam <- 3.4
+    p_gam_lci <- 2.6
+    p_gam_uci <- 4.2
+
+    #### SAM estimates and uncertainty ----
+    n_sam <- 29
+    p_sam <- 0.0
+    p_sam_lci <- 0.0
+    p_sam_uci <- 0.0
+
+    #### MAM estimates and uncertainty ----
+    n_mam <- 78
+    p_mam <- 3.4
+    p_mam_lci <- 2.6
+    p_mam_uci <- 4.2
+
+    ### Tests ----
+    testthat::expect_equal(p[[1]][1], n_gam)
+    testthat::expect_equal(round(p[[2]][1] * 100, 1), p_gam)
+    testthat::expect_equal(round(p[[3]][1] * 100, 1), p_gam_lci)
+    testthat::expect_equal(round(p[[4]][1] * 100, 1), p_gam_uci)
+    testthat::expect_equal(p[[6]][1], n_sam)
+    testthat::expect_equal(round(p[[7]][1] * 100, 1), p_sam)
+    testthat::expect_equal(round(p[[8]][1] * 100, 1), p_sam_lci)
+    testthat::expect_equal(round(p[[9]][1] * 100, 1), p_sam_uci)
+    testthat::expect_equal(p[[11]][1], n_mam)
+    testthat::expect_equal(round(p[[12]][1] * 100, 1), p_mam)
+    testthat::expect_equal(round(p[[13]][1] * 100, 1), p_mam_lci)
+    testthat::expect_equal(round(p[[14]][1] * 100, 1), p_mam_uci)
+  }
+)
+
 ## When std =! problematic & !is.null(wt) with .by = province ----
 testthat::test_that(
   "mw_estimate_prevalence_wfhz() yields correct estimates when .by is

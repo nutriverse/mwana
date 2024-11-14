@@ -11,7 +11,9 @@ mw_estimate_prevalence_muac(df, wt = NULL, edema = NULL, .by = NULL)
 }
 \arguments{
 \item{df}{A data set object of class \code{data.frame} to use. This must have been
-wrangled using this package's wrangling function for MUAC data.
+wrangled using this package's wrangling function for MUAC data. Make sure
+MUAC values are converted to millimeters after using the wrangler.
+If this is not done, the function will stop execution and return an error message.
 The function uses a variable name called \code{cluster} where the primary sampling unit IDs
 are stored. Make sure the data set has this variable and its name has been
 renamed to \code{cluster}, otherwise the function will error and terminate the execution.}
@@ -63,7 +65,7 @@ mw_estimate_prevalence_muac(
 )
 
 ## When .by is not set to NULL ----
-p <- mw_estimate_prevalence_muac(
+mw_estimate_prevalence_muac(
   df = anthro.04,
   wt = NULL,
   edema = edema,

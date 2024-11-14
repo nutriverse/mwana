@@ -72,7 +72,7 @@ get_age_months <- function(dos, dob) {
 #' millimeters or greater than 200 millimeters.
 #'
 #' Removing outliers consist in setting the outlier record to `NA` and not necessarily
-#' to delete it from the dataset. This is useful in the analysis procedures
+#' to delete it from the data set. This is useful in the analysis procedures
 #' where outliers must be removed, such as the analysis of the standard deviation.
 #'
 #' @param x A vector of class `numeric` of WFHZ, MFAZ, HFAZ, WFAZ or raw MUAC values.
@@ -256,7 +256,7 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
   switch(.to,
     ### Recode to centimeters ----
     "cm" = {
-      #### Enforce measuring unit is in "cm" ----
+      #### Enforce measuring unit is in "mm" ----
       if (any(grepl("\\.", as.character(x)))) {
         stop("MUAC values are not in millimeters. Please try again.")
       }

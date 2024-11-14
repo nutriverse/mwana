@@ -76,6 +76,12 @@ mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
+  ## Enforce measuring unit is in "mm" ----
+  x <- as.character(pull(df, muac))
+  if (any(grepl("\\.", x))) {
+    stop("MUAC values must be in millimeters. Please try again.")
+  }
+
   if (!quo_is_null(.by)) {
     df <- df |>
       filter(.data$flag_mfaz == 0) |>
@@ -118,15 +124,25 @@ complex_survey_estimates_muac <- function(df,
                                           wt = NULL,
                                           edema = NULL,
                                           .by = NULL) {
-  ## Difuse ----
+  ## Difuse arguments ----
   wt <- enquo(wt)
+  edema <- enquo(edema)
 
-  df <- df |>
-    define_wasting(
-      muac = .data$muac,
-      edema = {{ edema }},
-      .by = "muac"
-    )
+  ## Defines case based on the availability of edema ----
+  if (!quo_is_null(edema)) {
+    df <- df |>
+      define_wasting(
+        muac = .data$muac,
+        edema = !!edema,
+        .by = "muac"
+      )
+  } else {
+    df <- df |>
+      define_wasting(
+        muac = .data$muac,
+        .by = "muac"
+      )
+  }
 
   ### Weighted survey analysis ----
   if (!is.null(wt)) {
@@ -185,7 +201,9 @@ complex_survey_estimates_muac <- function(df,
 #' data set. Definition of workflow fit is done row-wise.
 #'
 #' @param df A data set object of class `data.frame` to use. This must have been
-#' wrangled using this package's wrangling function for MUAC data.
+#' wrangled using this package's wrangling function for MUAC data. Make sure
+#' MUAC values are converted to millimeters after using the wrangler.
+#' If this is not done, the function will stop execution and return an error message.
 #' The function uses a variable name called `cluster` where the primary sampling unit IDs
 #' are stored. Make sure the data set has this variable and its name has been
 #' renamed to `cluster`, otherwise the function will error and terminate the execution.
@@ -221,7 +239,7 @@ complex_survey_estimates_muac <- function(df,
 #' )
 #'
 #' ## When .by is not set to NULL ----
-#' p <- mw_estimate_prevalence_muac(
+#' mw_estimate_prevalence_muac(
 #'   df = anthro.04,
 #'   wt = NULL,
 #'   edema = edema,
@@ -238,6 +256,13 @@ mw_estimate_prevalence_muac <- function(df,
                                         .by = NULL) {
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
+
+
+  ## Enforce measuring unit is in "mm" ----
+  x <- as.character(pull(df, muac))
+  if (any(grepl("\\.", x))) {
+    stop("MUAC values must be in millimeters. Please try again.")
+  }
 
   ## Empty vector type list to store results ----
   results <- list()
