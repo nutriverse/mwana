@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-get_complex_sample_estimates <- function(df,
+complex_survey_estimates_wfhz <- function(df,
                                          wt = NULL,
                                          edema = NULL,
                                          .by) {
@@ -109,7 +109,7 @@ get_complex_sample_estimates <- function(df,
 #' )
 #'
 #' ### Now run the prevalence function ----
-#' mw_estimate_prev_wasting_wfhz(
+#' mw_estimate_prevalence_wfhz(
 #'   df = data,
 #'   wt = NULL,
 #'   edema = edema,
@@ -117,7 +117,7 @@ get_complex_sample_estimates <- function(df,
 #' )
 #'
 #' ## Now when .by is not set to NULL ----
-#' mw_estimate_prev_wasting_wfhz(
+#' mw_estimate_prevalence_wfhz(
 #'   df = data,
 #'   wt = NULL,
 #'   edema = edema,
@@ -125,7 +125,7 @@ get_complex_sample_estimates <- function(df,
 #' )
 #'
 #' ## When a weighted analysis is needed ----
-#' mw_estimate_prev_wasting_wfhz(
+#' mw_estimate_prevalence_wfhz(
 #'   df = anthro.02,
 #'   wt = wtfactor,
 #'   edema = edema,
@@ -134,7 +134,7 @@ get_complex_sample_estimates <- function(df,
 #'
 #' @export
 #'
-mw_estimate_prev_wasting_wfhz <- function(df,
+mw_estimate_prevalence_wfhz <- function(df,
                                         wt = NULL,
                                         edema = NULL,
                                         .by = NULL) {
@@ -172,7 +172,7 @@ mw_estimate_prev_wasting_wfhz <- function(df,
     std <- x$std[i]
     if (std != "Problematic") {
       ### Compute complex sample-based prevalence estimates ----
-      result <- get_complex_sample_estimates(data, {{ wt }}, {{ edema }}, !!.by)
+      result <- complex_survey_estimates_wfhz(data, {{ wt }}, {{ edema }}, !!.by)
     } else {
       ### Compute PROBIT-based prevalence estimates----
       if (!quo_is_null(.by)) {

@@ -313,12 +313,12 @@ define_wasting <- function(df,
 #' @keywords internal
 #'
 #'
-classify_wasting_for_cdc_approach <- function(muac, .edema = NULL) {
-  if (!is.null(.edema)) {
+smart_tool_case_definition <- function(muac, edema = NULL) {
+  if (!is.null(edema)) {
     ## Define cases including edema ----
     x <- case_when(
-      muac < 115 | {{ .edema }} == "y" ~ "sam",
-      muac >= 115 & muac < 125 & {{ .edema }} == "n" ~ "mam",
+      muac < 115 | {{ edema }} == "y" ~ "sam",
+      muac >= 115 & muac < 125 & {{ edema }} == "n" ~ "mam",
       .default = "not wasted"
     )
   } else {

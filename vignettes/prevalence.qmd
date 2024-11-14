@@ -21,13 +21,13 @@ This vignette demonstrates how to use the `mwana` package's functions to estimat
   + MUAC-for-age z-score (MFAZ) and/or edema, and
   + Combined prevalence. 
 
-The prevalence functions in `mwana` were carefully conceived and designed to simplify the workflow of a nutrition data analyst, especially when dealing with datasets containing imperfections that require additional layers of analysis. Let's try to clarify this with two scenarios that I believe will remind you of the complexity involved: 
+The prevalence functions in `mwana` were carefully conceived and designed to simplify the workflow of a nutrition data analyst, especially when dealing with data sets containing imperfections that require additional layers of analysis. Let's try to clarify this with two scenarios that I believe will remind you of the complexity involved: 
 
-  + When analysing a multi-area dataset, users will likely need to estimate the prevalence for each area individually. Afterward, they must extract the results and collate in a summary table.
+  + When analysing a multi-area data set, users will likely need to estimate the prevalence for each area individually. Afterward, they must extract the results and collate in a summary table.
   
   + When working with MUAC data, if age ratio test is rated as problematic, an additional tool is required to weight the prevalence and correct for age bias. In unfortunate cases where multiple areas face this issue, the workflow must be repeated several times, making the process cumbersome and highly error-prone 😬.
 
-With `mwana` you no longer have to worry about this 🥳 as the functions are designed to deal with that. To demonstrate their use, we will use different datasets containing some imperfections alluded above:
+With `mwana` you no longer have to worry about this 🥳 as the functions are designed to deal with that. To demonstrate their use, we will use different data sets containing some imperfections alluded above:
 
   + `anthro.02` : a survey data with survey weights. Read more about this data with `?anthro.02`.
   + `anthro.03` : district-level SMART surveys with two districts whose WFHZ standard deviation are rated as problematic while the rest are within range.  Do `?anthro.03` for more details.
@@ -37,9 +37,9 @@ Now we can begin delving into each function.
 
 ### Estimation of the prevalence of wasting based on WFHZ {#sec-prevalence-wfhz}
 
-To estimate the prevalence of wasting based on WFHZ we use the `mw_estimate_prev_wasting_wfhz()` function. The dataset to supply must have been wrangled by `mw_wrangle_wfhz()`. 
+To estimate the prevalence of wasting based on WFHZ we use the `mw_estimate_prevalence_wfhz()` function. The data set to supply must have been wrangled by `mw_wrangle_wfhz()`. 
 
-As usual, we start off by inspecting our dataset:
+As usual, we start off by inspecting our data set:
 
 ```{r}
 #| label: inspect_anthro.02
@@ -56,7 +56,7 @@ tail(anthro.02)
 tail(anthro.02)
 ```
 
-We can see that the dataset contains the required variables for a WFHZ prevalence analysis, including for a weighted analysis. This dataset has already been wrangled, so we do not need to call the WFHZ wrangler in this case. We will begin the demonstration with an unweigthed analysis - typical of SMART surveys - and then we proceed to a weighted analysis.
+We can see that the data set contains the required variables for a WFHZ prevalence analysis, including for a weighted analysis. This data set has already been wrangled, so we do not need to call the WFHZ wrangler in this case. We will begin the demonstration with an unweigthed analysis - typical of SMART surveys - and then we proceed to a weighted analysis.
 
 #### Estimation of unweighted prevalence 
 
@@ -67,7 +67,7 @@ To achieve this we do:
 #| eval: false
 
 anthro.02 |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
     .by = NULL
@@ -79,7 +79,7 @@ This will return:
 #| label: view_unwt_wast_wfhz
 #| echo: false
 
-mw_estimate_prev_wasting_wfhz(
+mw_estimate_prevalence_wfhz(
   df = anthro.02,
   wt = NULL,
   edema = edema,
@@ -87,7 +87,7 @@ mw_estimate_prev_wasting_wfhz(
 )
 ```
 
-If for some reason the variable edema is not available in the dataset, or it's there but not plausible, we can exclude it from the analysis by setting the argument `edema` to `NULL`:
+If for some reason the variable edema is not available in the data set, or it's there but not plausible, we can exclude it from the analysis by setting the argument `edema` to `NULL`:
 
 ```{r}
 #| label: unwt_wast_wfhz_noedema
@@ -95,7 +95,7 @@ If for some reason the variable edema is not available in the dataset, or it's t
 #| eval: false
 
 anthro.02 |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = NULL, # Setting edema to NULL
     .by = NULL
@@ -108,7 +108,7 @@ And we get:
 #| label: view_unwt_wast_wfhz_noedema
 #| echo: false
 
-mw_estimate_prev_wasting_wfhz(
+mw_estimate_prevalence_wfhz(
   df = anthro.02,
   wt = NULL,
   edema = NULL,
@@ -116,7 +116,7 @@ mw_estimate_prev_wasting_wfhz(
 )
 ```
 
-If we inspect the `gam_n` and `gam_p` columns of this output table and the previous, we notice differences in the numbers. This occurs because edema cases were excluded in the second implementation. Note that you will observed a change if there are positive cases of edema in the dataset; otherwise, setting `edema = NULL` will have no effect whatsoever. 
+If we inspect the `gam_n` and `gam_p` columns of this output table and the previous, we notice differences in the numbers. This occurs because edema cases were excluded in the second implementation. Note that you will observed a change if there are positive cases of edema in the data set; otherwise, setting `edema = NULL` will have no effect whatsoever. 
 
 The above output summary does not show results by province. We can control that using the `.by` argument. In the above examples, it was set to `NULL`; now let's pass the name of the column containing the locations where the data was collected. In our case, the column is `province`: 
 
@@ -126,7 +126,7 @@ The above output summary does not show results by province. We can control that 
 #| eval: false
 
 anthro.02 |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
     .by = province # province is the variable's name holding data on where the survey was conducted.
@@ -140,7 +140,7 @@ And _voila_ :
 #| echo: false
 
 anthro.02 |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
     .by = province
@@ -159,7 +159,7 @@ To get the weighted prevalence, we make the use of the `.wt` argument. We pass t
 #| eval: false
 
 anthro.02 |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = wtfactor, # Passing the wtfactor to .wt
     edema = edema,
     .by = province
@@ -173,7 +173,7 @@ And you get:
 #| echo: true
 
 anthro.02 |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = wtfactor,
     edema = edema,
     .by = province
@@ -181,14 +181,14 @@ anthro.02 |>
 ```
 
 :::{.callout-note}
-## The work under the hood of `mw_estimate_prev_wasting_wfhz`
+## The work under the hood of `mw_estimate_prevalence_wfhz`
 
-Under the hood, before starting the prevalence estimation, the function first checks the quality of the WFHZ standard deviation. If it is not rated as problematic, it proceeds with a complex sample-based analysis; otherwise, prevalence is estimated applying the PROBIT method. This is as you see in the body of the plausibility report generated by ENA. The `anthro.02` dataset has no such issues, so you don't see `mw_estimate_prev_wasting_wfhz` in action on this regard. To see that, let's use the `anthro.03` dataset: .
+Under the hood, before starting the prevalence estimation, the function first checks the quality of the WFHZ standard deviation. If it is not rated as problematic, it proceeds with a complex sample-based analysis; otherwise, prevalence is estimated applying the PROBIT method. This is as you see in the body of the plausibility report generated by ENA. The `anthro.02` data set has no such issues, so you don't see `mw_estimate_prevalence_wfhz` in action on this regard. To see that, let's use the `anthro.03` data set: .
 :::
 
 `anthro.03` contains problematic standard deviation in Metuge and Maravia districts, while the remaining districts are within range. 
 
-Let's inspect our dataset:
+Let's inspect our data set:
 
 ```{r}
 #| label: anthro.3
@@ -211,7 +211,7 @@ anthro.03 |>
     height = height,
     weight = weight
   ) |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
     .by = district
@@ -231,7 +231,7 @@ anthro.03 |>
     height = height,
     weight = weight
   ) |>
-  mw_estimate_prev_wasting_wfhz(
+  mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
     .by = district
@@ -242,11 +242,11 @@ Can you spot the differences? 😎 Yes, you're absolutely correct! While in Caho
 
 ### Estimation of the prevalence of wasting based on MFAZ 
 
-The prevalence of wasting based on MFAZ can be estimated using the `compute_mfaz_prevalence()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in the [plausibility checks](https://nutriverse.io/mwana/articles/plausibility.html). In this way, to avoid redundancy, we will not demonstrate the workflow. 
+The prevalence of wasting based on MFAZ can be estimated using the `mw_estimate_prevalence_mfaz()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in the [plausibility checks](https://nutriverse.io/mwana/articles/plausibility.html). In this way, to avoid redundancy, we will not demonstrate the workflow. 
 
 ### Estimation of the prevalence of wasting based on the raw MUAC values {#sec-prevalence-muac}
 
-This job is assigned to `compute_muac_prevalence()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the raw values MUAC.
+This job is assigned to `mw_estimate_prevalence_muac()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the raw values MUAC.
 
 :::{.callout-important}
 Although the acceptability is evaluated on the basis of MFAZ, the actual prevalence is estimated on the basis of the raw MUAC values. MFAZ is also used to detect outliers and flag them to be excluded from the prevalence analysis.
@@ -258,15 +258,15 @@ The MFAZ standard deviation and the age ratio test results are used to control t
   + If the MFAZ standard deviation is not problematic but the age ratio test is problematic, the CDC/SMART MUAC tool age-weighting approach is applied. 
   + If the MFAZ standard deviation is problematic, even if age ratio is not problematic, no prevalence analysis is estimated, instead `NA` are thrown. 
 
-When working with a multiple-area dataset, these conditionals will still be applied according to each area's situation.
+When working with a multiple-area data set, these conditionals will still be applied according to each area's situation.
 
 :::{.callout-note}
-## How does it work on a multi-area dataset
+## How does it work on a multi-area data set
 
-Fundamentally, the function performs the standard deviation and age ratio tests, evaluates their acceptability, and returns a summarized table by area. It then iterates over that summary table row by row checking the above conditionals. Based on the conditionals of each row (area), the function accesses the original dataset, computes the prevalence accordingly, and returns the results. 
+Fundamentally, the function performs the standard deviation and age ratio tests, evaluates their acceptability, and returns a summarized table by area. It then iterates over that summary table row by row checking the above conditionals. Based on the conditionals of each row (area), the function accesses the original data set, computes the prevalence accordingly, and returns the results. 
 :::
 
-To demonstrate this we will use the `anthro.04` dataset. 
+To demonstrate this we will use the `anthro.04` data set. 
 
 As usual, let's first inspect it: 
 ```{r}
@@ -288,10 +288,10 @@ As in ENA Software, make sure you run the plausibility check before you call the
 #| eval: false
 
 anthro.04 |>
-  compute_muac_prevalence(
-    .wt = NULL,
-    .edema = edema,
-    .summary_by = province
+  mw_estimate_prevalence_muac(
+    wt = NULL,
+    edema = edema,
+    .by = province
   )
 ```
 
@@ -302,18 +302,44 @@ This will return:
 #| echo: false
 
 anthro.04 |>
-  compute_muac_prevalence(
-    .wt = NULL,
-    .edema = edema,
-    .summary_by = province
+  mw_estimate_prevalence_muac(
+    wt = NULL,
+    edema = edema,
+    .by = province
   )
 ```
 
 We see that in Province 1, all columns are filled with numbers; in Province 2, some columns are filled with numbers, while other columns are filled with `NA`s: this is where the age-weighting approach was applied. Lastly, in Province 3 a bunch of `NA` are filled everywhere - you know why 😉 . 
 
+Alternatively, we can choose to apply the function that calculates the age-weighted prevalence estimates inside `mw_estimate_prevalence_muac()` directly on to our data set. This can be done by calling the `mw_estimate_smart_age_wt()` function. It worth noting that although possible, we recommend to use the main function. This is simply due the fact that if we decide to use the function independently, then we must, before calling it, check the acceptability of the standard deviation of MFAZ and of the age ratio test, and then evaluate if the conditions that fits the use `mw_estimate_smart_age_wt()` are there. This introduces some kind of cumbersomeness in our workflow, and along with that, a risk of picking a wrong analysis workflow.
+
+Nonetheless, if for any reason we decide to go for it anyway, then we would apply the function as demonstrated below. We will continue using the `anthro.04` data set. For this demonstration, we will just pull out the data set from `Province 2` where we already know that the conditions to apply `mw_estimate_smart_age_wt()` are met, and then we will pipe it in to the function:
+```{r}
+#| label: smart_wt
+#| echo: true
+#| eval: false
+
+anthro.04 |>
+  subset(province == "Province 2") |>
+  mw_estimate_smart_age_wt(
+    edema = edema,
+    .by = NULL
+  )
+```
+
+This returns the following: 
+```{r}
+#| label: smart_wt_view
+#| echo: false
+
+anthro.04 |>
+  subset(province == "Province 2") |>
+  mw_estimate_smart_age_wt()
+```
+
 #### Estimation of weighted prevalence
 
-For this we go back `anthro.02` dataset. 
+For this we go back `anthro.02` data set. 
 
 We approach this task as follows: 
 
@@ -342,10 +368,10 @@ anthro.02 |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
   ) |>
-  compute_muac_prevalence(
-    .wt = "wtfactor",
-    .edema = edema,
-    .summary_by = province
+  mw_estimate_prevalence_muac(
+    wt = wtfactor,
+    edema = edema,
+    .by = province
   )
 ```
 
@@ -374,22 +400,22 @@ anthro.02 |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
   ) |>
-  compute_muac_prevalence(
-    .wt = "wtfactor",
-    .edema = edema,
-    .summary_by = province
+  mw_estimate_prevalence_muac(
+    wt = wtfactor,
+    edema = edema,
+    .by = province
   )
 ```
 
 :::{.callout-warning}
-You may have noticed that in the above code block, we called the `recode_muac()` function inside `mutate()`. This is because after you use `mw_wrangle_muac()`, it puts the MUAC variable in centimeters. The `compute_muac_prevalence()` function was defined to accept MUAC in millimeters. Therefore, it must be converted to millimeters. 
+You may have noticed that in the above code block, we called the `recode_muac()` function inside `mutate()`. This is because after you use `mw_wrangle_muac()`, it puts the MUAC variable in centimeters. The `mw_estimate_prevalence_muac()` function was defined to accept MUAC in millimeters. Therefore, it must be converted to millimeters. 
 :::
 
 ### Estimation of the combined prevalence of wasting
 
 The estimation of the combined prevalence of wasting is a task attributed to the `compute_combined_prevalence()` function. The case-definition is based on the WFHZ, the raw MUAC values and edema. From the workflow standpoint, it combines the workflow demonstrated in @sec-prevalence-wfhz and in @sec-prevalence-muac.
 
-To demonstrate it's implementation we will use the `anthro.01` dataset.
+To demonstrate it's implementation we will use the `anthro.01` data set.
 
 Let's inspect the data:
 ```{r}
@@ -437,7 +463,7 @@ anthro.01 |>
   )
 ```
 
-This is to get the `wfhz` and `flag_wfhz` the `mfaz` and `flag_mfaz` added to the dataset. In the output below, we have just selected these columns: 
+This is to get the `wfhz` and `flag_wfhz` the `mfaz` and `flag_mfaz` added to the data set. In the output below, we have just selected these columns: 
 
 ```{r}
 #| label: view_combined_wrangling
@@ -473,7 +499,7 @@ anthro.01 |>
   select(area, wfhz, flag_wfhz, mfaz, flag_mfaz)
 ```
 
-Under the hood, `compute_combined_prevalence()` applies the same analysis approach as in `mw_estimate_prev_wasting_wfhz` and in `compute_muac_prevalence()`. It checks the acceptability of the standard deviation of WFHZ and MFAZ and of the age ratio test. The following conditionals are checked and applied: 
+Under the hood, `compute_combined_prevalence()` applies the same analysis approach as in `mw_estimate_prevalence_wfhz` and in `mw_estimate_prevalence_muac()`. It checks the acceptability of the standard deviation of WFHZ and MFAZ and of the age ratio test. The following conditionals are checked and applied: 
 
   + If the standard deviation of WFHZ and of MFAZ, and the age ratio test are all concurrently not problematic, the standard complex sample-based estimation is applied.
   + If any of the above is rated problematic, the prevalence is not computed and `NA`s are thrown. 
@@ -483,7 +509,7 @@ In this function, a concept of "combined flags" is used.
 :::{.callout-note}
 ## What is combined flag?
 
-Combined flags consists of defining as flag any observation that is flagged in either `flag_wfhz` or `flag_mfaz` vectors. A new column `cflags` for combined flags is created and added to the dataset. This ensures that all flagged observations from both WFHZ and MFAZ data are excluded from the prevalence analysis.
+Combined flags consists of defining as flag any observation that is flagged in either `flag_wfhz` or `flag_mfaz` vectors. A new column `cflags` for combined flags is created and added to the data set. This ensures that all flagged observations from both WFHZ and MFAZ data are excluded from the prevalence analysis.
 :::
 
 | **flag_wfhz** | **flag_mfaz** | **cflags** |

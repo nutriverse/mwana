@@ -20,6 +20,7 @@
 #' @importFrom srvyr as_survey_design survey_mean
 #' @importFrom stats na.omit prop.test sd pnorm setNames
 #' @importFrom tibble as_tibble
+#' @importFrom tibble tibble
 #' @importFrom zscorer addWGSR
 ## usethis namespace: end
 NULL

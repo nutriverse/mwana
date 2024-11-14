@@ -16,7 +16,7 @@ Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrit
 
 In the IPC AMN analysis workflow, the very first step of a data analyst is to check if these requirements were met. This is done for each area meant to be included in the IPC AMN analysis. For this, `mwana` provides a handy function: `mw_check_ipcamn_ssreq()`.
 
-To demonstrate its usage, we will use a built-in sample dataset `anthro.01`.
+To demonstrate its usage, we will use a built-in sample data set `anthro.01`.
 
 ```{r}
 #| label: view-data
@@ -33,9 +33,9 @@ head(anthro.01)
 head(anthro.01)
 ```
 
-`anthro.01` contains anthropometry data from SMART surveys from anonymized locations. We can check further details about the dataset by calling `help(anthro.01)` in `R` console. 
+`anthro.01` contains anthropometry data from SMART surveys from anonymized locations. We can check further details about the data set by calling `help(anthro.01)` in `R` console. 
 
-Now that we are acquainted with the dataset, we can proceed to execute the task. To achieve this, we simply do:
+Now that we are acquainted with the data set, we can proceed to execute the task. To achieve this, we simply do:
 
 ```{r}
 #| label: check
@@ -76,11 +76,11 @@ anthro.01 |>
 
 A table (of class `tibble`) is returned with three columns:  
 
-  + Column `n_clusters` counts the number of unique cluster IDs in the dataset.  
-  + Column `n_obs` counts the number of children in the dataset.  
+  + Column `n_clusters` counts the number of unique cluster IDs in the data set.  
+  + Column `n_obs` counts the number of children in the data set.  
   + Column `meet_ipc` indicates whether the IPC AMN sample size requirements (for surveys in this case) were met or not.
 
-The above output is not quite useful yet as we often deal with multiple area dataset. We can get a summarised table by area as follows: 
+The above output is not quite useful yet as we often deal with multiple area data set. We can get a summarised table by area as follows: 
 ```{r}
 #| label: group_by
 #| echo: true
