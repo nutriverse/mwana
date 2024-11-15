@@ -91,6 +91,7 @@ home:
      - mw_estimate_prevalence_muac
      - mw_estimate_prevalence_mfaz
      - mw_estimate_prevalence_combined
+     - mw_estimate_prevalence_screening
      - mw_estimate_smart_age_wt
 
    - title: Utilities

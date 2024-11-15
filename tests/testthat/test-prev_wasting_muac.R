@@ -428,19 +428,19 @@ testthat::test_that(
 ## When !is.null(.by) and analysis approach has different categories ----
 testthat::test_that(
   "mw_estimate_prevalence_muac() works well on a dataframe with multiple survey areas with
-    different categories on analysis_approach",
+    different categories of analysis_approach",
   {
     ### Get the prevalence estimates ----
     p <- anthro.04 |>
       mw_estimate_prevalence_muac(edema = edema, .by = province)
 
-    ### Subset a province whose analysis approach is unweighted ---
+    ### A Province whose analysis approach is unweighted ---
     province_1 <- subset(p, province == "Province 1")
 
-    ### Subset a province whose analysis approach is weighted ---
+    ### A Province whose analysis approach is weighted ---
     province_2 <- subset(p, province == "Province 2")
 
-    ### Subset a province whose analysis approach is add missing (NA's) ---
+    ### A Province whose analysis approach is add missing (NA's) ---
     province_3 <- subset(p, province == "Province 3") |>
       select(!province)
 

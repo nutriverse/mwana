@@ -244,7 +244,7 @@ Can you spot the differences? 😎 Yes, you're absolutely correct! While in Caho
 
 The prevalence of wasting based on MFAZ can be estimated using the `mw_estimate_prevalence_mfaz()` function. This function works and is implemented the same way as demonstrated in @sec-prevalence-wfhz, with the exception of the data wrangling that is based on MUAC. This was demonstrated in the [plausibility checks](https://nutriverse.io/mwana/articles/plausibility.html). In this way, to avoid redundancy, we will not demonstrate the workflow. 
 
-### Estimation of the prevalence of wasting based on the raw MUAC values {#sec-prevalence-muac}
+### Estimation of the prevalence of wasting based on raw MUAC values {#sec-prevalence-muac}
 
 This job is assigned to `mw_estimate_prevalence_muac()`. Once you call the function, before starting the prevalence estimation, it first evaluates the acceptability of the MFAZ standard deviation and the age ratio test. Yes, you read well, MFAZ's standard deviation, not on the raw values MUAC.
 
@@ -410,6 +410,38 @@ anthro.02 |>
 :::{.callout-warning}
 You may have noticed that in the above code block, we called the `recode_muac()` function inside `mutate()`. This is because after you use `mw_wrangle_muac()`, it puts the MUAC variable in centimeters. The `mw_estimate_prevalence_muac()` function was defined to accept MUAC in millimeters. Therefore, it must be converted to millimeters. 
 :::
+
+#### Estimation for non survey data
+
+Thus far, the demonstration has been around survey data. However, it is also common in day-to-day practice to come across non survey data to analyse. Non survey data can be screenings or any other 
+kind of community-based surveillance data. With this kind of data, the analysis workflow usually consists in a simple estimation of the point prevalence and the counts of the positive cases, without necessarily estimating the uncertainty. `mwana` provides a handy function for this task: `mw_estimate_prevalence_screening()`. Under the hood, this function works exactly the same way as `mw_estimate_prevalence_muac()`. The only difference is that it was designed to deal with non survey data. 
+
+To demonstrate its usage, we will use the `anthro.04` data set.
+```{r}
+#| label: non-survey
+#| echo: true
+#| eval: false
+
+anthro.04 |> 
+  mw_estimate_prevalence_screening(
+    muac = muac, 
+    edema = edema, 
+    .by = province
+  )
+```
+
+The returned output is: 
+```{r}
+#| label: non-survey-view
+#| echo: false
+
+anthro.04 |> 
+  mw_estimate_prevalence_screening(
+    muac = muac, 
+    edema = edema, 
+    .by = province
+  )
+```
 
 ### Estimation of the combined prevalence of wasting
 

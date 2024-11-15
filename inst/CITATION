@@ -1,7 +1,7 @@
 bibentry(
   bibtype  = "Manual",
   header   = "To cite mwana: in publications use:",
-  title    = "mwana: Utilities for Analysing Children's Nutritional Status",
+  title    = "mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R",
   author   = c(person("Tomás Zaba"), person("Ernest Guevarra")),
   year     = 2024,
   note     = "R package version 0.1.0",

@@ -211,7 +211,7 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #' values are in the opposite unit of the intended conversion. If not,
 #' execution stops and an error message is returned.
 #'
-#' @param x A vector of the raw MUAC values. The class can either be
+#' @param x A vector of raw MUAC values. The class can either be
 #' `double` or `numeric` or `integer`. If different than expected, the function
 #' will stop execution and return an error message indicating the type of mismatch.
 #'

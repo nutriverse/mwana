@@ -186,19 +186,17 @@ complex_survey_estimates_muac <- function(df,
 
 
 #'
-#' Estimate the prevalence of wasting based on MUAC
+#' Estimate the prevalence of wasting based on MUAC for survey data
 #'
 #' @description
 #' Calculate the prevalence estimates of wasting based on MUAC and/or bilateral
-#' edema. The function first learns learns about the acceptability of the age
-#' ratio test and of the standard deviation of muac-for-age z-scores (MFAZ) in
-#' the data set, and then, depending on the observed results, it picks an analysis
-#' workflow that best fits the data, between standard cluster-based survey design
-#' including and weighted analysis, application of the age-weighting approach
-#' as in the SMART MUAC Tool.
-#'
-#' The function has considerable usefulness when working with a multiple-area
-#' data set. Definition of workflow fit is done row-wise.
+#' edema. Prior estimating, it evaluates the quality of data by calculating and rating the
+#' standard deviation of z-scores of muac-for-age (MFAZ) and the age ratio test
+#' p-value, and then sets an analysis path that best fits the data. Paths vary between
+#' weighted, unweighted analysis or thrown of `NA`s. Weighted analysis refers to the
+#' age-weighting approach used in the SMART MUAC Tool to fix for the likely
+#' overestimation of wasting when there are excess of younger children in the
+#' data set. `NA`s get thrown when all checks are concurrently rated as problematic.
 #'
 #' @param df A data set object of class `data.frame` to use. This must have been
 #' wrangled using this package's wrangling function for MUAC data. Make sure
@@ -227,7 +225,8 @@ complex_survey_estimates_muac <- function(df,
 #' <https://smartmethodology.org/survey-planning-tools/updated-muac-tool/>
 #'
 #'
-#' @seealso [mw_estimate_smart_age_wt()]
+#' @seealso [mw_estimate_smart_age_wt()] [mw_estimate_prevalence_muac()]
+#' [mw_estimate_prevalence_screening()]
 #'
 #' @examples
 #' ## When .by = NULL ----
