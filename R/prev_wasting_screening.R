@@ -1,11 +1,9 @@
-
 #'
 #'
 #' @keywords internal
 #'
 #'
 get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
-
   muac <- eval_tidy(enquo(muac), df)
   edema <- eval_tidy(enquo(edema), df)
 
@@ -41,16 +39,16 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
       )
     )
   } else {
-  ## Wasting definition without `edema` ----
-  x <- with(
-    df,
-    define_wasting(
+    ## Wasting definition without `edema` ----
+    x <- with(
       df,
-      muac = muac,
-      .by = "muac"
+      define_wasting(
+        df,
+        muac = muac,
+        .by = "muac"
+      )
     )
-  )
-}
+  }
   ## Summarize results ----
   p <- x |>
     group_by({{ .by }}) |>
@@ -61,8 +59,8 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
         list(
           n = \(.)sum(., na.rm = TRUE),
           p = \(.)mean(., na.rm = TRUE)
-          )
         )
+      )
     )
   p
 }
@@ -70,14 +68,82 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
 
 #'
 #'
+#' Estimate the prevalence of wasting based on MUAC for non survey data
 #'
+#' @description
+#' It is common to estimate prevalence of wasting from non survey data, such
+#' as screenings or any other community-based surveillance systems. In such
+#' situations, the analysis usually consists only in estimating the point prevalence
+#' and the counts of positive cases, without necessarily estimating the
+#' uncertainty. This is the job of this function.
+#'
+#' Prior estimating, it evaluates the quality of data by calculating and rating the
+#' standard deviation of z-scores of muac-for-age (MFAZ) and the age ratio test
+#' p-value, and then sets an analysis path that best fits the data. Paths vary between
+#' weighted, unweighted analysis or thrown of `NA`s. Weighted analysis refers to the
+#' age-weighting approach used in the SMART MUAC Tool to fix for the likely
+#' overestimation of wasting when there are excess of younger children in the
+#' data set. `NA`s get thrown when all checks are concurrently rated as problematic.
+#'
+#' @param df A data set object of class `data.frame` to use. This must have been
+#' wrangled using this package's wrangling function for MUAC data. Make sure
+#' MUAC values are converted to millimeters after using the wrangler.
+#' If this is not done, the function will stop execution and return an error message
+#' with the issue.
+#'
+#' @param muac A vector of raw MUAC values of class `numeric` or `integer`.
+#' The measurement unit of the values should be millimeters. If any or all values
+#' are in a different unit than the expected, the function will stop execution and
+#' return an error message indicating the issue.
+#'
+#' @param edema A vector of class `character` of edema. Code should be
+#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
+#' If class, as well as, code values are different than expected, the function
+#' will stop the execution and return an error message indicating the issue.
+#'
+#' @param .by A vector of class `character` or `numeric` of the geographical areas
+#' or respective IDs for where the data was collected and for which the analysis
+#' should be summarized at.
+#'
+#' @references
+#' SMART Initiative (no date). *Updated MUAC data collection tool*. Available at:
+#' <https://smartmethodology.org/survey-planning-tools/updated-muac-tool/>
+#'
+#' @seealso [mw_estimate_prevalence_muac()] [mw_estimate_smart_age_wt()]
+#'
+#'
+#' @examples
+#' mw_estimate_prevalence_screening(
+#' df = anthro.02,
+#' muac = muac,
+#' edema = edema,
+#' .by = province
+#' )
+#'
+#' ## With `edema` set to `NULL` ----
+#' mw_estimate_prevalence_screening(
+#' df = anthro.02,
+#' muac = muac,
+#' edema = NULL,
+#' .by = province
+#' )
+#'
+#' ## With `.by` set to `NULL` ----
+#' mw_estimate_prevalence_screening(
+#' df = anthro.02,
+#' muac = muac,
+#' edema = NULL,
+#' .by = NULL
+#' )
+#'
+#' @export
 #'
 mw_estimate_prevalence_screening <- function(df,
-                                                  muac,
-                                                  edema = NULL,
-                                                  .by = NULL) {
+                                             muac,
+                                             edema = NULL,
+                                             .by = NULL) {
+  ## Difuse argument `.by` ----
   .by <- enquo(.by)
-
 
   ## Empty vector type list to store results ----
   results <- list()
@@ -132,7 +198,7 @@ mw_estimate_prevalence_screening <- function(df,
           sam_p = NA_real_,
           mam_p = NA_real_,
           .by = !!.by
-          )
+        )
       } else {
         ## Return NA's  ----
         output <- tibble(
@@ -155,4 +221,4 @@ mw_estimate_prevalence_screening <- function(df,
     results <- bind_rows(results)
   }
   results
-  }
+}

@@ -7,7 +7,7 @@
 recode_muac(x, .to = c("cm", "mm"))
 }
 \arguments{
-\item{x}{A vector of the raw MUAC values. The class can either be
+\item{x}{A vector of raw MUAC values. The class can either be
 \code{double} or \code{numeric} or \code{integer}. If different than expected, the function
 will stop execution and return an error message indicating the type of mismatch.}
 

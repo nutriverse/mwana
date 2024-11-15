@@ -3,7 +3,7 @@
 \name{mw_estimate_smart_age_wt}
 \alias{mw_estimate_smart_age_wt}
 \alias{mw_estimate_prevalence_muac}
-\title{Estimate the prevalence of wasting based on MUAC}
+\title{Estimate the prevalence of wasting based on MUAC for survey data}
 \usage{
 mw_estimate_smart_age_wt(df, edema = NULL, .by = NULL)
 
@@ -35,15 +35,13 @@ statistics about wasting.
 }
 \description{
 Calculate the prevalence estimates of wasting based on MUAC and/or bilateral
-edema. The function first learns learns about the acceptability of the age
-ratio test and of the standard deviation of muac-for-age z-scores (MFAZ) in
-the data set, and then, depending on the observed results, it picks an analysis
-workflow that best fits the data, between standard cluster-based survey design
-including and weighted analysis, application of the age-weighting approach
-as in the SMART MUAC Tool.
-
-The function has considerable usefulness when working with a multiple-area
-data set. Definition of workflow fit is done row-wise.
+edema. Prior estimating, it evaluates the quality of data by calculating and rating the
+standard deviation of z-scores of muac-for-age (MFAZ) and the age ratio test
+p-value, and then sets an analysis path that best fits the data. Paths vary between
+weighted, unweighted analysis or thrown of \code{NA}s. Weighted analysis refers to the
+age-weighting approach used in the SMART MUAC Tool to fix for the likely
+overestimation of wasting when there are excess of younger children in the
+data set. \code{NA}s get thrown when all checks are concurrently rated as problematic.
 }
 \examples{
 ## An application of `mw_estimate_smart_age_wt()` ----
@@ -78,5 +76,6 @@ SMART Initiative (no date). \emph{Updated MUAC data collection tool}. Available 
 \url{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}
 }
 \seealso{
-\code{\link[=mw_estimate_smart_age_wt]{mw_estimate_smart_age_wt()}}
+\code{\link[=mw_estimate_smart_age_wt]{mw_estimate_smart_age_wt()}} \code{\link[=mw_estimate_prevalence_muac]{mw_estimate_prevalence_muac()}}
+\code{\link[=mw_estimate_prevalence_screening]{mw_estimate_prevalence_screening()}}
 }
