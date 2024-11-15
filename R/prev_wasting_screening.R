@@ -76,18 +76,16 @@ mw_estimate_prevalence_screening <- function(df,
                                                   muac,
                                                   edema = NULL,
                                                   .by = NULL) {
-  muac <- eval_tidy(enquo(muac), df)
-  edema <- eval_tidy(enquo(edema), df)
-  .by <- eval_tidy(enquo(.by), df)
+  .by <- enquo(.by)
 
 
   ## Empty vector type list to store results ----
   results <- list()
 
   ## Determine the analysis path that fits the data ----
-  if (!is.null(.by)) {
+  if (!quo_is_null(.by)) {
     path <- df |>
-      group_by(.by) |>
+      group_by(!!.by) |>
       summarise(
         age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
         std = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
@@ -104,32 +102,30 @@ mw_estimate_prevalence_screening <- function(df,
   }
 
   ## Iterate over a data frame and compute estimates as per analysis path ----
-  for (i in seq_along(nrow(path))) {
-    if (!is.null(.by)) {
-      bys <- pull(path, .by)[i]
-      data <- filter(df, sym(.by) == bys)
+  for (i in seq_len(nrow(path))) {
+    if (!quo_is_null(.by)) {
+      area <- pull(path, !!.by)[i]
+      data <- filter(df, !!sym(quo_name(.by)) == area)
     } else {
       data <- df
     }
 
-    analysis_approach <- x$analysis_approach[i]
+    analysis_approach <- path$analysis_approach[i]
     if (analysis_approach == "unweighted") {
-      if (!is.null(.by)) {
-        output <- estimate_prevalence_screening()
+      if (!quo_is_null(.by)) {
+        output <- get_estimates(df = data, muac = {{ muac }}, edema = {{ edema }}, .by = !!.by)
+      } else {
+        output <- get_estimates(df = data, muac = {{ muac }}, edema = {{ edema }})
       }
     } else if (analysis_approach == "weighted") {
-      if (!is.null(.by)) {
-        output <- mw_estimate_smart_age_wt(
-          df = data,
-          edema = edema,
-          .by = by
-        )
+      if (!quo_is_null(.by)) {
+        output <- mw_estimate_smart_age_wt(df = data, edema = {{ edema }}, .by = !!.by)
       } else {
-        output <- mw_estimate_smart_age_wt(df = data, edema = edema)
+        output <- mw_estimate_smart_age_wt(df = data, edema = {{ edema }})
       }
     } else {
       ## Return NA's ----
-      if (!is.null(.by)) {
+      if (!quo_is_null(.by)) {
         output <- summarise(
           data,
           gam_p = NA_real_,
@@ -149,7 +145,7 @@ mw_estimate_prevalence_screening <- function(df,
     results[[i]] <- output
   }
   ### Ensure that all categories in `.by` get added to the tibble ----
-  if (!is.null(.by)) {
+  if (!quo_is_null(.by)) {
     results <- bind_rows(results) |>
       relocate(.data$gam_p, .after = .data$gam_n) |>
       relocate(.data$sam_p, .after = .data$sam_n) |>
