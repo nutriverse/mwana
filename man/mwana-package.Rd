@@ -4,11 +4,11 @@
 \name{mwana-package}
 \alias{mwana}
 \alias{mwana-package}
-\title{mwana: Utilities for Analysing Children's Nutritional Status}
+\title{mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A streamlined and comprehensive implementation of the Standardized Monitoring and Assessment of Relief and Transition (SMART) Methodology \url{https://smartmethodology.org/} guidelines for data quality checks and prevalence estimation, with enhanced programmable process particularly when handling multiple area datasets.
+A simple and streamlined workflow for plausibility checks and prevalence analysis of wasting based on the Standardized Monitoring and Assessment of Relief and Transition (SMART) Methodology \url{https://smartmethodology.org/}, with application in R.
 }
 \seealso{
 Useful links:

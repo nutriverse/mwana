@@ -132,7 +132,7 @@ mw_estimate_prevalence_mfaz <- function(df,
                                         edema = NULL,
                                         .by = NULL) {
   ## Difuse argument .by ----
-  .by <- rlang::enquo(.by)
+  .by <- enquo(.by)
 
   ## Empty vector ----
   results <- list()

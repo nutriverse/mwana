@@ -2,7 +2,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `mwana`: Utilities for analysing children’s nutritional status <img src="man/figures/logo.png" align="right" width="200px" />
+# `mwana`: An efficient workflow for plausibility checks and prevalence analysis of wasting in R <img src="man/figures/logo.png" align="right" width="200px" />
 
 <!-- badges: start -->
 
@@ -38,20 +38,20 @@ Methodology guidelines in R.
 ## Motivation
 
 `mwana` was borne out of the author’s own experience of having to work
-with multiple child anthropometric datasets to conduct data quality
+with multiple child anthropometric data sets to conduct data quality
 appraisal and prevalence estimation as part of the data quality
 assurance team of the Integrated Phase Classification (IPC). The current
 standard child anthropometric data appraisal workflow is extremely
 cumbersome requiring significant time and effort utilising different
 software tools (SPSS, Excel, Emergency Nutrition Assessment or ENA
-software) for each step of the process for a single dataset. This
-process is repeated for every dataset needing to be processed and often
+software) for each step of the process for a single data set. This
+process is repeated for every data set needing to be processed and often
 needing to be implemented in a relatively short period time. This manual
 and repetitive process, by its nature, is extremely error-prone.
 
 `mwana`, which is primarily an R-based implementation of the ENA for
 SMART software, simplifies this cumbersome workflow into a programmable
-process particularly when handling large multiple datasets.
+process particularly when handling large multiple data sets.
 
 > [!NOTE]
 >
@@ -97,8 +97,8 @@ summaries of the outputs.
 appropriate analysis procedure to follow based on the quality of the
 data, as per the SMART rules. It returns an output table with the
 appropriate results based on the data quality test results.
-Fundamentally, the calculators loop over the survey areas in the dataset
-whilst performing quality appraisal and taking decisions on the
+Fundamentally, the calculators loop over the survey areas in the data
+set whilst performing quality appraisal and taking decisions on the
 appropriate prevalence analysis procedure to follow on the basis of the
 result.
 
@@ -171,14 +171,14 @@ function as follows:
 citation("mwana")
 #> To cite mwana: in publications use:
 #> 
-#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: Utilities for Analysing
-#>   Children's Nutritional Status_. R package version 0.1.0,
-#>   <https://github.com/nutriverse/mwana>.
+#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: An Efficient Workflow for
+#>   Plausibility Checks and Prevalence Analysis of Wasting in R_. R
+#>   package version 0.1.0, <https://github.com/nutriverse/mwana>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     title = {mwana: Utilities for Analysing Children's Nutritional Status},
+#>     title = {mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R},
 #>     author = {{Tomás Zaba} and {Ernest Guevarra}},
 #>     year = {2024},
 #>     note = {R package version 0.1.0},

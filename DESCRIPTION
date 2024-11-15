@@ -1,6 +1,6 @@
 Type: Package
 Package: mwana
-Title: Utilities for Analysing Children's Nutritional Status 
+Title: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R
 Version: 0.1.0.9000
 Authors@R: c(
     person("Tomás", "Zaba", , "tomas.zaba@outlook.com", role = c("aut", "cre", "cph"),
@@ -8,11 +8,10 @@ Authors@R: c(
     person("Ernest", "Guevarra", role = c("aut", "cph"),
            comment = c(ORCID = "0000-0002-4887-4415"))
   )
-Description: A streamlined and comprehensive implementation of the Standardized
+Description: A simple and streamlined workflow for plausibility checks and 
+  prevalence analysis of wasting based on the Standardized
   Monitoring and Assessment of Relief and Transition (SMART) Methodology
-  <https://smartmethodology.org/> guidelines for data quality checks and 
-  prevalence estimation, with enhanced programmable process particularly when 
-  handling multiple area datasets.
+  <https://smartmethodology.org/>, with application in R.
 License: GPL (>= 3)
 URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana
 Imports: 
