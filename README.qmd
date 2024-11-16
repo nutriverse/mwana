@@ -39,7 +39,7 @@ Child anthropometric assessments are the cornerstones of child nutrition and foo
 `mwana` simplifies this cumbersome workflow into a programmable process particularly when handling multiple-area data set.
 
 :::{.callout-note}
-`mwana` was made possible thanks to the state-of-the-art work in nutrition survey guidance led by the [SMART initiative](https://smartmethodology.org). Under the hood, `mwana` bundles the SMART Methodology guidance, for both survey and non survey data, through the use of the National Information Platforms for Nutrition Anthropometric Data Toolkit (nipnTK) functionalities in `R` to build its handy function around plausibility checks and wasting prevalence estimation. Click [here](https://github.com/nutriverse/nipnTK) to learn more about the `nipnTK` package. 
+`mwana` was made possible thanks to the state-of-the-art work in nutrition survey guidance led by the [SMART initiative](https://smartmethodology.org). Under the hood, `mwana` bundles the SMART Methodology guidance, for both survey and non survey data, through the use of the National Information Platforms for Nutrition Anthropometric Data Toolkit (nipnTK) functionalities in `R` to build its handy function around plausibility checks and wasting prevalence estimation. Click [here](https://github.com/nutriverse/nipnTK) to learn more about the {`nipnTK`} package. 
 :::
 
 ## What does `mwana` do?

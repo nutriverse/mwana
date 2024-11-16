@@ -63,7 +63,7 @@ particularly when handling multiple-area data set.
 > to build its handy function around plausibility checks and wasting
 > prevalence estimation. Click
 > [here](https://github.com/nutriverse/nipnTK) to learn more about the
-> `nipnTK` package.
+> {`nipnTK`} package.
 
 ## What does `mwana` do?
 
