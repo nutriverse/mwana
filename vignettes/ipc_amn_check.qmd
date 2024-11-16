@@ -1,6 +1,8 @@
 ---
 title: "Checking if IPC Acute Malnutrition sample size requirements were met"
 author: Tomás Zaba
+bibliography: references.bib
+csl: harvard-cite-them-right-11th-edition.csl
 vignette: >
   %\VignetteIndexEntry{Checking if IPC Acute Malnutrition sample size requirements were met}
   %\VignetteEngine{quarto::html}
@@ -12,7 +14,7 @@ vignette: >
 
 library(mwana)
 ```
-Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrition (IPC AMN) can come from different sources, namely: representative surveys, screenings or community-based surveillance system (known as sentinel sites). The IPC set minimum sample size requirements for each of these sources. Details can be read from the [IPC Manual version 3.1 ](https://www.ipcinfo.org/ipcinfo-website/resources/ipc-manual/en/).  
+Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrition (IPC AMN) can come from different sources, namely: representative surveys, screenings or community-based surveillance system (known as sentinel sites). The IPC set minimum sample size requirements for each of these sources. Details can be read from the IPC Manual version 3.1 [@ipcmanual].  
 
 In the IPC AMN analysis workflow, the very first step of a data analyst is to check if these requirements were met. This is done for each area meant to be included in the IPC AMN analysis. For this, `mwana` provides a handy function: `mw_check_ipcamn_ssreq()`.
 

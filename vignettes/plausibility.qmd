@@ -1,6 +1,8 @@
 ---
 title: "Running plausibility checks"
 author: Tomás Zaba
+bibliography: references.bib
+csl: harvard-cite-them-right-11th-edition.csl
 vignette: >
   %\VignetteIndexEntry{Running plausibility checks}
   %\VignetteEngine{quarto::html}
@@ -28,7 +30,7 @@ We will begin the demonstration with the plausibility check that you are most fa
 
 We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to walk you through some key features about this function. 
 
-`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
+`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the SMART Methodology [@smart2017]. Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
 
   (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC.
   
@@ -113,7 +115,7 @@ wrangled_df <- anthro.01 |>
   )
 ```
 
-In this example, the argument `.recode_sex` was set to `TRUE`. That is because under the hood, to compute the z-scores, a task made possible thanks to the [zscorer](https://cran.r-project.org/web/packages/zscorer/index.htmlpackage) package, it uses sex coded into 1 and 2 for male and female,  respectively. This means that if our sex variable is already in 1 and 2's, we would set it to `FALSE`. 
+In this example, the argument `.recode_sex` was set to `TRUE`. That is because under the hood, to compute the z-scores, a task made possible thanks to the {zscorer} package [@zscorer], it uses sex coded into 1 and 2 for male and female,  respectively. This means that if our sex variable is already in 1 and 2's, we would set it to `FALSE`. 
 
 :::{.callout-note}
 If by any chance your sex variable is coded in any other different way than aforementioned, then you will have to recode it outside `mwana` utilities and then set `.recode_sex` accordingly.
@@ -358,7 +360,7 @@ At this point, you have reached the end of your workflow 🎉 .
 We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our data set.
 
 :::{.callout-note}
-The plausibility check for MFAZ data was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that of WFHZ for MFAZ, with a maximum acceptability of percent of flagged 
+The plausibility check for MFAZ data was built based on the insights gotten from @bilukha research presented at the 2023 High-Level Technical Assessment Workshop held in Nairobi, Kenya [@smarthighlevel]. Results from this research suggested a feasibility of applying the similar plausibility check as that of WFHZ for MFAZ, with a maximum acceptability of percent of flagged 
 records of 2.0%.
 :::
 
@@ -368,7 +370,7 @@ We can run MFAZ plausibility check by calling `mw_plausibility_check_mfaz()`. As
 ## Age ratio test in MFAZ
 
 As you know, the age ratio test in WFHZ is done on children aged 6 to 29 months old over those aged 30 to 59 months old. 
-This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in [SMART MUAC Tool](https://smartmethodology.org/survey-planning-tools/updated-muac-tool/). The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.
+This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in the SMART MUAC Tool [@smartmuactool]. The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.
 :::
 
 ### Wrangling MFAZ data {#sec-wrangle_mfaz}
