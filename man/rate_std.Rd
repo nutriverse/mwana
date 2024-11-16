@@ -8,10 +8,10 @@ rate_std(sd, .of = c("zscores", "raw_muac"))
 }
 \arguments{
 \item{sd}{A vector of class \code{double}, containing values of the standard deviation
-from the dataset. If the class does not match the expected type, the function
+from the data set. If the class does not match the expected type, the function
 will stop execution and return an error message indicating the type of mismatch.}
 
-\item{.of}{Specifies the dataset where the rating should be done, with options:
+\item{.of}{Specifies the data set where the rating should be done, with options:
 "wfhz", "mfaz", or "raw_muac".}
 }
 \value{

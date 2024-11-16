@@ -87,8 +87,13 @@ complex_survey_estimates_wfhz <- function(df,
 #' weight-for-height and/or bilateral edema. The function allows users to
 #' get the prevalence estimates calculated in accordance with the complex sample
 #' design properties; this includes applying survey weights when needed or applicable.
-#' When the standard deviation of WFHZ is rated as problematic, the prevalence is
-#' estimated based on the PROBIT method. This is as in the SMART Methodology.
+#'
+#' Before estimating, the function evaluates the quality of data by calculating
+#' and rating the standard deviation of z-scores of WFHZ. If rated as problematic,
+#' the prevalence is estimated based on the PROBIT method.
+#'
+#' Outliers are detected based on SMART flags and get excluded prior being piped
+#' into the actual prevalence analysis workflow.
 #'
 #' @param df A dataset object of class `data.frame` to use. This must have been
 #' wrangled using this package's wrangling function for WFHZ data. The function

@@ -35,13 +35,22 @@ statistics about wasting.
 }
 \description{
 Calculate the prevalence estimates of wasting based on MUAC and/or bilateral
-edema. Prior estimating, it evaluates the quality of data by calculating and rating the
-standard deviation of z-scores of muac-for-age (MFAZ) and the age ratio test
-p-value, and then sets an analysis path that best fits the data. Paths vary between
-weighted, unweighted analysis or thrown of \code{NA}s. Weighted analysis refers to the
-age-weighting approach used in the SMART MUAC Tool to fix for the likely
-overestimation of wasting when there are excess of younger children in the
-data set. \code{NA}s get thrown when all checks are concurrently rated as problematic.
+edema.
+Before estimating, the function evaluates the quality of data by calculating
+and rating the standard deviation of z-scores of muac-for-age (MFAZ) and the
+p-value of the age ratio test; then it sets the analysis path that best fits
+the data:
+\itemize{
+\item If all tests are rated as not problematic, a normal analysis is done.
+\item If standard deviation is not problematic and age ratio test is problematic,
+prevalence is age-weighted. This is to fix the likely overestimation of wasting
+when there are excess of younger children in the data set.
+\item If standard deviation is problematic and age ratio test is not, or both
+are problematic,  analysis gets cancelled out and \code{NA}s get thrown.
+}
+
+Outliers are detected based on SMART flags on the MFAZ values and then
+get excluded prior being piped into the actual prevalence analysis workflow.
 }
 \examples{
 ## An application of `mw_estimate_smart_age_wt()` ----
@@ -76,6 +85,6 @@ SMART Initiative (no date). \emph{Updated MUAC data collection tool}. Available 
 \url{https://smartmethodology.org/survey-planning-tools/updated-muac-tool/}
 }
 \seealso{
-\code{\link[=mw_estimate_smart_age_wt]{mw_estimate_smart_age_wt()}} \code{\link[=mw_estimate_prevalence_muac]{mw_estimate_prevalence_muac()}}
+\code{\link[=mw_estimate_smart_age_wt]{mw_estimate_smart_age_wt()}} \code{\link[=mw_estimate_prevalence_mfaz]{mw_estimate_prevalence_mfaz()}}
 \code{\link[=mw_estimate_prevalence_screening]{mw_estimate_prevalence_screening()}}
 }

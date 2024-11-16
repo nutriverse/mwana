@@ -4,7 +4,7 @@
 #' @description
 #' Check the overall plausibility and acceptability of WFHZ data through a
 #' structured test suite encompassing sampling and measurement-related biases checks
-#' in the dataset. The test suite, including the criteria and corresponding rating of
+#' in the data set. The test suite, including the criteria and corresponding rating of
 #' acceptability, follows the standards in the  SMART plausibility check. The only
 #' exception is the exclusion of MUAC checks. MUAC is checked separately using more
 #' comprehensive test suite as well.
@@ -12,7 +12,7 @@
 #' The function works on a data frame returned from this package's wrangling
 #' function for age and for WFHZ data.
 #'
-#' @param df A dataset object of class `data.frame` to check.
+#' @param df A data set object of class `data.frame` to check.
 #'
 #' @param sex A vector of class `numeric` of child's sex.
 #'
@@ -25,7 +25,7 @@
 #' @param flags A vector of class `numeric` of flagged records.
 #'
 #' @returns
-#' A summarised table of class `data.frame`, of length 19 and width 1, for
+#' A summarized table of class `data.frame`, of length 19 and width 1, for
 #' the plausibility test results and their respective acceptability rates.
 #'
 #' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
@@ -122,12 +122,13 @@ mw_plausibility_check_wfhz <- function(df,
 #' for improved clarity and readability. It converts scientific notations to standard
 #' notations, round values and rename columns to meaningful names.
 #'
-#' @param df A data frame containing the summary table returned by this package's
-#' WFHZ plausibility check function. Must be of class `data.frame`.
+#' @param df An object of class `data.frame` returned by this package's
+#' plausibility checker for WFHZ data, containing the summarized results to be
+#' formatted.
 #'
 #' @returns
-#' A data frame of the same length and width as `df`, with column names and
-#' values formatted for clarity.
+#' A `data.frame` object of the same length and width as `df`, with column names and
+#' values formatted for clarity and readability.
 #'
 #' @examples
 #' ## First wrangle age data ----

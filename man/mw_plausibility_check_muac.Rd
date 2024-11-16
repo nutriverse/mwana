@@ -7,7 +7,7 @@
 mw_plausibility_check_muac(df, sex, muac, flags)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to check. It must have been
+\item{df}{An object of class \code{data.frame} to check. It must have been
 wrangled using this package's wrangling function for MUAC.}
 
 \item{sex}{A vector of class \code{numeric} of child's sex.}
@@ -17,7 +17,7 @@ wrangled using this package's wrangling function for MUAC.}
 \item{flags}{A vector of class \code{numeric} of flagged records.}
 }
 \value{
-A summarised table of class \code{data.frame}, of length 9 and width 1, for
+A summarized table of class \code{data.frame}, of length 9 and width 1, for
 the plausibility test results and their respective acceptability ratings.
 }
 \description{

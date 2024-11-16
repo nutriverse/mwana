@@ -8,11 +8,11 @@ rate_propof_flagged(p, .in = c("mfaz", "wfhz", "raw_muac"))
 }
 \arguments{
 \item{p}{A vector of class \code{double}, containing the proportions of flagged
-records in the dataset. If the class does not match the expected type, the
+records in the data set. If the class does not match the expected type, the
 function will stop execution and return an error message indicating the type
 of mismatch.}
 
-\item{.in}{Specifies the dataset where the rating should be done,
+\item{.in}{Specifies the data set where the rating should be done,
 with options: "wfhz", "mfaz", or "raw_muac".}
 }
 \value{

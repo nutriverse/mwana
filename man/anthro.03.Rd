@@ -25,13 +25,13 @@ Anonymous
 anthro.03
 }
 \description{
-\code{anthro.03} contains survey data of four districts. Each district dataset
+\code{anthro.03} contains survey data of four districts. Each district data set
 presents distinct data quality scenarios that requires tailored prevalence
 analysis approach: two districts show a problematic WFHZ standard deviation
 whilst the remaining are all within range.
 
 This sample data is useful to demonstrate the use of the prevalence functions on
-a multi-area survey data where there can be variations in the rating of
+a multiple-area survey data where there can be variations in the rating of
 acceptability of the standard deviation, hence require different analyses approaches
 for each area to ensure accurate estimation.
 }
