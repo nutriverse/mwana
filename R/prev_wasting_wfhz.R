@@ -41,10 +41,12 @@ complex_survey_estimates_wfhz <- function(df,
   } else {
     ## Create survey object ----
     srvy <- df |>
+      mutate(wt = 1) |>
       as_survey_design(
         ids = .data$cluster,
         pps = "brewer",
-        variance = "YG"
+        variance = "YG",
+        weights = .data$wt
       )
   }
 
