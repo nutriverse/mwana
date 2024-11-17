@@ -7,7 +7,7 @@
 mw_check_ipcamn_ssreq(df, cluster, .source = c("survey", "screening", "ssite"))
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to check.}
+\item{df}{A data set object of class \code{data.frame} to check.}
 
 \item{cluster}{A vector of class \code{integer} or \code{character} of unique cluster or
 screening or sentinel site IDs. If a \code{character} vector, ensure that names are
@@ -23,13 +23,13 @@ screening data; "ssite" for community-based sentinel site data.}
 A summary table of class \code{data.frame}, of length 3 and width 1, for
 the check results. \code{n_clusters} is for the total number of unique clusters or
 screening or site IDs; \code{n_obs} for the correspondent total number of children
-in the dataset; and \code{meet_ipc} for whether the IPC AMN requirements were met.
+in the data set; and \code{meet_ipc} for whether the IPC AMN requirements were met.
 }
 \description{
 Evidence on the prevalence of acute malnutrition used in the IPC AMN
 can come from different sources: surveys, screenings or community-based
 surveillance system. The IPC set minimum sample size requirements
-for each source. This function helps in verifying whether the requirements
+for each source. This function helps in verifying whether those requirements
 were met or not depending on the source.
 }
 \examples{

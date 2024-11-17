@@ -5,7 +5,7 @@
 #' Calculate z-scores for weight-for-height (WFHZ) and identify outliers based on
 #' the SMART methodology.
 #'
-#' @param df A dataset object of class `data.frame` to wrangle data from.
+#' @param df A data set object of class `data.frame` to wrangle data from.
 #'
 #' @param sex A `numeric` or `character` vector of child's sex. Code values should
 #' only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
@@ -31,8 +31,8 @@
 #' `flag_wfhz`, of child's WFHZ and detected outliers, will be created.
 #'
 #' @references
-#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
-#' and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
+#' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief*
+#' *and Transition*. Manual 2.0. Available at: <https://smartmethodology.org>.
 #'
 #' @seealso
 #' [flag_outliers()] [remove_flags()]

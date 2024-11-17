@@ -7,7 +7,7 @@
 mw_wrangle_wfhz(df, sex, weight, height, .recode_sex = TRUE, .decimals = 3)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to wrangle data from.}
+\item{df}{A data set object of class \code{data.frame} to wrangle data from.}
 
 \item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values should
 only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
@@ -49,8 +49,8 @@ mw_wrangle_wfhz(
 
 }
 \references{
-SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief
-and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
+SMART Initiative (2017). \emph{Standardized Monitoring and Assessment for Relief}
+\emph{and Transition}. Manual 2.0. Available at: \url{https://smartmethodology.org}.
 }
 \seealso{
 \code{\link[=flag_outliers]{flag_outliers()}} \code{\link[=remove_flags]{remove_flags()}}

@@ -44,52 +44,60 @@ home:
   - text: Read more about IPC
     href: https://www.ipcinfo.org/
 
-# reference:
-#   - title: Description
-#     contents:
-#     - mwana
+reference:
+   - title: Description
+     contents:
+     - mwana
 
-#   - title: Built-in datasets
-#     contents:
-#     - anthro.01
-#     - anthro.02
-#     - anthro.03
-#     - anthro.04
-#     - mfaz.01
-#     - mfaz.02
-#     - wfhz.01
+   - title: Built-in data sets
+     contents:
+     - anthro.01
+     - anthro.02
+     - anthro.03
+     - anthro.04
+     - mfaz.01
+     - mfaz.02
+     - wfhz.01
 
-#   - title: Wrangle data
-#     contents:
-#     - mw_wrangle_age
-#     - mw_wrangle_wfhz
-#     - mw_wrangle_muac
+   - title: Wrangle data
+     contents:
+     - mw_wrangle_age
+     - mw_wrangle_wfhz
+     - mw_wrangle_muac
 
-#   - title: Statistical tests
-#     contents:
-#     - mw_stattest_ageratio
+   - title: Statistical tests
+     contents:
+     - mw_stattest_ageratio
 
-#   - title: Check IPC AMN sample size requirements
-#     contents:
-#     - mw_check_ipcamn_ssreq
+   - title: IPC Acute Malnutrition checks
+     contents:
+     - mw_check_ipcamn_ssreq
 
-#   - title: Check plausibility
-#     contents:
-#     - mw_plausibility_check_wfhz
-#     - mw_plausibility_check_mfaz
-#     - mw_plausibility_check_muac
+   - title: Plausibility check
+     contents:
+     - mw_plausibility_check_wfhz
+     - mw_plausibility_check_mfaz
+     - mw_plausibility_check_muac
 
-#   - title: Neat output tables
-#     contents:
-#     - mw_neat_output_wfhz
-#     - mw_neat_output_mfaz
-#     - mw_neat_output_muac
+   - title: Neat output tables
+     contents:
+     - mw_neat_output_wfhz
+     - mw_neat_output_mfaz
+     - mw_neat_output_muac
 
-#   - title: Utilities
-#     contents:
-#     - get_age_months
-#     - recode_muac
-#     - flag_outliers
-#     - remove_flags
+   - title: Estimate prevalence of wasting
+     contents:
+     - mw_estimate_prevalence_wfhz
+     - mw_estimate_prevalence_muac
+     - mw_estimate_prevalence_mfaz
+     - mw_estimate_prevalence_combined
+     - mw_estimate_prevalence_screening
+     - mw_estimate_smart_age_wt
 
-
+   - title: Utilities
+     contents:
+     - get_age_months
+     - recode_muac
+     - flag_outliers
+     - remove_flags
+     - define_wasting

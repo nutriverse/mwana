@@ -7,7 +7,7 @@
 mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to check.}
+\item{df}{A data set object of class \code{data.frame} to check.}
 
 \item{sex}{A vector of class \code{numeric} of child's sex.}
 
@@ -20,13 +20,13 @@ mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
 \item{flags}{A vector of class \code{numeric} of flagged records.}
 }
 \value{
-A summarised table of class \code{data.frame}, of length 19 and width 1, for
+A summarized table of class \code{data.frame}, of length 19 and width 1, for
 the plausibility test results and their respective acceptability rates.
 }
 \description{
 Check the overall plausibility and acceptability of WFHZ data through a
 structured test suite encompassing sampling and measurement-related biases checks
-in the dataset. The test suite, including the criteria and corresponding rating of
+in the data set. The test suite, including the criteria and corresponding rating of
 acceptability, follows the standards in the  SMART plausibility check. The only
 exception is the exclusion of MUAC checks. MUAC is checked separately using more
 comprehensive test suite as well.

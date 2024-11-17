@@ -8,7 +8,7 @@
 #' setting to `NA` the age values that are less than 6.0 and greater than or equal
 #' to 60.0 months old.
 #'
-#' @param df A dataset of class `data.frame` to wrangle age from.
+#' @param df A data set of class `data.frame` to wrangle age from.
 #'
 #' @param dos A vector of class `Date` for date of data collection from the
 #' `df`. Default is `NULL`.

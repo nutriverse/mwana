@@ -72,7 +72,7 @@ get_age_months <- function(dos, dob) {
 #' millimeters or greater than 200 millimeters.
 #'
 #' Removing outliers consist in setting the outlier record to `NA` and not necessarily
-#' to delete it from the dataset. This is useful in the analysis procedures
+#' to delete it from the data set. This is useful in the analysis procedures
 #' where outliers must be removed, such as the analysis of the standard deviation.
 #'
 #' @param x A vector of class `numeric` of WFHZ, MFAZ, HFAZ, WFAZ or raw MUAC values.
@@ -111,13 +111,15 @@ get_age_months <- function(dos, dob) {
 #' x <- anthro.01$muac
 #'
 #' ## Apply the function with `.from` set to "raw_muac" ----
-#' flag_outliers(x, .from = "raw_muac")
+#' m <- flag_outliers(x, .from = "raw_muac")
+#' head(m)
 #'
 #' ## Sample data of z-scores (be it WFHZ, MFAZ, HFAZ or WFAZ) ----
 #' x <- anthro.02$mfaz
 #'
 #' # Apply the function with `.from` set to "zscores" ----
-#' flag_outliers(x, .from = "zscores")
+#' z <- flag_outliers(x, .from = "zscores")
+#' tail(z)
 #'
 #' @rdname outliers
 #' @export
@@ -153,16 +155,20 @@ flag_outliers <- function(x, .from = c("zscores", "raw_muac")) {
 #'
 #' @examples
 #' ## With `.from` set to "zscores" ----
-#' remove_flags(
+#' z <- remove_flags(
 #'   x = wfhz.01$wfhz,
 #'   .from = "zscores"
 #' )
 #'
+#' head(z)
+#'
 #' ## With `.from` set to "raw_muac" ----
-#' remove_flags(
+#' m <- remove_flags(
 #'   x = mfaz.01$muac,
 #'   .from = "raw_muac"
 #' )
+#'
+#' tail(m)
 #'
 #' @rdname outliers
 #'
@@ -205,7 +211,7 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #' values are in the opposite unit of the intended conversion. If not,
 #' execution stops and an error message is returned.
 #'
-#' @param x A vector of the raw MUAC values. The class can either be
+#' @param x A vector of raw MUAC values. The class can either be
 #' `double` or `numeric` or `integer`. If different than expected, the function
 #' will stop execution and return an error message indicating the type of mismatch.
 #'
@@ -224,12 +230,14 @@ remove_flags <- function(x, .from = c("zscores", "raw_muac")) {
 #'   x = anthro.01$muac,
 #'   .to = "cm"
 #' )
+#' head(muac_cm)
 #'
 #' ## Using the `muac_cm` object to recode it back to "mm" ----
 #' muac_mm <- recode_muac(
 #'   x = muac_cm,
 #'   .to = "mm"
 #' )
+#' tail(muac_mm)
 #'
 #' @export
 #'
@@ -248,7 +256,7 @@ recode_muac <- function(x, .to = c("cm", "mm")) {
   switch(.to,
     ### Recode to centimeters ----
     "cm" = {
-      #### Enforce measuring unit is in "cm" ----
+      #### Enforce measuring unit is in "mm" ----
       if (any(grepl("\\.", as.character(x)))) {
         stop("MUAC values are not in millimeters. Please try again.")
       }

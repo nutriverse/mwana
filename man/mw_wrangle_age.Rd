@@ -7,7 +7,7 @@
 mw_wrangle_age(df, dos = NULL, dob = NULL, age, .decimals = 2)
 }
 \arguments{
-\item{df}{A dataset of class \code{data.frame} to wrangle age from.}
+\item{df}{A data set of class \code{data.frame} to wrangle age from.}
 
 \item{dos}{A vector of class \code{Date} for date of data collection from the
 \code{df}. Default is \code{NULL}.}

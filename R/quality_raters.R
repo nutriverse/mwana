@@ -7,11 +7,11 @@
 #' and raw MUAC data following the SMART methodology criteria.
 #'
 #' @param p A vector of class `double`, containing the proportions of flagged
-#' records in the dataset. If the class does not match the expected type, the
+#' records in the data set. If the class does not match the expected type, the
 #' function will stop execution and return an error message indicating the type
 #'  of mismatch.
 #'
-#' @param .in Specifies the dataset where the rating should be done,
+#' @param .in Specifies the data set where the rating should be done,
 #' with options: "wfhz", "mfaz", or "raw_muac".
 #'
 #' @returns A vector of class `factor` of the same length as input, for the
@@ -63,10 +63,10 @@ rate_propof_flagged <- function(p, .in = c("mfaz", "wfhz", "raw_muac")) {
 #' Rating follows the SMART methodology criteria.
 #'
 #' @param sd A vector of class `double`, containing values of the standard deviation
-#' from the dataset. If the class does not match the expected type, the function
+#' from the data set. If the class does not match the expected type, the function
 #' will stop execution and return an error message indicating the type of mismatch.
 #'
-#' @param .of Specifies the dataset where the rating should be done, with options:
+#' @param .of Specifies the data set where the rating should be done, with options:
 #' "wfhz", "mfaz", or "raw_muac".
 #'
 #' @returns A vector of class `factor` of the same length as input, for the

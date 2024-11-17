@@ -32,7 +32,7 @@ For raw MUAC values, outliers constitute values that are less than 100
 millimeters or greater than 200 millimeters.
 
 Removing outliers consist in setting the outlier record to \code{NA} and not necessarily
-to delete it from the dataset. This is useful in the analysis procedures
+to delete it from the data set. This is useful in the analysis procedures
 where outliers must be removed, such as the analysis of the standard deviation.
 }
 \details{
@@ -50,25 +50,31 @@ by Bilukha, O., & Kianian, B. (2023).
 x <- anthro.01$muac
 
 ## Apply the function with `.from` set to "raw_muac" ----
-flag_outliers(x, .from = "raw_muac")
+m <- flag_outliers(x, .from = "raw_muac")
+head(m)
 
 ## Sample data of z-scores (be it WFHZ, MFAZ, HFAZ or WFAZ) ----
 x <- anthro.02$mfaz
 
 # Apply the function with `.from` set to "zscores" ----
-flag_outliers(x, .from = "zscores")
+z <- flag_outliers(x, .from = "zscores")
+tail(z)
 
 ## With `.from` set to "zscores" ----
-remove_flags(
+z <- remove_flags(
   x = wfhz.01$wfhz,
   .from = "zscores"
 )
 
+head(z)
+
 ## With `.from` set to "raw_muac" ----
-remove_flags(
+m <- remove_flags(
   x = mfaz.01$muac,
   .from = "raw_muac"
 )
+
+tail(m)
 
 }
 \references{
