@@ -14,25 +14,19 @@ complex_survey_estimates_wfhz <- function(df,
   ## Defines case based on the availability of edema ----
   if (!quo_is_null(edema)) {
     ## When edema is available ----
-    df <- with(
-      df,
+    df <- df |>
       define_wasting(
-        df,
         zscores = .data$wfhz,
         edema = !!edema,
         .by = "zscores"
       )
-    )
   } else {
     ## When edema is not available ----
-    df <- with(
-      df,
+    df <- df |>
       define_wasting(
-        df,
         zscores = .data$wfhz,
         .by = "zscores"
       )
-    )
   }
 
   ## Create a survey object ----
