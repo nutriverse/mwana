@@ -166,6 +166,9 @@ mw_plausibility_check_wfhz <- function(df,
 #' @export
 mw_neat_output_wfhz <- function(df) {
 
+  ## Check if `df` is grouped ----
+  is_grouped <- is_grouped_df(df)
+
 ## Format data frame ----
 df <- df |>
   mutate(
@@ -183,7 +186,8 @@ df <- df |>
   ) |>
   ## Rename columns ----
 setNames(
-  c("Total children", "Flagged data (%)", "Class. of flagged data",
+  c( if (is_grouped) "Group" else NULL,
+    "Total children", "Flagged data (%)", "Class. of flagged data",
     "Sex ratio (p)", "Class. of sex ratio", "Age ratio (p)",
     "Class. of age ratio", "DPS weight (#)", "Class. DPS weight",
     "DPS height (#)", "Class. DPS height", "Standard Dev* (#)",

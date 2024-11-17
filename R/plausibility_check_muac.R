@@ -128,6 +128,9 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
 #'
 mw_neat_output_muac <- function(df) {
 
+  ## Check if `df` is grouped ----
+  is_grouped <- is_grouped_df(df)
+
   ## Format data frame ----
   df <- df |>
     mutate(
@@ -139,7 +142,8 @@ mw_neat_output_muac <- function(df) {
     ) |>
     ## Rename columns ----
   setNames(
-    c("Total children", "Flagged data (%)", "Class. of flagged data", "Sex ratio (p)",
+    c( if (is_grouped) "Group" else NULL,
+      "Total children", "Flagged data (%)", "Class. of flagged data", "Sex ratio (p)",
       "Class. of sex ratio", "DPS(#)", "Class. of DPS", "Standard Dev* (#)",
       "Class. of standard dev")
   )

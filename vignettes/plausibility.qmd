@@ -287,7 +287,7 @@ anthro.01 |>
 
 An already formatted table, with scientific notations converted to standard notations, etc.
 
-When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by simply chaining the previous workflow with `group_by()` function from the {`dplyr`} package: 
+When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by using `group_by()` function from the {`dplyr`} package as follows:
 
 ```{r}
 #| label: pl_group_by
@@ -320,6 +320,7 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz
   ) |> 
+  group_by(area) |> 
   mw_neat_output_wfhz()
 ```
 
@@ -354,6 +355,7 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz
   ) |> 
+  group_by(area) |> 
   mw_neat_output_wfhz()
 ```
 
@@ -607,6 +609,7 @@ anthro.01 |>
     age = age,
     flags = flag_mfaz
   ) |>
+  group_by(area) |> 
   mw_neat_output_mfaz()
 ```
 
@@ -643,6 +646,7 @@ anthro.01 |>
     age = age,
     flags = flag_mfaz
   ) |>
+  group_by(area) |> 
   mw_neat_output_mfaz()
 ```
 
@@ -764,7 +768,7 @@ anthro.01 |>
   mw_neat_output_muac()
 ```
 
-And we get
+And we get:
 
 ```{r}
 #| label: view_pretty_tabl_muac
@@ -814,6 +818,7 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
+  group_by(area) |> 
   mw_neat_output_muac()
 ```
 
@@ -841,5 +846,6 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
+  group_by(area) |> 
   mw_neat_output_muac()
 ```

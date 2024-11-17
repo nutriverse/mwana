@@ -171,6 +171,9 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #' @export
 #'
 mw_neat_output_mfaz <- function(df) {
+  ## Check if `df` is grouped ----
+  is_grouped <- is_grouped_df(df)
+
   ## Format data frame ----
   df <- df |>
     mutate(
@@ -188,6 +191,7 @@ mw_neat_output_mfaz <- function(df) {
     ## Rename columns ----
     setNames(
       c(
+        if (is_grouped) "Group" else NULL,
         "Total children", "Flagged data (%)",
         "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
         "Age ratio (p)", "Class. of age ratio", "DPS (#)",
