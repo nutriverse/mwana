@@ -24,12 +24,12 @@ testthat::test_that(
     p <- anthro.03 |>
       mw_wrangle_wfhz(sex, weight, height, .recode_sex = TRUE) |>
       subset(district == "Metuge") |>
-      estimate_probit_prevalence(.for = "wfhz")
+      estimate_probit_prevalence(.for = "wfhz", .by = NULL)
 
     ## Tests ----
     testthat::expect_s3_class(p, class = "tbl", exact = FALSE)
     testthat::expect_length(p, 3)
-    testthat::expect_vector(p, nrow(1))
+    testthat::expect_vector(p, nrow(1), ncol(3))
   }
 )
 
@@ -56,7 +56,7 @@ testthat::test_that(
   {
     ## Input data ----
     p <- mfaz.01 |>
-      estimate_probit_prevalence(.for = "mfaz")
+      estimate_probit_prevalence(.for = "mfaz", .by = NULL)
 
     ## Tests ----
     testthat::expect_s3_class(p, class = "tbl", exact = FALSE)

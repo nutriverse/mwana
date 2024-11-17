@@ -7,7 +7,7 @@
 #' in the dataset. The test suite in this function follows the recommendation made
 #' by Bilukha, O., & Kianian, B. (2023).
 #'
-#' @param df A dataset object of class `data.frame` to check. It must have been
+#' @param df An object of class `data.frame` to check. It must have been
 #' wrangled using this package's wrangling function for MUAC.
 #'
 #' @param sex A vector of class `numeric` of child's sex.
@@ -16,7 +16,7 @@
 #'
 #' @param flags A vector of class `numeric` of flagged records.
 #'
-#' @returns A summarised table of class `data.frame`, of length 9 and width 1, for
+#' @returns A summarized table of class `data.frame`, of length 9 and width 1, for
 #' the plausibility test results and their respective acceptability ratings.
 #'
 #' @details
@@ -92,12 +92,13 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
 #' MUAC data for improved clarity and readability. It converts scientific notations
 #' to standard notations, round values and rename columns to meaningful names.
 #'
-#' @param df A data frame containing the summary table returned by this package's
-#' plausibility check function for raw MUAC data. Must be of class `data.frame`.
+#' @param df An object of class `data.frame` returned by this package's
+#' plausibility checker for raw MUAC data, containing the summarized results to be
+#' formatted.
 #'
 #' @returns
-#' A data frame of the same length and width as `df`, with column names and
-#' values formatted for clarity.
+#' A `data.frame` object of the same length and width as `df`, with column names and
+#' values formatted for clarity and readability.
 #'
 #' @examples
 #' ## First wranlge MUAC data ----
@@ -127,6 +128,9 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
 #'
 mw_neat_output_muac <- function(df) {
 
+  ## Check if `df` is grouped ----
+  is_grouped <- is_grouped_df(df)
+
   ## Format data frame ----
   df <- df |>
     mutate(
@@ -138,7 +142,8 @@ mw_neat_output_muac <- function(df) {
     ) |>
     ## Rename columns ----
   setNames(
-    c("Total children", "Flagged data (%)", "Class. of flagged data", "Sex ratio (p)",
+    c( if (is_grouped) "Group" else NULL,
+      "Total children", "Flagged data (%)", "Class. of flagged data", "Sex ratio (p)",
       "Class. of sex ratio", "DPS(#)", "Class. of DPS", "Standard Dev* (#)",
       "Class. of standard dev")
   )

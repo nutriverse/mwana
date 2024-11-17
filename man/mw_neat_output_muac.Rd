@@ -8,12 +8,13 @@ for improved clarity and readability.}
 mw_neat_output_muac(df)
 }
 \arguments{
-\item{df}{A data frame containing the summary table returned by this package's
-plausibility check function for raw MUAC data. Must be of class \code{data.frame}.}
+\item{df}{An object of class \code{data.frame} returned by this package's
+plausibility checker for raw MUAC data, containing the summarized results to be
+formatted.}
 }
 \value{
-A data frame of the same length and width as \code{df}, with column names and
-values formatted for clarity.
+A \code{data.frame} object of the same length and width as \code{df}, with column names and
+values formatted for clarity and readability.
 }
 \description{
 Clean and format the output table returned from the plausibility check of raw

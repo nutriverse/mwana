@@ -13,7 +13,7 @@ define_wasting(
 )
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to use. It must have been
+\item{df}{A data set object of class \code{data.frame} to use. It must have been
 wrangled using this package's wrangling functions for WFHZ or MUAC, or both
 (for combined) as appropriate.}
 
@@ -42,7 +42,7 @@ This is added to \code{df}. When \code{combined} is selected, vector's names bec
 \code{cgam}, \code{csam} and \code{cmam}.
 }
 \description{
-Define if a given observation in the dataset is wasted or not, and its
+Define if a given observation in the data set is wasted or not, and its
 respective form of wasting (global, severe or moderate) on the basis of
 z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), raw MUAC values and
 combined case-definition.

@@ -70,3 +70,42 @@ testthat::test_that(
 
   }
 )
+
+# Test check: mw_neat_output_muac()----
+testthat::test_that(
+  "mw_neat_output_muac() works when `df` is grouped",
+  {
+    ## Workflow ----
+    quality <- anthro.01 |>
+      mw_wrangle_muac(
+        sex = sex,
+        muac = muac,
+        .recode_sex = TRUE,
+        .recode_muac = FALSE,
+        .to = "none"
+      ) |>
+      group_by(area) |>
+      mw_plausibility_check_muac(
+        flags = flag_muac,
+        sex = sex,
+        muac = muac
+      )|>
+      group_by(area) |>
+      mw_neat_output_muac()
+
+    ## Tests ----
+    testthat::expect_s3_class(quality, "data.frame")
+    testthat::expect_equal(ncol(quality), 10)
+    testthat::expect_equal(nrow(quality), 2)
+    testthat::expect_true(
+      all(c(
+        "Group","Total children", "Flagged data (%)", "Class. of flagged data",
+        "Sex ratio (p)", "Class. of sex ratio", "DPS(#)", "Class. of DPS",
+        "Standard Dev* (#)", "Class. of standard dev"
+      ) %in% names(quality)
+      )
+    )
+
+  }
+)
+

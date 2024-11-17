@@ -6,6 +6,7 @@
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr ends_with everything filter mutate
 #' @importFrom dplyr group_by
+#' @importFrom dplyr is_grouped_df
 #' @importFrom dplyr pull
 #' @importFrom dplyr relocate
 #' @importFrom dplyr select

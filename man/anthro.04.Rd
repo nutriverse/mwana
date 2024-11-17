@@ -25,7 +25,7 @@ anthro.04
 }
 \description{
 Data was generated through a community-based sentinel site conducted
-across three provinces. Each province's dataset presents distinct
+across three provinces. Each province's data set presents distinct
 data quality scenarios, requiring tailored prevalence analysis:
 \itemize{
 \item "Province 1" has MFAZ's standard deviation and age ratio test rating of
@@ -36,7 +36,7 @@ standard deviation of MFAZ;
 }
 
 This sample data is useful to demonstrate the use of prevalence functions on
-a multi-area survey data where variations in the rating of acceptability of the
+a multiple-area survey data where variations in the rating of acceptability of the
 standard deviation exist, hence require different analyses approaches for each
 area to ensure accurate estimation.
 }

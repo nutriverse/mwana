@@ -34,13 +34,18 @@ statistics about combined wasting.
 \description{
 Estimate the prevalence of wasting based on the combined case-definition of
 weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows users to
-get the prevalence estimates calculated in accordance with the complex sample
+get the prevalence estimates in accordance with the complex sample
 design properties; this includes applying survey weights when needed or applicable.
-Flagged records in WFHZ and in MUAC data set are excluded prior prevalence analysis.
-Alongside this, the function also checks for the quality of
-data set before computing the prevalence. If all standard deviations of
-WFHZ and MFAZ, as well the age ratio test are not problematic, analysis is done;
-otherwise, if any of the checks get rated as problematic, NAs get thrown.
+Before estimating, the function evaluates the quality of data by calculating
+and rating the standard deviation of WFHZ and MFAZ, as well as the p-value of
+the age ratio test.
+Prevalence will be calculated only when the rating of all test is as not
+problematic concurrently. If either of them is problematic, it cancels out
+the analysis and \code{NA}s get thrown.
+
+Outliers are detected in both WFHZ and in MUAC data set (through z-scores)
+based on SMART flags get excluded prior being piped into the actual prevalence
+analysis workflow.
 }
 \details{
 A concept of "combined flags" is introduced in this function. It consists of
@@ -49,7 +54,7 @@ defining as flag any observation that is flagged in either \code{flag_wfhz} or
 added to \code{df}. This ensures that all flagged observations from both WFHZ
 and MFAZ data are excluded from the prevalence analysis.
 
-\emph{A glimpse on how \code{cflags} are defined}\tabular{ccc}{
+\emph{A glimpse on how \code{cflags} are defined:}\tabular{ccc}{
    \strong{flag_wfhz} \tab \strong{flag_mfaz} \tab \strong{cflags} \cr
    1 \tab 0 \tab 1 \cr
    0 \tab 1 \tab 1 \cr

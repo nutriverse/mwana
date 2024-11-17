@@ -5,15 +5,15 @@
 #' @description
 #' Check the overall plausibility and acceptability of MFAZ data through a
 #' structured test suite encompassing sampling and measurement-related biases checks
-#' in the dataset. The test suite in this function follows the recommendation made
+#' in the data set. The test suite in this function follows the recommendation made
 #' by Bilukha, O., & Kianian, B. (2023) on the plausibility of
 #' constructing a comprehensive plausibility check for MUAC data similar to WFHZ
-#' to evaluate its acceptability when the variable age exists in the dataset.
+#' to evaluate its acceptability when the variable age exists in the data set.
 #'
 #' The function works on a data frame returned from this package's wrangling
 #' function for age and for MFAZ data.
 #'
-#' @param df A dataset object of class `data.frame` to check.
+#' @param df A data set object of class `data.frame` to check.
 #'
 #' @param sex A vector of class `numeric` of child's sex.
 #'
@@ -24,13 +24,14 @@
 #' @param flags A vector of class `numeric` of flagged records.
 #'
 #' @returns
-#' A summarised table of class `data.frame`, of length 17 and width 1, for
+#' A summarized table of class `data.frame`, of length 17 and width 1, for
 #' the plausibility test results and their respective acceptability ratings.
 #'
 #' @details
 #' Whilst the function uses the same test checks and criteria as that of WFHZ
-#' in the SMART plausibility check, the percent of flagged data uses
-#' different cut-off points, with a maximum acceptability of 2.0%, as shown below:
+#' in the SMART plausibility check, the percent of flagged data is evaluated
+#' using a different cut-off points, with a maximum acceptability of 2.0%,
+#' as shown below:
 #'
 #' |**Excellent** | **Good** | **Acceptable** | **Problematic** |
 #' | :---: | :---: | :---: | :---: |
@@ -126,12 +127,13 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #' for improved clarity and readability. It converts scientific notations to standard
 #' notations, round values and rename columns to meaningful names.
 #'
-#' @param df A data frame containing the summary table returned by this package's
-#' MFAZ plausibility check function. Must be of class `data.frame`.
+#' @param df An object of class `data.frame` returned by this package's
+#' plausibility checker for MFAZ data, containing the summarized results to be
+#' formatted.
 #'
 #' @returns
-#' A data frame of the same length and width as `df`, with column names and
-#' values formatted for clarity.
+#' A `data.frame` object of the same length and width as `df`, with column names and
+#' values formatted for clarity and readability.
 #'
 #' @examples
 #' ## First wrangle age data ----
@@ -169,6 +171,9 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #' @export
 #'
 mw_neat_output_mfaz <- function(df) {
+  ## Check if `df` is grouped ----
+  is_grouped <- is_grouped_df(df)
+
   ## Format data frame ----
   df <- df |>
     mutate(
@@ -186,6 +191,7 @@ mw_neat_output_mfaz <- function(df) {
     ## Rename columns ----
     setNames(
       c(
+        if (is_grouped) "Group" else NULL,
         "Total children", "Flagged data (%)",
         "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
         "Age ratio (p)", "Class. of age ratio", "DPS (#)",

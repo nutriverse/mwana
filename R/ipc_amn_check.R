@@ -5,10 +5,10 @@
 #' Evidence on the prevalence of acute malnutrition used in the IPC AMN
 #' can come from different sources: surveys, screenings or community-based
 #' surveillance system. The IPC set minimum sample size requirements
-#' for each source. This function helps in verifying whether the requirements
+#' for each source. This function helps in verifying whether those requirements
 #' were met or not depending on the source.
 #'
-#' @param df A dataset object of class `data.frame` to check.
+#' @param df A data set object of class `data.frame` to check.
 #'
 #' @param cluster A vector of class `integer` or `character` of unique cluster or
 #' screening or sentinel site IDs. If a `character` vector, ensure that names are
@@ -23,7 +23,7 @@
 #' @returns A summary table of class `data.frame`, of length 3 and width 1, for
 #' the check results. `n_clusters` is for the total number of unique clusters or
 #' screening or site IDs; `n_obs` for the correspondent total number of children
-#' in the dataset; and `meet_ipc` for whether the IPC AMN requirements were met.
+#' in the data set; and `meet_ipc` for whether the IPC AMN requirements were met.
 #'
 #' @references
 #' IPC Global Partners. 2021. *Integrated Food Security Phase Classification*

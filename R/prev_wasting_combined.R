@@ -89,13 +89,18 @@ complex_survey_estimates_combined <- function(df,
 #' @description
 #' Estimate the prevalence of wasting based on the combined case-definition of
 #' weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows users to
-#' get the prevalence estimates calculated in accordance with the complex sample
+#' get the prevalence estimates in accordance with the complex sample
 #' design properties; this includes applying survey weights when needed or applicable.
-#' Flagged records in WFHZ and in MUAC data set are excluded prior prevalence analysis.
-#' Alongside this, the function also checks for the quality of
-#' data set before computing the prevalence. If all standard deviations of
-#' WFHZ and MFAZ, as well the age ratio test are not problematic, analysis is done;
-#' otherwise, if any of the checks get rated as problematic, NAs get thrown.
+#' Before estimating, the function evaluates the quality of data by calculating
+#' and rating the standard deviation of WFHZ and MFAZ, as well as the p-value of
+#' the age ratio test.
+#' Prevalence will be calculated only when the rating of all test is as not
+#' problematic concurrently. If either of them is problematic, it cancels out
+#' the analysis and `NA`s get thrown.
+#'
+#' Outliers are detected in both WFHZ and in MUAC data set (through z-scores)
+#' based on SMART flags get excluded prior being piped into the actual prevalence
+#' analysis workflow.
 #'
 #' @param df A dataset object of class `data.frame` to use. This must have been
 #' wrangled using this package's wrangling functions for both WFHZ and MUAC data
@@ -127,7 +132,7 @@ complex_survey_estimates_combined <- function(df,
 #' added to `df`. This ensures that all flagged observations from both WFHZ
 #' and MFAZ data are excluded from the prevalence analysis.
 #'
-#' *A glimpse on how `cflags` are defined*
+#' *A glimpse on how `cflags` are defined:*
 #' | **flag_wfhz** | **flag_mfaz** | **cflags** |
 #' | :---: | :---: | :---: |
 #' | 1 | 0  | 1 |

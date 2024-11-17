@@ -1,6 +1,12 @@
 ---
 title: "Running plausibility checks"
 author: Tomás Zaba
+bibliography: references.bib
+csl: harvard-cite-them-right-11th-edition.csl
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>"
 vignette: >
   %\VignetteIndexEntry{Running plausibility checks}
   %\VignetteEngine{quarto::html}
@@ -20,7 +26,7 @@ Plausibility check is a tool that evaluates the overall quality and acceptabilit
 
 `mwana` provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or raw MUAC values.  
 
-In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on raw MUAC values. For demonstration, we will use a `mwana` built-in sample data set named `anthro.01`. This data set is contains district level SMART surveys from anonymized locations. Do `?anthro.01` in `R` console to read more about the data set.
+In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on raw MUAC values. For demonstration, we will use a `mwana` built-in sample data set named `anthro.01`. This data set contains district level SMART surveys from anonymized locations. Do `?anthro.01` in `R` console to read more about it.
 
 We will begin the demonstration with the plausibility check that you are most familiar with and then proceed to the ones you are less familiar with. 
 
@@ -28,15 +34,15 @@ We will begin the demonstration with the plausibility check that you are most fa
 
 We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to walk you through some key features about this function. 
 
-`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the [SMART Methodology](https://smartmethodology.org/). Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
+`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the SMART Methodology [@smart2017]. Under the hood, it runs the same test suite you already know from SMART; it also applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
 
   (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC.
   
-  (ii) `mw_plausibility_check_wfhz()` allows user to run checks on a multiple area data set at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
+  (ii) `mw_plausibility_check_wfhz()` allows user to run checks on a multiple-area data set at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
 
 That is it! Now we can begin delving into the "how to". 
 
-It is always a good practice to start off by inspecting the data set. Let's check the first 6 rows of our data set:
+It is always a good practice to start off by inspecting our data set. Let's check the first 6 rows of our data set:
 
 ```{r}
 #| label: data
@@ -58,9 +64,9 @@ We can see that the data set has eleven variables, and the way how their respect
 
 ### Data wrangling
 
-As mentioned somewhere above, before we supply a data object to `mw_plausibility_check_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing  `help(mw_wrangle_age)` or `help(mw_wrangle_wfhz)` in `R` console. 
+As mentioned somewhere above, before we supply a data object to `mw_plausibility_check_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing  `help("mw_wrangle_age")` or `help("mw_wrangle_wfhz")` in `R` console. 
 
-#### Age {#sec-age}
+#### Wrangling age {#sec-age}
 
 We use `mw_wrangle_age()` to calculate child's age in months based on the date of data collection and child's date of birth. This is done as follows:
 
@@ -113,7 +119,7 @@ wrangled_df <- anthro.01 |>
   )
 ```
 
-In this example, the argument `.recode_sex` was set to `TRUE`. That is because under the hood, to compute the z-scores, a task made possible thanks to the [zscorer](https://cran.r-project.org/web/packages/zscorer/index.htmlpackage) package, it uses sex coded into 1 and 2 for male and female,  respectively. This means that if our sex variable is already in 1 and 2's, we would set it to `FALSE`. 
+In this example, the argument `.recode_sex` was set to `TRUE`. That is because under the hood, to compute the z-scores, a task made possible thanks to the {`zscorer`} package [@zscorer], it uses sex coded into 1 and 2 for male and female,  respectively. This means that if our sex variable is already in 1 and 2's, we would set it to `FALSE`. 
 
 :::{.callout-note}
 If by any chance your sex variable is coded in any other different way than aforementioned, then you will have to recode it outside `mwana` utilities and then set `.recode_sex` accordingly.
@@ -281,7 +287,7 @@ anthro.01 |>
 
 An already formatted table, with scientific notations converted to standard notations, etc.
 
-When working on a multiple area data set, for instance districts, we can check the plausibility of all districts in the data set at once by simply chaining the previous workflow with `group_by()` function from the `dplyr` package: 
+When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by using `group_by()` function from the {`dplyr`} package as follows:
 
 ```{r}
 #| label: pl_group_by
@@ -314,6 +320,7 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz
   ) |> 
+  group_by(area) |> 
   mw_neat_output_wfhz()
 ```
 
@@ -348,6 +355,7 @@ anthro.01 |>
     height = height,
     flags = flag_wfhz
   ) |> 
+  group_by(area) |> 
   mw_neat_output_wfhz()
 ```
 
@@ -358,17 +366,17 @@ At this point, you have reached the end of your workflow 🎉 .
 We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our data set.
 
 :::{.callout-note}
-The plausibility check for MFAZ data was built based on the insights gotten from [Bilukha, O., & Kianian, B. (2023)](https://doi.org/10.1111/mcn.13478) research presented at the [2023 High-Level Technical Assessment Workshop](https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf) held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that of WFHZ for MFAZ, with a maximum acceptability of percent of flagged 
+The plausibility check for MFAZ data was built based on the insights gotten from @bilukha research presented at the 2023 High-Level Technical Assessment Workshop held in Nairobi, Kenya [@smarthighlevel]. Results from this research suggested a feasibility of applying the similar plausibility check as that of WFHZ for MFAZ, with a maximum acceptability of percent of flagged 
 records of 2.0%.
 :::
 
-We can run MFAZ plausibility check by calling `mw_plausibility_check_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with processing age; for this, we approach the same way as in @sec-age.
+We can run MFAZ plausibility check by calling `mw_plausibility_check_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with wrangling age; for this, we approach the same way as in @sec-age.
 
 :::{.callout-important}
 ## Age ratio test in MFAZ
 
 As you know, the age ratio test in WFHZ is done on children aged 6 to 29 months old over those aged 30 to 59 months old. 
-This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in [SMART MUAC Tool](https://smartmethodology.org/survey-planning-tools/updated-muac-tool/). The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.
+This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in the SMART MUAC Tool [@smartmuactool]. The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.
 :::
 
 ### Wrangling MFAZ data {#sec-wrangle_mfaz}
@@ -424,7 +432,7 @@ anthro.01 |>
 ```
 
 :::{.callout-note}
-`mw_wrangle_muac()` accepts MUAC values in centimeters. This is why it takes the arguments `.recode_muac` and `.to` to control whether there is need to transform the variable `muac`function or not. Read the function documentation to learn how to control these two arguments.
+`mw_wrangle_muac()` accepts MUAC values in centimeters. This is why it takes the arguments `.recode_muac` and `.to` to control whether there is need to transform the variable `muac` or not. Read the function documentation to learn about how to control these two arguments.
 :::
 
 ### On to *de facto* plausibility check of MFAZ data
@@ -567,7 +575,7 @@ anthro.01 |>
   mw_neat_output_mfaz()
 ```
 
-We can also run checks on a multiple area data set as follows: 
+We can also run checks on a multiple-area data set as follows: 
 
 ```{r}
 #| label: grouped_mfaz
@@ -601,6 +609,7 @@ anthro.01 |>
     age = age,
     flags = flag_mfaz
   ) |>
+  group_by(area) |> 
   mw_neat_output_mfaz()
 ```
 
@@ -637,6 +646,7 @@ anthro.01 |>
     age = age,
     flags = flag_mfaz
   ) |>
+  group_by(area) |> 
   mw_neat_output_mfaz()
 ```
 
@@ -758,7 +768,7 @@ anthro.01 |>
   mw_neat_output_muac()
 ```
 
-And we get
+And we get:
 
 ```{r}
 #| label: view_pretty_tabl_muac
@@ -782,7 +792,7 @@ anthro.01 |>
 ```
 
 
-When working on multiple area data, we approach the task the same way as demonstrated above:
+When working on multiple-area data, we approach the task the same way as demonstrated above:
 
 ```{r}
 #| label: by_area
@@ -808,6 +818,7 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
+  group_by(area) |> 
   mw_neat_output_muac()
 ```
 
@@ -835,5 +846,6 @@ anthro.01 |>
     flags = flag_muac,
     muac = muac
   ) |>
+  group_by(area) |> 
   mw_neat_output_muac()
 ```

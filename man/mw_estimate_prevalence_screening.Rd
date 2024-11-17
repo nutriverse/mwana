@@ -27,6 +27,10 @@ will stop the execution and return an error message indicating the issue.}
 or respective IDs for where the data was collected and for which the analysis
 should be summarized at.}
 }
+\value{
+A summarized table of class \code{data.frame} of the descriptive
+statistics about wasting.
+}
 \description{
 It is common to estimate prevalence of wasting from non survey data, such
 as screenings or any other community-based surveillance systems. In such
@@ -34,36 +38,43 @@ situations, the analysis usually consists only in estimating the point prevalenc
 and the counts of positive cases, without necessarily estimating the
 uncertainty. This is the job of this function.
 
-Prior estimating, it evaluates the quality of data by calculating and rating the
-standard deviation of z-scores of muac-for-age (MFAZ) and the age ratio test
-p-value, and then sets an analysis path that best fits the data. Paths vary between
-weighted, unweighted analysis or thrown of \code{NA}s. Weighted analysis refers to the
-age-weighting approach used in the SMART MUAC Tool to fix for the likely
-overestimation of wasting when there are excess of younger children in the
-data set. \code{NA}s get thrown when all checks are concurrently rated as problematic.
+Before estimating, it evaluates the quality of data by calculating and rating the
+standard deviation of z-scores of muac-for-age (MFAZ) and the p-value of the
+age ratio test; then it sets the analysis path that best fits the data.
+\itemize{
+\item If all tests are rated as not problematic, a normal analysis is done.
+\item If standard deviation is not problematic and age ratio test is problematic,
+prevalence is age-weighted. This is to fix the likely overestimation of wasting
+when there are excess of younger children in the data set.
+\item If standard deviation is problematic and age ratio test is not, or both
+are problematic,  analysis gets cancelled out and \code{NA}s get thrown.
+}
+
+Outliers are detected based on SMART flags on the MFAZ values and then
+get excluded prior being piped into the actual prevalence analysis workflow.
 }
 \examples{
 mw_estimate_prevalence_screening(
-df = anthro.02,
-muac = muac,
-edema = edema,
-.by = province
+  df = anthro.02,
+  muac = muac,
+  edema = edema,
+  .by = province
 )
 
 ## With `edema` set to `NULL` ----
 mw_estimate_prevalence_screening(
-df = anthro.02,
-muac = muac,
-edema = NULL,
-.by = province
+  df = anthro.02,
+  muac = muac,
+  edema = NULL,
+  .by = province
 )
 
 ## With `.by` set to `NULL` ----
 mw_estimate_prevalence_screening(
-df = anthro.02,
-muac = muac,
-edema = NULL,
-.by = NULL
+  df = anthro.02,
+  muac = muac,
+  edema = NULL,
+  .by = NULL
 )
 
 }

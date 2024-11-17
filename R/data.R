@@ -74,13 +74,13 @@
 #' A sample data of district level SMART surveys conducted in Mozambique
 #'
 #' @description
-#' `anthro.03` contains survey data of four districts. Each district dataset
+#' `anthro.03` contains survey data of four districts. Each district data set
 #' presents distinct data quality scenarios that requires tailored prevalence
 #' analysis approach: two districts show a problematic WFHZ standard deviation
 #' whilst the remaining are all within range.
 #'
 #' This sample data is useful to demonstrate the use of the prevalence functions on
-#' a multi-area survey data where there can be variations in the rating of
+#' a multiple-area survey data where there can be variations in the rating of
 #' acceptability of the standard deviation, hence require different analyses approaches
 #' for each area to ensure accurate estimation.
 #'
@@ -113,7 +113,7 @@
 #'
 #' @description
 #' Data was generated through a community-based sentinel site conducted
-#' across three provinces. Each province's dataset presents distinct
+#' across three provinces. Each province's data set presents distinct
 #' data quality scenarios, requiring tailored prevalence analysis:
 #'  + "Province 1" has MFAZ's standard deviation and age ratio test rating of
 #'  acceptability falling within range;
@@ -122,7 +122,7 @@
 #'  + "Province 3" has both tests rated as problematic.
 #'
 #' This sample data is useful to demonstrate the use of prevalence functions on
-#' a multi-area survey data where variations in the rating of acceptability of the
+#' a multiple-area survey data where variations in the rating of acceptability of the
 #' standard deviation exist, hence require different analyses approaches for each
 #' area to ensure accurate estimation.
 #'

@@ -77,13 +77,19 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
 #' and the counts of positive cases, without necessarily estimating the
 #' uncertainty. This is the job of this function.
 #'
-#' Prior estimating, it evaluates the quality of data by calculating and rating the
-#' standard deviation of z-scores of muac-for-age (MFAZ) and the age ratio test
-#' p-value, and then sets an analysis path that best fits the data. Paths vary between
-#' weighted, unweighted analysis or thrown of `NA`s. Weighted analysis refers to the
-#' age-weighting approach used in the SMART MUAC Tool to fix for the likely
-#' overestimation of wasting when there are excess of younger children in the
-#' data set. `NA`s get thrown when all checks are concurrently rated as problematic.
+#' Before estimating, it evaluates the quality of data by calculating and rating the
+#' standard deviation of z-scores of muac-for-age (MFAZ) and the p-value of the
+#' age ratio test; then it sets the analysis path that best fits the data.
+#'
+#'  + If all tests are rated as not problematic, a normal analysis is done.
+#'  + If standard deviation is not problematic and age ratio test is problematic,
+#'  prevalence is age-weighted. This is to fix the likely overestimation of wasting
+#'   when there are excess of younger children in the data set.
+#'  + If standard deviation is problematic and age ratio test is not, or both
+#'  are problematic,  analysis gets cancelled out and `NA`s get thrown.
+#'
+#' Outliers are detected based on SMART flags on the MFAZ values and then
+#' get excluded prior being piped into the actual prevalence analysis workflow.
 #'
 #' @param df A data set object of class `data.frame` to use. This must have been
 #' wrangled using this package's wrangling function for MUAC data. Make sure
@@ -105,6 +111,9 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
 #' or respective IDs for where the data was collected and for which the analysis
 #' should be summarized at.
 #'
+#' @returns A summarized table of class `data.frame` of the descriptive
+#' statistics about wasting.
+#'
 #' @references
 #' SMART Initiative (no date). *Updated MUAC data collection tool*. Available at:
 #' <https://smartmethodology.org/survey-planning-tools/updated-muac-tool/>
@@ -114,26 +123,26 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
 #'
 #' @examples
 #' mw_estimate_prevalence_screening(
-#' df = anthro.02,
-#' muac = muac,
-#' edema = edema,
-#' .by = province
+#'   df = anthro.02,
+#'   muac = muac,
+#'   edema = edema,
+#'   .by = province
 #' )
 #'
 #' ## With `edema` set to `NULL` ----
 #' mw_estimate_prevalence_screening(
-#' df = anthro.02,
-#' muac = muac,
-#' edema = NULL,
-#' .by = province
+#'   df = anthro.02,
+#'   muac = muac,
+#'   edema = NULL,
+#'   .by = province
 #' )
 #'
 #' ## With `.by` set to `NULL` ----
 #' mw_estimate_prevalence_screening(
-#' df = anthro.02,
-#' muac = muac,
-#' edema = NULL,
-#' .by = NULL
+#'   df = anthro.02,
+#'   muac = muac,
+#'   edema = NULL,
+#'   .by = NULL
 #' )
 #'
 #' @export
