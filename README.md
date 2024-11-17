@@ -166,7 +166,7 @@ citation("mwana")
 #> 
 #>   Tomás Zaba, Ernest Guevarra (2024). _mwana: An Efficient Workflow for
 #>   Plausibility Checks and Prevalence Analysis of Wasting in R_. R
-#>   package version 0.1.0, <https://github.com/nutriverse/mwana>.
+#>   package version 0.2.0, <https://github.com/nutriverse/mwana>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -174,7 +174,7 @@ citation("mwana")
 #>     title = {mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R},
 #>     author = {{Tomás Zaba} and {Ernest Guevarra}},
 #>     year = {2024},
-#>     note = {R package version 0.1.0},
+#>     note = {R package version 0.2.0},
 #>     url = {https://github.com/nutriverse/mwana},
 #>   }
 ```
