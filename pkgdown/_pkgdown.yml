@@ -44,7 +44,7 @@ home:
   - text: Read more about IPC
     href: https://www.ipcinfo.org/
 
- reference:
+reference:
    - title: Description
      contents:
      - mwana
@@ -101,6 +101,3 @@ home:
      - flag_outliers
      - remove_flags
      - define_wasting
-
-
-

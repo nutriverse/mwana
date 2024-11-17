@@ -122,3 +122,5 @@ anthro.01 |>
 ```
 
 For screening or sentinel site-based data, we approach the task the same way; we only have to change the `.source` parameter to "screening" or to "ssite" as appropriate, as well as to supply `cluster` with the right column name of the sub-areas inside the main area (villages, localities, comunas, communities, etc).
+
+# References

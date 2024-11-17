@@ -53,68 +53,6 @@ smart_age_weighting <- function(muac,
 }
 
 
-
-#'
-#'
-#' @rdname prev-muac
-#'
-#' @examples
-#' ## An application of `mw_estimate_smart_age_wt()` ----
-#' .data <- anthro.04 |>
-#'   subset(province == "Province 2")
-#'
-#' mw_estimate_smart_age_wt(
-#'   df = .data,
-#'   edema = edema,
-#'   .by = NULL
-#' )
-#'
-#' @export
-#'
-#'
-mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
-  ## Difuse argument `.by` ----
-  .by <- enquo(.by)
-
-  ## Enforce measuring unit is in "mm" ----
-  x <- as.character(pull(df, .data$muac))
-  if (any(grepl("\\.", x))) {
-    stop("MUAC values must be in millimeters. Please try again.")
-  }
-
-  if (!quo_is_null(.by)) {
-    df <- df |>
-      filter(.data$flag_mfaz == 0) |>
-      summarise(
-        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
-        gam = sum(.data$sam, .data$mam),
-        .by = !!.by
-      ) |>
-      rename(
-        gam_p = .data$gam,
-        sam_p = .data$sam,
-        mam_p = .data$mam
-      )
-  } else {
-    df <- df |>
-      filter(.data$flag_mfaz == 0) |>
-      summarise(
-        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
-        gam = sum(.data$sam, .data$mam)
-      ) |>
-      rename(
-        gam_p = .data$gam,
-        sam_p = .data$sam,
-        mam_p = .data$mam
-      )
-  }
-  df
-}
-
-
-
 #'
 #'
 #' @keywords internal
@@ -353,3 +291,63 @@ mw_estimate_prevalence_muac <- function(df,
   }
   results
 }
+
+#'
+#'
+#' @rdname prev-muac
+#'
+#' @examples
+#' ## An application of `mw_estimate_smart_age_wt()` ----
+#' .data <- anthro.04 |>
+#'   subset(province == "Province 2")
+#'
+#' mw_estimate_smart_age_wt(
+#'   df = .data,
+#'   edema = edema,
+#'   .by = NULL
+#' )
+#'
+#' @export
+#'
+#'
+mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
+  ## Difuse argument `.by` ----
+  .by <- enquo(.by)
+
+  ## Enforce measuring unit is in "mm" ----
+  x <- as.character(pull(df, .data$muac))
+  if (any(grepl("\\.", x))) {
+    stop("MUAC values must be in millimeters. Please try again.")
+  }
+
+  if (!quo_is_null(.by)) {
+    df <- df |>
+      filter(.data$flag_mfaz == 0) |>
+      summarise(
+        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
+        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+        gam = sum(.data$sam, .data$mam),
+        .by = !!.by
+      ) |>
+      rename(
+        gam_p = .data$gam,
+        sam_p = .data$sam,
+        mam_p = .data$mam
+      )
+  } else {
+    df <- df |>
+      filter(.data$flag_mfaz == 0) |>
+      summarise(
+        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
+        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+        gam = sum(.data$sam, .data$mam)
+      ) |>
+      rename(
+        gam_p = .data$gam,
+        sam_p = .data$sam,
+        mam_p = .data$mam
+      )
+  }
+  df
+}
+

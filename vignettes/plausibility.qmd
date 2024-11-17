@@ -849,3 +849,5 @@ anthro.01 |>
   group_by(area) |> 
   mw_neat_output_muac()
 ```
+
+# References
