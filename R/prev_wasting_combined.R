@@ -102,7 +102,7 @@ complex_survey_estimates_combined <- function(df,
 #' based on SMART flags get excluded prior being piped into the actual prevalence
 #' analysis workflow.
 #'
-#' @param df A dataset object of class `data.frame` to use. This must have been
+#' @param df A data set object of class `data.frame` to use. This must have been
 #' wrangled using this package's wrangling functions for both WFHZ and MUAC data
 #' sequentially. The order does not matter. Note that MUAC values should be
 #' converted to millimeters after using the MUAC wrangler. If this is not done,

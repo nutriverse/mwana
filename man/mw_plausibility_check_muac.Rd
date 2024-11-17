@@ -23,7 +23,7 @@ the plausibility test results and their respective acceptability ratings.
 \description{
 Check the overall plausibility and acceptability of raw MUAC data through a
 structured test suite encompassing sampling and measurement-related biases checks
-in the dataset. The test suite in this function follows the recommendation made
+in the data set. The test suite in this function follows the recommendation made
 by Bilukha, O., & Kianian, B. (2023).
 }
 \details{

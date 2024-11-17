@@ -7,7 +7,7 @@
 mw_estimate_prevalence_wfhz(df, wt = NULL, edema = NULL, .by = NULL)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to use. This must have been
+\item{df}{A data set object of class \code{data.frame} to use. This must have been
 wrangled using this package's wrangling function for WFHZ data. The function
 uses a variable name called \code{cluster} where the primary sampling unit IDs
 are stored. Make sure to rename your cluster ID variable to \code{cluster}, otherwise

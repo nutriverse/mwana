@@ -5,7 +5,7 @@
 #' Calculate z-scores for weight-for-height (WFHZ) and identify outliers based on
 #' the SMART methodology.
 #'
-#' @param df A dataset object of class `data.frame` to wrangle data from.
+#' @param df A data set object of class `data.frame` to wrangle data from.
 #'
 #' @param sex A `numeric` or `character` vector of child's sex. Code values should
 #' only be 1 or "m" for males and 2 or "f" for females. Make sure sex values

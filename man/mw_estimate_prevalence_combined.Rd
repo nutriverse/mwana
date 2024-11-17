@@ -7,7 +7,7 @@
 mw_estimate_prevalence_combined(df, wt = NULL, edema = NULL, .by = NULL)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to use. This must have been
+\item{df}{A data set object of class \code{data.frame} to use. This must have been
 wrangled using this package's wrangling functions for both WFHZ and MUAC data
 sequentially. The order does not matter. Note that MUAC values should be
 converted to millimeters after using the MUAC wrangler. If this is not done,

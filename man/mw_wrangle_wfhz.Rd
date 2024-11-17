@@ -7,7 +7,7 @@
 mw_wrangle_wfhz(df, sex, weight, height, .recode_sex = TRUE, .decimals = 3)
 }
 \arguments{
-\item{df}{A dataset object of class \code{data.frame} to wrangle data from.}
+\item{df}{A data set object of class \code{data.frame} to wrangle data from.}
 
 \item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values should
 only be 1 or "m" for males and 2 or "f" for females. Make sure sex values

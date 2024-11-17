@@ -91,7 +91,7 @@ complex_survey_estimates_wfhz <- function(df,
 #' Outliers are detected based on SMART flags and get excluded prior being piped
 #' into the actual prevalence analysis workflow.
 #'
-#' @param df A dataset object of class `data.frame` to use. This must have been
+#' @param df A data set object of class `data.frame` to use. This must have been
 #' wrangled using this package's wrangling function for WFHZ data. The function
 #' uses a variable name called `cluster` where the primary sampling unit IDs
 #' are stored. Make sure to rename your cluster ID variable to `cluster`, otherwise

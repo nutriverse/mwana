@@ -7,7 +7,7 @@
 #' in detecting outliers from the raw MUAC values. The function only works after
 #' the age has been wrangled.
 #'
-#' @param df A dataset object of class `data.frame` to wrangle data from.
+#' @param df A data set object of class `data.frame` to wrangle data from.
 #'
 #' @param sex A `numeric` or `character` vector of child's sex. Code values should
 #' only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
