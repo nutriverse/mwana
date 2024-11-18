@@ -22,7 +22,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 Child anthropometric assessments are the cornerstones of child nutrition
 and food security surveillance around the world. Ensuring the quality of
 data from these assessments is paramount to obtaining accurate child
-undernutrition prevalence estimates. Additionally, the timeliness of
+under nutrition prevalence estimates. Additionally, the timeliness of
 reporting is, as well, critical to allowing timely situation analyses
 and responses to tackle the needs of the affected population.
 
