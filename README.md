@@ -122,7 +122,7 @@ In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow,
 sample size requirements of a given area were met, on the basis of the
 methodology used to collect the data, be it a survey, a screening or a
 sentinel site data. Read the guide
-[here](https://nutriverse.io/mwana/articles/sample_size.html).
+[here](https://nutriverse.io/mwana/articles/ipc_amn_check.html).
 
 > [!TIP]
 >

@@ -114,7 +114,7 @@ digraph mwana {
   + MFAZ and/or edema. Read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz).
   + Combined prevalence. A concept of combined flags is used to streamline the flags removed in WFHZ and those in MUAC. Read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
 
-In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking whether the minimum sample size requirements of a given area were met, on the basis of the methodology used to collect the data, be it a survey, a screening or a sentinel site data. Read the guide [here](https://nutriverse.io/mwana/articles/sample_size.html).
+In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking whether the minimum sample size requirements of a given area were met, on the basis of the methodology used to collect the data, be it a survey, a screening or a sentinel site data. Read the guide [here](https://nutriverse.io/mwana/articles/ipc_amn_check.html).
 
 :::{.callout-tip}
 If you are undertaking a research and you want to wrangle your data before using it in your statistical models, `mwana` is a great helper.
