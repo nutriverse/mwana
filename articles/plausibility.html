@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="plausibility_files/libs/quarto-html/popper.min.js"></script><script src="plausibility_files/libs/quarto-html/tippy.umd.min.js"></script><link href="plausibility_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="plausibility_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Running plausibility checks">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mwana</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@
       <p class="author">Tomás Zaba</p>
 
 
-      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/v0.1.0/vignettes/plausibility.qmd" class="external-link"><code>vignettes/plausibility.qmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/main/vignettes/plausibility.qmd" class="external-link"><code>vignettes/plausibility.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
     </div>
 
@@ -86,41 +86,39 @@
 </h2>
 <p>Plausibility check is a tool that evaluates the overall quality and acceptability of anthropometric data to ensure its suitability for informing decision-making process.</p>
 <p><code>mwana</code> provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or raw MUAC values.</p>
-<p>In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on raw MUAC values. For demonstration, we will use a <code>mwana</code> built-in sample dataset named <code>anthro.01</code>. This dataset is contains district level SMART surveys from anonymized locations. Do <code><a href="../reference/anthro.01.html">?anthro.01</a></code> in <code>R</code> console to read more about the dataset.</p>
+<p>In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on raw MUAC values. For demonstration, we will use a <code>mwana</code> built-in sample data set named <code>anthro.01</code>. This data set contains district level SMART surveys from anonymized locations. Do <code><a href="../reference/anthro.01.html">?anthro.01</a></code> in <code>R</code> console to read more about it.</p>
 <p>We will begin the demonstration with the plausibility check that you are most familiar with and then proceed to the ones you are less familiar with.</p>
 <section class="level2"><h3 id="plausibility-check-of-wfhz-data">Plausibility check of WFHZ data<a class="anchor" aria-label="anchor" href="#plausibility-check-of-wfhz-data"></a>
 </h3>
 <p>We check the plausibility of WFHZ data by calling the <code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> function. Before doing that, we need ensure the data is in the right “shape and format” that is accepted and understood by the function. Don’t worry, you will soon learn how to get there. But first, let’s take a moment to walk you through some key features about this function.</p>
-<p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> is a replica of the plausibility check in ENA for SMART software of the <a href="https://smartmethodology.org/" class="external-link">SMART Methodology</a>. Under the hood, it runs the same statistical tests you already know from SMART, and it applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind:</p>
+<p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> is a replica of the plausibility check in ENA for SMART software of the SMART Methodology <span class="citation" data-cites="smart2017">(<a href="#ref-smart2017" role="doc-biblioref">SMART Initiative, 2017</a>)</span>. Under the hood, it runs the same test suite you already know from SMART; it also applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind:</p>
 <ol type="i">
 <li><p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC.</p></li>
-<li><p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> allows user to run checks on a multiple area dataset at once, without having to repeat the same workflow over and over again for the number of areas the data holds.</p></li>
+<li><p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> allows user to run checks on a multiple-area data set at once, without having to repeat the same workflow over and over again for the number of areas the data holds.</p></li>
 </ol>
 <p>That is it! Now we can begin delving into the “how to”.</p>
-<p>It is always a good practice to start off by inspecting the dataset. Let’s check the first 6 rows of our dataset:</p>
+<p>It is always a good practice to start off by inspecting our data set. Let’s check the first 6 rows of our data set:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">anthro.01</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 11
-  area       dos        cluster  team sex   dob      age weight height edema
-  &lt;chr&gt;      &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
-1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n
-2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n
-3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n
-4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n
-5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n
-6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n
-# ℹ 1 more variable: muac &lt;int&gt;</code></pre>
+<pre><code><span><span class="co">#&gt; # A tibble: 6 × 11</span></span>
+<span><span class="co">#&gt;   area       dos        cluster  team sex   dob      age weight height edema</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n</span></span>
+<span><span class="co">#&gt; 2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n</span></span>
+<span><span class="co">#&gt; 3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n</span></span>
+<span><span class="co">#&gt; 4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n</span></span>
+<span><span class="co">#&gt; 5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n</span></span>
+<span><span class="co">#&gt; 6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: muac &lt;int&gt;</span></span></code></pre>
 </div>
-</div>
-<p>We can see that the dataset has eleven variables, and the way how their respective values are presented. This is useful to inform the data wrangling workflow.</p>
+<p>We can see that the data set has eleven variables, and the way how their respective values are presented. This is useful to inform the data wrangling workflow.</p>
 <section class="level3"><h4 id="data-wrangling">Data wrangling<a class="anchor" aria-label="anchor" href="#data-wrangling"></a>
 </h4>
-<p>As mentioned somewhere above, before we supply a data object to <code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code>, we need to wrangle it first. This task is executed by <code><a href="../reference/mw_wrangle_age.html">mw_wrangle_age()</a></code> and <code><a href="../reference/mw_wrangle_wfhz.html">mw_wrangle_wfhz()</a></code>. Read more about the technical documentation by doing <code><a href="../reference/mw_wrangle_age.html">help(mw_wrangle_age)</a></code> or <code><a href="../reference/mw_wrangle_wfhz.html">help(mw_wrangle_wfhz)</a></code> in <code>R</code> console.</p>
-<section class="level4"><h5 id="sec-age">Age<a class="anchor" aria-label="anchor" href="#sec-age"></a>
+<p>As mentioned somewhere above, before we supply a data object to <code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code>, we need to wrangle it first. This task is executed by <code><a href="../reference/mw_wrangle_age.html">mw_wrangle_age()</a></code> and <code><a href="../reference/mw_wrangle_wfhz.html">mw_wrangle_wfhz()</a></code>. Read more about the technical documentation by doing <code><a href="../reference/mw_wrangle_age.html">help("mw_wrangle_age")</a></code> or <code><a href="../reference/mw_wrangle_wfhz.html">help("mw_wrangle_wfhz")</a></code> in <code>R</code> console.</p>
+<section class="level4"><h5 id="sec-age">Wrangling age<a class="anchor" aria-label="anchor" href="#sec-age"></a>
 </h5>
 <p>We use <code><a href="../reference/mw_wrangle_age.html">mw_wrangle_age()</a></code> to calculate child’s age in months based on the date of data collection and child’s date of birth. This is done as follows:</p>
 <div class="cell">
@@ -135,18 +133,16 @@
 </div>
 <p>This will return:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 12
-  area       dos        cluster  team sex   dob      age weight height edema
-  &lt;chr&gt;      &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
-1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n
-2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n
-3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n
-4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n
-5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n
-6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n
-# ℹ 2 more variables: muac &lt;int&gt;, age_days &lt;dbl&gt;</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; # A tibble: 6 × 12</span></span>
+<span><span class="co">#&gt;   area       dos        cluster  team sex   dob      age weight height edema</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n</span></span>
+<span><span class="co">#&gt; 2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n</span></span>
+<span><span class="co">#&gt; 3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n</span></span>
+<span><span class="co">#&gt; 4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n</span></span>
+<span><span class="co">#&gt; 5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n</span></span>
+<span><span class="co">#&gt; 6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: muac &lt;int&gt;, age_days &lt;dbl&gt;</span></span></code></pre>
 </div>
 </section><section class="level4"><h5 id="wrangling-all-other-remaining-variables">Wrangling all other remaining variables<a class="anchor" aria-label="anchor" href="#wrangling-all-other-remaining-variables"></a>
 </h5>
@@ -161,35 +157,31 @@
 <span>    .recode_sex <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
-<p>In this example, the argument <code>.recode_sex</code> was set to <code>TRUE</code>. That is because under the hood, to compute the z-scores, a task made possible thanks to the <a href="https://cran.r-project.org/web/packages/zscorer/index.htmlpackage" class="external-link">zscorer</a> package, it uses sex coded into 1 and 2 for male and female, respectively. This means that if our sex variable is already in 1 and 2’s, we would set it to <code>FALSE</code>.</p>
+<p>In this example, the argument <code>.recode_sex</code> was set to <code>TRUE</code>. That is because under the hood, to compute the z-scores, a task made possible thanks to the {<code>zscorer</code>} package <span class="citation" data-cites="zscorer">(<a href="#ref-zscorer" role="doc-biblioref">Myatt and Guevarra, 2019</a>)</span>, it uses sex coded into 1 and 2 for male and female, respectively. This means that if our sex variable is already in 1 and 2’s, we would set it to <code>FALSE</code>.</p>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
 <p>If by any chance your sex variable is coded in any other different way than aforementioned, then you will have to recode it outside <code>mwana</code> utilities and then set <code>.recode_sex</code> accordingly.</p>
 </blockquote>
 </div>
-<p>Under the hood, after recoding (or not) the sex variables, <code><a href="../reference/mw_wrangle_wfhz.html">mw_wrangle_wfhz()</a></code> computes the z-scores, then identifies outliers and adds them to the dataset. Two new variables (<code>wfhz</code> and <code>flag_wfhz</code>) are created and added to the dataset. We can see this below:</p>
+<p>Under the hood, after recoding (or not) the sex variables, <code><a href="../reference/mw_wrangle_wfhz.html">mw_wrangle_wfhz()</a></code> computes the z-scores, then identifies outliers and adds them to the data set. Two new variables (<code>wfhz</code> and <code>flag_wfhz</code>) are created and added to the data set. We can see this below:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  area         wfhz flag_wfhz
-  &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;
-1 District E -1.83          0
-2 District E -0.956         0
-3 District E -0.796         0
-4 District E -0.74          0
-5 District E -0.679         0
-6 District E -0.432         0</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 3</span></span>
+<span><span class="co">#&gt;   area         wfhz flag_wfhz</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 District E -1.83          0</span></span>
+<span><span class="co">#&gt; 2 District E -0.956         0</span></span>
+<span><span class="co">#&gt; 3 District E -0.796         0</span></span>
+<span><span class="co">#&gt; 4 District E -0.74          0</span></span>
+<span><span class="co">#&gt; 5 District E -0.679         0</span></span>
+<span><span class="co">#&gt; 6 District E -0.432         0</span></span></code></pre>
 </div>
 </section></section><section class="level3"><h4 id="on-to-de-facto-plausibility-check-of-wfhz-data">On to <em>de facto</em> plausibility check of WFHZ data<a class="anchor" aria-label="anchor" href="#on-to-de-facto-plausibility-check-of-wfhz-data"></a>
 </h4>
 <p>We can check the plausibility of our data by calling <code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> function as demonstrated below:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">wrangled_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -201,7 +193,7 @@
 </div>
 <p>Or we can chain all previous functions in this way:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_age.html">mw_wrangle_age</a></span><span class="op">(</span></span>
 <span>    dos <span class="op">=</span> <span class="va">dos</span>,</span>
@@ -225,23 +217,19 @@
 </div>
 <p>The returned output is:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 19
-      n flagged flagged_class sex_ratio sex_ratio_class age_ratio
-  &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;
-1  1191  0.0101 Excellent         0.297 Excellent           0.409
-# ℹ 13 more variables: age_ratio_class &lt;chr&gt;, dps_wgt &lt;dbl&gt;,
-#   dps_wgt_class &lt;chr&gt;, dps_hgt &lt;dbl&gt;, dps_hgt_class &lt;chr&gt;, sd &lt;dbl&gt;,
-#   sd_class &lt;chr&gt;, skew &lt;dbl&gt;, skew_class &lt;fct&gt;, kurt &lt;dbl&gt;, kurt_class &lt;fct&gt;,
-#   quality_score &lt;dbl&gt;, quality_class &lt;fct&gt;</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 19</span></span>
+<span><span class="co">#&gt;       n flagged flagged_class sex_ratio sex_ratio_class age_ratio</span></span>
+<span><span class="co">#&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  1191  0.0101 Excellent         0.297 Excellent           0.409</span></span>
+<span><span class="co">#&gt; # ℹ 13 more variables: age_ratio_class &lt;chr&gt;, dps_wgt &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   dps_wgt_class &lt;chr&gt;, dps_hgt &lt;dbl&gt;, dps_hgt_class &lt;chr&gt;, sd &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   sd_class &lt;chr&gt;, skew &lt;dbl&gt;, skew_class &lt;fct&gt;, kurt &lt;dbl&gt;, kurt_class &lt;fct&gt;,</span></span>
+<span><span class="co">#&gt; #   quality_score &lt;dbl&gt;, quality_class &lt;fct&gt;</span></span></code></pre>
 </div>
 <p>As we can see, the returned output is a summary table of statistics and ratings. We can neat it for more clarity and readability. We can achieve this by chaining <code><a href="../reference/mw_neat_output_wfhz.html">mw_neat_output_wfhz()</a></code> to the previous pipeline:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_age.html">mw_wrangle_age</a></span><span class="op">(</span></span>
 <span>    dos <span class="op">=</span> <span class="va">dos</span>,</span>
@@ -266,27 +254,23 @@
 </div>
 <p>This will give us:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 19
-  `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
-             &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;                    &lt;chr&gt;
-1             1191 1.0%               Excellent                0.297
-# ℹ 15 more variables: `Class. of sex ratio` &lt;chr&gt;, `Age ratio (p)` &lt;chr&gt;,
-#   `Class. of age ratio` &lt;chr&gt;, `DPS weight (#)` &lt;dbl&gt;,
-#   `Class. DPS weight` &lt;chr&gt;, `DPS height (#)` &lt;dbl&gt;,
-#   `Class. DPS height` &lt;chr&gt;, `Standard Dev* (#)` &lt;dbl&gt;,
-#   `Class. of standard dev` &lt;chr&gt;, `Skewness* (#)` &lt;dbl&gt;,
-#   `Class. of skewness` &lt;fct&gt;, `Kurtosis* (#)` &lt;dbl&gt;,
-#   `Class. of kurtosis` &lt;fct&gt;, `Overall score` &lt;dbl&gt;, …</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 19</span></span>
+<span><span class="co">#&gt;   `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`</span></span>
+<span><span class="co">#&gt;              &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;                    &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1             1191 1.0%               Excellent                0.297</span></span>
+<span><span class="co">#&gt; # ℹ 15 more variables: `Class. of sex ratio` &lt;chr&gt;, `Age ratio (p)` &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of age ratio` &lt;chr&gt;, `DPS weight (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. DPS weight` &lt;chr&gt;, `DPS height (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. DPS height` &lt;chr&gt;, `Standard Dev* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of standard dev` &lt;chr&gt;, `Skewness* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of skewness` &lt;fct&gt;, `Kurtosis* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of kurtosis` &lt;fct&gt;, `Overall score` &lt;dbl&gt;, …</span></span></code></pre>
 </div>
 <p>An already formatted table, with scientific notations converted to standard notations, etc.</p>
-<p>When working on a multiple area dataset, for instance districts, we can check the plausibility of all districts in the dataset at once by simply chaining the previous workflow with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> function from the <code>dplyr</code> package:</p>
+<p>When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by using <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> function from the {<code>dplyr</code>} package as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -312,50 +296,48 @@
 <span>    height <span class="op">=</span> <span class="va">height</span>,</span>
 <span>    flags <span class="op">=</span> <span class="va">flag_wfhz</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">area</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/mw_neat_output_wfhz.html">mw_neat_output_wfhz</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>This will return the following:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 20
-  `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
-  &lt;chr&gt;                         &lt;int&gt; &lt;chr&gt;                    &lt;fct&gt;
-1 District E                      505 0.8%                     Excellent
-2 District G                      686 1.2%                     Excellent
-# ℹ 16 more variables: `Class. of sex ratio` &lt;chr&gt;, `Age ratio (p)` &lt;chr&gt;,
-#   `Class. of age ratio` &lt;chr&gt;, `DPS weight (#)` &lt;chr&gt;,
-#   `Class. DPS weight` &lt;dbl&gt;, `DPS height (#)` &lt;chr&gt;,
-#   `Class. DPS height` &lt;dbl&gt;, `Standard Dev* (#)` &lt;chr&gt;,
-#   `Class. of standard dev` &lt;dbl&gt;, `Skewness* (#)` &lt;chr&gt;,
-#   `Class. of skewness` &lt;dbl&gt;, `Kurtosis* (#)` &lt;fct&gt;,
-#   `Class. of kurtosis` &lt;dbl&gt;, `Overall score` &lt;fct&gt;, …</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 20</span></span>
+<span><span class="co">#&gt; # Groups:   Group [2]</span></span>
+<span><span class="co">#&gt;   Group      `Total children` `Flagged data (%)` `Class. of flagged data`</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                 &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;</span></span>
+<span><span class="co">#&gt; 1 District E              505 0.8%               Excellent</span></span>
+<span><span class="co">#&gt; 2 District G              686 1.2%               Excellent</span></span>
+<span><span class="co">#&gt; # ℹ 16 more variables: `Sex ratio (p)` &lt;chr&gt;, `Class. of sex ratio` &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   `Age ratio (p)` &lt;chr&gt;, `Class. of age ratio` &lt;chr&gt;, `DPS weight (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. DPS weight` &lt;chr&gt;, `DPS height (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. DPS height` &lt;chr&gt;, `Standard Dev* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of standard dev` &lt;chr&gt;, `Skewness* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of skewness` &lt;fct&gt;, `Kurtosis* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of kurtosis` &lt;fct&gt;, `Overall score` &lt;dbl&gt;, …</span></span></code></pre>
 </div>
 <p>At this point, you have reached the end of your workflow 🎉 .</p>
 </section></section><section class="level2"><h3 id="plausibility-check-of-mfaz-data">Plausibility check of MFAZ data<a class="anchor" aria-label="anchor" href="#plausibility-check-of-mfaz-data"></a>
 </h3>
-<p>We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our dataset.</p>
+<p>We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our data set.</p>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
-<p>The plausibility check for MFAZ data was built based on the insights gotten from <a href="https://doi.org/10.1111/mcn.13478" class="external-link">Bilukha, O., &amp; Kianian, B. (2023)</a> research presented at the <a href="https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf" class="external-link">2023 High-Level Technical Assessment Workshop</a> held in Nairobi, Kenya. Results from this research suggested a feasibility of applying the similar plausibility check as that in WFHZ for MFAZ, with a difference in the amount of flags to be considered: maximum of 2%.</p>
+<p>The plausibility check for MFAZ data was built based on the insights gotten from <span class="citation" data-cites="bilukha">Bilukha and Kianian (<a href="#ref-bilukha" role="doc-biblioref">2023</a>)</span> research presented at the 2023 High-Level Technical Assessment Workshop held in Nairobi, Kenya <span class="citation" data-cites="smarthighlevel">(<a href="#ref-smarthighlevel" role="doc-biblioref">SMART Initiative, 2023</a>)</span>. Results from this research suggested a feasibility of applying the similar plausibility check as that of WFHZ for MFAZ, with a maximum acceptability of percent of flagged records of 2.0%.</p>
 </blockquote>
 </div>
-<p>We can run MFAZ plausibility check by calling <code><a href="../reference/mw_plausibility_check_mfaz.html">mw_plausibility_check_mfaz()</a></code>. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with processing age; for this, we approach the same way as in <a href="#sec-age" class="quarto-xref">Section 1.1.1.1</a>.</p>
+<p>We can run MFAZ plausibility check by calling <code><a href="../reference/mw_plausibility_check_mfaz.html">mw_plausibility_check_mfaz()</a></code>. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with wrangling age; for this, we approach the same way as in <a href="#sec-age" class="quarto-xref">Section 1.1.1.1</a>.</p>
 <div>
 <blockquote>
 <p><strong>Age ratio test in MFAZ</strong></p>
-<p>As you know, the age ratio test in WFHZ is done on children aged 6 to 29 months old over those aged 30 to 59 months old. This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in <a href="https://smartmethodology.org/survey-planning-tools/updated-muac-tool/" class="external-link">SMART MUAC Tool</a>. The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.</p>
+<p>As you know, the age ratio test in WFHZ is done on children aged 6 to 29 months old over those aged 30 to 59 months old. This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in the SMART MUAC Tool <span class="citation" data-cites="smartmuactool">(<a href="#ref-smartmuactool" role="doc-biblioref">SMART Initiative, n.d.</a>)</span>. The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.</p>
 </blockquote>
 </div>
 <section class="level3"><h4 id="sec-wrangle_mfaz">Wrangling MFAZ data<a class="anchor" aria-label="anchor" href="#sec-wrangle_mfaz"></a>
 </h4>
 <p>This is the job of <code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> function. We use it as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_age.html">mw_wrangle_age</a></span><span class="op">(</span></span>
 <span>    dos <span class="op">=</span> <span class="va">dos</span>,</span>
@@ -372,41 +354,37 @@
 <span>    .to <span class="op">=</span> <span class="st">"cm"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
-<p>Just as in WFHZ wrangler, under the hood, <code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> computes the z-scores then identifies outliers and flags them. These are stored in the <code>mfaz</code> and <code>flag_mfaz</code> variables that are created and added to the dataset.</p>
+<p>Just as in WFHZ wrangler, under the hood, <code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> computes the z-scores then identifies outliers and flags them. These are stored in the <code>mfaz</code> and <code>flag_mfaz</code> variables that are created and added to the data set.</p>
 <p>The above code returns:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,191 × 14
-   area      dos        cluster  team   sex dob      age weight height edema
-   &lt;chr&gt;     &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
- 1 District… 2023-12-04       1     3     1 NA        59   15.6  109.  n
- 2 District… 2023-12-04       1     3     1 NA         8    7.5   68.6 n
- 3 District… 2023-12-04       1     3     1 NA        19    9.7   79.5 n
- 4 District… 2023-12-04       1     3     2 NA        49   14.3  100.  n
- 5 District… 2023-12-04       1     3     2 NA        32   12.4   92.1 n
- 6 District… 2023-12-04       1     3     2 NA        17    9.3   77.8 n
- 7 District… 2023-12-04       1     3     2 NA        20   10.1   80.4 n
- 8 District… 2023-12-04       1     3     2 NA        27   11.7   87.1 n
- 9 District… 2023-12-04       1     3     1 NA        46   13.6   98   n
-10 District… 2023-12-04       1     3     1 NA        58   17.2  109.  n
-# ℹ 1,181 more rows
-# ℹ 4 more variables: muac &lt;dbl&gt;, age_days &lt;dbl&gt;, mfaz &lt;dbl&gt;, flag_mfaz &lt;dbl&gt;</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 1,191 × 14</span></span>
+<span><span class="co">#&gt;    area      dos        cluster  team   sex dob      age weight height edema</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;     &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt;  1 District… 2023-12-04       1     3     1 NA        59   15.6  109.  n</span></span>
+<span><span class="co">#&gt;  2 District… 2023-12-04       1     3     1 NA         8    7.5   68.6 n</span></span>
+<span><span class="co">#&gt;  3 District… 2023-12-04       1     3     1 NA        19    9.7   79.5 n</span></span>
+<span><span class="co">#&gt;  4 District… 2023-12-04       1     3     2 NA        49   14.3  100.  n</span></span>
+<span><span class="co">#&gt;  5 District… 2023-12-04       1     3     2 NA        32   12.4   92.1 n</span></span>
+<span><span class="co">#&gt;  6 District… 2023-12-04       1     3     2 NA        17    9.3   77.8 n</span></span>
+<span><span class="co">#&gt;  7 District… 2023-12-04       1     3     2 NA        20   10.1   80.4 n</span></span>
+<span><span class="co">#&gt;  8 District… 2023-12-04       1     3     2 NA        27   11.7   87.1 n</span></span>
+<span><span class="co">#&gt;  9 District… 2023-12-04       1     3     1 NA        46   13.6   98   n</span></span>
+<span><span class="co">#&gt; 10 District… 2023-12-04       1     3     1 NA        58   17.2  109.  n</span></span>
+<span><span class="co">#&gt; # ℹ 1,181 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 4 more variables: muac &lt;dbl&gt;, age_days &lt;dbl&gt;, mfaz &lt;dbl&gt;, flag_mfaz &lt;dbl&gt;</span></span></code></pre>
 </div>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
-<p><code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> accepts MUAC values in centimeters. This is why it takes the arguments <code>.recode_muac</code> and <code>.to</code> to control whether there is need to transform the variable <code>muac</code>function or not. Read the function documentation to learn how to control these two arguments.</p>
+<p><code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> accepts MUAC values in centimeters. This is why it takes the arguments <code>.recode_muac</code> and <code>.to</code> to control whether there is need to transform the variable <code>muac</code> or not. Read the function documentation to learn about how to control these two arguments.</p>
 </blockquote>
 </div>
 </section><section class="level3"><h4 id="on-to-de-facto-plausibility-check-of-mfaz-data">On to <em>de facto</em> plausibility check of MFAZ data<a class="anchor" aria-label="anchor" href="#on-to-de-facto-plausibility-check-of-mfaz-data"></a>
 </h4>
 <p>We achieve this by calling the <code><a href="../reference/mw_plausibility_check_mfaz.html">mw_plausibility_check_mfaz()</a></code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load dplyr library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -436,22 +414,18 @@
 </div>
 <p>And this will return:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 17
-      n flagged flagged_class sex_ratio sex_ratio_class age_ratio
-  &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;
-1  1191 0.00504 Excellent         0.297 Excellent           0.636
-# ℹ 11 more variables: age_ratio_class &lt;chr&gt;, dps &lt;dbl&gt;, dps_class &lt;chr&gt;,
-#   sd &lt;dbl&gt;, sd_class &lt;chr&gt;, skew &lt;dbl&gt;, skew_class &lt;fct&gt;, kurt &lt;dbl&gt;,
-#   kurt_class &lt;fct&gt;, quality_score &lt;dbl&gt;, quality_class &lt;fct&gt;</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 17</span></span>
+<span><span class="co">#&gt;       n flagged flagged_class sex_ratio sex_ratio_class age_ratio</span></span>
+<span><span class="co">#&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  1191 0.00504 Excellent         0.297 Excellent           0.636</span></span>
+<span><span class="co">#&gt; # ℹ 11 more variables: age_ratio_class &lt;chr&gt;, dps &lt;dbl&gt;, dps_class &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   sd &lt;dbl&gt;, sd_class &lt;chr&gt;, skew &lt;dbl&gt;, skew_class &lt;fct&gt;, kurt &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   kurt_class &lt;fct&gt;, quality_score &lt;dbl&gt;, quality_class &lt;fct&gt;</span></span></code></pre>
 </div>
 <p>We can also neat this output. We just need to call <code><a href="../reference/mw_neat_output_mfaz.html">mw_neat_output_mfaz()</a></code> and chain it to the pipeline:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load dplyr library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -482,24 +456,20 @@
 </div>
 <p>This will return:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 17</span></span>
+<span><span class="co">#&gt;   `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`</span></span>
+<span><span class="co">#&gt;              &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;                    &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1             1191 0.5%               Excellent                0.297</span></span>
+<span><span class="co">#&gt; # ℹ 13 more variables: `Class. of sex ratio` &lt;chr&gt;, `Age ratio (p)` &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of age ratio` &lt;chr&gt;, `DPS (#)` &lt;dbl&gt;, `Class. of DPS` &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   `Standard Dev* (#)` &lt;dbl&gt;, `Class. of standard dev` &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   `Skewness* (#)` &lt;dbl&gt;, `Class. of skewness` &lt;fct&gt;, `Kurtosis* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of kurtosis` &lt;fct&gt;, `Overall score` &lt;dbl&gt;, `Overall quality` &lt;fct&gt;</span></span></code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 17
-  `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
-             &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;                    &lt;chr&gt;
-1             1191 0.5%               Excellent                0.297
-# ℹ 13 more variables: `Class. of sex ratio` &lt;chr&gt;, `Age ratio (p)` &lt;chr&gt;,
-#   `Class. of age ratio` &lt;chr&gt;, `DPS (#)` &lt;dbl&gt;, `Class. of DPS` &lt;chr&gt;,
-#   `Standard Dev* (#)` &lt;dbl&gt;, `Class. of standard dev` &lt;chr&gt;,
-#   `Skewness* (#)` &lt;dbl&gt;, `Class. of skewness` &lt;fct&gt;, `Kurtosis* (#)` &lt;dbl&gt;,
-#   `Class. of kurtosis` &lt;fct&gt;, `Overall score` &lt;dbl&gt;, `Overall quality` &lt;fct&gt;</code></pre>
-</div>
-</div>
-<p>We can also run checks on a multiple area dataset as follows:</p>
+<p>We can also run checks on a multiple-area data set as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load dplyr library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -527,37 +497,35 @@
 <span>    age <span class="op">=</span> <span class="va">age</span>,</span>
 <span>    flags <span class="op">=</span> <span class="va">flag_mfaz</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">area</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/mw_neat_output_mfaz.html">mw_neat_output_mfaz</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>This will return:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>================================================================================</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 18
-  `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
-  &lt;chr&gt;                         &lt;int&gt; &lt;chr&gt;                    &lt;fct&gt;
-1 District E                      505 0.0%                     Excellent
-2 District G                      686 0.9%                     Excellent
-# ℹ 14 more variables: `Class. of sex ratio` &lt;chr&gt;, `Age ratio (p)` &lt;chr&gt;,
-#   `Class. of age ratio` &lt;chr&gt;, `DPS (#)` &lt;chr&gt;, `Class. of DPS` &lt;dbl&gt;,
-#   `Standard Dev* (#)` &lt;chr&gt;, `Class. of standard dev` &lt;dbl&gt;,
-#   `Skewness* (#)` &lt;chr&gt;, `Class. of skewness` &lt;dbl&gt;, `Kurtosis* (#)` &lt;fct&gt;,
-#   `Class. of kurtosis` &lt;dbl&gt;, `Overall score` &lt;fct&gt;, `Overall quality` &lt;dbl&gt;,
-#   `` &lt;fct&gt;</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; ================================================================================</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 18</span></span>
+<span><span class="co">#&gt; # Groups:   Group [2]</span></span>
+<span><span class="co">#&gt;   Group      `Total children` `Flagged data (%)` `Class. of flagged data`</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                 &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;</span></span>
+<span><span class="co">#&gt; 1 District E              505 0.0%               Excellent</span></span>
+<span><span class="co">#&gt; 2 District G              686 0.9%               Excellent</span></span>
+<span><span class="co">#&gt; # ℹ 14 more variables: `Sex ratio (p)` &lt;chr&gt;, `Class. of sex ratio` &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   `Age ratio (p)` &lt;chr&gt;, `Class. of age ratio` &lt;chr&gt;, `DPS (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of DPS` &lt;chr&gt;, `Standard Dev* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of standard dev` &lt;chr&gt;, `Skewness* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of skewness` &lt;fct&gt;, `Kurtosis* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of kurtosis` &lt;fct&gt;, `Overall score` &lt;dbl&gt;, `Overall quality` &lt;fct&gt;</span></span></code></pre>
 </div>
 <p>At this point, you have reached the end of your workflow ✨.</p>
 </section></section><section class="level2"><h3 id="plausibility-check-of-raw-muac-data">Plausibility check of raw MUAC data<a class="anchor" aria-label="anchor" href="#plausibility-check-of-raw-muac-data"></a>
 </h3>
-<p>We will assess the plausibility of raw MUAC data through it’s raw values when the variable age is not available in the dataset. This is a job assigned to <code><a href="../reference/mw_plausibility_check_muac.html">mw_plausibility_check_muac()</a></code>. The workflow for this check is the shortest one.</p>
+<p>We will assess the plausibility of raw MUAC data through it’s raw values when the variable age is not available in the data set. This is a job assigned to <code><a href="../reference/mw_plausibility_check_muac.html">mw_plausibility_check_muac()</a></code>. The workflow for this check is the shortest one.</p>
 <section class="level3"><h4 id="data-wrangling-1">Data wrangling<a class="anchor" aria-label="anchor" href="#data-wrangling-1"></a>
 </h4>
-<p>As you can tell, z-scores cannot be computed in the absence of age. In this way, the data wrangling workflow would be quite minimal. You still set the arguments inside <code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> as learned in <a href="#sec-wrangle_mfaz" class="quarto-xref">Section 1.2.1</a>. The only difference is that here we will set <code>age</code> to <code>NULL</code>. Fundamentally, under the hood the function detects MUAC values that are outliers and flags them and stores them in <code>flag_muac</code> variable that is added to the dataset.</p>
-<p>We will continue using the same dataset:</p>
+<p>As you can tell, z-scores cannot be computed in the absence of age. In this way, the data wrangling workflow would be quite minimal. You still set the arguments inside <code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> as learned in <a href="#sec-wrangle_mfaz" class="quarto-xref">Section 1.2.1</a>. The only difference is that here we will set <code>age</code> to <code>NULL</code>. Fundamentally, under the hood the function detects MUAC values that are outliers and flags them and stores them in <code>flag_muac</code> variable that is added to the data set.</p>
+<p>We will continue using the same data set:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -570,29 +538,27 @@
 </div>
 <p>This returns:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,191 × 12
-   area      dos        cluster  team   sex dob      age weight height edema
-   &lt;chr&gt;     &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
- 1 District… 2023-12-04       1     3     1 NA        59   15.6  109.  n
- 2 District… 2023-12-04       1     3     1 NA         8    7.5   68.6 n
- 3 District… 2023-12-04       1     3     1 NA        19    9.7   79.5 n
- 4 District… 2023-12-04       1     3     2 NA        49   14.3  100.  n
- 5 District… 2023-12-04       1     3     2 NA        32   12.4   92.1 n
- 6 District… 2023-12-04       1     3     2 NA        17    9.3   77.8 n
- 7 District… 2023-12-04       1     3     2 NA        20   10.1   80.4 n
- 8 District… 2023-12-04       1     3     2 NA        27   11.7   87.1 n
- 9 District… 2023-12-04       1     3     1 NA        46   13.6   98   n
-10 District… 2023-12-04       1     3     1 NA        58   17.2  109.  n
-# ℹ 1,181 more rows
-# ℹ 2 more variables: muac &lt;int&gt;, flag_muac &lt;dbl&gt;</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; # A tibble: 1,191 × 12</span></span>
+<span><span class="co">#&gt;    area      dos        cluster  team   sex dob      age weight height edema</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;     &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt;  1 District… 2023-12-04       1     3     1 NA        59   15.6  109.  n</span></span>
+<span><span class="co">#&gt;  2 District… 2023-12-04       1     3     1 NA         8    7.5   68.6 n</span></span>
+<span><span class="co">#&gt;  3 District… 2023-12-04       1     3     1 NA        19    9.7   79.5 n</span></span>
+<span><span class="co">#&gt;  4 District… 2023-12-04       1     3     2 NA        49   14.3  100.  n</span></span>
+<span><span class="co">#&gt;  5 District… 2023-12-04       1     3     2 NA        32   12.4   92.1 n</span></span>
+<span><span class="co">#&gt;  6 District… 2023-12-04       1     3     2 NA        17    9.3   77.8 n</span></span>
+<span><span class="co">#&gt;  7 District… 2023-12-04       1     3     2 NA        20   10.1   80.4 n</span></span>
+<span><span class="co">#&gt;  8 District… 2023-12-04       1     3     2 NA        27   11.7   87.1 n</span></span>
+<span><span class="co">#&gt;  9 District… 2023-12-04       1     3     1 NA        46   13.6   98   n</span></span>
+<span><span class="co">#&gt; 10 District… 2023-12-04       1     3     1 NA        58   17.2  109.  n</span></span>
+<span><span class="co">#&gt; # ℹ 1,181 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: muac &lt;int&gt;, flag_muac &lt;dbl&gt;</span></span></code></pre>
 </div>
 </section><section class="level3"><h4 id="on-to-de-facto-plausibility-check">On to <em>de facto</em> plausibility check<a class="anchor" aria-label="anchor" href="#on-to-de-facto-plausibility-check"></a>
 </h4>
 <p>We just have to add <code><a href="../reference/mw_plausibility_check_muac.html">mw_plausibility_check_muac()</a></code> to the above pipeline:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -610,17 +576,15 @@
 </div>
 <p>And this will return:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 9
-      n flagged flagged_class sex_ratio sex_ratio_class   dps dps_class    sd
-  &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
-1  1191 0.00252 Excellent         0.297 Excellent        5.39 Excellent  11.1
-# ℹ 1 more variable: sd_class &lt;fct&gt;</code></pre>
-</div>
+<pre><code><span><span class="co">#&gt; # A tibble: 1 × 9</span></span>
+<span><span class="co">#&gt;       n flagged flagged_class sex_ratio sex_ratio_class   dps dps_class    sd</span></span>
+<span><span class="co">#&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  1191 0.00252 Excellent         0.297 Excellent        5.39 Excellent  11.1</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: sd_class &lt;fct&gt;</span></span></code></pre>
 </div>
 <p>We can also return a formatted table with <code><a href="../reference/mw_neat_output_muac.html">mw_neat_output_muac()</a></code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -637,21 +601,19 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_neat_output_muac.html">mw_neat_output_muac</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>And we get</p>
+<p>And we get:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 9
-  `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
-             &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;                    &lt;chr&gt;
-1             1191 0.3%               Excellent                0.297
-# ℹ 5 more variables: `Class. of sex ratio` &lt;chr&gt;, `DPS(#)` &lt;dbl&gt;,
-#   `Class. of DPS` &lt;chr&gt;, `Standard Dev* (#)` &lt;dbl&gt;,
-#   `Class. of standard dev` &lt;fct&gt;</code></pre>
+<pre><code><span><span class="co">#&gt; # A tibble: 1 × 9</span></span>
+<span><span class="co">#&gt;   `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`</span></span>
+<span><span class="co">#&gt;              &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;                    &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1             1191 0.3%               Excellent                0.297</span></span>
+<span><span class="co">#&gt; # ℹ 5 more variables: `Class. of sex ratio` &lt;chr&gt;, `DPS(#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of DPS` &lt;chr&gt;, `Standard Dev* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of standard dev` &lt;fct&gt;</span></span></code></pre>
 </div>
-</div>
-<p>When working on multiple area data, we approach the task the same way as demonstrated above:</p>
+<p>When working on multiple-area data, we approach the task the same way as demonstrated above:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -671,22 +633,41 @@
 <span>    flags <span class="op">=</span> <span class="va">flag_muac</span>,</span>
 <span>    muac <span class="op">=</span> <span class="va">muac</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">area</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/mw_neat_output_muac.html">mw_neat_output_muac</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>And we get:</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 10
-  `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
-  &lt;chr&gt;                         &lt;int&gt; &lt;chr&gt;                    &lt;fct&gt;
-1 District E                      505 0.0%                     Excellent
-2 District G                      686 0.4%                     Excellent
-# ℹ 6 more variables: `Class. of sex ratio` &lt;chr&gt;, `DPS(#)` &lt;chr&gt;,
-#   `Class. of DPS` &lt;dbl&gt;, `Standard Dev* (#)` &lt;chr&gt;,
-#   `Class. of standard dev` &lt;dbl&gt;, `` &lt;fct&gt;</code></pre>
+<pre><code><span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
+<span><span class="co">#&gt; # Groups:   Group [2]</span></span>
+<span><span class="co">#&gt;   Group      `Total children` `Flagged data (%)` `Class. of flagged data`</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                 &lt;int&gt; &lt;chr&gt;              &lt;fct&gt;</span></span>
+<span><span class="co">#&gt; 1 District E              505 0.0%               Excellent</span></span>
+<span><span class="co">#&gt; 2 District G              686 0.4%               Excellent</span></span>
+<span><span class="co">#&gt; # ℹ 6 more variables: `Sex ratio (p)` &lt;chr&gt;, `Class. of sex ratio` &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   `DPS(#)` &lt;dbl&gt;, `Class. of DPS` &lt;chr&gt;, `Standard Dev* (#)` &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   `Class. of standard dev` &lt;fct&gt;</span></span></code></pre>
+</div>
+</section></section></section><section class="section level2"><h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-bilukha" class="csl-entry" role="listitem">
+Bilukha, O. and Kianian, B. (2023) <span>“Considerations for assessment of measurement quality of mid-upper arm circumference data in anthropometric surveys and mass nutritional screenings conducted in humanitarian and refugee settings,”</span> <em>Maternal &amp; Child Nutrition</em>, 19, p. e13478. doi:<a href="https://doi.org/10.1111/mcn.13478" class="external-link">10.1111/mcn.13478</a>.
+</div>
+<div id="ref-zscorer" class="csl-entry" role="listitem">
+Myatt, M. and Guevarra, E. (2019) <em>Zscorer: Child anthropometry z-score calculator</em>. Available at: <a href="https://CRAN.R-project.org/package=zscorer" class="external-link">https://CRAN.R-project.org/package=zscorer</a>.
+</div>
+<div id="ref-smart2017" class="csl-entry" role="listitem">
+SMART Initiative (2017) <em>Standardized monitoring and assessment for relief and transition</em>. Action Against Hunger Canada. Available at: <a href="https://smartmethodology.org" class="external-link">https://smartmethodology.org</a>.
+</div>
+<div id="ref-smarthighlevel" class="csl-entry" role="listitem">
+SMART Initiative (2023) <em>2023 high-level technical assessment workshop report</em>. Available at: <a href="https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf" class="external-link">https://smartmethodology.org/wp-content/uploads/2024/03/2023-High-level-Technical-Assessment-Workshop-Report.pdf</a>.
+</div>
+<div id="ref-smartmuactool" class="csl-entry" role="listitem">
+SMART Initiative (n.d.) <span>“Updated SMART MUAC tool.”</span> Available at: <a href="https://smartmethodology.org/survey-planning-tools/updated-muac-tool/" class="external-link">https://smartmethodology.org/survey-planning-tools/updated-muac-tool/</a>.
 </div>
 </div>
-</section></section></section><script id="quarto-html-after-body" type="application/javascript">
+</section><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

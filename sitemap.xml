@@ -14,16 +14,16 @@
 <url><loc>https://nutriverse.io/mwana/reference/anthro.02.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/anthro.03.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/anthro.04.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/apply_cdc_age_weighting.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/case_definition.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/classify_wasting_for_cdc_approach.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/combined_prevalence.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/compute_weighted_prevalence.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/reference/define_wasting.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/get_age_months.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/index.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/mfaz.01.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/mfaz.02.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/mw_check_ipcamn_ssreq.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/reference/mw_estimate_prevalence_combined.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/reference/mw_estimate_prevalence_mfaz.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/reference/mw_estimate_prevalence_screening.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/reference/mw_estimate_prevalence_wfhz.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/mw_neat_output_mfaz.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/mw_neat_output_muac.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/mw_neat_output_wfhz.html</loc></url>
@@ -36,8 +36,7 @@
 <url><loc>https://nutriverse.io/mwana/reference/mw_wrangle_wfhz.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/mwana-package.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/outliers.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/prevalence.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/probit-method.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/reference/prev-muac.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/rate_agesex_ratio.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/rate_overall_quality.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/rate_propof_flagged.html</loc></url>
@@ -46,7 +45,6 @@
 <url><loc>https://nutriverse.io/mwana/reference/recode_muac.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/score_overall_quality.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/scorer.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/reference/tell_muac_analysis_strategy.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/reference/wfhz.01.html</loc></url>
 </urlset>
 
