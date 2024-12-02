@@ -90,8 +90,7 @@ multiple areas.
 
 #### A tidy workflow for plausibility check using `mwana`
 
-<div layout-align="center">
-
+<p align="center" width="100%">
 <div id="fig-workflow">
 
 <img src="man/figures/workflow.png" style="width:4in;height:10in" />
@@ -100,8 +99,7 @@ multiple areas.
 Figure 1: Plausibility check workflow using mwana
 
 </div>
-
-</div>
+</p>
 
 ### Prevalence estimation
 
