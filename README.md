@@ -95,7 +95,7 @@ multiple areas.
 <div>
 
 <img src="README_files/figure-commonmark/dot-figure-1.png"
-style="width:10in;height:16in" />
+style="width:6in;height:8in" />
 
 </div>
 
