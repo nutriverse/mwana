@@ -56,7 +56,7 @@ It automates plausibility checks, prevalence analyses, and summary outputs, prov
 
 <p align="center" width="100%">
 
-![Plausibility check workflow using mwana](man/figures/workflow.png){#fig-workflow height="80%"}
+![Plausibility check workflow using mwana](man/figures/workflow.png){#fig-workflow height="40%"}
 
 </p>
 
