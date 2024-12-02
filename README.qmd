@@ -53,54 +53,52 @@ It automates plausibility checks, prevalence analyses, and summary outputs, prov
   + It performs, as well, plausibility checks on MUAC data. For this, `mwana` integrates recent advances in using muac-for-age z-score (MFAZ) for checking the plausibility and the acceptability of MUAC data. In this way, when the variable age is available: `mwana` performs plausibility checks similar to those in WFHZ, with a few differences in the scoring criteria for the percent of flagged data. Otherwise, when the variables age is missing, a similar test suit used in the current version of ENA is performed. Read guide [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-mfaz-data).
 
 #### A tidy workflow for plausibility check using `mwana`
-```{r}
-#| label: workflow
-#| echo: false
-#| warning: false
-#| fig-align: center
 
-DiagrammeR::grViz("
+```{dot}
+//| label: fig-workflow
+//| fig-cap: Plausibility check workflow implemented by mwana
+//| echo: false
+
 digraph mwana {
   # Default node attributes
-  node [style = filled, color = lightblue, fontname = Helvetica, fontsize = 12];
+  node [style = filled, color = "lightblue", fontname = "Helvetica", fontsize = 12];
 
   # Nodes
-  node1 [label = 'Start', shape = ellipse, color = PaleGreen];
-  node2 [label = 'Anthro data', shape = parallelogram];
-  node3 [label = 'Indicator', shape = diamond, color = lightgoldenrod];
-  node4 [label = 'WFHZ', shape = note];
-  node5 [label = 'MFAZ', shape = note];
-  node6 [label = 'Raw MUAC', shape = note];
-  node7 [label = 'Wrangle age', shape = box];
-  node8 [label = 'Wrangle anthro data', shape = box];
-  node9 [label = 'Plausibility check', shape = box];
-  node10 [label = 'End of workflow', shape = oval, color = salmon];
+  node1 [label = "Start", shape = ellipse, color = "PaleGreen"];
+  node2 [label = "Anthro data", shape = parallelogram];
+  node3 [label = "Indicator", shape = diamond, color = "lightgoldenrod"];
+  node4 [label = "WFHZ", shape = note];
+  node5 [label = "MFAZ", shape = note];
+  node6 [label = "Raw MUAC", shape = note];
+  node7 [label = "Wrangle age", shape = box];
+  node8 [label = "Wrangle anthro data", shape = box];
+  node9 [label = "Plausibility check", shape = box];
+  node10 [label = "End of workflow", shape = oval, color = "salmon"];
 
   ## Data process ----
-  node1 -> node2 [color = gray, arrowhead = vee];
-  node2 -> node3 [color = gray, arrowhead = vee];
-  node3 -> node4 [color = gray, arrowhead = vee];
+  node1 -> node2 [color = "gray", arrowhead = vee];
+  node2 -> node3 [color = "gray", arrowhead = vee];
+  node3 -> node4 [color = "gray", arrowhead = vee];
   
   ## WFHZ flow ----
-  node4 -> node7 [color = gray, arrowhead = vee];
-  node7 -> node8 [color = gray, arrowhead = vee];
-  node8 -> node9 [color = gray, arrowhead = vee];
-  node9 -> node10 [color = gray, arrowhead = vee];
+  node4 -> node7 [color = "gray", arrowhead = vee];
+  node7 -> node8 [color = "gray", arrowhead = vee];
+  node8 -> node9 [color = "gray", arrowhead = vee];
+  node9 -> node10 [color = "gray", arrowhead = vee];
   
    ## MFAZ flow ----
-  node3 -> node5 [color = gray, arrowhead = vee];
-  node5 -> node7 [color = gray, arrowhead = vee];
-  node7 -> node8 [color = gray, arrowhead = vee];
-  node8 -> node9 [color = gray, arrowhead = vee];
-  node9 -> node10 [color = gray, arrowhead = vee];
+  node3 -> node5 [color = "gray", arrowhead = vee];
+  node5 -> node7 [color = "gray", arrowhead = vee];
+  node7 -> node8 [color = "gray", arrowhead = vee];
+  node8 -> node9 [color = "gray", arrowhead = vee];
+  node9 -> node10 [color = "gray", arrowhead = vee];
   
   ## Absolute MUAC flow ----
-  node3 -> node6 [color = gray, arrowhead = vee];
-  node6 -> node8 [color = gray, arrowhead = vee];
-  node8 -> node9 [color = gray, arrowhead = vee];
-  node9 -> node10 [color = gray, arrowhead = vee];
+  node3 -> node6 [color = "gray", arrowhead = vee];
+  node6 -> node8 [color = "gray", arrowhead = vee];
+  node8 -> node9 [color = "gray", arrowhead = vee];
+  node9 -> node10 [color = "gray", arrowhead = vee];
 }
-", width = 400, height = 450)
 ```
 
 ### Prevalence estimation

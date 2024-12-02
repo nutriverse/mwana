@@ -90,7 +90,18 @@ multiple areas.
 
 #### A tidy workflow for plausibility check using `mwana`
 
-<img src="man/figures/README-workflow-1.png" data-fig-align="center" />
+<div id="fig-workflow">
+
+<div>
+
+<img src="README_files/figure-commonmark/dot-figure-1.png"
+style="width:7in;height:5in" />
+
+</div>
+
+Figure 1: Plausibility check workflow implemented by mwana
+
+</div>
 
 ### Prevalence estimation
 
@@ -164,17 +175,17 @@ function as follows:
 citation("mwana")
 #> To cite mwana: in publications use:
 #> 
-#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: An Efficient Workflow for
-#>   Plausibility Checks and Prevalence Analysis of Wasting in R_. R
-#>   package version 0.2.0, <https://github.com/nutriverse/mwana>.
+#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: Utilities for Analysing
+#>   Children's Nutritional Status_. R package version 0.0.0.9000,
+#>   <https://github.com/nutriverse/mwana>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     title = {mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R},
+#>     title = {mwana: Utilities for Analysing Children's Nutritional Status},
 #>     author = {{Tomás Zaba} and {Ernest Guevarra}},
 #>     year = {2024},
-#>     note = {R package version 0.2.0},
+#>     note = {R package version 0.0.0.9000},
 #>     url = {https://github.com/nutriverse/mwana},
 #>   }
 ```
