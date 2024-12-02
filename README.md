@@ -90,14 +90,16 @@ multiple areas.
 
 #### A tidy workflow for plausibility check using `mwana`
 
+<center>
 <div id="fig-workflow">
 
-<img src="man/figures/workflow.png" height="600" />
+<img src="man/figures/workflow.png" height="800" />
 
 
 Figure 1: Plausibility check workflow using mwana
 
 </div>
+</center>
 
 ### Prevalence estimation
 
