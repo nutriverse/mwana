@@ -92,7 +92,8 @@ multiple areas.
 
 <div id="fig-workflow">
 
-![](man/figures/workflow.png)
+<img src="man/figures/workflow.png" data-fig-align="center"
+height="400" />
 
 
 Figure 1: Plausibility check workflow using mwana
