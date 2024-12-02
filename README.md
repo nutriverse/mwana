@@ -92,10 +92,10 @@ multiple areas.
 
 <div id="fig-workflow">
 
-![](man/figures/README-fig-workflow-1.png)
+![](man/figures/workflow.png)
 
 
-Figure 1: Plausibility check workflow implemented by mwana
+Figure 1: Plausibility check workflow using mwana
 
 </div>
 
