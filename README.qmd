@@ -54,7 +54,11 @@ It automates plausibility checks, prevalence analyses, and summary outputs, prov
 
 #### A tidy workflow for plausibility check using `mwana`
 
-![Plausibility check workflow using mwana](man/figures/workflow.png){#fig-workflow fig-align="center" height="800"}
+::: {#fig-workflow layout-align="center"}
+
+![Plausibility check workflow using mwana](man/figures/workflow.png){height="800"}
+
+:::
 
 ### Prevalence estimation
 

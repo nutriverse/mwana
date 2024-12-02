@@ -92,11 +92,10 @@ multiple areas.
 
 <div id="fig-workflow">
 
-<img src="man/figures/workflow.png" data-fig-align="center"
-height="800" />
+<img src="man/figures/workflow.png" height="800"
+alt="Plausibility check workflow using mwana" />
 
-
-Figure 1: Plausibility check workflow using mwana
+Figure 1
 
 </div>
 
