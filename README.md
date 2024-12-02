@@ -92,12 +92,8 @@ multiple areas.
 
 <div id="fig-workflow">
 
-<div>
+![](man/figures/README-fig-workflow-1.png)
 
-<img src="README_files/figure-commonmark/dot-figure-1.png"
-style="width:6in;height:8in" />
-
-</div>
 
 Figure 1: Plausibility check workflow implemented by mwana
 

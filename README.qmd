@@ -1,8 +1,5 @@
 ---
-format:
-  gfm:
-    fig-width: 6
-    fig-height: 8
+format: gfm
 knitr:
   opts_chunk: 
     collapse: true
@@ -57,51 +54,54 @@ It automates plausibility checks, prevalence analyses, and summary outputs, prov
 
 #### A tidy workflow for plausibility check using `mwana`
 
-```{dot}
-//| label: fig-workflow
-//| fig-cap: Plausibility check workflow implemented by mwana
-//| echo: false
+```{r}
+#| label: fig-workflow
+#| fig-cap: Plausibility check workflow implemented by mwana
+#| echo: false
+#| warning: false
 
+DiagrammeR::grViz("
 digraph mwana {
   # Default node attributes
-  node [style = filled, color = "lightblue", fontname = "Helvetica", fontsize = 12];
+  node [style = filled, color = lightblue, fontname = Helvetica, fontsize = 12];
 
   # Nodes
-  node1 [label = "Start", shape = ellipse, color = "PaleGreen"];
-  node2 [label = "Anthro data", shape = parallelogram];
-  node3 [label = "Indicator", shape = diamond, color = "lightgoldenrod"];
-  node4 [label = "WFHZ", shape = note];
-  node5 [label = "MFAZ", shape = note];
-  node6 [label = "Raw MUAC", shape = note];
-  node7 [label = "Wrangle age", shape = box];
-  node8 [label = "Wrangle anthro data", shape = box];
-  node9 [label = "Plausibility check", shape = box];
-  node10 [label = "End of workflow", shape = oval, color = "salmon"];
+  node1 [label = 'Start', shape = ellipse, color = PaleGreen];
+  node2 [label = 'Anthro data', shape = parallelogram];
+  node3 [label = 'Indicator', shape = diamond, color = lightgoldenrod];
+  node4 [label = 'WFHZ', shape = note];
+  node5 [label = 'MFAZ', shape = note];
+  node6 [label = 'Raw MUAC', shape = note];
+  node7 [label = 'Wrangle age', shape = box];
+  node8 [label = 'Wrangle anthro data', shape = box];
+  node9 [label = 'Plausibility check', shape = box];
+  node10 [label = 'End of workflow', shape = oval, color = salmon];
 
   ## Data process ----
-  node1 -> node2 [color = "gray", arrowhead = vee];
-  node2 -> node3 [color = "gray", arrowhead = vee];
-  node3 -> node4 [color = "gray", arrowhead = vee];
+  node1 -> node2 [color = gray, arrowhead = vee];
+  node2 -> node3 [color = gray, arrowhead = vee];
+  node3 -> node4 [color = gray, arrowhead = vee];
   
   ## WFHZ flow ----
-  node4 -> node7 [color = "gray", arrowhead = vee];
-  node7 -> node8 [color = "gray", arrowhead = vee];
-  node8 -> node9 [color = "gray", arrowhead = vee];
-  node9 -> node10 [color = "gray", arrowhead = vee];
+  node4 -> node7 [color = gray, arrowhead = vee];
+  node7 -> node8 [color = gray, arrowhead = vee];
+  node8 -> node9 [color = gray, arrowhead = vee];
+  node9 -> node10 [color = gray, arrowhead = vee];
   
    ## MFAZ flow ----
-  node3 -> node5 [color = "gray", arrowhead = vee];
-  node5 -> node7 [color = "gray", arrowhead = vee];
-  node7 -> node8 [color = "gray", arrowhead = vee];
-  node8 -> node9 [color = "gray", arrowhead = vee];
-  node9 -> node10 [color = "gray", arrowhead = vee];
+  node3 -> node5 [color = gray, arrowhead = vee];
+  node5 -> node7 [color = gray, arrowhead = vee];
+  node7 -> node8 [color = gray, arrowhead = vee];
+  node8 -> node9 [color = gray, arrowhead = vee];
+  node9 -> node10 [color = gray, arrowhead = vee];
   
   ## Absolute MUAC flow ----
-  node3 -> node6 [color = "gray", arrowhead = vee];
-  node6 -> node8 [color = "gray", arrowhead = vee];
-  node8 -> node9 [color = "gray", arrowhead = vee];
-  node9 -> node10 [color = "gray", arrowhead = vee];
+  node3 -> node6 [color = gray, arrowhead = vee];
+  node6 -> node8 [color = gray, arrowhead = vee];
+  node8 -> node9 [color = gray, arrowhead = vee];
+  node9 -> node10 [color = gray, arrowhead = vee];
 }
+")
 ```
 
 ### Prevalence estimation
