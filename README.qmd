@@ -44,7 +44,7 @@ Child anthropometric assessments are the cornerstones of child nutrition and foo
 
 ## What does `mwana` do?
 
-It automates plausibility checks, prevalence analyses, and summary outputs, providing particular advantages when handling data sets with multiple areas. <img src="man/figures/workflow.png" width="113px" height="292px" align="right" />
+It automates plausibility checks, prevalence analyses, and summary outputs, providing particular advantages when handling data sets with multiple areas. <img src="man/figures/workflow.png" width="225px" height="584px" align="right" />
 
 ### Plausibility checks
 
