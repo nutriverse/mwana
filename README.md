@@ -70,7 +70,7 @@ particularly when handling multiple-area data set.
 It automates plausibility checks, prevalence analyses, and summary
 outputs, providing particular advantages when handling data sets with
 multiple areas.
-<img src="man/figures/workflow.png" width="3.2in" height="8in" align="right" />
+<img src="man/figures/workflow.png" width="113px" height="292px" align="right" />
 
 ### Plausibility checks
 
