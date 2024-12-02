@@ -71,12 +71,15 @@ It automates plausibility checks, prevalence analyses, and summary
 outputs, providing particular advantages when handling data sets with
 multiple areas.
 
-### Plausibility checks.
+### Plausibility checks
 
-- `mwana` performs plausibility checks on weight-for-height z-score
-  (WFHZ) data by mimicking the SMART plausibility checkers in ENA for
-  SMART software, their scoring and classification criterion. Read guide
-  [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-wfhz-data).
+<img src="man/figures/workflow.png" id="fig-workflow"
+style="width:4in;height:10in" data-fig-align="right"
+alt="A tidy workflow for plausibility check using mwana" /> + `mwana`
+performs plausibility checks on weight-for-height z-score (WFHZ) data by
+mimicking the SMART plausibility checkers in ENA for SMART software,
+their scoring and classification criterion. Read guide
+[here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-wfhz-data).
 
 - It performs, as well, plausibility checks on MUAC data. For this,
   `mwana` integrates recent advances in using muac-for-age z-score
@@ -87,19 +90,6 @@ multiple areas.
   Otherwise, when the variables age is missing, a similar test suit used
   in the current version of ENA is performed. Read guide
   [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-mfaz-data).
-
-#### A tidy workflow for plausibility check using `mwana`
-
-<p align="center" width="100%">
-<div id="fig-workflow">
-
-<img src="man/figures/workflow.png" style="width:4in;height:10in" />
-
-
-Figure 1: Plausibility check workflow using mwana
-
-</div>
-</p>
 
 ### Prevalence estimation
 
