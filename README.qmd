@@ -94,20 +94,6 @@ Please note that `mwana` is still experimental but is already in late stage alph
 
 `mwana` has helper functions that process summary output tables and turn them into presentation and/or report ready tables. 
 
-
-<p align="center">
-```{r}
-#| label: fig-workflow
-#| height: 900px
-#| width: 360px
-#| echo: false
-
-knitr::include_graphics("man/figures/workflow.png")
-```
-</p>
-
-
-
 ::: {.callout-tip}
 
 If you are undertaking research using anthropometric data of children 6-59 months old with a focus on acute undernutrition, `mwana` has functions to wrangle ***weight***, ***height***, ***age***, ***WFHZ***, ***MUAC***, and ***MFAZ*** data before using it in your models.
