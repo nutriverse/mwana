@@ -7,37 +7,37 @@
 \format{
 A tibble of 2,267 rows and 14 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
-   \emph{province} \tab The administrative unit (admin 1) where data was collected. \cr
-   \emph{strata} \tab Rural and Urban \cr
+   \emph{province} \tab The administrative unit level 1 where data was collected \cr
+   \emph{strata} \tab Rural or Urban \cr
    \emph{cluster} \tab Primary sampling unit \cr
-   \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
-   \emph{age} \tab calculated age in months with two decimal places \cr
-   \emph{weight} \tab Weight (kg) \cr
-   \emph{height} \tab Height (cm) \cr
-   \emph{edema} \tab Edema, "n" = no, "y" = yes \cr
-   \emph{muac} \tab Mid-upper arm circumference (mm) \cr
+   \emph{sex} \tab Sex; "m" = boys, "f" = girls \cr
+   \emph{age} \tab Calculated age in months with two decimal places \cr
+   \emph{weight} \tab Weight in kilograms \cr
+   \emph{height} \tab Height in centimetres \cr
+   \emph{edema} \tab Edema; "n" = no edema, "y" = with edema \cr
+   \emph{muac} \tab Mid-upper arm circumference in millimetres \cr
    \emph{wtfactor} \tab Survey weights \cr
    \emph{wfhz} \tab Weight-for-height z-scores with 3 decimal places \cr
-   \emph{flag_wfhz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
+   \emph{flag_wfhz} \tab Flagged WFHZ value. 1 = flagged, 0 = not flagged \cr
    \emph{mfaz} \tab MUAC-for-age z-scores with 3 decimal places \cr
-   \emph{flag_mfaz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
+   \emph{flag_mfaz} \tab Flagged MFAZ value. 1 = flagged, 0 = not flagged \cr
 }
 }
 \source{
 Mozambique National Institute of Statistics. The data is publicly
 available at \url{https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-data_access}.
 Data was wrangled using this package's wranglers. Details about survey design
-can be gotten from: \url{https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-sampling}
+can be read from: \url{https://mozdata.ine.gov.mz/index.php/catalog/88#metadata-sampling}
 }
 \usage{
 anthro.02
 }
 \description{
-A household budget survey data conducted in Mozambique in
-2019/2020, known as \emph{IOF} (\emph{Inquérito ao Orçamento Familiar} in Portuguese). \emph{IOF}
-is a two-stage cluster-based survey, representative at province level (admin 2),
-with probability of the selection of the clusters proportional to the size of
-the population. Its data collection spans for a period of 12 months.
+A household budget survey data conducted in Mozambique in 2019/2020, known as
+\emph{IOF} (\emph{Inquérito ao Orçamento Familiar} in Portuguese). \emph{IOF} is a two-stage
+cluster-based survey, representative at province level (second administrative
+level), with probability of the selection of the clusters proportional to the
+size of the population. Its data collection spans for a period of 12 months.
 }
 \examples{
 anthro.02
