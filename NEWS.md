@@ -1,3 +1,5 @@
+# mwana 0.3.0
+
 # mwana v0.2.0.9000 (development version)
 
 <br/>
