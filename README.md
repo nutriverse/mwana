@@ -85,8 +85,6 @@ library(mwana)
 
 > [!WARNING]
 >
-> ### Current package lifecycle
->
 > Please note that `mwana` is still experimental but is already in late
 > stage alpha version testing nearing a stable release with development
 > focusing on backwards compatible patch or minor changes. Current
@@ -155,8 +153,6 @@ about this function, read this
 them into presentation and/or report ready tables.
 
 > [!TIP]
->
-> ### Support for anthropometric data wrangling
 >
 > If you are undertaking research using anthropometric data of children
 > 6-59 months old with a focus on acute undernutrition, `mwana` has
