@@ -62,7 +62,7 @@ library(mwana)
 
 ## What does `mwana` do?
 
-:::{.callout-warning title="Current package lifecycle"}
+::: {.callout-warning}
 
 Please note that `mwana` is still experimental but is already in late stage alpha version testing nearing a stable release with development focusing on backwards compatible patch or minor changes. Current functionalities described below may still change in the future but are likely to be compatible with the current interface or approach.
 
@@ -94,7 +94,7 @@ Please note that `mwana` is still experimental but is already in late stage alph
 
 `mwana` has helper functions that process summary output tables and turn them into presentation and/or report ready tables. 
 
-::: {.callout-tip title="Support for anthropometric data wrangling"}
+::: {.callout-tip}
 
 If you are undertaking research using anthropometric data of children 6-59 months old with a focus on acute undernutrition, `mwana` has functions to wrangle ***weight***, ***height***, ***age***, ***WFHZ***, ***MUAC***, and ***MFAZ*** data before using it in your models.
 
