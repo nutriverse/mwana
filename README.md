@@ -170,17 +170,17 @@ citation provided by a call to `citation()` function as follows:
 citation("mwana")
 #> To cite mwana: in publications use:
 #> 
-#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: Utilities for Analysing
-#>   Children's Nutritional Status_. R package version 0.0.0.9000,
-#>   <https://github.com/nutriverse/mwana>.
+#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: An Efficient Workflow for
+#>   Plausibility Checks and Prevalence Analysis of Wasting in R_. R
+#>   package version 0.2.1, <https://github.com/nutriverse/mwana>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     title = {mwana: Utilities for Analysing Children's Nutritional Status},
+#>     title = {mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R},
 #>     author = {{Tomás Zaba} and {Ernest Guevarra}},
 #>     year = {2024},
-#>     note = {R package version 0.0.0.9000},
+#>     note = {R package version 0.2.1},
 #>     url = {https://github.com/nutriverse/mwana},
 #>   }
 ```
