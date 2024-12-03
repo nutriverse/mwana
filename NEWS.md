@@ -2,7 +2,7 @@
 
 ## General updates
 
-* Updated documentation in README, function documentation, and vignettes;
+* Updated documentation in README, data documentation, function documentation, and vignettes;
 
 * 
 
