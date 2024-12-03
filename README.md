@@ -15,7 +15,6 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![R-CMD-check](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/gh/nutriverse/mwana/graph/badge.svg?token=kUUp1WOlSi)](https://codecov.io/gh/nutriverse/mwana)
-[![CodeFactor](https://www.codefactor.io/repository/github/nutriverse/mwana/badge.png)](https://www.codefactor.io/repository/github/nutriverse/mwana)
 [![DOI](https://zenodo.org/badge/867609177.svg)](https://zenodo.org/badge/latestdoi/867609177)
 <!-- badges: end -->
 
@@ -142,7 +141,7 @@ estimates for each survey domain.
 
 `mwana` provides a handy function for checking whether a specific
 anthropometric dataset has met the minimum sample size requirements for
-each of the dataset’s domains. The function assesses this sample size
+each of the dataset domains. The function assesses this sample size
 requirement based on whether the dataset was collected through a survey,
 a screening exercise, or a sentinel site surveillance. To learn more
 about this function, read this
