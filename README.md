@@ -83,7 +83,7 @@ library(mwana)
 
 ## What does `mwana` do?
 
-<img src="man/figures/workflow.png" width="225px" height="584px" align="left" />Currently,
+<img src="man/figures/workflow.png" width="240px" height="600px" align="left" />Currently,
 `mwana` has the following functionalities that support the creation of a
 programmatic workflow described in the figure to the left.
 
