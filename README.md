@@ -1,6 +1,6 @@
 
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.qmd. Please edit that file -->
 
 # mwana: An efficient workflow for plausibility checks and prevalence analysis of wasting in R <img src="man/figures/logo.png" align="right" width="200px" />
 
@@ -86,7 +86,7 @@ library(mwana)
 
 <img src="man/figures/workflow.png" width="360px" height="900px" align="left" />Currently,
 `mwana` has the following functionalities that support the creation of a
-programmatic workflow described in the figure to the left.
+programmatic workflow illustrated in the figure to the left.
 
 ### 1. Data plausibility checks of acute undernutrition anthropometric data of children 6-59 months old
 
@@ -177,7 +177,7 @@ citation("mwana")
 #>   }
 ```
 
-# Community guidelines
+## Community guidelines
 
 Feedback, bug reports and feature requests are welcome; file issues or
 seek support [here](https://github.com/nutriverse/mwana/issues). If you
