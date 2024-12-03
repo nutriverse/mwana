@@ -30,7 +30,8 @@ The `mwana` package streamlines data quality checks of and acute
 undernutrition prevalence estimation from anthropometric data of
 children aged 6 to 59 months old. This is made possible through the many
 years of leadership and development work in nutrition surveys of the
-[SMART initiative](https://smartmethodology.org) through its [nutrition
+[Standardized Monitoring and Assessment of Relief and Transitions
+(SMART) initiative](https://smartmethodology.org) through its [nutrition
 survey
 guidance](https://smartmethodology.org/survey-planning-tools/smart-methodology/)
 which `mwana` builds upon as a development framework. The main
@@ -83,7 +84,7 @@ library(mwana)
 
 ## What does `mwana` do?
 
-<img src="man/figures/workflow.png" width="280px" height="700px" align="left" />Currently,
+<img src="man/figures/workflow.png" width="360px" height="900px" align="left" />Currently,
 `mwana` has the following functionalities that support the creation of a
 programmatic workflow described in the figure to the left.
 
