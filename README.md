@@ -152,18 +152,6 @@ about this function, read this
 `mwana` has helper functions that process summary output tables and turn
 them into presentation and/or report ready tables.
 
-<p align="center">
-
-<div id="fig-workflow">
-
-<img src="man/figures/workflow.png" id="fig-workflow" />
-
-Figure 1
-
-</div>
-
-</p>
-
 > [!TIP]
 >
 > If you are undertaking research using anthropometric data of children
