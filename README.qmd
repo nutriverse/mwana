@@ -98,6 +98,8 @@ Please note that `mwana` is still experimental but is already in late stage alph
 <p align="center">
 ```{r}
 #| label: fig-workflow
+#| height: 900px
+#| width: 360px
 #| echo: false
 
 knitr::include_graphics("man/figures/workflow.png")
