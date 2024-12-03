@@ -63,7 +63,7 @@ library(mwana)
 
 ## What does `mwana` do?
 
-<img src="man/figures/workflow.png" width="240px" height="600px" align="left" />Currently, `mwana` has the following functionalities that support the creation of a programmatic workflow described in the figure to the left.
+<img src="man/figures/workflow.png" width="280px" height="700px" align="left" />Currently, `mwana` has the following functionalities that support the creation of a programmatic workflow described in the figure to the left.
 
 ### 1. Data plausibility checks of acute undernutrition anthropometric data of children 6-59 months old
 
