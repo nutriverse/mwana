@@ -61,11 +61,11 @@ reference:
      contents:
      - mw_stattest_ageratio
 
-   - title: IPC Acute Malnutrition checks
+   - title: Sample size checks
      contents:
      - mw_check_ipcamn_ssreq
 
-   - title: Plausibility check
+   - title: Plausibility checks
      contents:
      - mw_plausibility_check_wfhz
      - mw_plausibility_check_mfaz
@@ -77,7 +77,7 @@ reference:
      - mw_neat_output_mfaz
      - mw_neat_output_muac
 
-   - title: Estimate prevalence of wasting
+   - title: Prevalence estimators
      contents:
      - mw_estimate_prevalence_wfhz
      - mw_estimate_prevalence_muac
