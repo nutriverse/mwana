@@ -28,7 +28,7 @@ navbar:
         href: articles/plausibility.html
       - text: "Estimating the prevalence of wasting"
         href: articles/prevalence.html
-      - text: "Checking if IPC Acute Malnutrition sample size requirements were met"
+      - text: "Sample size requirements"
         href: articles/ipc_amn_check.html
     website:
       icon: "fa globe fa-lg"
@@ -43,21 +43,13 @@ home:
     href: https://smartmethodology.org/
   - text: Read more about IPC
     href: https://www.ipcinfo.org/
+  - text: Read more about nipnTK
+    href: https://nutriverse.io/nipnTK/
 
 reference:
    - title: Description
      contents:
      - mwana
-
-   - title: Built-in data sets
-     contents:
-     - anthro.01
-     - anthro.02
-     - anthro.03
-     - anthro.04
-     - mfaz.01
-     - mfaz.02
-     - wfhz.01
 
    - title: Wrangle data
      contents:
@@ -101,3 +93,13 @@ reference:
      - flag_outliers
      - remove_flags
      - define_wasting
+
+   - title: Datasets
+     contents:
+     - anthro.01
+     - anthro.02
+     - anthro.03
+     - anthro.04
+     - mfaz.01
+     - mfaz.02
+     - wfhz.01
