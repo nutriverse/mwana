@@ -6,9 +6,9 @@
 
 <!-- badges: start -->
 
-[![Project Status: WIP – Initial development is in progress, but there
-has not yet been a stable, usable release suitable for the
-public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![pages-build-deployment](https://github.com/nutriverse/mwana/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/pages/pages-build-deployment)
@@ -83,6 +83,14 @@ library(mwana)
 ```
 
 ## What does `mwana` do?
+
+> [!WARNING]
+>
+> Please note that `mwana` is still experimental but is already in late
+> stage alpha version testing nearing a stable release with development
+> focusing on backwards compatible patch or minor changes. Current
+> functionalities described below may still change in the future but are
+> likely to be compatible with the current interface or approach.
 
 <img src="man/figures/workflow.png" width="360px" height="900px" align="left" />Currently,
 `mwana` has the following functionalities that support the creation of a
