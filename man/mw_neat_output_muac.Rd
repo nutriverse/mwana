@@ -2,27 +2,24 @@
 % Please edit documentation in R/plausibility_check_muac.R
 \name{mw_neat_output_muac}
 \alias{mw_neat_output_muac}
-\title{Clean and format the output table returned from the MUAC plausibility check
-for improved clarity and readability.}
+\title{Clean and format the output tibble returned from the MUAC plausibility check}
 \usage{
 mw_neat_output_muac(df)
 }
 \arguments{
-\item{df}{An object of class \code{data.frame} returned by this package's
-plausibility checker for raw MUAC data, containing the summarized results to be
-formatted.}
+\item{df}{A \code{tibble} object returned by the \code{\link[=mw_plausibility_check_muac]{mw_plausibility_check_muac()}}
+function containing the summarized results to be formatted.}
 }
 \value{
-A \code{data.frame} object of the same length and width as \code{df}, with column names and
-values formatted for clarity and readability.
+A \code{data.frame} object of the same length and width as \code{df}, with column names
+and values formatted for clarity and readability.
 }
 \description{
-Clean and format the output table returned from the plausibility check of raw
-MUAC data for improved clarity and readability. It converts scientific notations
-to standard notations, round values and rename columns to meaningful names.
+Converts scientific notations to standard notations, rounds off values, and
+renames columns to meaningful names.
 }
 \examples{
-## First wranlge MUAC data ----
+## First wrangle MUAC data ----
 df_muac <- mw_wrangle_muac(
   df = anthro.01,
   sex = sex,

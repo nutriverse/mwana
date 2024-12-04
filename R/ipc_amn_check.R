@@ -63,17 +63,17 @@ mw_check_ipcamn_ssreq <- function(df,
   }
 
   ## Summarize ----
-  df <- df |>
-    dplyr::summarise(
-      n_clusters = dplyr::n_distinct({{ cluster }}),
-      n_obs = n(),
-      meet_ipc = dplyr::case_when(
-        .source == "survey" & n_clusters >= 25 ~ "yes",
-        .source == "screening" & n_clusters >= 3 & n_obs >= 600 ~ "yes",
-        .source == "ssite" & n_clusters >= 5 & n_obs >= 200 ~ "yes",
-        .default = "no"
-      )
+  df <- dplyr::summarise(
+    .data = df,
+    n_clusters = dplyr::n_distinct({{ cluster }}),
+    n_obs = dplyr::n(),
+    meet_ipc = dplyr::case_when(
+      .source == "survey" & n_clusters >= 25 ~ "yes",
+      .source == "screening" & n_clusters >= 3 & n_obs >= 600 ~ "yes",
+      .source == "ssite" & n_clusters >= 5 & n_obs >= 200 ~ "yes",
+      .default = "no"
     )
+  )
   
   ## Return tibble ----
   tibble::as_tibble(df)

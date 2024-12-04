@@ -38,6 +38,11 @@ functionalities of the `mwana` package on acute undernutrition data
 quality checks are mainly convenience wrappers to functions in the
 [`nipnTK`](https://nutriverse.io/nipnTK) package.
 
+The term ***mwana*** means child in *Elómwè*, a local language spoken in
+the central-northern regions of Mozambique where the author hails from.
+It also has a similar meaning across other Bantu languages, such as
+*Swahili*, spoken in many parts of Africa.
+
 ## Motivation
 
 `mwana` was borne out of the author’s own experience of having to work

@@ -2,24 +2,22 @@
 % Please edit documentation in R/plausibility_check_mfaz.R
 \name{mw_neat_output_mfaz}
 \alias{mw_neat_output_mfaz}
-\title{Clean and format the output table returned from the MFAZ plausibility check
-for improved clarity and readability}
+\title{Clean and format the output tibble returned from the MUAC-for-age z-score
+plausibility check}
 \usage{
 mw_neat_output_mfaz(df)
 }
 \arguments{
-\item{df}{An object of class \code{data.frame} returned by this package's
-plausibility checker for MFAZ data, containing the summarized results to be
-formatted.}
+\item{df}{An \code{data.frame} object returned by \code{\link[=mw_plausibility_check_mfaz]{mw_plausibility_check_mfaz()}}
+containing the summarized results to be formatted.}
 }
 \value{
-A \code{data.frame} object of the same length and width as \code{df}, with column names and
-values formatted for clarity and readability.
+A \code{data.frame} object of the same length and width as \code{df}, with column
+names and values formatted as appropriate.
 }
 \description{
-Clean and format the output table returned from the MFAZ plausibility check
-for improved clarity and readability. It converts scientific notations to standard
-notations, round values and rename columns to meaningful names.
+Converts scientific notations to standard notations, rounds off values, and
+renames columns to meaningful names.
 }
 \examples{
 ## First wrangle age data ----

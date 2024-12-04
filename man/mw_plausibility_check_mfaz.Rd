@@ -2,41 +2,42 @@
 % Please edit documentation in R/plausibility_check_mfaz.R
 \name{mw_plausibility_check_mfaz}
 \alias{mw_plausibility_check_mfaz}
-\title{Check the plausibility and acceptability of muac-for-age z-score (MFAZ) data}
+\title{Check the plausibility and acceptability of MUAC-for-age z-score (MFAZ) data}
 \usage{
 mw_plausibility_check_mfaz(df, sex, muac, age, flags)
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to check.}
+\item{df}{A \code{data.frame} object to check.}
 
-\item{sex}{A vector of class \code{numeric} of child's sex.}
+\item{sex}{A \code{numeric} vector for child's sex with 1 = males and 2 = females.}
 
-\item{muac}{A vector of class \code{numeric} of child's MUAC in centimeters.}
+\item{muac}{A \code{numeric} vector of child's MUAC in centimeters.}
 
 \item{age}{A vector of class \code{double} of child's age in months.}
 
-\item{flags}{A vector of class \code{numeric} of flagged records.}
+\item{flags}{A \code{numeric} vector of flagged records.}
 }
 \value{
-A summarized table of class \code{data.frame}, of length 17 and width 1, for
-the plausibility test results and their respective acceptability ratings.
+A single row summary \code{tibble} with 17 columns containing the
+plausibility check results and their respective acceptability ratings.
 }
 \description{
 Check the overall plausibility and acceptability of MFAZ data through a
-structured test suite encompassing sampling and measurement-related biases checks
-in the data set. The test suite in this function follows the recommendation made
-by Bilukha, O., & Kianian, B. (2023) on the plausibility of
-constructing a comprehensive plausibility check for MUAC data similar to WFHZ
-to evaluate its acceptability when the variable age exists in the data set.
+structured test suite encompassing checks for sampling and
+measurement-related biases in the dataset. This test suite follows the
+recommendation made by Bilukha & Kianian (2023) on the plausibility of
+constructing a comprehensive plausibility check for MUAC data similar to
+weight-for-height z-score to evaluate its acceptability when age values are
+available in the dataset.
 
-The function works on a data frame returned from this package's wrangling
-function for age and for MFAZ data.
+The function works on a \code{data.frame} returned from wrangling functions for
+age and for MUAC-for-age z-score data available from this package.
 }
 \details{
-Whilst the function uses the same test checks and criteria as that of WFHZ
-in the SMART plausibility check, the percent of flagged data is evaluated
-using a different cut-off points, with a maximum acceptability of 2.0\%,
-as shown below:\tabular{cccc}{
+Whilst the function uses the same checks and criteria as those for
+weight-for-height z-scores in the SMART plausibility check, the percent of
+flagged records is evaluated using different cut-off points, with a maximum
+acceptability of 2.0\% as shown below:\tabular{cccc}{
    \strong{Excellent} \tab \strong{Good} \tab \strong{Acceptable} \tab \strong{Problematic} \cr
    0.0 - 1.0 \tab >1.0 - 1.5 \tab >1.5 - 2.0 \tab >2.0 \cr
 }

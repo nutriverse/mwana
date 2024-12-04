@@ -2,29 +2,29 @@
 % Please edit documentation in R/plausibility_check_muac.R
 \name{mw_plausibility_check_muac}
 \alias{mw_plausibility_check_muac}
-\title{Check the plausibility and acceptability of raw MUAC data}
+\title{Check the plausibility and acceptability of unadjusted MUAC data}
 \usage{
 mw_plausibility_check_muac(df, sex, muac, flags)
 }
 \arguments{
-\item{df}{An object of class \code{data.frame} to check. It must have been
-wrangled using this package's wrangling function for MUAC.}
+\item{df}{A \code{data.frame} object to check. It must have been wrangled using
+the \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}} function.}
 
-\item{sex}{A vector of class \code{numeric} of child's sex.}
+\item{sex}{A \code{numeric} vector for child's sex with 1 = males and 2 = females.}
 
 \item{muac}{A vector of class \code{double} of child's MUAC in centimeters.}
 
-\item{flags}{A vector of class \code{numeric} of flagged records.}
+\item{flags}{A \code{numeric} vector of flagged records.}
 }
 \value{
-A summarized table of class \code{data.frame}, of length 9 and width 1, for
-the plausibility test results and their respective acceptability ratings.
+A single row summary \code{tibble} with 9 columns containing the
+plausibility check results and their respective acceptability ratings.
 }
 \description{
-Check the overall plausibility and acceptability of raw MUAC data through a
-structured test suite encompassing sampling and measurement-related biases checks
-in the data set. The test suite in this function follows the recommendation made
-by Bilukha, O., & Kianian, B. (2023).
+Check the overall plausibility and acceptability of unadjusted MUAC data
+through a structured test suite encompassing checks for sampling and
+measurement-related biases in the dataset. The test suite in this function
+follows the recommendation made by Bilukha & Kianian (2023).
 }
 \details{
 Cut-off points used for the percent of flagged records:\tabular{cccc}{
@@ -33,7 +33,7 @@ Cut-off points used for the percent of flagged records:\tabular{cccc}{
 }
 }
 \examples{
-## First wranlge MUAC data ----
+## First wrangle MUAC data ----
 df_muac <- mw_wrangle_muac(
   df = anthro.01,
   sex = sex,
