@@ -18,7 +18,7 @@ wrangling functions for WFHZ or MUAC, or both (for combined) as appropriate.}
 
 \item{zscores}{A vector of class \code{double} of WFHZ or MFAZ values.}
 
-\item{muac}{An \code{integer} or \code{character} vector of unadjusted MUAC values in
+\item{muac}{An \code{integer} or \code{character} vector of raw MUAC values in
 millimeters.}
 
 \item{edema}{A \code{character} vector indicating edema status. Default is NULL.
@@ -38,7 +38,7 @@ named \code{cgam}, \code{csam} and \code{cmam}.
 \description{
 Determine if a given observation in the data set is wasted or not, and its
 respective form of wasting (global, severe or moderate) on the basis of
-z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), unadjusted MUAC
+z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), raw MUAC
 values and combined case-definition.
 }
 \examples{

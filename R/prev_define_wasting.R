@@ -139,7 +139,7 @@ define_wasting_combined <- function(zscores,
 #' @description
 #' Determine if a given observation in the data set is wasted or not, and its
 #' respective form of wasting (global, severe or moderate) on the basis of
-#' z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), unadjusted MUAC 
+#' z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), raw MUAC 
 #' values and combined case-definition.
 #'
 #' @param df A `tibble` object. It must have been wrangled using this package's 
@@ -147,7 +147,7 @@ define_wasting_combined <- function(zscores,
 #'
 #' @param zscores A vector of class `double` of WFHZ or MFAZ values.
 #'
-#' @param muac An `integer` or `character` vector of unadjusted MUAC values in
+#' @param muac An `integer` or `character` vector of raw MUAC values in
 #' millimeters.
 #'
 #' @param edema A `character` vector indicating edema status. Default is NULL.

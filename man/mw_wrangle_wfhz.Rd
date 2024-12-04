@@ -7,35 +7,28 @@
 mw_wrangle_wfhz(df, sex, weight, height, .recode_sex = TRUE, .decimals = 3)
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to wrangle data from.}
+\item{df}{A \code{data.frame} object to wrangle data from.}
 
-\item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values should
-only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
-are coded in either of the aforementioned before to call the function. If input
-codes are neither of the above, the function will stop execution and
-return an error message with the type of mismatch.}
+\item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values
+should only be 1 or "m" for males and 2 or "f" for females.}
 
-\item{weight}{A vector of class \code{double} of child's weight in kilograms. If the input
-is of a different class, the function will stop execution and return an error
-message indicating the type of mismatch.}
+\item{weight}{A vector of class \code{double} of child's weight in kilograms.}
 
-\item{height}{A vector of class \code{double} of child's height in centimeters. If the input
-is of a different class, the function will stop execution and return an error
-message indicating the type of mismatch.}
+\item{height}{A vector of class \code{double} of child's height in centimeters.}
 
-\item{.recode_sex}{Logical. Set to \code{TRUE} if the values for \code{sex} are not coded
-as 1 (for males) or 2 (for females). Otherwise, set to \code{FALSE} (default).}
+\item{.recode_sex}{Logical. Set to TRUE if the values for \code{sex} are not coded
+as 1 (for males) or 2 (for females). Otherwise, set to FALSE (default).}
 
-\item{.decimals}{The number of decimals places the z-scores should have.
+\item{.decimals}{The number of decimal places to use for z-score outputs.
 Default is 3.}
 }
 \value{
-A data frame based on \code{df}. New variables named \code{wfhz} and
-\code{flag_wfhz}, of child's WFHZ and detected outliers, will be created.
+A data frame based on \code{df} with new variables named \code{wfhz} for
+child's WFHZ and \code{flag_wfhz} for detected outliers added.
 }
 \description{
-Calculate z-scores for weight-for-height (WFHZ) and identify outliers based on
-the SMART methodology.
+Calculate z-scores for weight-for-height (WFHZ) and identify outliers based
+on the SMART methodology.
 }
 \examples{
 mw_wrangle_wfhz(

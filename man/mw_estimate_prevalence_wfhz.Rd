@@ -2,44 +2,43 @@
 % Please edit documentation in R/prev_wasting_wfhz.R
 \name{mw_estimate_prevalence_wfhz}
 \alias{mw_estimate_prevalence_wfhz}
-\title{Estimate the prevalence of wasting based on z-scores of weight-for-height (WFHZ)}
+\title{Estimate the prevalence of wasting based on weight-for-height z-scores (WFHZ)}
 \usage{
 mw_estimate_prevalence_wfhz(df, wt = NULL, edema = NULL, .by = NULL)
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to use. This must have been
-wrangled using this package's wrangling function for WFHZ data. The function
-uses a variable name called \code{cluster} where the primary sampling unit IDs
-are stored. Make sure to rename your cluster ID variable to \code{cluster}, otherwise
-the function will error and terminate the execution.}
+\item{df}{A \code{tibble} object that has been produced by the \code{\link[=mw_wrangle_wfhz]{mw_wrangle_wfhz()}}
+functions. The \code{df} should have a variable named \code{cluster} for the primary
+sampling unit identifiers.}
 
-\item{wt}{A vector of class \code{double} of the final survey weights. Default is
-\code{NULL} assuming a self weighted survey, as in the ENA for SMART software;
-otherwise, when a vector of weights if supplied, weighted analysis is done.}
+\item{wt}{A vector of class \code{double} of the survey sampling weights. Default
+is NULL which assumes a self-weighted survey as is the case for a survey
+sample selected proportional to population size (i.e., SMART survey sample).
+Otherwise, a weighted analysis is implemented.}
 
-\item{edema}{A vector of class \code{character} of edema. Code should be
-"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
+\item{edema}{A \code{character} vector for presence of nutritional edema coded as
+"y" for presence of nutritional edema and "n" for absence of nutritional
+edema. Default is NULL.}
 
-\item{.by}{A vector of class \code{character} or \code{numeric} of the geographical areas
-or respective IDs for where the data was collected and for which the analysis
-should be summarised at.}
+\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
+or identifiers for where the data was collected and for which the analysis
+should be summarised for.}
 }
 \value{
-A summarised table of class \code{data.frame} of the descriptive
-statistics about wasting.
+A summary \code{tibble} for the descriptive statistics about wasting.
 }
 \description{
 Calculate the prevalence estimates of wasting based on z-scores of
-weight-for-height and/or bilateral edema. The function allows users to
-get the prevalence estimates calculated in accordance with the complex sample
-design properties; this includes applying survey weights when needed or applicable.
-
-Before estimating, the function evaluates the quality of data by calculating
-and rating the standard deviation of z-scores of WFHZ. If rated as problematic,
-the prevalence is estimated based on the PROBIT method.
-
-Outliers are detected based on SMART flags and get excluded prior being piped
-into the actual prevalence analysis workflow.
+weight-for-height and/or nutritional edema. The function allows users to
+estimate prevalence in accordance with complex sample design properties such
+as accounting for survey sample weights when needed or applicable. The
+quality of the data is first evaluated by calculating and rating the standard
+deviation of WFHZ. Standard approach to prevalence estimation is calculated
+only when the standard deviation of MFAZ is rated as not problematic. If
+the standard deviation is problematic, prevalence is estimated using the
+PROBIT estimator. Outliers are detected based on SMART flagging criteria.
+Identified outliers are then excluded before prevalence estimation is
+performed.
 }
 \examples{
 ## When .by = NULL ----

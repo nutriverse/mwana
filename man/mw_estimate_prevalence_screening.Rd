@@ -2,56 +2,51 @@
 % Please edit documentation in R/prev_wasting_screening.R
 \name{mw_estimate_prevalence_screening}
 \alias{mw_estimate_prevalence_screening}
-\title{Estimate the prevalence of wasting based on MUAC for non survey data}
+\title{Estimate the prevalence of wasting based on MUAC for non-survey data}
 \usage{
 mw_estimate_prevalence_screening(df, muac, edema = NULL, .by = NULL)
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to use. This must have been
-wrangled using this package's wrangling function for MUAC data. Make sure
-MUAC values are converted to millimeters after using the wrangler.
-If this is not done, the function will stop execution and return an error message
-with the issue.}
+\item{df}{A \code{tibble} object produced by \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}} and
+\code{\link[=mw_wrangle_age]{mw_wrangle_age()}} functions. Note that MUAC values in \code{df}
+must be in millimeters unit after using \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}}. Also, \code{df}
+must have a variable called \code{cluster} which contains the primary sampling
+unit identifiers.}
 
-\item{muac}{A vector of raw MUAC values of class \code{numeric} or \code{integer}.
-The measurement unit of the values should be millimeters. If any or all values
-are in a different unit than the expected, the function will stop execution and
-return an error message indicating the issue.}
+\item{muac}{A \code{numeric} or \code{integer} vector of raw MUAC values. The
+measurement unit of the values should be millimeters.}
 
-\item{edema}{A vector of class \code{character} of edema. Code should be
-"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.
-If class, as well as, code values are different than expected, the function
-will stop the execution and return an error message indicating the issue.}
+\item{edema}{A \code{character} vector for presence of nutritional edema coded as
+"y" for presence of nutritional edema and "n" for absence of nutritional
+edema. Default is NULL.}
 
-\item{.by}{A vector of class \code{character} or \code{numeric} of the geographical areas
-or respective IDs for where the data was collected and for which the analysis
-should be summarized at.}
+\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
+or identifiers for where the data was collected and for which the analysis
+should be summarised for.}
 }
 \value{
-A summarized table of class \code{data.frame} of the descriptive
-statistics about wasting.
+A summary \code{tibble} for the descriptive statistics about combined
+wasting.
 }
 \description{
 It is common to estimate prevalence of wasting from non survey data, such
 as screenings or any other community-based surveillance systems. In such
-situations, the analysis usually consists only in estimating the point prevalence
-and the counts of positive cases, without necessarily estimating the
-uncertainty. This is the job of this function.
+situations, the analysis usually consists only in estimating the point
+prevalence and the counts of positive cases, without necessarily estimating
+the uncertainty. This function serves this use.
 
-Before estimating, it evaluates the quality of data by calculating and rating the
-standard deviation of z-scores of muac-for-age (MFAZ) and the p-value of the
-age ratio test; then it sets the analysis path that best fits the data.
-\itemize{
-\item If all tests are rated as not problematic, a normal analysis is done.
-\item If standard deviation is not problematic and age ratio test is problematic,
-prevalence is age-weighted. This is to fix the likely overestimation of wasting
-when there are excess of younger children in the data set.
-\item If standard deviation is problematic and age ratio test is not, or both
-are problematic,  analysis gets cancelled out and \code{NA}s get thrown.
-}
-
-Outliers are detected based on SMART flags on the MFAZ values and then
-get excluded prior being piped into the actual prevalence analysis workflow.
+The quality of the data is first evaluated by calculating and rating the
+standard deviation of MFAZ and the p-value of the age ratio test. Prevalence
+is calculated only when the standard deviation of MFAZ is not problematic. If
+both standard deviation of MFAZ and p-value of age ratio test is not
+problematic, straightforward prevalence estimation is performed. If standard
+deviation of MFAZ is not problematic but p-value of age ratio test is
+problematic, age-weighting is applied to prevalence estimation to account for
+the over-representation of younger children in the sample. If standard
+deviation of MFAZ is problematic, no estimation is done and an NA value is
+returned. Outliers are detected based on SMART flagging criteria for MFAZ.
+Identified outliers are then excluded before prevalence  estimation is
+performed.
 }
 \examples{
 mw_estimate_prevalence_screening(

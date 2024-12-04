@@ -16,44 +16,39 @@ mw_wrangle_muac(
 )
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to wrangle data from.}
+\item{df}{A \code{data.frame} object to wrangle data from.}
 
-\item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values should
-only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
-are coded in either of the aforementioned before calling the function. If input
-codes are different than expected, the function will stop execution and
-return an error message with the type of mismatch.}
+\item{sex}{A \code{numeric} or \code{character} vector of child's sex. Code values
+should only be 1 or "m" for males and 2 or "f" for females.}
 
-\item{muac}{A vector of class \code{numeric} of child's age in months. If the class
-is different than expected, the function will stop execution and return an error
-message indicating the type of mismatch.}
+\item{muac}{A \code{numeric} vector of child's age in months.}
 
-\item{age}{A vector of class \code{numeric} of child's age in months.}
+\item{age}{A \code{numeric} vector of child's age in months. Default is NULL.}
 
-\item{.recode_sex}{Logical. Set to \code{TRUE} if the values for \code{sex} are not coded
-as 1 (for males) or 2 (for females). Otherwise, set to \code{FALSE} (default).}
+\item{.recode_sex}{Logical. Set to TRUE if the values for \code{sex} are not coded
+as 1 (for males) or 2 (for females). Otherwise, set to FALSE (default).}
 
-\item{.recode_muac}{Logical. Set to \code{TRUE} if the values for raw MUAC should be
-converted to either centimeters or millimeters. Otherwise, set to \code{FALSE}
+\item{.recode_muac}{Logical. Set to TRUE if the values for raw MUAC should be
+converted to either centimeters or millimeters. Otherwise, set to FALSE
 (default)}
 
-\item{.to}{A choice of the measuring unit to which the MUAC values should be converted;
-"cm" for centimeters, "mm" for millimeters and "none" to leave as it is.}
+\item{.to}{A choice of the measuring unit to convert MUAC values into. Can be
+"cm" for centimeters, "mm" for millimeters, or "none" to leave as it is.}
 
-\item{.decimals}{The number of decimals places the z-scores should have.
+\item{.decimals}{The number of decimal places to use for z-score outputs.
 Default is 3.}
 }
 \value{
-A data frame based on \code{df}. New variables named \code{mfaz} and
-\code{flag_mfaz}, of child's MFAZ and detected outliers, will be created. When age
-is not supplied, only \code{flag_muac} variable is created. This refers to outliers
-detected based on the raw MUAC values.
+A \code{tibble} based on \code{df}. If \code{age = NULL}, \code{flag_muac} variable for
+detected MUAC outliers based on raw MUAC is added to \code{df}. Otherwise,
+variables named \code{mfaz} for child's MFAZ and \code{flag_mfaz} for detected outliers
+based on SMART guidelines are added to \code{df}.
 }
 \description{
 Calculate z-scores for MUAC-for-age (MFAZ) and identify outliers based on
-the SMART methodology. When age is not supplied, wrangling will consist only
-in detecting outliers from the raw MUAC values. The function only works after
-the age has been wrangled.
+the SMART methodology. When age is not supplied, only outliers are detected
+from the raw MUAC values. The function only works after age has gone through
+\code{\link[=mw_wrangle_age]{mw_wrangle_age()}}.
 }
 \examples{
 ## When age is available, wrangle it first before calling the function ----

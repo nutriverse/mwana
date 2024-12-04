@@ -15,33 +15,29 @@ vignette: >
 
 ```{r}
 #| label: global-setup
+#| echo: false
 
 library(mwana)
+library(dplyr)
 ```
-Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrition (IPC AMN) can come from different sources, namely: representative surveys, screenings or community-based surveillance system (known as sentinel sites). The IPC set minimum sample size requirements for each of these sources. Details can be read from the IPC Manual version 3.1 [@ipcmanual].  
 
-In the IPC AMN analysis workflow, the very first step of a data analyst is to check if these requirements were met. This is done for each area meant to be included in the IPC AMN analysis. For this, `mwana` provides a handy function: `mw_check_ipcamn_ssreq()`.
+Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrition (IPC AMN) can come from different sources: representative surveys, screenings, or community-based surveillance system (known as sentinel sites). The IPC sets minimum sample size requirements for each of these sources [@ipcmanual].
 
-To demonstrate its usage, we will use a built-in sample data set `anthro.01`.
+In the IPC AMN analysis workflow, the first step a data analyst has to take is the checking of sample size requirements as set by IPC for each survey area to be included in the IPC AMN analysis. `mwana` provides the `mw_check_ipcamn_ssreq()` function for this purpose.
+
+To demonstrate its usage, we will use the built-in sample data set `anthro.01`.
 
 ```{r}
 #| label: view-data
 #| echo: true
-#| eval: false
 
 head(anthro.01)
 ```
 
-```{r}
-#| label: view-data.
-#| echo: false
 
-head(anthro.01)
-```
+`anthro.01` contains anthropometry data from SMART surveys from anonymized locations. To learn more about this dataset, call `help("anthro.01")` in your `R` console. 
 
-`anthro.01` contains anthropometry data from SMART surveys from anonymized locations. We can check further details about the data set by calling `help("anthro.01")` in `R` console. 
-
-Now that we got acquainted with the data set, we can proceed to execute the task. To achieve this, we simply do:
+Now that we got acquainted with the data set, we can proceed to executing the task. To achieve this, we simply do:
 
 ```{r}
 #| label: check
@@ -49,13 +45,20 @@ Now that we got acquainted with the data set, we can proceed to execute the task
 #| eval: false
 
 mw_check_ipcamn_ssreq(
-  df = anthro.01,
-  cluster = cluster,
-  .source = "survey"
+  df = anthro.01,         # <1>
+  cluster = cluster,      # <2>
+  .source = "survey"      # <3>
 )
 ```
 
-Or we can also choose to chain the data object to the function using the pipe operator: 
+1. The argument `df` should be specified with the dataset you want to assess sample sizes for. In this case, `anthro.01`.
+
+2. The argument `cluster` should be specified with the unquoted variable name in `df` that contains information for the unique cluster or screening or sentinel site identifiers. In this case, `anthro.01` has a variable called `cluster` which we supply to this argument unquoted.
+
+3. The argument `.source` should be specified with the type of the source for the data in `df`. Since `anthro.01` data is from a survey, we specify this argument as *"survey"*.
+
+We can also chain `anthro.01` to the function using the native pipe operator `|>`:
+
 ```{r}
 #| label: pipe_operator
 #| echo: true
@@ -80,13 +83,16 @@ anthro.01 |>
   )
 ```
 
-A table (of class `tibble`) is returned with three columns:  
+A `tibble` object is returned with three columns:  
 
-  + Column `n_clusters` counts the number of unique cluster or villages or community IDs in the data set where the activity took place.
-  + Column `n_obs` counts the number of children in the data set.  
-  + Column `meet_ipc` indicates whether the IPC AMN sample size requirements (for surveys in this case) were met or not.
+  + `n_clusters` counts the number of unique cluster or villages or community identifiers in the data set where the data collection took place.
+  
+  + `n_obs` counts the number of children from which data were collected.
+  
+  + `meet_ipc` indicates whether the IPC AMN sample size requirements (for surveys in this case) were met or not.
 
-The above output is not quite useful yet as we often deal with multiple-area data set. We can get a summarized table by area as follows: 
+The above output is not quite useful yet as we often deal with multiple-area datasets. We can get a summarized output by area as follows: 
+
 ```{r}
 #| label: group_by
 #| echo: true
@@ -110,8 +116,6 @@ This will return:
 #| label: view_group_by
 #| echo: false
 #| message: false
-
-library(dplyr)
 
 anthro.01 |>
   group_by(area) |>

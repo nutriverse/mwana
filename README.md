@@ -134,7 +134,7 @@ estimates for each survey domain.
 - To read about the functions and the process for estimating acute
   undernutrition prevalence from MUAC data, read this
   [guide](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-muac)
-  on using unadjusted MUAC and/or edema data and this
+  on using raw MUAC and/or edema data and this
   [guide](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz)
   on using MFAZ and/or edema data.
 

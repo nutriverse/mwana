@@ -34,7 +34,7 @@ We will begin the demonstration with the plausibility check that you are most fa
 
 We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to walk you through some key features about this function. 
 
-`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the SMART Methodology [@smart2017]. Under the hood, it runs the same test suite you already know from SMART; it also applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
+`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the SMART Methodology [@smart2017]. Under the hood, it runs the same test suite you already know from SMART. It also applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
 
   (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC.
   
@@ -47,15 +47,6 @@ It is always a good practice to start off by inspecting our data set. Let's chec
 ```{r}
 #| label: data
 #| echo: true
-#| eval: false
-
-head(anthro.01)
-```
-
-```{r}
-#| label: view_data
-#| echo: false
-#| eval: true
 
 head(anthro.01)
 ```
@@ -75,14 +66,26 @@ We use `mw_wrangle_age()` to calculate child's age in months based on the date o
 #| echo: true
 #| eval: false
 
-age_mo <- anthro.01 |>
-  mw_wrangle_age(
-    dos = dos,
-    dob = dob,
-    age = age,
-    .decimals = 2
+age_mo <- mw_wrangle_age(   # <1>
+    df = anthro.01          # <2>
+    dos = dos,              # <3>
+    dob = dob,              # <4>
+    age = age,              # <5>
+    .decimals = 2           # <6>
   )
 ```
+
+1. The output for this operation will be assigned to an object called `age_mo`.
+
+2. The argument `df` is supplied with the `anthro.01` object which contains variables related to age that will be used for the wrangling process.
+
+3. The argument `dos` is supplied with the unquoted variable name in `df` that contains the date when the data collection was performed. In the `anthro.01` dataset, this so happens to be `dos` as well.
+
+4. The argument `dob` is supplied with the unquoted variable name in `df` that contains the date when the child was born. In the `anthro.01` dataset, this so happens to be `dob` as well.
+
+5. The argument `age` is supplied with the unquoted variable name in `df` that contains the age of the child in months. In the `anthro.01` dataset, this so happens to be `age` as well.
+
+6. The argument `.decimals` allows the user to specify the number of decimal places to which the output age values will be rounded off to. By default, `.decimals` is set to 2. So, even without specifying this argument, the resulting output will be rounded off to 2.
 
 This will return: 
 

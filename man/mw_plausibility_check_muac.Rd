@@ -2,7 +2,7 @@
 % Please edit documentation in R/plausibility_check_muac.R
 \name{mw_plausibility_check_muac}
 \alias{mw_plausibility_check_muac}
-\title{Check the plausibility and acceptability of unadjusted MUAC data}
+\title{Check the plausibility and acceptability of raw MUAC data}
 \usage{
 mw_plausibility_check_muac(df, sex, muac, flags)
 }
@@ -21,7 +21,7 @@ A single row summary \code{tibble} with 9 columns containing the
 plausibility check results and their respective acceptability ratings.
 }
 \description{
-Check the overall plausibility and acceptability of unadjusted MUAC data
+Check the overall plausibility and acceptability of raw MUAC data
 through a structured test suite encompassing checks for sampling and
 measurement-related biases in the dataset. The test suite in this function
 follows the recommendation made by Bilukha & Kianian (2023).

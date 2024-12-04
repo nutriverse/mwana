@@ -1,8 +1,8 @@
 #'
-#' Check the plausibility and acceptability of unadjusted MUAC data
+#' Check the plausibility and acceptability of raw MUAC data
 #'
 #' @description
-#' Check the overall plausibility and acceptability of unadjusted MUAC data 
+#' Check the overall plausibility and acceptability of raw MUAC data 
 #' through a structured test suite encompassing checks for sampling and 
 #' measurement-related biases in the dataset. The test suite in this function 
 #' follows the recommendation made by Bilukha & Kianian (2023).

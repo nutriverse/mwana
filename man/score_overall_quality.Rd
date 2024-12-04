@@ -18,12 +18,12 @@ score_overall_quality(
 )
 }
 \arguments{
-\item{.for}{A choice between "wfhz" and "mfaz" for the basis on which the
-calculations should be made.}
+\item{.for}{A choice between "wfhz" and "mfaz" for the type of scorer to
+apply. Default is "wfhz".}
 }
 \value{
-A vector of class \code{numeric}, of length 1, for the overall
-data quality (acceptability) score.
+A \code{numeric} value for the overall data quality (acceptability)
+score.
 }
 \description{
 Get the overall acceptability score from the acceptability rate scores

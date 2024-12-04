@@ -2,9 +2,13 @@
 
 ## General updates
 
-* Updated documentation in README, data documentation, function documentation, and vignettes;
+* Updated documentation in README, data documentation function documentation, and vignettes to improve grammar, coherence, and consistency;
 
-* 
+* Enforced use of `::` to state external package dependencies;
+
+* Ensured that a code sequence started with a function statement rather than a data.frame piped into a function;
+
+* simplified specific code syntax
 
 <br/>
 

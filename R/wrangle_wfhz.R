@@ -2,33 +2,26 @@
 #' Wrangle weight-for-height data
 #'
 #' @description
-#' Calculate z-scores for weight-for-height (WFHZ) and identify outliers based on
-#' the SMART methodology.
+#' Calculate z-scores for weight-for-height (WFHZ) and identify outliers based 
+#' on the SMART methodology.
 #'
-#' @param df A data set object of class `data.frame` to wrangle data from.
+#' @param df A `data.frame` object to wrangle data from.
 #'
-#' @param sex A `numeric` or `character` vector of child's sex. Code values should
-#' only be 1 or "m" for males and 2 or "f" for females. Make sure sex values
-#' are coded in either of the aforementioned before to call the function. If input
-#' codes are neither of the above, the function will stop execution and
-#' return an error message with the type of mismatch.
+#' @param sex A `numeric` or `character` vector of child's sex. Code values 
+#' should only be 1 or "m" for males and 2 or "f" for females.
 #'
-#' @param .recode_sex Logical. Set to `TRUE` if the values for `sex` are not coded
-#' as 1 (for males) or 2 (for females). Otherwise, set to `FALSE` (default).
+#' @param .recode_sex Logical. Set to TRUE if the values for `sex` are not coded
+#' as 1 (for males) or 2 (for females). Otherwise, set to FALSE (default).
 #'
-#' @param weight A vector of class `double` of child's weight in kilograms. If the input
-#' is of a different class, the function will stop execution and return an error
-#' message indicating the type of mismatch.
+#' @param weight A vector of class `double` of child's weight in kilograms.
 #'
-#' @param height A vector of class `double` of child's height in centimeters. If the input
-#' is of a different class, the function will stop execution and return an error
-#' message indicating the type of mismatch.
+#' @param height A vector of class `double` of child's height in centimeters.
 #'
-#' @param .decimals The number of decimals places the z-scores should have.
+#' @param .decimals The number of decimal places to use for z-score outputs.
 #' Default is 3.
 #'
-#' @returns A data frame based on `df`. New variables named `wfhz` and
-#' `flag_wfhz`, of child's WFHZ and detected outliers, will be created.
+#' @returns A data frame based on `df` with new variables named `wfhz` for
+#' child's WFHZ and `flag_wfhz` for detected outliers added.
 #'
 #' @references
 #' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief*
@@ -61,21 +54,29 @@ mw_wrangle_wfhz <- function(df,
 
   ## Check if the class of vector weight is "double" ----
   if (!is.double(weight)) {
-    stop("`weight` must be of class 'double'; not ", shQuote(class(weight)), ". Please try again.")
+    stop(
+      "`weight` must be of class double not ", 
+      class(weight), ". Please try again."
+    )
   }
 
   ## Check if the class of vector height is "double" ----
   if (!is.double(height)) {
-    stop("`height` must be of class 'double'; not ", shQuote(class(height)), ". Please try again.")
+    stop(
+      "`height` must be of class double not ", 
+      class(height), ". Please try again."
+    )
   }
 
   ## Difuse sex variable for NSE----
-  sex <- eval_tidy(enquo(sex), df)
+  sex <- rlang::eval_tidy(enquo(sex), df)
 
   ## Enforce code value of `sex` ----
   x <- as.factor(as.character(sex))
   if (!(all(levels(x) %in% c("m", "f")) | all(levels(x) %in% c("1", "2")))) {
-    stop("Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively")
+    stop(
+      'Values for sex should either be "m" and "f" or 1 and 2 for male and female respectively'
+    )
   }
 
   ## Capture expressions to evaluate later ----
@@ -86,11 +87,11 @@ mw_wrangle_wfhz <- function(df,
   )
 
   ## Compute z-scores ----
-  df <- df |>
-    mutate(
-      sex = !!recode_sex
-    ) |>
-    addWGSR(
+  df <- dplyr::mutate(
+    .data = df,
+    sex = !!recode_sex
+  ) |>
+    zscorer::addWGSR(
       sex = "sex",
       firstPart = "weight",
       secondPart = "height",
@@ -98,9 +99,10 @@ mw_wrangle_wfhz <- function(df,
       digits = .decimals
     ) |>
     ## Identify and flag outliers ----
-    mutate(
+    dplyr::mutate(
       flag_wfhz = do.call(flag_outliers, list(.data$wfhz, .from = "zscores"))
     )
-  ## Return ---
-  as_tibble(df)
+  
+  ## Return df ---
+  tibble::as_tibble(df)
 }

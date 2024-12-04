@@ -7,16 +7,14 @@
 rate_overall_quality(q)
 }
 \arguments{
-\item{q}{A vector of class \code{numeric} or \code{integer} of data acceptability scores.
-If the class does not match the expected type, the function
-will stop execution and return an error message indicating the type of mismatch.}
+\item{q}{A \code{numeric} or \code{integer} vector of data acceptability scores.}
 }
 \value{
-A vector of class \code{factor} of the same length as \code{q}, providing an overall
+A vector of class \code{factor} with the same length as \code{q} of overall
 rate of acceptability of the data.
 }
 \description{
-Rate the overall data acceptability score into "Excellent", "Good", "Acceptable"
-or "Problematic".
+Rate the overall data acceptability score into "Excellent", "Good",
+"Acceptable" or "Problematic".
 }
 \keyword{internal}
