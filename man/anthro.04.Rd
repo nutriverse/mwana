@@ -3,18 +3,18 @@
 \docType{data}
 \name{anthro.04}
 \alias{anthro.04}
-\title{A sample data of a community-based sentinel site from an anonymized location}
+\title{A sample data from a community-based sentinel site in an anonymized location}
 \format{
 A tibble of 3,002 x 8.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
-   \emph{province} \tab location where data was collected \cr
+   \emph{province} \tab Survey location \cr
    \emph{cluster} \tab Primary sampling unit \cr
-   \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
-   \emph{age} \tab calculated age in months with two decimal places \cr
-   \emph{muac} \tab Mid-upper arm circumference (mm) \cr
-   \emph{edema} \tab Edema, "n" = no, "y" = yes \cr
+   \emph{sex} \tab Sex; "m" = boys, "f" = girls \cr
+   \emph{age} \tab Calculated age in months with two decimal places \cr
+   \emph{muac} \tab Mid-upper arm circumference in millimetres \cr
+   \emph{edema} \tab Edema; "n" = no edema, "y" = with edema \cr
    \emph{mfaz} \tab MUAC-for-age z-scores with 3 decimal places \cr
-   \emph{flag_mfaz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
+   \emph{flag_mfaz} \tab Flagged MUAC-for-age z-score value; 1 = flagged, 0 = not flagged \cr
 }
 }
 \source{
@@ -24,21 +24,21 @@ Anonymous
 anthro.04
 }
 \description{
-Data was generated through a community-based sentinel site conducted
-across three provinces. Each province's data set presents distinct
-data quality scenarios, requiring tailored prevalence analysis:
+Data was collected from community-based sentinel sites located across three
+provinces. Each provincial data set presents distinct data quality scenarios,
+requiring tailored prevalence analysis:
 \itemize{
-\item "Province 1" has MFAZ's standard deviation and age ratio test rating of
-acceptability falling within range;
-\item "Province 2" has age ratio rated as problematic but with an acceptable
-standard deviation of MFAZ;
-\item "Province 3" has both tests rated as problematic.
+\item \emph{Province 1} has a MUAC-for-age z-score standard deviation and age ratio
+test rating of acceptability falling within range
+\item \emph{Province 2} has age ratio rated as problematic but with an acceptable
+standard deviation of MUAC-for-age z-score
+\item \emph{"Province 3} has both tests rated as problematic
 }
 
-This sample data is useful to demonstrate the use of prevalence functions on
-a multiple-area survey data where variations in the rating of acceptability of the
-standard deviation exist, hence require different analyses approaches for each
-area to ensure accurate estimation.
+This sample data is useful to demonstrate the use of the prevalence functions
+on a multiple-domain survey data where variations in the rating of
+acceptability of the standard deviation exist, hence require different
+analytical approach for each domain to ensure accurate estimation.
 }
 \examples{
 anthro.04

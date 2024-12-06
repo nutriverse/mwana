@@ -58,8 +58,8 @@ testthat::test_that(
           .by = NULL
         ),
       regexp = paste0(
-        "`muac` should be of class numeric; not ",
-        shQuote(class(df$muacx)), ". Try again!"
+        "`muac` should be of class numeric not ",
+        class(df$muacx), ". Try again!"
       )
     )
     testthat::expect_error(
@@ -70,8 +70,8 @@ testthat::test_that(
           .by = NULL
         ),
       regexp = paste0(
-        "`edema` should be of class character; not ",
-        shQuote(class(df$edemax)), ". Try again!"
+        "`edema` should be of class character not ",
+        class(df$edemax), ". Try again!"
       )
     )
     testthat::expect_error(
@@ -81,7 +81,7 @@ testthat::test_that(
           edema = ede,
           .by = NULL
         ),
-      regexp = "Code values in `edema` must only be 'y' and 'n'. Try again!"
+      regexp = 'Code values in `edema` must only be "y" and "n". Try again!'
     )
   }
 )

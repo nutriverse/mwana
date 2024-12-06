@@ -7,19 +7,18 @@
 rate_std(sd, .of = c("zscores", "raw_muac"))
 }
 \arguments{
-\item{sd}{A vector of class \code{double}, containing values of the standard deviation
-from the data set. If the class does not match the expected type, the function
-will stop execution and return an error message indicating the type of mismatch.}
+\item{sd}{A vector of class \code{double} of standard deviation values from the
+data set.}
 
-\item{.of}{Specifies the data set where the rating should be done, with options:
+\item{.of}{Specifies the data set to which the rating should be done. Can be
 "wfhz", "mfaz", or "raw_muac".}
 }
 \value{
-A vector of class \code{factor} of the same length as input, for the
+A vector of class \code{factor} of the same length as \code{sd} for the
 acceptability rate.
 }
 \description{
-Rate the acceptability of the standard deviation of WFHZ, MFAZ, and raw MUAC data.
-Rating follows the SMART methodology criteria.
+Rate the acceptability of the standard deviation of WFHZ, MFAZ, and raw MUAC
+data. Rating follows the SMART methodology criteria.
 }
 \keyword{internal}

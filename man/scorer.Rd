@@ -14,20 +14,18 @@ score_agesexr_dps(x)
 score_skewkurt(x)
 }
 \arguments{
-\item{x}{A vector of class \code{character} containing the acceptability rate of
-a given test check. If the class does not match the expected type, the function
-will stop execution and return an error message indicating the type of mismatch.}
+\item{x}{A \code{character} vector of the acceptability rate of a given check.
+'}
 }
 \value{
-A vector of class \code{integer} of the same length as \code{x} for the
-acceptability score.
+An \code{integer} vector with the same length as \code{x} of the acceptability
+score.
 }
 \description{
-Attribute a score, also known as penalty point, for a given rate of acceptability
-of the standard deviation, proportion of flagged records, age and sex ratio,
-skewness, kurtosis and digit preference score check results.
-
-The scoring criteria and thresholds follows the standards in the SMART
+Attribute a score, also known as \emph{penalty point}, for a given rate of
+acceptability of the standard deviation, proportion of flagged records,
+age and sex ratio, skewness, kurtosis and digit preference score check
+results. The scoring criteria and thresholds follows the standards in the SMART
 plausibility check.
 }
 \references{

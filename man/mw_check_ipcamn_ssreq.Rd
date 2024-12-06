@@ -2,35 +2,40 @@
 % Please edit documentation in R/ipc_amn_check.R
 \name{mw_check_ipcamn_ssreq}
 \alias{mw_check_ipcamn_ssreq}
-\title{Check whether IPC Acute Malnutrition (IPC AMN) sample size requirements were met}
+\title{Check whether sample size requirements for IPC Acute Malnutrition (IPC AMN)
+analysis are met}
 \usage{
 mw_check_ipcamn_ssreq(df, cluster, .source = c("survey", "screening", "ssite"))
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to check.}
+\item{df}{A \code{data.frame} object to check.}
 
-\item{cluster}{A vector of class \code{integer} or \code{character} of unique cluster or
-screening or sentinel site IDs. If a \code{character} vector, ensure that names are
-correct and each name represents one location for accurate counts. If the class
-does not match the above expected type, the function will stop execution and
-return an error message indicating the type of mismatch.}
+\item{cluster}{A vector of class \code{integer} or \code{character} of unique cluster
+or screening or sentinel site identifiers. If a \code{character} vector, ensure
+that each unique name represents one location. If \code{cluster} is not of class
+\code{integer} or \code{character}, an error message will be returned indicating the
+type of mismatch.}
 
 \item{.source}{The source of evidence. A choice between "survey" for
 representative survey data at the area of analysis; "screening" for
-screening data; "ssite" for community-based sentinel site data.}
+screening data; "ssite" for community-based sentinel site data. Default value
+is "survey".}
 }
 \value{
-A summary table of class \code{data.frame}, of length 3 and width 1, for
-the check results. \code{n_clusters} is for the total number of unique clusters or
-screening or site IDs; \code{n_obs} for the correspondent total number of children
-in the data set; and \code{meet_ipc} for whether the IPC AMN requirements were met.
+A single row summary \code{tibble} with 3 columns containing
+check results for:
+\itemize{
+\item \code{n_clusters} - the total number of unique clusters or
+screening or site identifiers;
+\item \code{n_obs} - the corresponding total number of children in the data set; and,
+\item \code{meet_ipc} - whether the IPC AMN requirements were met.
+}
 }
 \description{
-Evidence on the prevalence of acute malnutrition used in the IPC AMN
+Data for estimating the prevalence of acute malnutrition used in the IPC AMN
 can come from different sources: surveys, screenings or community-based
-surveillance system. The IPC set minimum sample size requirements
-for each source. This function helps in verifying whether those requirements
-were met or not depending on the source.
+surveillance systems. The IPC has set minimum sample size requirements for
+each  source. This function verifies whether these requirements are met.
 }
 \examples{
 mw_check_ipcamn_ssreq(

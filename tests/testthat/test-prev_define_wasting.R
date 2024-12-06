@@ -277,7 +277,7 @@ testthat::test_that(
         .by = "zscores"
       ),
       regexp = paste0(
-        "`zscores` must be of class 'double'; not ", shQuote(class(data$x)),
+        "`zscores` must be of class double not ", class(data$x),
         ". Please try again."
       )
     )
@@ -290,8 +290,8 @@ testthat::test_that(
         .by = "zscores"
       ),
       regexp = paste0(
-        "`edema` must be of class 'character'; not ",
-        shQuote(class(data$ed)), ". Please try again."
+        "`edema` must be of class character not ",
+        class(data$ed), ". Please try again."
       )
     )
   }
@@ -329,8 +329,8 @@ testthat::test_that(
         .by = "muac"
       ),
       regexp = paste0(
-        "`muac` must be of class 'numeric' or 'integer'; not ",
-        shQuote(class(data$m)), ". Please try again."
+        "`muac` must be of class numeric or integer not ",
+        class(data$m), ". Please try again."
       )
     )
     testthat::expect_error(
@@ -341,8 +341,8 @@ testthat::test_that(
         .by = "muac"
       ),
       regexp = paste0(
-        "`edema` must be of class 'character'; not ",
-        shQuote(class(data$ed)), ". Please try again."
+        "`edema` must be of class character not ",
+        class(data$ed), ". Please try again."
       )
     )
   }
@@ -383,7 +383,7 @@ testthat::test_that(
         .by = "combined"
       ),
       regexp = paste0(
-        "`zscores` must be of class 'double'; not ", shQuote(class(y$zs)),
+        "`zscores` must be of class double not ", class(y$zs),
         ". Please try again."
       )
     )
@@ -396,8 +396,8 @@ testthat::test_that(
         .by = "combined"
       ),
       regexp = paste0(
-        "`muac` must be of class 'numeric' or 'integer'; not ",
-        shQuote(class(y$m)), ". Please try again."
+        "`muac` must be of class numeric or integer not ",
+        class(y$m), ". Please try again."
       )
     )
     testthat::expect_error(
@@ -409,7 +409,7 @@ testthat::test_that(
         .by = "combined"
       ),
       regexp = paste0(
-        "Values in `edema` should either be 'y' or 'n'. Please try again."
+        'Values in `edema` should either be "y" or "n". Please try again.'
       )
     )
   }

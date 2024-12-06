@@ -27,15 +27,15 @@ testthat::test_that(
     testthat::expect_error(
       mw_wrangle_wfhz(df, sex, w, height, TRUE),
       regexp = paste0(
-        "`weight` must be of class 'double'; not ",
-        shQuote(class(df[["w"]])), ". Please try again."
+        "`weight` must be of class double not ",
+        class(df[["w"]]), ". Please try again."
       )
     )
     testthat::expect_error(
       mw_wrangle_wfhz(df, sex, weight, h, TRUE),
       regexp = paste0(
-        "`height` must be of class 'double'; not ",
-        shQuote(class(df[["h"]])), ". Please try again."
+        "`height` must be of class double not ",
+        class(df[["h"]]), ". Please try again."
       )
     )
   }
@@ -62,7 +62,7 @@ testthat::test_that(
           height = ht,
           .recode_sex = TRUE
         ),
-      regexp = "Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively"
+      regexp = 'Values for sex should either be "m" and "f" or 1 and 2 for male and female respectively'
     )
   }
 )
@@ -88,7 +88,7 @@ testthat::test_that(
           height = ht,
           .recode_sex = TRUE
         ),
-      regexp = "Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively"
+      regexp = 'Values for sex should either be "m" and "f" or 1 and 2 for male and female respectively'
     )
   }
 )

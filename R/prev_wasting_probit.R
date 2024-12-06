@@ -10,13 +10,21 @@ apply_probit_method <- function(x, .status = c("gam", "sam")) {
   .status <- match.arg(.status)
 
   ## Calculate mean of zscores ----
-  mean <- mean(remove_flags(x, "zscores"), na.rm = TRUE)
+  mean_zscore <- mean(remove_flags(x, "zscores"), na.rm = TRUE)
 
   ## Estimate prevalence based on probit method, with a SD = 1 ----
   switch(
     .status,
-    "gam" = {pnorm(q = -2, mean = mean, sd = 1, lower.tail = TRUE, log.p = FALSE)},
-    "sam" = {pnorm(q = -3, mean = mean, sd = 1, lower.tail = TRUE, log.p = FALSE)}
+    "gam" = {
+      pnorm(
+        q = -2, mean = mean_zscore, sd = 1, lower.tail = TRUE, log.p = FALSE
+      )
+    },
+    "sam" = {
+      pnorm(
+        q = -3, mean = mean_zscore, sd = 1, lower.tail = TRUE, log.p = FALSE
+      )
+    }
   )
 }
 
@@ -31,10 +39,10 @@ estimate_probit_prevalence <- function(df,
                                       .by = NULL,
                                       .for = c("wfhz", "mfaz")) {
 
-  ## Difuse argument ----
+  ## Defuse argument ----
   .by <- enquo(.by)
 
-  ## Enfornce options in `.for` ----
+  ## Enforce options in `.for` ----
   .for <- match.arg(.for)
 
   ## Calculate probit-based prevalence ----

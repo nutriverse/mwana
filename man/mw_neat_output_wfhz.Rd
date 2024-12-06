@@ -2,24 +2,21 @@
 % Please edit documentation in R/plausibility_check_wfhz.R
 \name{mw_neat_output_wfhz}
 \alias{mw_neat_output_wfhz}
-\title{Clean and format the output table returned from the WFHZ plausibility check
-for improved clarity and readability}
+\title{Clean and format the output tibble returned from the WFHZ plausibility check}
 \usage{
 mw_neat_output_wfhz(df)
 }
 \arguments{
-\item{df}{An object of class \code{data.frame} returned by this package's
-plausibility checker for WFHZ data, containing the summarized results to be
-formatted.}
+\item{df}{An \code{tibble} object returned by the \code{\link[=mw_plausibility_check_wfhz]{mw_plausibility_check_wfhz()}}
+containing the summarized results to be formatted.}
 }
 \value{
-A \code{data.frame} object of the same length and width as \code{df}, with column names and
+A \code{tibble} object of the same length and width as \code{df}, with column names and
 values formatted for clarity and readability.
 }
 \description{
-Clean and format the output table returned from the WFHZ plausibility check
-for improved clarity and readability. It converts scientific notations to standard
-notations, round values and rename columns to meaningful names.
+Converts scientific notations to standard notations, rounds off values, and
+renames columns to meaningful names.
 }
 \examples{
 ## First wrangle age data ----

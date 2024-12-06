@@ -7,7 +7,7 @@ knitr:
     fig.path: "man/figures/README-"
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.qmd. Please edit that file -->
 ```{r}
 #| label: load_library
 #| include: false
@@ -15,118 +15,33 @@ knitr:
 library(mwana)
 ```
 
-# `mwana`: An efficient workflow for plausibility checks and prevalence analysis of wasting in R <img src="man/figures/logo.png" align="right" width="200px" />
+# mwana: An efficient workflow for plausibility checks and prevalence analysis of wasting in R <img src="man/figures/logo.png" align="right" width="200px" />
 
 <!-- badges: start -->
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![pages-build-deployment](https://github.com/nutriverse/mwana/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/pages/pages-build-deployment)
 [![R-CMD-check](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/nutriverse/mwana/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/gh/nutriverse/mwana/graph/badge.svg?token=kUUp1WOlSi)](https://codecov.io/gh/nutriverse/mwana)
-[![CodeFactor](https://www.codefactor.io/repository/github/nutriverse/mwana/badge)](https://www.codefactor.io/repository/github/nutriverse/mwana)
 [![DOI](https://zenodo.org/badge/867609177.svg)](https://zenodo.org/badge/latestdoi/867609177)
 <!-- badges: end -->
 
-Child anthropometric assessments are the cornerstones of child nutrition and food security surveillance around the world. Ensuring the quality of data from these assessments is paramount to obtaining accurate child under nutrition prevalence estimates. Additionally, the timeliness of reporting is, as well, critical to allowing timely situation analyses and responses to tackle the needs of the affected population.  
+Child anthropometric assessments are the cornerstones of child nutrition and food security surveillance around the world. Ensuring the quality of data from these assessments is paramount to obtaining accurate child under nutrition prevalence estimates. The timeliness of reporting is, as well, critical to allowing timely situation analyses and responses to tackle the needs of the affected population.  
 
-`mwana`, term for *child* in *Elómwè*, a local language spoken in the central-northern regions of Mozambique, with a similar meaning across other Bantu languages, such as Swahili, spoken in many parts of Africa, is a package that streamlines data quality checks and wasting prevalence estimation from anthropometric data of children aged 6 to 59 months old through a comprehensive implementation of the SMART Methodology guidelines in R.
+The `mwana` package streamlines data quality checks of and acute undernutrition prevalence estimation from anthropometric data of children aged 6 to 59 months old. This is made possible through the many years of leadership and development work in nutrition surveys of the [Standardized Monitoring and Assessment of Relief and Transitions (SMART) initiative](https://smartmethodology.org) through its [nutrition survey guidance](https://smartmethodology.org/survey-planning-tools/smart-methodology/) which `mwana` builds upon as a development framework. The main functionalities of the `mwana` package on acute undernutrition data quality checks are mainly convenience wrappers to functions in the [`nipnTK`](https://nutriverse.io/nipnTK) package.
+
+The term ***mwana*** means child in *Elómwè*, a local language spoken in the central-northern regions of Mozambique where the author hails from. It also has a similar meaning across other Bantu languages, such as *Swahili*, spoken in many parts of Africa.
 
 ## Motivation
 
-`mwana` was borne out of the author’s own experience of having to work with multiple child anthropometric data sets to conduct data quality appraisal and prevalence estimation as part of the analysis Quality Assurance Team of the Integrated Phase Classification (IPC) Global Support Unit. The current standard child anthropometric data appraisal workflow is extremely cumbersome, requiring significant time and effort utilizing different software tools - SPSS, Excel, Emergency Nutrition Assessment or ENA software - for each step of the process for a single data set. This process is repeated for every data set needing to be processed and often needing to be implemented in a relatively short period of time. This manual and repetitive process, by its nature, is extremely error-prone.  
+`mwana` was borne out of the author’s own experience of having to work with multiple child anthropometric data sets to conduct data quality appraisal and prevalence estimation as part of the ***Quality Assurance Team*** of the [Integrated Phase Classification (IPC)](https://www.ipcinfo.org/) Global Support Unit. The current standard child anthropometric data appraisal workflow is extremely cumbersome, requiring significant time and effort utilizing different software tools - SPSS, Microsoft Excel, [SMART Emergency Nutrition Assessment (ENA) software](https://smartmethodology.org/survey-planning-tools/smart-emergency-nutrition-assessment/) - for each step of the process for a single dataset. This process is repeated for every data set needing to be processed and often needing to be implemented in a relatively short period of time. This manual and repetitive process, by its nature, is extremely error-prone.  
 
-`mwana` simplifies this cumbersome workflow into a programmable process particularly when handling multiple-area data set.
-
-:::{.callout-note}
-`mwana` was made possible thanks to the state-of-the-art work in nutrition survey guidance led by the [SMART initiative](https://smartmethodology.org). Under the hood, `mwana` bundles the SMART Methodology guidance, for both survey and non survey data, through the use of the National Information Platforms for Nutrition Anthropometric Data Toolkit (nipnTK) functionalities in `R` to build its handy function around plausibility checks and wasting prevalence estimation. Click [here](https://github.com/nutriverse/nipnTK) to learn more about the {`nipnTK`} package. 
-:::
-
-## What does `mwana` do?
-
-It automates plausibility checks, prevalence analyses, and summary outputs, providing particular advantages when handling data sets with multiple areas.
-
-### Plausibility checks. 
-
-  + `mwana` performs plausibility checks on weight-for-height z-score (WFHZ) data by mimicking the SMART plausibility checkers in ENA for SMART software, their scoring and classification criterion. Read guide [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-wfhz-data).
-
-  + It performs, as well, plausibility checks on MUAC data. For this, `mwana` integrates recent advances in using muac-for-age z-score (MFAZ) for checking the plausibility and the acceptability of MUAC data. In this way, when the variable age is available: `mwana` performs plausibility checks similar to those in WFHZ, with a few differences in the scoring criteria for the percent of flagged data. Otherwise, when the variables age is missing, a similar test suit used in the current version of ENA is performed. Read guide [here](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-mfaz-data).
-
-#### A tidy workflow for plausibility check using `mwana`
-```{r}
-#| label: workflow
-#| echo: false
-#| warning: false
-#| fig-align: center
-
-DiagrammeR::grViz("
-digraph mwana {
-  # Default node attributes
-  node [style = filled, color = lightblue, fontname = Helvetica, fontsize = 12];
-
-  # Nodes
-  node1 [label = 'Start', shape = ellipse, color = PaleGreen];
-  node2 [label = 'Anthro data', shape = parallelogram];
-  node3 [label = 'Indicator', shape = diamond, color = lightgoldenrod];
-  node4 [label = 'WFHZ', shape = note];
-  node5 [label = 'MFAZ', shape = note];
-  node6 [label = 'Raw MUAC', shape = note];
-  node7 [label = 'Wrangle age', shape = box];
-  node8 [label = 'Wrangle anthro data', shape = box];
-  node9 [label = 'Plausibility check', shape = box];
-  node10 [label = 'End of workflow', shape = oval, color = salmon];
-
-  ## Data process ----
-  node1 -> node2 [color = gray, arrowhead = vee];
-  node2 -> node3 [color = gray, arrowhead = vee];
-  node3 -> node4 [color = gray, arrowhead = vee];
-  
-  ## WFHZ flow ----
-  node4 -> node7 [color = gray, arrowhead = vee];
-  node7 -> node8 [color = gray, arrowhead = vee];
-  node8 -> node9 [color = gray, arrowhead = vee];
-  node9 -> node10 [color = gray, arrowhead = vee];
-  
-   ## MFAZ flow ----
-  node3 -> node5 [color = gray, arrowhead = vee];
-  node5 -> node7 [color = gray, arrowhead = vee];
-  node7 -> node8 [color = gray, arrowhead = vee];
-  node8 -> node9 [color = gray, arrowhead = vee];
-  node9 -> node10 [color = gray, arrowhead = vee];
-  
-  ## Absolute MUAC flow ----
-  node3 -> node6 [color = gray, arrowhead = vee];
-  node6 -> node8 [color = gray, arrowhead = vee];
-  node8 -> node9 [color = gray, arrowhead = vee];
-  node9 -> node10 [color = gray, arrowhead = vee];
-}
-", width = 400, height = 450)
-```
-
-### Prevalence estimation
-
-`mwana` prevalence estimators were built to take decisions on the appropriate analysis procedure to follow based on the quality of the data, as per the SMART rules. They return output tables with summarized results based on the data quality test results. Fundamentally, the functions loop over the survey areas in the data set whilst doing quality checks and taking decisions on the appropriate prevalence analysis path that best fits the data.  
-
-`mwana` estimates wasting prevalence on the basis of: 
-
-  + WFHZ and/or edema. Read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-wfhz) 
-  + Raw MUAC values and/or edema. When variable age is available, detection and removal of outliers is based on MFAZ, otherwise based on the raw MUAC values. This is simply to exclude outliers; the actual prevalence estimation is based on the raw MUAC values. Read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-muac).
-  + MFAZ and/or edema. Read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz).
-  + Combined prevalence. A concept of combined flags is used to streamline the flags removed in WFHZ and those in MUAC. Read the guide [here](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
-
-In the context of IPC Acute Malnutrition (IPC AMN) analysis workflow, `mwana` provides a handy function for checking whether the minimum sample size requirements of a given area were met, on the basis of the methodology used to collect the data, be it a survey, a screening or a sentinel site data. Read the guide [here](https://nutriverse.io/mwana/articles/ipc_amn_check.html).
-
-:::{.callout-tip}
-If you are undertaking a research and you want to wrangle your data before using it in your statistical models, `mwana` is a great helper.
-:::
-
-:::{.callout-warning}
-Please note that `mwana` is still highly experimental and is undergoing a lot of development. Hence, any functionalities described above have a high likelihood of changing interface or approach as we aim for a stable working version.
-:::
+`mwana` provides functions that can simplify this cumbersome workflow into a process that can be programmatically designed particularly when handling multiple-area datasets. Whilst developed with the analytic and reporting needs of the IPC Global Support Unit in mind, `mwana` can be used generally for anthropometric datasets of children for the purpose of assessing data quality and for estimating prevalence of acute undernutrition in children 6-59 months old.
 
 ## Installation
 
-`mwana` is not yet on CRAN but can be installed from the [nutriverse R Universe](https://nutriverse.r-universe.dev) as follows:
+`mwana` is not yet on [CRAN](https::cran.r-project.org) but can be installed from the [nutriverse R Universe](https://nutriverse.r-universe.dev) as follows:
 
 ```{r}
 #| label: installation
@@ -138,26 +53,67 @@ install.packages(
 )
 ```
 
-Then load to in memory with
+then loaded into the current environment via
+
 ```{r}
-#| label: example
+#| label: load-package
+#| eval: false
 
 library(mwana)
 ```
 
-# Citation
+## What does `mwana` do?
 
-If you were enticed to use `mwana` package and found it useful, please cite using the suggested citation provided by a call to `citation` function as follows:
+::: {.callout-warning}
+
+Please note that `mwana` is still experimental but is already in late stage alpha version testing nearing a stable release with development focusing on backwards compatible patch or minor changes. Current functionalities described below may still change in the future but are likely to be compatible with the current interface or approach.
+
+:::
+
+<img src="man/figures/workflow.png" width="360px" height="900px" align="left" />Currently, `mwana` has the following functionalities that support the creation of a programmatic workflow illustrated in the figure to the left.
+
+### 1. Data plausibility checks of acute undernutrition anthropometric data of children 6-59 months old
+
+`mwana` has functions for performing data plausibility checks on weight-for-height z-score (WFHZ) data based on the SMART plausibility checkers, data quality scoring, and data quality classification implemented by the ENA for SMART software, their scoring and classification criterion. To learn more about these WFHZ plausibility checks, the functions that implement them, and how to use these function, read this [guide](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-wfhz-data).
+
+`mwana` also has functions for performing data plausibility checks on mid-upper arm circumference (MUAC) data based on recent research and recommendations on MUAC-for-age z-score (MFAZ) and its utility for data plausibility checks of MUAC data. To learn more about these MUAC plausibility checks, the functions that implement them, and how to use these functions, read this [guide](https://nutriverse.io/mwana/articles/plausibility.html#plausibility-check-on-mfaz-data).
+
+### 2. Prevalence estimation of acute undernutrition
+
+`mwana` has prevalence estimators developed to take into account SMART guidelines on estimation approach to use based on an assessment of data quality. These functions accept input datasets that include multiple survey domains and return summary output tables with prevalence estimates for each survey domain.
+
+* To read about the functions and the process for estimating acute undernutrition prevalence from WFHZ and/or edema data, read this [guide](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-wfhz).
+
+* To read about the functions and the process for estimating acute undernutrition prevalence from MUAC data, read this [guide](https://nutriverse.io/mwana/articles/prevalence.html#sec-prevalence-muac) on using raw MUAC and/or edema data and this [guide](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-prevalence-of-wasting-based-on-mfaz) on using MFAZ and/or edema data.
+
+* To read about functions and the process for estimating combined acute undernutrition prevalence, read this [guide](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
+
+### 3. IPC sample size checker
+
+`mwana` provides a handy function for checking whether a specific anthropometric dataset has met the minimum sample size requirements for each of the dataset domains based on IPC requirements. The function assesses this sample size requirement based on whether the dataset was collected through a survey, a screening exercise, or a sentinel site surveillance. To learn more about this function, read this [guide](https://nutriverse.io/mwana/articles/ipc_amn_check.html).
+
+### 4. Reporting of data plausibility checks and prevalence estimation summary outputs
+
+`mwana` has helper functions that process summary output tables and turn them into presentation and/or report ready tables. 
+
+::: {.callout-tip}
+
+If you are undertaking research using anthropometric data of children 6-59 months old with a focus on acute undernutrition, `mwana` has functions to wrangle ***weight***, ***height***, ***age***, ***WFHZ***, ***MUAC***, and ***MFAZ*** data before using it in your models.
+
+:::
+
+## Citation
+
+If you use `mwana` package in your work, please cite using the suggested citation provided by a call to `citation()` function as follows:
 
 ```{r}
 #| label: citation
-#| eval: true
 
 citation("mwana")
 ```
 
-# Community guidelines  
+## Community guidelines  
 
 Feedback, bug reports and feature requests are welcome; file issues or seek support [here](https://github.com/nutriverse/mwana/issues). If you would like to contribute to the package, please see our [contributing guidelines](https://nutriverse.io/mwana/CONTRIBUTING.html).  
 
-This project is releases with [Contributor Code of Conduct](https://nutriverse.io/mwana/CODE_OF_CONDUCT.html). By participating in this project you agree to abide by its terms.
+This project is released with a [Contributor Code of Conduct](https://nutriverse.io/mwana/CODE_OF_CONDUCT.html). By participating in this project you agree to abide by its terms.

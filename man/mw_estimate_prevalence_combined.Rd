@@ -7,54 +7,48 @@
 mw_estimate_prevalence_combined(df, wt = NULL, edema = NULL, .by = NULL)
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to use. This must have been
-wrangled using this package's wrangling functions for both WFHZ and MUAC data
-sequentially. The order does not matter. Note that MUAC values should be
-converted to millimeters after using the MUAC wrangler. If this is not done,
-the function will stop execution and return an error message. Moreover, the
-function uses a variable called \code{cluster} where the primary sampling unit IDs
-are stored. Make sure to rename your cluster ID variable to \code{cluster}, otherwise
-the function will error and terminate the execution.}
+\item{df}{A \code{tibble} object produced by sequential application of the
+\code{\link[=mw_wrangle_wfhz]{mw_wrangle_wfhz()}} and \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}}. Note that MUAC values in \code{df}
+must be in millimeters unit after using \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}}. Also, \code{df}
+must have a variable called \code{cluster} which contains the primary sampling
+unit identifiers.}
 
-\item{wt}{A vector of class \code{double} of the final survey weights. Default is
-\code{NULL} assuming a self-weighted survey, as in the ENA for SMART software;
-otherwise a weighted analysis is computed.}
+\item{wt}{A vector of class \code{double} of the survey sampling weights. Default
+is NULL which assumes a self-weighted survey as is the case for a survey
+sample selected proportional to population size (i.e., SMART survey sample).
+Otherwise, a weighted analysis is implemented.}
 
-\item{edema}{A vector of class \code{character} of edema. Code will be
-"y" for presence and "n" for absence of bilateral edema. Default is \code{NULL}.}
+\item{edema}{A \code{character} vector for presence of nutritional edema coded as
+"y" for presence of nutritional edema and "n" for absence of nutritional
+edema. Default is NULL.}
 
-\item{.by}{A vector of class \code{character} or \code{numeric} of the geographical areas
-or respective IDs for where the data was collected and for which the analysis
-should be summarised at.}
+\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
+or identifiers for where the data was collected and for which the analysis
+should be summarised for.}
 }
 \value{
-A summarised table of class \code{data.frame} for the descriptive
-statistics about combined wasting.
+A summary \code{tibble} for the descriptive statistics about combined
+wasting.
 }
 \description{
 Estimate the prevalence of wasting based on the combined case-definition of
-weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows users to
-get the prevalence estimates in accordance with the complex sample
-design properties; this includes applying survey weights when needed or applicable.
-Before estimating, the function evaluates the quality of data by calculating
-and rating the standard deviation of WFHZ and MFAZ, as well as the p-value of
-the age ratio test.
-Prevalence will be calculated only when the rating of all test is as not
-problematic concurrently. If either of them is problematic, it cancels out
-the analysis and \code{NA}s get thrown.
-
-Outliers are detected in both WFHZ and in MUAC data set (through z-scores)
-based on SMART flags get excluded prior being piped into the actual prevalence
-analysis workflow.
+weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows
+users to estimate prevalence in accordance with complex sample design
+properties such as accounting for survey sample weights when needed or
+applicable. The quality of the data is first evaluated by calculating and
+rating the standard deviation of WFHZ and MFAZ and the p-value of the age
+ratio test. Prevalence is calculated only when all tests are rated as not
+problematic. If any of the tests rate as problematic, no estimation is done
+and an NA value is returned. Outliers are detected in both WFHZ and MFAZ
+datasets based on SMART flagging criteria. Identified outliers are then
+excluded before prevalence estimation is performed.
 }
 \details{
-A concept of "combined flags" is introduced in this function. It consists of
-defining as flag any observation that is flagged in either \code{flag_wfhz} or
-\code{flag_mfaz} vectors. A new column \code{cflags} for combined flags is created and
-added to \code{df}. This ensures that all flagged observations from both WFHZ
-and MFAZ data are excluded from the prevalence analysis.
-
-\emph{A glimpse on how \code{cflags} are defined:}\tabular{ccc}{
+A concept of \emph{combined flags} is introduced in this function. Any observation
+that is flagged for either \code{flag_wfhz} or \code{flag_mfaz} is flagged under a new
+variable named \code{cflags} added to \code{df}. This ensures that all flagged
+observations from both WFHZ and MFAZ data are excluded from the prevalence
+analysis.\tabular{ccc}{
    \strong{flag_wfhz} \tab \strong{flag_mfaz} \tab \strong{cflags} \cr
    1 \tab 0 \tab 1 \cr
    0 \tab 1 \tab 1 \cr

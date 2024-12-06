@@ -7,12 +7,10 @@
 rate_agesex_ratio(p)
 }
 \arguments{
-\item{p}{A vector of class \code{double} of the age or sex ratio test p-values.
-If the class does not match the expected type, the function
-will stop execution and return an error message indicating the type of mismatch.}
+\item{p}{A vector of class \code{double} of the age or sex ratio test p-values.}
 }
 \value{
-A vector of class \code{character} of the same length as \code{p} for the
+A \code{character} vector with the same length as \code{p} for the
 acceptability rate.
 }
 \description{

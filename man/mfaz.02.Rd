@@ -3,16 +3,16 @@
 \docType{data}
 \name{mfaz.02}
 \alias{mfaz.02}
-\title{A sample SMART survey data with MUAC}
+\title{A sample SMART survey data with mid-upper arm circumference measurements}
 \format{
 A tibble with 303 rows and 7 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
    \emph{cluster} \tab Primary sampling unit \cr
-   \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
-   \emph{age} \tab calculated age in months with two decimal places \cr
-   \emph{edema} \tab Edema, "n" = no, "y" = yes \cr
+   \emph{sex} \tab Sex; "m" = boys, "f" = girls \cr
+   \emph{age} \tab Calculated age in months with two decimal places \cr
+   \emph{edema} \tab Edema, "n" = no edema, "y" = with edema \cr
    \emph{mfaz} \tab MUAC-for-age z-scores with 3 decimal places \cr
-   \emph{flag_mfaz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
+   \emph{flag_mfaz} \tab Flagged MUAC-for-age z-score value. 1 = flagged, 0 = not flagged \cr
 }
 }
 \source{
@@ -22,7 +22,7 @@ Anonymous
 mfaz.02
 }
 \description{
-A sample SMART survey data with MUAC
+A sample SMART survey data with mid-upper arm circumference measurements
 }
 \examples{
 mfaz.02

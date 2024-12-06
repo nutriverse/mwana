@@ -13,8 +13,11 @@ vignette: >
 
 ```{r}
 #| label: load_library
+#| echo: false
+#| message: false
 
 library(mwana)
+library(dplyr)
 ```
 
 ## Introduction 
@@ -386,8 +389,6 @@ This will return:
 #| echo: false
 #| message: false
 
-library(dplyr)
-
 anthro.02 |>
   mw_wrangle_age(
     age = age,
@@ -506,8 +507,6 @@ This is to get the `wfhz` and `flag_wfhz` the `mfaz` and `flag_mfaz` added to th
 #| echo: false
 #| message: false
 
-library(dplyr)
-
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -603,8 +602,6 @@ We get this:
 ```{r}
 #| label: view_cwasting
 #| echo: false
-
-library(dplyr)
 
 anthro.01 |>
   mw_wrangle_age(

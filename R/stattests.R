@@ -1,28 +1,28 @@
 #'
 #' Test for statistical difference between the proportion of children aged 24 to
-#'  59 months old over those aged 6 to 23 months old
+#' 59 months old over those aged 6 to 23 months old
 #'
 #' @description
 #' Calculate the observed age ratio of children aged 24 to 59 months old over
-#' those aged 6 to 23 months old and test if there is a statistical difference
-#' between the observed and the expected.
+#' those aged 6 to 23 months old and test if there is a statistically 
+#' significant difference between the observed and the expected.
 #'
-#' @param age A vector of class `numeric` of child's age in months. If different
-#' than expected, the function will stop execution and return an error message
-#' indicating the type of mismatch.
+#' @param age A `numeric` vector of child's age in months.
 #'
 #' @param .expectedP The expected proportion of children aged 24 to 59 months
-#' old over those aged 6 to 23 months old. This is estimated to be 0.66.
+#' old over those aged 6 to 23 months old. By default, this is expected to be 
+#' 0.66.
 #'
-#' @returns A vector of class `list` of three statistics: `p` for p-value of the
-#' statistical difference between the observed and the expected proportion of
-#' children aged 24 to 59 months old over those aged 6 to 23 months old;
-#'  `observedR` and `observedP` for the observed ratio and proportion respectively.
+#' @returns A `list` object with three elements: `p` for p-value of the
+#' difference between the observed and the expected proportion of children aged 
+#' 24 to 59 months old over those aged 6 to 23 months old, `observedR` for the 
+#' observed ratio, and `observedP` for the observed proportion.
 #'
 #' @details
-#' This function should be used specifically when assessing the quality of MUAC data.
-#' For age ratio test of children aged 6 to 29 months old over 30 to 59 months old, as
-#' performed in the SMART plausibility check, use [nipnTK::ageRatioTest()] instead.
+#' This function should be used specifically when assessing the quality of MUAC 
+#' data. For age ratio test of children aged 6 to 29 months old over 30 to 59 
+#' months old, as performed in the SMART plausibility check, use 
+#' [nipnTK::ageRatioTest()] instead.
 #'
 #' @references
 #' SMART Initiative. *Updated MUAC data collection tool*. Available at:
@@ -39,7 +39,10 @@
 mw_stattest_ageratio <- function(age, .expectedP = 0.66) {
   ## Enforce the class of `age` ----
   if (!is.numeric(age)) {
-    stop("`age` must be of class 'numeric'; not ", shQuote(class(age)), ". Please try again.")
+    stop(
+      "`age` must be of class numeric not ", class(age), 
+      ". Please try again."
+    )
   }
 
   ## Calculate observed proportion and ratio ----
@@ -51,7 +54,7 @@ mw_stattest_ageratio <- function(age, .expectedP = 0.66) {
   prop <- sum_o24 / total
 
   ## Stats test with Yates continuity correction set to false ----
-  test <- prop.test(sum_o24, total, p = .expectedP, correct = FALSE)
+  test <- stats::prop.test(sum_o24, total, p = .expectedP, correct = FALSE)
 
   ## Return ----
   list(
