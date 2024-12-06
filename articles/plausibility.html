@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mwana</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/plausibility.html">Running plausibility checks</a></li>
     <li><a class="dropdown-item" href="../articles/prevalence.html">Estimating the prevalence of wasting</a></li>
-    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">Checking if IPC Acute Malnutrition sample size requirements were met</a></li>
+    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">IPC sample size requirements</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -64,12 +64,12 @@
 </nav><div class="container template-quarto">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Running plausibility checks</h1>
+      <img src="../logo.png" class="logo" alt=""><h1></h1>
 
       <p class="author">Tomás Zaba</p>
 
 
-      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/main/vignettes/plausibility.qmd" class="external-link"><code>vignettes/plausibility.qmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/dev/vignettes/plausibility.qmd" class="external-link"><code>vignettes/plausibility.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
     </div>
 
@@ -78,11 +78,7 @@
 
 
 
-    <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nutriverse/mwana" class="external-link">mwana</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<section class="section level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+    <header id="title-block-header" class="quarto-title-block"><h1 class="title">Running plausibility checks</h1></header><section class="section level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>Plausibility check is a tool that evaluates the overall quality and acceptability of anthropometric data to ensure its suitability for informing decision-making process.</p>
 <p><code>mwana</code> provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or raw MUAC values.</p>
@@ -91,7 +87,7 @@
 <section class="level2"><h3 id="plausibility-check-of-wfhz-data">Plausibility check of WFHZ data<a class="anchor" aria-label="anchor" href="#plausibility-check-of-wfhz-data"></a>
 </h3>
 <p>We check the plausibility of WFHZ data by calling the <code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> function. Before doing that, we need ensure the data is in the right “shape and format” that is accepted and understood by the function. Don’t worry, you will soon learn how to get there. But first, let’s take a moment to walk you through some key features about this function.</p>
-<p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> is a replica of the plausibility check in ENA for SMART software of the SMART Methodology <span class="citation" data-cites="smart2017">(<a href="#ref-smart2017" role="doc-biblioref">SMART Initiative, 2017</a>)</span>. Under the hood, it runs the same test suite you already know from SMART; it also applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind:</p>
+<p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> is a replica of the plausibility check in ENA for SMART software of the SMART Methodology <span class="citation" data-cites="smart2017">(<a href="#ref-smart2017" role="doc-biblioref">SMART Initiative, 2017</a>)</span>. Under the hood, it runs the same test suite you already know from SMART. It also applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind:</p>
 <ol type="i">
 <li><p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC.</p></li>
 <li><p><code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> allows user to run checks on a multiple-area data set at once, without having to repeat the same workflow over and over again for the number of areas the data holds.</p></li>
@@ -99,20 +95,18 @@
 <p>That is it! Now we can begin delving into the “how to”.</p>
 <p>It is always a good practice to start off by inspecting our data set. Let’s check the first 6 rows of our data set:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">anthro.01</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="cell">
-<pre><code><span><span class="co">#&gt; # A tibble: 6 × 11</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">anthro.01</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 11</span></span>
 <span><span class="co">#&gt;   area       dos        cluster  team sex   dob      age weight height edema</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;      &lt;date&gt;       &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;date&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;</span></span>
-<span><span class="co">#&gt; 1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n</span></span>
-<span><span class="co">#&gt; 2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n</span></span>
-<span><span class="co">#&gt; 3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n</span></span>
-<span><span class="co">#&gt; 4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n</span></span>
-<span><span class="co">#&gt; 5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n</span></span>
-<span><span class="co">#&gt; 6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n</span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: muac &lt;int&gt;</span></span></code></pre>
+<span><span class="co">#&gt; 1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n    </span></span>
+<span><span class="co">#&gt; 2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n    </span></span>
+<span><span class="co">#&gt; 3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n    </span></span>
+<span><span class="co">#&gt; 4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n    </span></span>
+<span><span class="co">#&gt; 5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n    </span></span>
+<span><span class="co">#&gt; 6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n    </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: muac &lt;int&gt;</span></span></code></pre></div>
 </div>
 <p>We can see that the data set has eleven variables, and the way how their respective values are presented. This is useful to inform the data wrangling workflow.</p>
 <section class="level3"><h4 id="data-wrangling">Data wrangling<a class="anchor" aria-label="anchor" href="#data-wrangling"></a>
@@ -122,14 +116,42 @@
 </h5>
 <p>We use <code><a href="../reference/mw_wrangle_age.html">mw_wrangle_age()</a></code> to calculate child’s age in months based on the date of data collection and child’s date of birth. This is done as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">age_mo</span> <span class="op">&lt;-</span> <span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/mw_wrangle_age.html">mw_wrangle_age</a></span><span class="op">(</span></span>
-<span>    dos <span class="op">=</span> <span class="va">dos</span>,</span>
-<span>    dob <span class="op">=</span> <span class="va">dob</span>,</span>
-<span>    age <span class="op">=</span> <span class="va">age</span>,</span>
-<span>    .decimals <span class="op">=</span> <span class="fl">2</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>age_mo <span class="ot">&lt;-</span> <span class="fu">mw_wrangle_age</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-2-2" class="code-annotation-target"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> anthro<span class="fl">.01</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">dos =</span> dos,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-2-4" class="code-annotation-target"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">dob =</span> dob,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="5" onclick="event.preventDefault();" href="">5</a><span id="annotated-cell-2-5" class="code-annotation-target"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> age,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="6" onclick="event.preventDefault();" href="">6</a><span id="annotated-cell-2-6" class="code-annotation-target"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">.decimals =</span> <span class="dv">2</span></span>
+<span id="annotated-cell-2-7"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div>
+<div class="code-annotation-gutter"></div></code></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">The output for this operation will be assigned to an object called <code>age_mo</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="2" data-code-annotation="2">The argument <code>df</code> is supplied with the <code>anthro.01</code> object which contains variables related to age that will be used for the wrangling process.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="3" data-code-annotation="3">The argument <code>dos</code> is supplied with the unquoted variable name in <code>df</code> that contains the date when the data collection was performed. In the <code>anthro.01</code> dataset, this so happens to be <code>dos</code> as well.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="4" data-code-annotation="4">The argument <code>dob</code> is supplied with the unquoted variable name in <code>df</code> that contains the date when the child was born. In the <code>anthro.01</code> dataset, this so happens to be <code>dob</code> as well.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="5" data-code-annotation="5">The argument <code>age</code> is supplied with the unquoted variable name in <code>df</code> that contains the age of the child in months. In the <code>anthro.01</code> dataset, this so happens to be <code>age</code> as well.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="6" data-code-annotation="6">The argument <code>.decimals</code> allows the user to specify the number of decimal places to which the output age values will be rounded off to. By default, <code>.decimals</code> is set to 2. So, even without specifying this argument, the resulting output will be rounded off to 2.</span>
+</dd>
+</dl>
+</div>
 </div>
 <p>This will return:</p>
 <div class="cell">
@@ -148,7 +170,7 @@
 </h5>
 <p>For this, we call <code><a href="../reference/mw_wrangle_wfhz.html">mw_wrangle_wfhz()</a></code> as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wrangled_df</span> <span class="op">&lt;-</span> <span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_wfhz.html">mw_wrangle_wfhz</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -181,7 +203,7 @@
 </h4>
 <p>We can check the plausibility of our data by calling <code><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz()</a></code> function as demonstrated below:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">wrangled_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_plausibility_check_wfhz.html">mw_plausibility_check_wfhz</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -193,7 +215,7 @@
 </div>
 <p>Or we can chain all previous functions in this way:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_age.html">mw_wrangle_age</a></span><span class="op">(</span></span>
 <span>    dos <span class="op">=</span> <span class="va">dos</span>,</span>
@@ -229,7 +251,7 @@
 </div>
 <p>As we can see, the returned output is a summary table of statistics and ratings. We can neat it for more clarity and readability. We can achieve this by chaining <code><a href="../reference/mw_neat_output_wfhz.html">mw_neat_output_wfhz()</a></code> to the previous pipeline:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_age.html">mw_wrangle_age</a></span><span class="op">(</span></span>
 <span>    dos <span class="op">=</span> <span class="va">dos</span>,</span>
@@ -270,7 +292,7 @@
 <p>An already formatted table, with scientific notations converted to standard notations, etc.</p>
 <p>When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by using <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> function from the {<code>dplyr</code>} package as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -337,7 +359,7 @@
 </h4>
 <p>This is the job of <code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> function. We use it as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_age.html">mw_wrangle_age</a></span><span class="op">(</span></span>
 <span>    dos <span class="op">=</span> <span class="va">dos</span>,</span>
@@ -384,7 +406,7 @@
 </h4>
 <p>We achieve this by calling the <code><a href="../reference/mw_plausibility_check_mfaz.html">mw_plausibility_check_mfaz()</a></code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load dplyr library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -425,7 +447,7 @@
 </div>
 <p>We can also neat this output. We just need to call <code><a href="../reference/mw_neat_output_mfaz.html">mw_neat_output_mfaz()</a></code> and chain it to the pipeline:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load dplyr library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -469,7 +491,7 @@
 </div>
 <p>We can also run checks on a multiple-area data set as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load dplyr library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -525,7 +547,7 @@
 <p>As you can tell, z-scores cannot be computed in the absence of age. In this way, the data wrangling workflow would be quite minimal. You still set the arguments inside <code><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac()</a></code> as learned in <a href="#sec-wrangle_mfaz" class="quarto-xref">Section 1.2.1</a>. The only difference is that here we will set <code>age</code> to <code>NULL</code>. Fundamentally, under the hood the function detects MUAC values that are outliers and flags them and stores them in <code>flag_muac</code> variable that is added to the data set.</p>
 <p>We will continue using the same data set:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -558,7 +580,7 @@
 </h4>
 <p>We just have to add <code><a href="../reference/mw_plausibility_check_muac.html">mw_plausibility_check_muac()</a></code> to the above pipeline:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -584,7 +606,7 @@
 </div>
 <p>We can also return a formatted table with <code><a href="../reference/mw_neat_output_muac.html">mw_neat_output_muac()</a></code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">anthro.01</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/mw_wrangle_muac.html">mw_wrangle_muac</a></span><span class="op">(</span></span>
 <span>    sex <span class="op">=</span> <span class="va">sex</span>,</span>
@@ -613,7 +635,7 @@
 </div>
 <p>When working on multiple-area data, we approach the task the same way as demonstrated above:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load library ----</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>

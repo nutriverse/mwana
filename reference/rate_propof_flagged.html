@@ -9,7 +9,7 @@ and raw MUAC data following the SMART methodology criteria."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">mwana</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,7 @@ and raw MUAC data following the SMART methodology criteria."><meta property="og:
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/plausibility.html">Running plausibility checks</a></li>
     <li><a class="dropdown-item" href="../articles/prevalence.html">Estimating the prevalence of wasting</a></li>
-    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">Checking if IPC Acute Malnutrition sample size requirements were met</a></li>
+    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">IPC sample size requirements</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -38,7 +38,7 @@ and raw MUAC data following the SMART methodology criteria."><meta property="og:
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Rate the acceptability of the proportion of flagged records</h1>
-      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/main/R/quality_raters.R" class="external-link"><code>R/quality_raters.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/dev/R/quality_raters.R" class="external-link"><code>R/quality_raters.R</code></a></small>
       <div class="d-none name"><code>rate_propof_flagged.Rd</code></div>
     </div>
 
@@ -57,20 +57,18 @@ and raw MUAC data following the SMART methodology criteria.</p>
 
 
 <dl><dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
-<dd><p>A vector of class <code>double</code>, containing the proportions of flagged
-records in the data set. If the class does not match the expected type, the
-function will stop execution and return an error message indicating the type
-of mismatch.</p></dd>
+<dd><p>A vector of class <code>double</code> of the proportions of flagged records in
+the data set.</p></dd>
 
 
 <dt id="arg--in">.in<a class="anchor" aria-label="anchor" href="#arg--in"></a></dt>
-<dd><p>Specifies the data set where the rating should be done,
-with options: "wfhz", "mfaz", or "raw_muac".</p></dd>
+<dd><p>Specifies the data set where the rating should be done. Can be
+"wfhz", "mfaz", or "raw_muac". Default to "wfhz".</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A vector of class <code>factor</code> of the same length as input, for the
+    <p>A vector of class <code>factor</code> with the same length as <code>p</code> for the
 acceptability rate.</p>
     </div>
 

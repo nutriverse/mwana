@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mwana</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/plausibility.html">Running plausibility checks</a></li>
     <li><a class="dropdown-item" href="../articles/prevalence.html">Estimating the prevalence of wasting</a></li>
-    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">Checking if IPC Acute Malnutrition sample size requirements were met</a></li>
+    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">IPC sample size requirements</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -36,7 +36,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Get the overall acceptability score from the acceptability rate scores</h1>
-      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/main/R/quality_scorers.R" class="external-link"><code>R/quality_scorers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/dev/R/quality_scorers.R" class="external-link"><code>R/quality_scorers.R</code></a></small>
       <div class="d-none name"><code>score_overall_quality.Rd</code></div>
     </div>
 
@@ -65,14 +65,14 @@
 
 
 <dl><dt id="arg--for">.for<a class="anchor" aria-label="anchor" href="#arg--for"></a></dt>
-<dd><p>A choice between "wfhz" and "mfaz" for the basis on which the
-calculations should be made.</p></dd>
+<dd><p>A choice between "wfhz" and "mfaz" for the type of scorer to
+apply. Default is "wfhz".</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A vector of class <code>numeric</code>, of length 1, for the overall
-data quality (acceptability) score.</p>
+    <p>A <code>numeric</code> value for the overall data quality (acceptability)
+score.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

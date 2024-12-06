@@ -11,7 +11,7 @@ the SMART methodology."><meta property="og:image" content="https://nutriverse.io
 
     <a class="navbar-brand me-2" href="../index.html">mwana</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@ the SMART methodology."><meta property="og:image" content="https://nutriverse.io
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/plausibility.html">Running plausibility checks</a></li>
     <li><a class="dropdown-item" href="../articles/prevalence.html">Estimating the prevalence of wasting</a></li>
-    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">Checking if IPC Acute Malnutrition sample size requirements were met</a></li>
+    <li><a class="dropdown-item" href="../articles/ipc_amn_check.html">IPC sample size requirements</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -40,7 +40,7 @@ the SMART methodology."><meta property="og:image" content="https://nutriverse.io
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>A sample data of district level SMART surveys with location anonymised</h1>
-      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/main/R/data.R" class="external-link"><code>R/data.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nutriverse/mwana/blob/dev/R/data.R" class="external-link"><code>R/data.R</code></a></small>
       <div class="d-none name"><code>anthro.01.Rd</code></div>
     </div>
 
@@ -57,7 +57,7 @@ the SMART methodology.</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A tibble of 1,191 rows and 11 columns.</p><table class="table table"><tr><td><strong>Variable</strong></td><td><strong>Description</strong></td></tr><tr><td><em>area</em></td><td>Location where the survey took place</td></tr><tr><td><em>dos</em></td><td>Survey date</td></tr><tr><td><em>cluster</em></td><td>Primary sampling unit</td></tr><tr><td><em>team</em></td><td>Enumerator IDs</td></tr><tr><td><em>sex</em></td><td>Sex, "m" = boys, "f" = girls</td></tr><tr><td><em>dob</em></td><td>Date of birth</td></tr><tr><td><em>age</em></td><td>Age in months, typically estimated using local event calendars</td></tr><tr><td><em>weight</em></td><td>Weight (kg)</td></tr><tr><td><em>height</em></td><td>Height (cm)</td></tr><tr><td><em>edema</em></td><td>Edema, "n" = no, "y" = yes</td></tr><tr><td><em>muac</em></td><td>Mid-upper arm circumference (mm)</td></tr></table></div>
+    <p>A tibble of 1,191 rows and 11 columns.</p><table class="table table"><tr><td><strong>Variable</strong></td><td><strong>Description</strong></td></tr><tr><td><em>area</em></td><td>Survey location</td></tr><tr><td><em>dos</em></td><td>Survey date</td></tr><tr><td><em>cluster</em></td><td>Primary sampling unit</td></tr><tr><td><em>team</em></td><td>Enumerator IDs</td></tr><tr><td><em>sex</em></td><td>Sex; "m" = boys, "f" = girls</td></tr><tr><td><em>dob</em></td><td>Date of birth</td></tr><tr><td><em>age</em></td><td>Age in months, typically estimated using local event calendars</td></tr><tr><td><em>weight</em></td><td>Weight in kilograms</td></tr><tr><td><em>height</em></td><td>Height in centimetres</td></tr><tr><td><em>edema</em></td><td>Edema; "n" = no edema, "y" = with edema</td></tr><tr><td><em>muac</em></td><td>Mid-upper arm circumference in millimetres</td></tr></table></div>
     <div class="section level2">
     <h2 id="source">Source<a class="anchor" aria-label="anchor" href="#source"></a></h2>
     <p>Anonymous</p>
