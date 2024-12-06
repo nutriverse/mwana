@@ -16,8 +16,11 @@ vignette: >
 ```{r}
 #| label: setup
 #| collapse: true
+#| echo: false
+#| message: false
 
 library(mwana)
+library(dplyr)
 ```
 
 # Introduction
@@ -67,12 +70,12 @@ We use `mw_wrangle_age()` to calculate child's age in months based on the date o
 #| eval: false
 
 age_mo <- mw_wrangle_age(   # <1>
-    df = anthro.01          # <2>
-    dos = dos,              # <3>
-    dob = dob,              # <4>
-    age = age,              # <5>
-    .decimals = 2           # <6>
-  )
+  df = anthro.01            # <2>
+  dos = dos,                # <3>
+  dob = dob,                # <4>
+  age = age,                # <5>
+  .decimals = 2             # <6>
+)
 ```
 
 1. The output for this operation will be assigned to an object called `age_mo`.
@@ -134,7 +137,6 @@ Under the hood, after recoding (or not) the sex variables, `mw_wrangle_wfhz()` c
 #| label: view_df
 #| echo: false
 #| eval: true
-#| include: true
 
 wrangled_df <- anthro.01 |>
   mw_wrangle_wfhz(
@@ -296,7 +298,6 @@ When working on a multiple-area data set, for instance districts, we can check t
 #| label: pl_group_by
 #| echo: true
 #| eval: false
-#| message: false
 
 ## Load library ----
 library(dplyr)
@@ -334,8 +335,6 @@ This will return the following:
 #| echo: false
 #| eval: true
 #| message: false
-
-library(dplyr)
 
 anthro.01 |>
   mw_wrangle_age(
@@ -483,8 +482,6 @@ And this will return:
 #| eval: true
 #| message: false
 
-library(dplyr)
-
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -623,8 +620,6 @@ This will return:
 #| echo: false
 #| message: false
 #| eval: true
-
-library(dplyr)
 
 anthro.01 |>
   mw_wrangle_age(
@@ -831,8 +826,6 @@ And we get:
 #| label: view_by_area
 #| echo: false
 #| message: false
-
-library(dplyr)
 
 anthro.01 |>
   mw_wrangle_muac(

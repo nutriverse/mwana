@@ -16,6 +16,7 @@ vignette: >
 ```{r}
 #| label: global-setup
 #| echo: false
+#| message: false
 
 library(mwana)
 library(dplyr)
@@ -115,7 +116,6 @@ This will return:
 ```{r}
 #| label: view_group_by
 #| echo: false
-#| message: false
 
 anthro.01 |>
   group_by(area) |>

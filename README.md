@@ -70,7 +70,8 @@ undernutrition in children 6-59 months old.
 
 ## Installation
 
-`mwana` is not yet on CRAN but can be installed from the [nutriverse R
+`mwana` is not yet on [CRAN](https::cran.r-project.org) but can be
+installed from the [nutriverse R
 Universe](https://nutriverse.r-universe.dev) as follows:
 
 ``` r
@@ -142,14 +143,14 @@ estimates for each survey domain.
   undernutrition prevalence, read this
   [guide](https://nutriverse.io/mwana/articles/prevalence.html#estimation-of-the-combined-prevalence-of-wasting).
 
-### 3. Sample size checker
+### 3. IPC sample size checker
 
 `mwana` provides a handy function for checking whether a specific
 anthropometric dataset has met the minimum sample size requirements for
-each of the dataset domains. The function assesses this sample size
-requirement based on whether the dataset was collected through a survey,
-a screening exercise, or a sentinel site surveillance. To learn more
-about this function, read this
+each of the dataset domains based on IPC requirements. The function
+assesses this sample size requirement based on whether the dataset was
+collected through a survey, a screening exercise, or a sentinel site
+surveillance. To learn more about this function, read this
 [guide](https://nutriverse.io/mwana/articles/ipc_amn_check.html).
 
 ### 4. Reporting of data plausibility checks and prevalence estimation summary outputs

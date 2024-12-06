@@ -28,7 +28,7 @@ navbar:
         href: articles/plausibility.html
       - text: "Estimating the prevalence of wasting"
         href: articles/prevalence.html
-      - text: "Sample size requirements"
+      - text: "IPC sample size requirements"
         href: articles/ipc_amn_check.html
     website:
       icon: "fa globe fa-lg"
@@ -61,7 +61,7 @@ reference:
      contents:
      - mw_stattest_ageratio
 
-   - title: Sample size checks
+   - title: IPC sample size checks
      contents:
      - mw_check_ipcamn_ssreq
 
