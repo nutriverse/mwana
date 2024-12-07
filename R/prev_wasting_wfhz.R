@@ -14,35 +14,34 @@ complex_survey_estimates_wfhz <- function(df,
   ## Defines case based on the availability of edema ----
   if (!quo_is_null(edema)) {
     ## When edema is available ----
-    df <- df |>
-      define_wasting(
-        zscores = .data$wfhz,
-        edema = !!edema,
-        .by = "zscores"
-      )
+    df <- define_wasting(
+      df,
+      zscores = .data$wfhz,
+      edema = !!edema,
+      .by = "zscores"
+    )
   } else {
     ## When edema is not available ----
-    df <- df |>
-      define_wasting(
-        zscores = .data$wfhz,
-        .by = "zscores"
-      )
+    df <- define_wasting(
+      df,
+      zscores = .data$wfhz,
+      .by = "zscores"
+    )
   }
 
   ## Create a survey object ----
   if (!quo_is_null(wt)) {
-    srvy <- df |>
-      as_survey_design(
-        ids = .data$cluster,
-        pps = "brewer",
-        variance = "YG",
-        weights = !!wt
-      )
+    srvy <- srvyr::as_survey_design(
+      .data = df,
+      ids = .data$cluster,
+      pps = "brewer",
+      variance = "YG",
+      weights = !!wt
+    )
   } else {
     ## Create survey object ----
-    srvy <- df |>
-      mutate(wt = 1) |>
-      as_survey_design(
+    srvy <- dplyr::mutate(df, wt = 1) |>
+      srvyr::as_survey_design(
         ids = .data$cluster,
         pps = "brewer",
         variance = "YG",
@@ -51,15 +50,15 @@ complex_survey_estimates_wfhz <- function(df,
   }
 
   ## Summarise prevalence ----
-  p <- srvy |>
-    group_by({{ .by }}) |>
-    filter(.data$flag_wfhz == 0) |>
-    summarise(
-      across(
-        c(.data$gam:.data$mam),
+  p <- dplyr::group_by(.data = srvy, {{ .by }}) |>
+    dplyr::filter(.data$flag_wfhz == 0) |>
+    dplyr::summarise(
+      dplyr::across(
+        .data$gam:.data$mam,
         list(
-          n = \(.)sum(., na.rm = TRUE),
-          p = \(.)survey_mean(.,
+          n = \(.) sum(., na.rm = TRUE),
+          p = \(.) srvyr::survey_mean(
+            .,
             vartype = "ci",
             level = 0.95,
             deff = TRUE,
@@ -75,41 +74,39 @@ complex_survey_estimates_wfhz <- function(df,
 
 
 #'
-#'
-#' Estimate the prevalence of wasting based on z-scores of weight-for-height (WFHZ)
+#' Estimate the prevalence of wasting based on weight-for-height z-scores (WFHZ)
 #'
 #' @description
-#' Calculate the prevalence estimates of wasting based on z-scores of
-#' weight-for-height and/or bilateral edema. The function allows users to
-#' get the prevalence estimates calculated in accordance with the complex sample
-#' design properties; this includes applying survey weights when needed or applicable.
+#' Calculate the prevalence estimates of wasting based on z-scores of 
+#' weight-for-height and/or nutritional edema. The function allows users to 
+#' estimate prevalence in accordance with complex sample design properties such 
+#' as accounting for survey sample weights when needed or applicable. The 
+#' quality of the data is first evaluated by calculating and rating the standard 
+#' deviation of WFHZ. Standard approach to prevalence estimation is calculated 
+#' only when the standard deviation of MFAZ is rated as not problematic. If 
+#' the standard deviation is problematic, prevalence is estimated using the
+#' PROBIT estimator. Outliers are detected based on SMART flagging criteria. 
+#' Identified outliers are then excluded before prevalence estimation is 
+#' performed.
 #'
-#' Before estimating, the function evaluates the quality of data by calculating
-#' and rating the standard deviation of z-scores of WFHZ. If rated as problematic,
-#' the prevalence is estimated based on the PROBIT method.
+#' @param df A `tibble` object that has been produced by the [mw_wrangle_wfhz()] 
+#' functions. The `df` should have a variable named `cluster` for the primary 
+#' sampling unit identifiers.
 #'
-#' Outliers are detected based on SMART flags and get excluded prior being piped
-#' into the actual prevalence analysis workflow.
+#' @param wt A vector of class `double` of the survey sampling weights. Default 
+#' is NULL which assumes a self-weighted survey as is the case for a survey 
+#' sample selected proportional to population size (i.e., SMART survey sample).
+#' Otherwise, a weighted analysis is implemented.
 #'
-#' @param df A data set object of class `data.frame` to use. This must have been
-#' wrangled using this package's wrangling function for WFHZ data. The function
-#' uses a variable name called `cluster` where the primary sampling unit IDs
-#' are stored. Make sure to rename your cluster ID variable to `cluster`, otherwise
-#' the function will error and terminate the execution.
+#' @param edema A `character` vector for presence of nutritional edema coded as
+#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' edema. Default is NULL.
 #'
-#' @param wt A vector of class `double` of the final survey weights. Default is
-#'  `NULL` assuming a self weighted survey, as in the ENA for SMART software;
-#'  otherwise, when a vector of weights if supplied, weighted analysis is done.
+#' @param .by A `character` or `numeric` vector of the geographical areas
+#' or identifiers for where the data was collected and for which the analysis
+#' should be summarised for.
 #'
-#' @param edema A vector of class `character` of edema. Code should be
-#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
-#'
-#' @param .by A vector of class `character` or `numeric` of the geographical areas
-#' or respective IDs for where the data was collected and for which the analysis
-#' should be summarised at.
-#'
-#' @returns A summarised table of class `data.frame` of the descriptive
-#' statistics about wasting.
+#' @returns A summary `tibble` for the descriptive statistics about wasting.
 #'
 #' @examples
 #' ## When .by = NULL ----
@@ -148,11 +145,12 @@ complex_survey_estimates_wfhz <- function(df,
 #'
 #' @export
 #'
+
 mw_estimate_prevalence_wfhz <- function(df,
                                         wt = NULL,
                                         edema = NULL,
                                         .by = NULL) {
-  ## Difuse argument `.by` ----
+  ## Defuse argument `.by` ----
   .by <- enquo(.by)
 
   ## Empty vector type list ----
@@ -160,54 +158,60 @@ mw_estimate_prevalence_wfhz <- function(df,
 
   if (!quo_is_null(.by)) {
     ## Rate standard deviation ----
-    x <- df |>
-      summarise(
-        std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)),
-        .by = !!.by
-      )
+    x <- dplyr::summarise(
+      .data = df,
+      std = rate_std(
+        stats::sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)
+      ),
+      .by = !!.by
+    )
   } else {
     ## Rate standard deviation ----
-    x <- df |>
-      summarise(
-        std = rate_std(sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE))
+    x <- dplyr::summarise(
+      .data = df,
+      std = rate_std(
+        stats::sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)
       )
+    )
   }
 
   ## Compute prevalence based on the rate of the SD ----
   for (i in seq_len(nrow(x))) {
     if (!quo_is_null(.by)) {
-      area <- pull(x, !!.by)[i]
-      data <- filter(df, !!sym(quo_name(.by)) == !!area)
+      area <- dplyr::pull(x, !!.by)[i]
+      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == !!area)
     } else {
-      data <- df
+      data_subset <- df
     }
 
     std <- x$std[i]
     if (std != "Problematic") {
       ### Compute complex sample-based prevalence estimates ----
-      result <- data |>
-        complex_survey_estimates_wfhz(
-          wt = {{ wt }},
-          edema = {{ edema }},
-          .by = !!.by
-        )
+      result <- complex_survey_estimates_wfhz(
+        data_subset,
+        wt = {{ wt }},
+        edema = {{ edema }},
+        .by = !!.by
+      )
     } else {
       ### Compute PROBIT-based prevalence estimates----
       if (!quo_is_null(.by)) {
-        result <- data |>
-          estimate_probit_prevalence(
-            .by = !!.by,
-            .for = "wfhz"
-          )
+        result <- estimate_probit_prevalence(
+          data_subset,
+          .by = !!.by,
+          .for = "wfhz"
+        )
       } else {
         ### Compute PROBIT-based prevalence estimates ----
-        result <- estimate_probit_prevalence(data, .for = "wfhz")
+        result <- estimate_probit_prevalence(data_subset, .for = "wfhz")
       }
     }
+
     results[[i]] <- result
   }
-  bind_rows(results) |>
-    relocate(.data$gam_p, .after = .data$gam_n) |>
-    relocate(.data$sam_p, .after = .data$sam_n) |>
-    relocate(.data$mam_p, .after = .data$mam_n)
+  
+  dplyr::bind_rows(results) |>
+    dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
+    dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
+    dplyr::relocate(.data$mam_p, .after = .data$mam_n)
 }

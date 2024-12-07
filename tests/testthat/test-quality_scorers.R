@@ -19,7 +19,8 @@ testthat::test_that(
     testthat::expect_error(
       score_std_flags(as.numeric(exp)),
       regexp = paste0(
-        "`x` must be of class `character` or `factor`; not ", shQuote(class(exp)), ". Please try again."
+        "`x` must be of class character or factor not ", 
+        class(exp), ". Please try again."
       )
     )
   }
@@ -48,8 +49,9 @@ testthat::test_that(
     testthat::expect_error(
       score_agesexr_dps(e),
       regexp = paste0(
-        "`x` must be of class `character` or `factor`; not ", shQuote(class(e)), ". Please try again."
-        )
+        "`x` must be of class character or factor not ", 
+        class(e), ". Please try again."
+      )
     )
   }
 )
@@ -78,7 +80,8 @@ testthat::test_that(
     testthat::expect_error(
       score_skewkurt(exp),
       regexp = paste0(
-        "`x` must be of class `character` or `factor`; not ", shQuote(class(exp)), ". Please try again."
+        "`x` must be of class character or factor not ", 
+        class(exp), ". Please try again."
       )
     )
   }

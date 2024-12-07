@@ -7,7 +7,7 @@
 
 inst/doc
 docs
-/doc/
+/docs/
 /Meta/
 
 /README_files/
@@ -17,3 +17,6 @@ docs
 /vignettes/sample_size_files/
 
 /.quarto/
+
+
+data-raw/ENA_generated_zscores.csv

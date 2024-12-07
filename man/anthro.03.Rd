@@ -7,15 +7,15 @@
 \format{
 A tibble of 943 x 9.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
-   \emph{district} \tab The location where data was collected \cr
+   \emph{district} \tab Survey location \cr
    \emph{cluster} \tab Primary sampling unit \cr
    \emph{team} \tab Survey teams \cr
-   \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
-   \emph{age} \tab calculated age in months with two decimal places \cr
-   \emph{weight} \tab Weight (kg) \cr
-   \emph{height} \tab Height (cm) \cr
-   \emph{edema} \tab Edema, "n" = no, "y" = yes \cr
-   \emph{muac} \tab Mid-upper arm circumference (mm) \cr
+   \emph{sex} \tab Sex; "m" = boys, "f" = girls \cr
+   \emph{age} \tab Calculated age in months with two decimal places \cr
+   \emph{weight} \tab Weight in kilograms \cr
+   \emph{height} \tab Height in centimetres \cr
+   \emph{edema} \tab Edema; "n" = no edema, "y" = with edema \cr
+   \emph{muac} \tab Mid-upper arm circumference in millimetres \cr
 }
 }
 \source{
@@ -26,14 +26,14 @@ anthro.03
 }
 \description{
 \code{anthro.03} contains survey data of four districts. Each district data set
-presents distinct data quality scenarios that requires tailored prevalence
-analysis approach: two districts show a problematic WFHZ standard deviation
-whilst the remaining are all within range.
+presents distinct data quality scenarios that require a specific prevalence
+analysis approach. Data from two districts have a problematic WFHZ standard
+deviation. The data from the remaining two districts are all within range.
 
-This sample data is useful to demonstrate the use of the prevalence functions on
-a multiple-area survey data where there can be variations in the rating of
-acceptability of the standard deviation, hence require different analyses approaches
-for each area to ensure accurate estimation.
+This sample data is useful to demonstrate the use of the prevalence functions
+on a multiple-domain survey data where there can be variations in the rating
+of acceptability of the standard deviation, hence requiring different
+analytical approach for each survey domain to ensure accurate estimation.
 }
 \examples{
 anthro.03

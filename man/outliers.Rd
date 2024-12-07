@@ -3,47 +3,42 @@
 \name{flag_outliers}
 \alias{flag_outliers}
 \alias{remove_flags}
-\title{Identify, flag outliers and remove them}
+\title{Identify, flag, and remove outliers}
 \usage{
 flag_outliers(x, .from = c("zscores", "raw_muac"))
 
 remove_flags(x, .from = c("zscores", "raw_muac"))
 }
 \arguments{
-\item{x}{A vector of class \code{numeric} of WFHZ, MFAZ, HFAZ, WFAZ or raw MUAC values.
-The latter should be in millimeters. If the class is different than expected,
-the function will stop execution and return an error message indicating the
-type of mismatch.}
+\item{x}{A \code{numeric} vector of WFHZ, MFAZ, HFAZ, WFAZ or raw MUAC values.
+Raw MUAC values should be in millimetre units.}
 
-\item{.from}{A choice between \code{zscores} and \code{raw_muac} for where outliers should be
-detected and flagged from.}
+\item{.from}{Either "zscores" or "raw_muac" for type of data to flag
+outliers from.}
 }
 \value{
-A vector of the same length as \code{x} for flagged records coded as
-\code{1} for is a flag and \code{0} not a flag.
+An vector of the same length as \code{x} of flagged records coded as
+\code{1} for a flagged record and \code{0} for a non-flagged record.
 }
 \description{
-Identify outlier z-scores for weight-for-height (WFHZ) and MUAC-for-age (MFAZ)
-following the SMART methodology. The function can also be used to detect
-outliers for height-for-age (HFAZ) and weight-for-age (WFAZ) z-scores
+Identify outlier z-scores for weight-for-height (WFHZ) and MUAC-for-age
+(MFAZ) following the SMART methodology. The function can also be used to
+detect outliers for height-for-age (HFAZ) and weight-for-age (WFAZ) z-scores
 following the same approach.
 
-For raw MUAC values, outliers constitute values that are less than 100
-millimeters or greater than 200 millimeters.
+For flagging z-scores, z-scores that deviate substantially from the sample's
+z-score mean are considered outliers and are unlikely to reflect accurate
+measurements. For raw MUAC, values that are less than 100 millimeters or
+greater than 200 millimeters are considered outliers as recommended by
+Bilukha & Kianian (2023). Including these values in the analysis could
+compromise the accuracy of the resulting estimates.
 
-Removing outliers consist in setting the outlier record to \code{NA} and not necessarily
-to delete it from the data set. This is useful in the analysis procedures
-where outliers must be removed, such as the analysis of the standard deviation.
-}
-\details{
-For z-score-based detection, flagged records represent outliers that deviate
-substantially from the sample's z-score mean, making them unlikely to reflect
-accurate measurements. For raw MUAC values, flagged records are those that fall
-outside the acceptable fixed range. Including such outliers in the analysis could
-compromise the accuracy and precision of the resulting estimates.
-
-The flagging criterion used for raw MUAC values is based on a recommendation
-by Bilukha, O., & Kianian, B. (2023).
+To remove outliers, their values are set to NA rather than removing the
+record from the dataset. This process is also called \emph{censoring}. By
+assigning NA values to these outliers, they can be effectively removed
+during statistical operations with functions that allow for removal of NA
+values such as \code{\link[=mean]{mean()}} for getting the mean value or \code{\link[=sd]{sd()}} for getting the
+standard deviation.
 }
 \examples{
 ## Sample data of raw MUAC values ----

@@ -1,29 +1,33 @@
 #'
-#' Check whether IPC Acute Malnutrition (IPC AMN) sample size requirements were met
+#' Check whether sample size requirements for IPC Acute Malnutrition (IPC AMN)
+#' analysis are met
 #'
 #' @description
-#' Evidence on the prevalence of acute malnutrition used in the IPC AMN
+#' Data for estimating the prevalence of acute malnutrition used in the IPC AMN
 #' can come from different sources: surveys, screenings or community-based
-#' surveillance system. The IPC set minimum sample size requirements
-#' for each source. This function helps in verifying whether those requirements
-#' were met or not depending on the source.
+#' surveillance systems. The IPC has set minimum sample size requirements for 
+#' each  source. This function verifies whether these requirements are met.
 #'
-#' @param df A data set object of class `data.frame` to check.
+#' @param df A `data.frame` object to check.
 #'
-#' @param cluster A vector of class `integer` or `character` of unique cluster or
-#' screening or sentinel site IDs. If a `character` vector, ensure that names are
-#' correct and each name represents one location for accurate counts. If the class
-#' does not match the above expected type, the function will stop execution and
-#' return an error message indicating the type of mismatch.
+#' @param cluster A vector of class `integer` or `character` of unique cluster 
+#' or screening or sentinel site identifiers. If a `character` vector, ensure 
+#' that each unique name represents one location. If `cluster` is not of class
+#' `integer` or `character`, an error message will be returned indicating the 
+#' type of mismatch.
 #'
 #' @param .source The source of evidence. A choice between "survey" for
 #' representative survey data at the area of analysis; "screening" for
-#' screening data; "ssite" for community-based sentinel site data.
+#' screening data; "ssite" for community-based sentinel site data. Default value
+#' is "survey".
 #'
-#' @returns A summary table of class `data.frame`, of length 3 and width 1, for
-#' the check results. `n_clusters` is for the total number of unique clusters or
-#' screening or site IDs; `n_obs` for the correspondent total number of children
-#' in the data set; and `meet_ipc` for whether the IPC AMN requirements were met.
+#' @returns A single row summary `tibble` with 3 columns containing
+#' check results for: 
+#' 
+#' - `n_clusters` - the total number of unique clusters or
+#' screening or site identifiers; 
+#' - `n_obs` - the corresponding total number of children in the data set; and,
+#' - `meet_ipc` - whether the IPC AMN requirements were met.
 #'
 #' @references
 #' IPC Global Partners. 2021. *Integrated Food Security Phase Classification*
@@ -43,30 +47,34 @@
 mw_check_ipcamn_ssreq <- function(df,
                                   cluster,
                                   .source = c("survey", "screening", "ssite")) {
-  ## Difuse and evaluate arguments ----
-  cluster <- eval_tidy(enquo(cluster), df)
+  ## Defuse and evaluate arguments ----
+  cluster <- rlang::eval_tidy(enquo(cluster), df)
 
   ## Enforce the options in `.source` ----
   .source <- match.arg(.source)
 
   ## Enforce the class of `cluster` ----
-  if (!(class(cluster) %in% c("integer", "character"))) {
+  if (!is(cluster, "character") & !is(cluster, "integer")) {
     stop(
-      "`cluster` must be of class `integer` or `character`; not ", shQuote(class(cluster)), ". Please try again."
+      "`cluster` must be of class `integer` or `character` not ", 
+      shQuote(class(cluster)), 
+      ". Please try again."
     )
   }
 
   ## Summarize ----
-  df <- df |>
-    summarise(
-      n_clusters = n_distinct({{ cluster }}),
-      n_obs = n(),
-      meet_ipc = case_when(
-        .source == "survey" & n_clusters >= 25 ~ "yes",
-        .source == "screening" & n_clusters >= 3 & n_obs >= 600 ~ "yes",
-        .source == "ssite" & n_clusters >= 5 & n_obs >= 200 ~ "yes",
-        .default = "no"
-      )
+  df <- dplyr::summarise(
+    .data = df,
+    n_clusters = dplyr::n_distinct({{ cluster }}),
+    n_obs = dplyr::n(),
+    meet_ipc = dplyr::case_when(
+      .source == "survey" & n_clusters >= 25 ~ "yes",
+      .source == "screening" & n_clusters >= 3 & n_obs >= 600 ~ "yes",
+      .source == "ssite" & n_clusters >= 5 & n_obs >= 200 ~ "yes",
+      .default = "no"
     )
-  as_tibble(df)
+  )
+  
+  ## Return tibble ----
+  tibble::as_tibble(df)
 }

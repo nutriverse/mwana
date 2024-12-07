@@ -3,16 +3,17 @@
 \docType{data}
 \name{wfhz.01}
 \alias{wfhz.01}
-\title{A sample SMART survey data with WFHZ standard deviation rated as problematic}
+\title{A sample SMART survey data with weight-for-height z-score standard deviation
+rated as problematic}
 \format{
 A tibble with 303 rows and 6 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
    \emph{cluster} \tab Primary sampling unit \cr
-   \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
-   \emph{age} \tab calculated age in months with two decimal places \cr
-   \emph{edema} \tab Edema, "n" = no, "y" = yes \cr
+   \emph{sex} \tab Sex; "m" = boys, "f" = girls \cr
+   \emph{age} \tab Calculated age in months with two decimal places \cr
+   \emph{edema} \tab Edema, "n" = no edema, "y" = with edema \cr
    \emph{wfhz} \tab MUAC-for-age z-scores with 3 decimal places \cr
-   \emph{flag_wfhz} \tab Flagged observations. 1=flagged, 0=not flagged \cr
+   \emph{flag_wfhz} \tab Flagged weight-for-height z-score value; 1 = flagged, 0 = not flagged \cr
 }
 }
 \source{
@@ -22,7 +23,8 @@ Anonymous
 wfhz.01
 }
 \description{
-A sample SMART survey data with WFHZ standard deviation rated as problematic
+A sample SMART survey data with weight-for-height z-score standard deviation
+rated as problematic
 }
 \examples{
 wfhz.01

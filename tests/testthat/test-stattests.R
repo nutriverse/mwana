@@ -15,7 +15,8 @@ testthat::test_that(
     testthat::expect_error(
       mw_stattest_ageratio(ager, .expectedP = 0.66),
       regexp = paste0(
-        "`age` must be of class 'numeric'; not ", shQuote(class(ager)) , ". Please try again."
+        "`age` must be of class numeric not ", class(ager), 
+        ". Please try again."
       )
     )
   }

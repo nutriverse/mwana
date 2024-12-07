@@ -9,7 +9,7 @@ set_analysis_path <- function(ageratio_class, sd_class) {
   sd_class <- as.character(sd_class)
 
   ## Set the analysis path ----
-  case_when(
+  dplyr::case_when(
     ageratio_class == "Problematic" & sd_class != "Problematic" ~ "weighted",
     ageratio_class != "Problematic" & sd_class == "Problematic" ~ "missing",
     ageratio_class == "Problematic" & sd_class == "Problematic" ~ "missing",
@@ -68,48 +68,48 @@ complex_survey_estimates_muac <- function(df,
 
   ## Defines case based on the availability of edema ----
   if (!quo_is_null(edema)) {
-    df <- df |>
-      define_wasting(
-        muac = .data$muac,
-        edema = !!edema,
-        .by = "muac"
-      )
+    df <- define_wasting(
+      df = df,
+      muac = .data$muac,
+      edema = !!edema,
+      .by = "muac"
+    )
   } else {
-    df <- df |>
-      define_wasting(
-        muac = .data$muac,
-        .by = "muac"
-      )
+    df <- define_wasting(
+      df = df,      
+      muac = .data$muac,
+      .by = "muac"
+    )
   }
 
   ### Weighted survey analysis ----
   if (!is.null(wt)) {
-    srvy <- df |>
-      as_survey_design(
-        ids = .data$cluster,
-        pps = "brewer",
-        variance = "YG",
-        weights = !!wt
-      )
+    srvy <- srvyr::as_survey_design(
+      .data = df,
+      ids = .data$cluster,
+      pps = "brewer",
+      variance = "YG",
+      weights = !!wt
+    )
   } else {
     ### Unweighted: typical SMART survey analysis ----
-    srvy <- df |>
-      as_survey_design(
-        ids = .data$cluster,
-        pps = "brewer",
-        variance = "YG"
-      )
+    srvy <- srvyr::as_survey_design(
+      .data = df,
+      ids = .data$cluster,
+      pps = "brewer",
+      variance = "YG"
+    )
   }
   #### Summarise prevalence ----
-  p <- srvy |>
-    group_by({{ .by }}) |>
-    filter(.data$flag_mfaz == 0) |>
-    summarise(
-      across(
-        c(.data$gam:.data$mam),
+  p <- dplyr::group_by(.data = srvy, {{ .by }}) |>
+    dplyr::filter(.data$flag_mfaz == 0) |>
+    dplyr::summarise(
+      dplyr::across(
+        .data$gam:.data$mam,
         list(
-          n = \(.)sum(., na.rm = TRUE),
-          p = \(.)survey_mean(.,
+          n = \(.) sum(., na.rm = TRUE),
+          p = \(.) srvyr::survey_mean(
+            .,
             vartype = "ci",
             level = 0.95,
             deff = TRUE,
@@ -127,43 +127,44 @@ complex_survey_estimates_muac <- function(df,
 #' Estimate the prevalence of wasting based on MUAC for survey data
 #'
 #' @description
-#' Calculate the prevalence estimates of wasting based on MUAC and/or bilateral
-#' edema.
-#' Before estimating, the function evaluates the quality of data by calculating
-#' and rating the standard deviation of z-scores of muac-for-age (MFAZ) and the
-#' p-value of the age ratio test; then it sets the analysis path that best fits
-#' the data:
-#'  + If all tests are rated as not problematic, a normal analysis is done.
-#'  + If standard deviation is not problematic and age ratio test is problematic,
-#'  prevalence is age-weighted. This is to fix the likely overestimation of wasting
-#'   when there are excess of younger children in the data set.
-#'  + If standard deviation is problematic and age ratio test is not, or both
-#'  are problematic,  analysis gets cancelled out and `NA`s get thrown.
+#' 
+#' Estimate the prevalence of wasting based on MUAC and/or nutritional edema. 
+#' The function allows users to estimate prevalence in accordance with complex 
+#' sample design properties such as accounting for survey sample weights when 
+#' needed or applicable. The quality of the data is first evaluated by 
+#' calculating and rating the standard deviation of MFAZ and the p-value of the 
+#' age ratio test. Prevalence is calculated only when the standard deviation of 
+#' MFAZ is not problematic. If both standard deviation of MFAZ and p-value of 
+#' age ratio test is not problematic, straightforward prevalence estimation is 
+#' performed. If standard deviation of MFAZ is not problematic but p-value of 
+#' age ratio test is problematic, age-weighting is applied to prevalence 
+#' estimation to account for the over-representation of younger children in the 
+#' sample. If standard deviation of MFAZ is problematic, no estimation is done 
+#' and an NA value is returned. Outliers are detected based on SMART flagging 
+#' criteria for MFAZ. Identified outliers are then excluded before prevalence 
+#' estimation is performed.
 #'
-#'  Outliers are detected based on SMART flags on the MFAZ values and then
-#' get excluded prior being piped into the actual prevalence analysis workflow.
+#' @param df A `tibble` object produced by [mw_wrangle_muac()] and 
+#' [mw_wrangle_age()] functions. Note that MUAC values in `df` 
+#' must be in millimeters unit after using [mw_wrangle_muac()]. Also, `df`
+#' must have a variable called `cluster` which contains the primary sampling
+#' unit identifiers.
 #'
-#' @param df A data set object of class `data.frame` to use. This must have been
-#' wrangled using this package's wrangling function for MUAC data. Make sure
-#' MUAC values are converted to millimeters after using the wrangler.
-#' If this is not done, the function will stop execution and return an error message.
-#' The function uses a variable name called `cluster` where the primary sampling unit IDs
-#' are stored. Make sure the data set has this variable and its name has been
-#' renamed to `cluster`, otherwise the function will error and terminate the execution.
+#' @param wt A vector of class `double` of the survey sampling weights. Default 
+#' is NULL which assumes a self-weighted survey as is the case for a survey 
+#' sample selected proportional to population size (i.e., SMART survey sample).
+#' Otherwise, a weighted analysis is implemented.
 #'
-#' @param wt A vector of class `double` of the final survey weights. Default is
-#'  `NULL` assuming a self weighted survey, as in the ENA for SMART software;
-#'  otherwise, when a vector of weights if supplied, weighted analysis is done.
+#' @param edema A `character` vector for presence of nutritional edema coded as
+#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' edema. Default is NULL.
 #'
-#' @param edema A vector of class `character` of edema. Code should be
-#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
+#' @param .by A `character` or `numeric` vector of the geographical areas
+#' or identifiers for where the data was collected and for which the analysis
+#' should be summarised for.
 #'
-#' @param .by A vector of class `character` or `numeric` of the geographical areas
-#' or respective IDs for where the data was collected and for which the analysis
-#' should be summarized at.
-#'
-#' @returns A summarized table of class `data.frame` of the descriptive
-#' statistics about wasting.
+#' @returns A summary `tibble` for the descriptive statistics about combined 
+#' wasting.
 #'
 #' @references
 #' SMART Initiative (no date). *Updated MUAC data collection tool*. Available at:
@@ -190,7 +191,7 @@ complex_survey_estimates_muac <- function(df,
 #'   .by = province
 #' )
 #'
-#' @rdname prev-muac
+#' @rdname prev_muac
 #'
 #' @export
 #'
@@ -203,8 +204,7 @@ mw_estimate_prevalence_muac <- function(df,
 
 
   ## Enforce measuring unit is in "mm" ----
-  x <- as.character(pull(df, .data$muac))
-  if (any(grepl("\\.", x))) {
+  if (any(grepl("\\.", df$muac))) {
     stop("MUAC values must be in millimeters. Please try again.")
   }
 
@@ -213,64 +213,76 @@ mw_estimate_prevalence_muac <- function(df,
 
   if (!quo_is_null(.by)) {
     ## Evaluate the analysis path by `.by`  ----
-    x <- df |>
-      group_by(!!.by) |>
-      summarise(
-        age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
-        std = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
+    x <- dplyr::group_by(.data = df, !!.by) |>
+      dplyr::summarise(
+        age_ratio = rate_agesex_ratio(
+          mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
+        ),
+        std = rate_std(
+          stats::sd(
+            remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE
+          )
+        ),
         analysis_approach = set_analysis_path(.data$age_ratio, .data$std),
         .groups = "drop"
       )
   } else {
     ## Evaluate the analysis path ----
-    x <- df |>
-      summarise(
-        age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
-        std = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
-        analysis_approach = set_analysis_path(.data$age_ratio, .data$std)
-      )
+    x <- dplyr::summarise(
+      .data = df,
+      age_ratio = rate_agesex_ratio(
+        mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
+      ),
+      std = rate_std(
+        stats::sd(
+          remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE
+        )
+      ),
+      analysis_approach = set_analysis_path(.data$age_ratio, .data$std)
+    )
   }
 
   ## Iterate over a data frame and compute estimates as per analysis path ----
   for (i in seq_len(nrow(x))) {
     if (!quo_is_null(.by)) {
-      area <- pull(x, !!.by)[i]
-      data <- filter(df, !!sym(quo_name(.by)) == area)
+      area <- dplyr::pull(x, !!.by)[i]
+      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == area)
     } else {
-      data <- df
+      data_subset <- df
     }
 
     analysis_approach <- x$analysis_approach[i]
 
     if (analysis_approach == "unweighted") {
-      ### Estimate PPS-based prevalence ----
-      output <- complex_survey_estimates_muac(data, {{ wt }}, {{ edema }}, !!.by)
+      ##£ Estimate PPS-based prevalence ----
+      output <- complex_survey_estimates_muac(
+        data_subset, {{ wt }}, {{ edema }}, !!.by
+      )
     } else if (analysis_approach == "weighted") {
       ### Estimate age-weighted prevalence as per SMART MUAC tool ----
       if (!quo_is_null(.by)) {
-        output <- data |>
-          mw_estimate_smart_age_wt(
-            edema = {{ edema }},
-            .by = !!.by
-          )
+        output <- mw_estimate_smart_age_wt(
+          data_subset,
+          edema = {{ edema }},
+          .by = !!.by
+        )
       } else {
-        ### Estimate age-weighted prevalence as per SMART MUAC tool ----
-        output <- data |>
-          mw_estimate_smart_age_wt(edema = {{ edema }})
+      ### Estimate age-weighted prevalence as per SMART MUAC tool ----
+        output <- mw_estimate_smart_age_wt(data_subset, edema = {{ edema }})
       }
     } else {
-      ## Return NA's ----
+      ##£ Return NA's ----
       if (!quo_is_null(.by)) {
-        output <- data |>
-          summarise(
-            gam_p = NA_real_,
-            sam_p = NA_real_,
-            mam_p = NA_real_,
-            .by = !!.by
-          )
+        output <- dplyr::summarise(
+          .data = data_subset,
+          gam_p = NA_real_,
+          sam_p = NA_real_,
+          mam_p = NA_real_,
+          .by = !!.by
+        )
       } else {
-        ## Return NA's  ----
-        output <- tibble(
+      ### Return NA's  ----
+        output <- tibble::tibble(
           gam_p = NA_real_,
           sam_p = NA_real_,
           mam_p = NA_real_
@@ -279,27 +291,26 @@ mw_estimate_prevalence_muac <- function(df,
     }
     results[[i]] <- output
   }
-  ### Ensure that all categories in `.by` get added to the tibble ----
+
+  ## Ensure that all categories in `.by` get added to the tibble ----
   if (!quo_is_null(.by)) {
-    results <- bind_rows(results) |>
-      relocate(.data$gam_p, .after = .data$gam_n) |>
-      relocate(.data$sam_p, .after = .data$sam_n) |>
-      relocate(.data$mam_p, .after = .data$mam_n)
+    results <- dplyr::bind_rows(results) |>
+      dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
+      dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
+      dplyr::relocate(.data$mam_p, .after = .data$mam_n)
   } else {
-    ## Non-grouped results
-    results <- bind_rows(results)
+    ### Non-grouped results ----
+    results <- dplyr::bind_rows(results)
   }
+
+  ## Return results ----
   results
 }
 
 #'
-#'
-#' @rdname prev-muac
-#'
 #' @examples
 #' ## An application of `mw_estimate_smart_age_wt()` ----
-#' .data <- anthro.04 |>
-#'   subset(province == "Province 2")
+#' .data <- anthro.04 |> subset(province == "Province 2")
 #'
 #' mw_estimate_smart_age_wt(
 #'   df = .data,
@@ -307,47 +318,55 @@ mw_estimate_prevalence_muac <- function(df,
 #'   .by = NULL
 #' )
 #'
+#' @rdname prev_muac
 #' @export
 #'
-#'
+
 mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
-  ## Difuse argument `.by` ----
+  ## Defuse argument `.by` ----
   .by <- enquo(.by)
 
   ## Enforce measuring unit is in "mm" ----
-  x <- as.character(pull(df, .data$muac))
-  if (any(grepl("\\.", x))) {
+  if (any(grepl("\\.", df$muac))) {
     stop("MUAC values must be in millimeters. Please try again.")
   }
 
   if (!quo_is_null(.by)) {
-    df <- df |>
-      filter(.data$flag_mfaz == 0) |>
-      summarise(
-        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+    df <- dplyr::filter(.data = df, .data$flag_mfaz == 0) |>
+      dplyr::summarise(
+        sam = smart_age_weighting(
+          .data$muac, .data$age, {{ edema }}, .form = "sam"
+        ),
+        mam = smart_age_weighting(
+          .data$muac, .data$age, {{ edema }}, .form = "mam"
+        ),
         gam = sum(.data$sam, .data$mam),
         .by = !!.by
       ) |>
-      rename(
+      dplyr::rename(
         gam_p = .data$gam,
         sam_p = .data$sam,
         mam_p = .data$mam
       )
   } else {
-    df <- df |>
-      filter(.data$flag_mfaz == 0) |>
-      summarise(
-        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+    df <- dplyr::filter(.data = df, .data$flag_mfaz == 0) |>
+      dplyr::summarise(
+        sam = smart_age_weighting(
+          .data$muac, .data$age, {{ edema }}, .form = "sam"
+        ),
+        mam = smart_age_weighting(
+          .data$muac, .data$age, {{ edema }}, .form = "mam"
+        ),
         gam = sum(.data$sam, .data$mam)
       ) |>
-      rename(
+      dplyr::rename(
         gam_p = .data$gam,
         sam_p = .data$sam,
         mam_p = .data$mam
       )
   }
+
+  ## Return df ----
   df
 }
 

@@ -3,19 +3,16 @@
 #' plausibility check suite
 #'
 #' @description
-#' Attribute a score, also known as penalty point, for a given rate of acceptability
-#' of the standard deviation, proportion of flagged records, age and sex ratio,
-#' skewness, kurtosis and digit preference score check results.
-#'
-#' The scoring criteria and thresholds follows the standards in the SMART
+#' Attribute a score, also known as *penalty point*, for a given rate of 
+#' acceptability of the standard deviation, proportion of flagged records, 
+#' age and sex ratio, skewness, kurtosis and digit preference score check 
+#' results. The scoring criteria and thresholds follows the standards in the SMART
 #' plausibility check.
 #'
-#' @param x A vector of class `character` containing the acceptability rate of
-#' a given test check. If the class does not match the expected type, the function
-#' will stop execution and return an error message indicating the type of mismatch.
-#'
-#' @returns A vector of class `integer` of the same length as `x` for the
-#' acceptability score.
+#' @param x A `character` vector of the acceptability rate of a given check.
+#' '
+#' @returns An `integer` vector with the same length as `x` of the acceptability 
+#' score.
 #'
 #' @references
 #' SMART Initiative (2017). *Standardized Monitoring and Assessment for Relief
@@ -28,11 +25,14 @@
 score_std_flags <- function(x) {
   ## Enforce the class of `x` ----
   if (!(is.character(x) | is.factor(x))) {
-    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
+    stop(
+      "`x` must be of class character or factor not ", class(x), 
+      ". Please try again."
+    )
   }
 
   ## Score ----
-  case_when(
+  dplyr::case_when(
     x == "Excellent" ~ 0,
     x == "Good" ~ 5,
     x == "Acceptable" ~ 10,
@@ -42,7 +42,6 @@ score_std_flags <- function(x) {
 
 
 #'
-#'
 #' @rdname scorer
 #'
 #' @keywords internal
@@ -50,11 +49,14 @@ score_std_flags <- function(x) {
 score_agesexr_dps <- function(x) {
   ## Enforce the class of `x` ----
   if (!(is.character(x) | is.factor(x))) {
-    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
+    stop(
+      "`x` must be of class character or factor not ", 
+      class(x), ". Please try again."
+    )
   }
 
   ## Score ----
-  case_when(
+  dplyr::case_when(
     x == "Excellent" ~ 0,
     x == "Good" ~ 2,
     x == "Acceptable" ~ 4,
@@ -63,7 +65,6 @@ score_agesexr_dps <- function(x) {
 }
 
 #'
-#'
 #' @rdname scorer
 #'
 #' @keywords internal
@@ -71,11 +72,14 @@ score_agesexr_dps <- function(x) {
 score_skewkurt <- function(x) {
   ## Enforce the class of `x` ----
   if (!(is.character(x) | is.factor(x))) {
-    stop("`x` must be of class `character` or `factor`; not ", shQuote(class(x)), ". Please try again.")
+    stop(
+      "`x` must be of class character or factor not ", 
+      class(x), ". Please try again."
+    )
   }
 
   ## Score ----
-  case_when(
+  dplyr::case_when(
     x == "Excellent" ~ 0,
     x == "Good" ~ 1,
     x == "Acceptable" ~ 3,
@@ -87,11 +91,11 @@ score_skewkurt <- function(x) {
 #'
 #' Get the overall acceptability score from the acceptability rate scores
 #'
-#' @param .for A choice between "wfhz" and "mfaz" for the basis on which the
-#' calculations should be made.
+#' @param .for A choice between "wfhz" and "mfaz" for the type of scorer to
+#' apply. Default is "wfhz".
 #'
-#' @returns A vector of class `numeric`, of length 1, for the overall
-#' data quality (acceptability) score.
+#' @returns A `numeric` value for the overall data quality (acceptability) 
+#' score.
 #'
 #' @keywords internal
 #'

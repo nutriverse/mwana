@@ -2,14 +2,15 @@
 % Please edit documentation in R/plausibility_check_wfhz.R
 \name{mw_plausibility_check_wfhz}
 \alias{mw_plausibility_check_wfhz}
-\title{Check the plausibility and acceptability of weight-for-height z-score (WFHZ) data}
+\title{Check the plausibility and acceptability of weight-for-height z-score (WFHZ)
+data}
 \usage{
 mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to check.}
+\item{df}{A \code{tibble} object to check.}
 
-\item{sex}{A vector of class \code{numeric} of child's sex.}
+\item{sex}{A \code{numeric} vector for child's sex with 1 = males and 2 = females.}
 
 \item{age}{A vector of class \code{double} of child's age in months.}
 
@@ -17,22 +18,21 @@ mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
 
 \item{height}{A vector of class \code{double} of child's height in centimeters.}
 
-\item{flags}{A vector of class \code{numeric} of flagged records.}
+\item{flags}{A \code{numeric} vector of flagged records.}
 }
 \value{
-A summarized table of class \code{data.frame}, of length 19 and width 1, for
-the plausibility test results and their respective acceptability rates.
+A single row summary \code{tibble} with 19 columns for the plausibility check
+results and their respective acceptability rates.
 }
 \description{
 Check the overall plausibility and acceptability of WFHZ data through a
-structured test suite encompassing sampling and measurement-related biases checks
-in the data set. The test suite, including the criteria and corresponding rating of
-acceptability, follows the standards in the  SMART plausibility check. The only
-exception is the exclusion of MUAC checks. MUAC is checked separately using more
-comprehensive test suite as well.
+structured test suite encompassing checks for sampling and
+measurement-related biases in the dataset. The test suite, including the
+criteria and corresponding rating of acceptability, follows the standards in
+the SMART plausibility check.
 
-The function works on a data frame returned from this package's wrangling
-function for age and for WFHZ data.
+The function works on a data frame returned by this package's wrangling
+functions for age and for WFHZ data.
 }
 \examples{
 ## First wrangle age data ----

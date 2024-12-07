@@ -7,17 +7,17 @@
 \format{
 A tibble of 1,191 rows and 11 columns.\tabular{ll}{
    \strong{Variable} \tab \strong{Description} \cr
-   \emph{area} \tab Location where the survey took place \cr
+   \emph{area} \tab Survey location \cr
    \emph{dos} \tab Survey date \cr
    \emph{cluster} \tab Primary sampling unit \cr
    \emph{team} \tab Enumerator IDs \cr
-   \emph{sex} \tab Sex, "m" = boys, "f" = girls \cr
+   \emph{sex} \tab Sex; "m" = boys, "f" = girls \cr
    \emph{dob} \tab Date of birth \cr
    \emph{age} \tab Age in months, typically estimated using local event calendars \cr
-   \emph{weight} \tab Weight (kg) \cr
-   \emph{height} \tab Height (cm) \cr
-   \emph{edema} \tab Edema, "n" = no, "y" = yes \cr
-   \emph{muac} \tab Mid-upper arm circumference (mm) \cr
+   \emph{weight} \tab Weight in kilograms \cr
+   \emph{height} \tab Height in centimetres \cr
+   \emph{edema} \tab Edema; "n" = no edema, "y" = with edema \cr
+   \emph{muac} \tab Mid-upper arm circumference in millimetres \cr
 }
 }
 \source{

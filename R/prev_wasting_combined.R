@@ -7,7 +7,7 @@ complex_survey_estimates_combined <- function(df,
                                               wt = NULL,
                                               edema = NULL,
                                               .by) {
-  ## Difuse arguments ----
+  ## Defuse arguments ----
   wt <- enquo(wt)
   edema <- enquo(edema)
 
@@ -22,7 +22,7 @@ complex_survey_estimates_combined <- function(df,
         edema = !!edema,
         .by = "combined"
       ) |>
-        mutate(
+        dplyr::mutate(
           cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
         )
     )
@@ -35,7 +35,7 @@ complex_survey_estimates_combined <- function(df,
         muac = .data$muac,
         .by = "combined"
       ) |>
-        mutate(
+        dplyr::mutate(
           cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
         )
     )
@@ -43,31 +43,31 @@ complex_survey_estimates_combined <- function(df,
 
   ## Create survey object ----
   if (!quo_is_null(wt)) {
-    srvy <- df |>
-      as_survey_design(
-        ids = .data$cluster,
-        pps = "brewer",
-        variance = "YG",
-        weights = !!wt
-      )
+    srvy <- srvyr::as_survey_design(
+      .data = df,
+      ids = .data$cluster,
+      pps = "brewer",
+      variance = "YG",
+      weights = !!wt
+    )
   } else {
-    srvy <- df |>
-      as_survey_design(
-        ids = .data$cluster,
-        pps = "brewer",
-        variance = "YG"
-      )
+    srvy <- srvyr::as_survey_design(
+      .data = df,
+      ids = .data$cluster,
+      pps = "brewer",
+      variance = "YG"
+    )
   }
   ## Summarise prevalence ----
-  p <- srvy |>
-    group_by({{ .by }}) |>
-    filter(.data$cflags == 0) |>
-    summarise(
-      across(
-        c(.data$cgam:.data$cmam),
+  p <- dplyr::group_by(.data = srvy, {{ .by }}) |>
+    dplyr::filter(.data$cflags == 0) |>
+    dplyr::summarise(
+      dplyr::across(
+        .data$cgam:.data$cmam,
         list(
-          n = \(.)sum(., na.rm = TRUE),
-          p = \(.)survey_mean(.,
+          n = \(.) sum(., na.rm = TRUE),
+          p = \(.) srvyr::survey_mean(
+            .,
             vartype = "ci",
             level = 0.95,
             deff = TRUE,
@@ -83,56 +83,50 @@ complex_survey_estimates_combined <- function(df,
 
 
 #'
-#'
 #' Estimate the prevalence of combined wasting
 #'
 #' @description
 #' Estimate the prevalence of wasting based on the combined case-definition of
-#' weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows users to
-#' get the prevalence estimates in accordance with the complex sample
-#' design properties; this includes applying survey weights when needed or applicable.
-#' Before estimating, the function evaluates the quality of data by calculating
-#' and rating the standard deviation of WFHZ and MFAZ, as well as the p-value of
-#' the age ratio test.
-#' Prevalence will be calculated only when the rating of all test is as not
-#' problematic concurrently. If either of them is problematic, it cancels out
-#' the analysis and `NA`s get thrown.
+#' weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows 
+#' users to estimate prevalence in accordance with complex sample design 
+#' properties such as accounting for survey sample weights when needed or 
+#' applicable. The quality of the data is first evaluated by calculating and 
+#' rating the standard deviation of WFHZ and MFAZ and the p-value of the age 
+#' ratio test. Prevalence is calculated only when all tests are rated as not 
+#' problematic. If any of the tests rate as problematic, no estimation is done 
+#' and an NA value is returned. Outliers are detected in both WFHZ and MFAZ 
+#' datasets based on SMART flagging criteria. Identified outliers are then 
+#' excluded before prevalence estimation is performed.
 #'
-#' Outliers are detected in both WFHZ and in MUAC data set (through z-scores)
-#' based on SMART flags get excluded prior being piped into the actual prevalence
-#' analysis workflow.
+#' @param df A `tibble` object produced by sequential application of the
+#' [mw_wrangle_wfhz()] and [mw_wrangle_muac()]. Note that MUAC values in `df` 
+#' must be in millimeters unit after using [mw_wrangle_muac()]. Also, `df`
+#' must have a variable called `cluster` which contains the primary sampling
+#' unit identifiers.
 #'
-#' @param df A data set object of class `data.frame` to use. This must have been
-#' wrangled using this package's wrangling functions for both WFHZ and MUAC data
-#' sequentially. The order does not matter. Note that MUAC values should be
-#' converted to millimeters after using the MUAC wrangler. If this is not done,
-#' the function will stop execution and return an error message. Moreover, the
-#' function uses a variable called `cluster` where the primary sampling unit IDs
-#' are stored. Make sure to rename your cluster ID variable to `cluster`, otherwise
-#' the function will error and terminate the execution.
+#' @param wt A vector of class `double` of the survey sampling weights. Default 
+#' is NULL which assumes a self-weighted survey as is the case for a survey 
+#' sample selected proportional to population size (i.e., SMART survey sample).
+#' Otherwise, a weighted analysis is implemented.
 #'
-#' @param wt A vector of class `double` of the final survey weights. Default is
-#'  `NULL` assuming a self-weighted survey, as in the ENA for SMART software;
-#'  otherwise a weighted analysis is computed.
+#' @param edema A `character` vector for presence of nutritional edema coded as
+#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' edema. Default is NULL.
 #'
-#' @param edema A vector of class `character` of edema. Code will be
-#' "y" for presence and "n" for absence of bilateral edema. Default is `NULL`.
+#' @param .by A `character` or `numeric` vector of the geographical areas
+#' or identifiers for where the data was collected and for which the analysis
+#' should be summarised for.
 #'
-#' @param .by A vector of class `character` or `numeric` of the geographical areas
-#' or respective IDs for where the data was collected and for which the analysis
-#' should be summarised at.
-#'
-#' @returns A summarised table of class `data.frame` for the descriptive
-#' statistics about combined wasting.
+#' @returns A summary `tibble` for the descriptive statistics about combined 
+#' wasting.
 #'
 #' @details
-#' A concept of "combined flags" is introduced in this function. It consists of
-#' defining as flag any observation that is flagged in either `flag_wfhz` or
-#' `flag_mfaz` vectors. A new column `cflags` for combined flags is created and
-#' added to `df`. This ensures that all flagged observations from both WFHZ
-#' and MFAZ data are excluded from the prevalence analysis.
+#' A concept of *combined flags* is introduced in this function. Any observation
+#' that is flagged for either `flag_wfhz` or `flag_mfaz` is flagged under a new
+#' variable named `cflags` added to `df`. This ensures that all flagged 
+#' observations from both WFHZ and MFAZ data are excluded from the prevalence 
+#' analysis.
 #'
-#' *A glimpse on how `cflags` are defined:*
 #' | **flag_wfhz** | **flag_mfaz** | **cflags** |
 #' | :---: | :---: | :---: |
 #' | 1 | 0  | 1 |
@@ -163,12 +157,11 @@ mw_estimate_prevalence_combined <- function(df,
                                             wt = NULL,
                                             edema = NULL,
                                             .by = NULL) {
-  ## Difuse argument `.by` ----
+  ## Defuse argument `.by` ----
   .by <- enquo(.by)
 
   ## Enforce measuring unit is in "mm" ----
-  x <- as.character(pull(df, .data$muac))
-  if (any(grepl("\\.", x))) {
+  if (any(grepl("\\.", df$muac))) {
     stop("MUAC values must be in millimeters. Please try again.")
   }
 
@@ -177,32 +170,55 @@ mw_estimate_prevalence_combined <- function(df,
 
   if (!quo_is_null(.by)) {
     ## Rate standard deviation and set MUAC analysis path ----
-    x <- df |>
-      summarise(
-        std_wfhz = rate_std(sd(remove_flags(as.numeric(.data$wfhz), "zscores"), na.rm = TRUE)),
-        age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
-        std_mfaz = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
-        muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz),
-        .by = !!.by
-      )
+    x <- dplyr::summarise(
+      .data = df,
+      std_wfhz = rate_std(
+        stats::sd(
+          remove_flags(as.numeric(.data$wfhz), "zscores"), 
+          na.rm = TRUE
+        )
+      ),
+      age_ratio = rate_agesex_ratio(
+        mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
+      ),
+      std_mfaz = rate_std(
+        stats::sd(
+          remove_flags(as.numeric(.data$mfaz), "zscores"), 
+          na.rm = TRUE)
+      ),
+      muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz),
+      .by = !!.by
+    )
   } else {
     ## Rate standard deviation and set MUAC analysis path ----
-    x <- df |>
-      summarise(
-        std_wfhz = rate_std(sd(remove_flags(as.numeric(.data$wfhz), "zscores"), na.rm = TRUE)),
-        age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
-        std_mfaz = rate_std(sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
-        muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz)
-      )
+    x <- dplyr::summarise(
+      .data = df,
+      std_wfhz = rate_std(
+        stats::sd(
+          remove_flags(as.numeric(.data$wfhz), "zscores"), 
+          na.rm = TRUE
+        )
+      ),
+      age_ratio = rate_agesex_ratio(
+        mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
+      ),
+      std_mfaz = rate_std(
+        stats::sd(
+          remove_flags(as.numeric(.data$mfaz), "zscores"), 
+          na.rm = TRUE
+        )
+      ),
+      muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz)
+    )
   }
 
-  ## Iterate over data frame to compute prevalence according to the SD ----
+  ## Iterate over data.frame to compute prevalence according to the SD ----
   for (i in seq_len(nrow(x))) {
     if (!quo_is_null(.by)) {
-      area <- pull(x, !!.by)[i]
-      data <- filter(df, !!sym(quo_name(.by)) == !!area)
+      area <- dplyr::pull(x, !!.by)[i]
+      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == !!area)
     } else {
-      data <- df
+      data_subset <- df
     }
 
     std_wfhz <- x$std_wfhz[i]
@@ -210,25 +226,25 @@ mw_estimate_prevalence_combined <- function(df,
 
     if (std_wfhz != "Problematic" && muac_analysis_path == "unweighted") {
       ### Compute standard complex sample based prevalence analysis ----
-      output <- data |>
-        complex_survey_estimates_combined(
-          wt = {{ wt }},
-          edema = {{ edema }},
-          .by = !!.by
-        )
+      output <- complex_survey_estimates_combined(
+        df = data_subset,
+        wt = {{ wt }},
+        edema = {{ edema }},
+        .by = !!.by
+      )
     } else {
       ## Add NA ----
       if (!quo_is_null(.by)) {
-        output <- data |>
-          summarise(
-            cgam_p = NA_real_,
-            csam_p = NA_real_,
-            cmam_p = NA_real_,
-            .by = !!.by
-          )
+        output <- dplyr::summarise(
+          .data = data_subset,
+          cgam_p = NA_real_,
+          csam_p = NA_real_,
+          cmam_p = NA_real_,
+          .by = !!.by
+        )
       } else {
         ## Add NA ----
-        output <- tibble(
+        output <- tibble::tibble(
           cgam_p = NA_real_,
           csam_p = NA_real_,
           cmam_p = NA_real_
@@ -239,13 +255,15 @@ mw_estimate_prevalence_combined <- function(df,
   }
   ### Ensure that all categories in `.by` get added to the tibble ----
   if (!quo_is_null(.by)) {
-    results <- bind_rows(results) |>
-      relocate(.data$cgam_p, .after = .data$cgam_n) |>
-      relocate(.data$csam_p, .after = .data$csam_n) |>
-      relocate(.data$cmam_p, .after = .data$cmam_n)
+    results <- dplyr::bind_rows(results) |>
+      dplyr::relocate(.data$cgam_p, .after = .data$cgam_n) |>
+      dplyr::relocate(.data$csam_p, .after = .data$csam_n) |>
+      dplyr::relocate(.data$cmam_p, .after = .data$cmam_n)
   } else {
     ## Ungrouped results
-    results <- bind_rows(results)
+    results <- dplyr::bind_rows(results)
   }
+
+  ## Return results ----
   results
 }

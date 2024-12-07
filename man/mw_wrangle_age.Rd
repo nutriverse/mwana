@@ -7,35 +7,33 @@
 mw_wrangle_age(df, dos = NULL, dob = NULL, age, .decimals = 2)
 }
 \arguments{
-\item{df}{A data set of class \code{data.frame} to wrangle age from.}
+\item{df}{A \code{data.frame} object to wrangle age from.}
 
-\item{dos}{A vector of class \code{Date} for date of data collection from the
-\code{df}. Default is \code{NULL}.}
+\item{dos}{A \code{Date} vector of dates when data collection was conducted.
+Default is NULL.}
 
-\item{dob}{A vector of class \code{Date} for child's date of birth from the \code{df}.
-Default is \code{NULL}.}
+\item{dob}{A \code{Date} vector of dates of birth of child. Default is NULL.}
 
-\item{age}{A vector of class \code{numeric} of child's age in months. In most
-cases this will be estimated using local event calendars; in some other
-cases it can be a mix of the former and the one based on the child's
-date of birth and the date of data collection.}
+\item{age}{A \code{numeric} vector of child's age in months. In most cases this
+will be estimated using local event calendars or calculated age in months
+based on date of data collection and date of birth of child.}
 
-\item{.decimals}{The number of decimals places to which the age should be rounded.
-Default is 2.}
+\item{.decimals}{The number of decimal places to round off age to. Default is
+2.}
 }
 \value{
-A \code{data.frame} based on \code{df}. The variable \code{age} will be automatically
+A \code{tibble} based on \code{df}. The variable \code{age} will be automatically
 filled in each row where age value was missing and both the child's
 date of birth and the date of data collection are available. Rows where \code{age}
-is less than 6.0 and greater than or equal to 60.0 months old will be set to \code{NA}.
-Additionally, a new variable for \code{df} named \code{age_days}, of class \code{double}, will
-be created.
+is less than 6.0 and greater than or equal to 60.0 months old will be set to
+NA. Additionally, a new variable named \code{age_days} of class \code{double} for
+calculated age of child in days is added to \code{df}.
 }
 \description{
 Wrangle child's age for downstream analysis. This includes calculating age
-in months based on the date of data collection and the child's date of birth, and
-setting to \code{NA} the age values that are less than 6.0 and greater than or equal
-to 60.0 months old.
+in months based on the date of data collection and the child's date of birth,
+and setting to NA the age values that are less than 6.0 and greater than or
+equal to 60.0 months old.
 }
 \examples{
 

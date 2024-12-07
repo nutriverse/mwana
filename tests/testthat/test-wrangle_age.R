@@ -37,8 +37,8 @@ testthat::test_that(
     testthat::expect_error(
       mw_wrangle_age(df, surdate, birdate, age_, 2),
       regexp = paste0(
-        "age` must be of class 'numeric'; not ",
-        shQuote(class(df[["age_"]])), ". Please try again."
+        "age` must be of class numeric not ",
+        class(df[["age_"]]), ". Please try again."
       )
     )
   }
@@ -74,8 +74,8 @@ testthat::test_that(
     testthat::expect_error(
       mw_wrangle_age(df, dos = NULL, dob = NULL, age = month, 2),
       regexp = paste0(
-        "age` must be of class 'numeric'; not ",
-        shQuote(class(df[["month"]])), ". Please try again."
+        "age` must be of class numeric not ",
+        class(df[["month"]]), ". Please try again."
       )
     )
   }
@@ -93,8 +93,8 @@ testthat::test_that(
     testthat::expect_error(
       mw_wrangle_age(df, dos = NULL, dob = NULL, age = age, 2),
       regexp = paste0(
-        "age` must be of class 'numeric'; not ",
-        shQuote(class(df[["age"]])), ". Please try again."
+        "`age` must be of class numeric not ",
+        class(df[["age"]]), ". Please try again."
       )
     )
   }

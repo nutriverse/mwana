@@ -46,8 +46,8 @@ define_wasting_muac <- function(muac,
 #'
 #'
 define_wasting_zscores <- function(zscores,
-                                edema = NULL,
-                                .cases = c("gam", "sam", "mam")) {
+                                   edema = NULL,
+                                   .cases = c("gam", "sam", "mam")) {
   ## Enforce options in `.cases` ----
   .cases <- match.arg(.cases)
 
@@ -105,7 +105,11 @@ define_wasting_combined <- function(zscores,
         csam <- ifelse(zscores < -3 | muac < 115 | edema == "y", 1, 0)
       },
       "cmam" = {
-        cmam <- ifelse((zscores >= -3 & zscores < -2) | (muac >= 115 & muac < 125) & (edema == "n"), 1, 0)
+        cmam <- ifelse(
+          (zscores >= -3 & zscores < -2) | 
+            (muac >= 115 & muac < 125) & 
+            edema == "n", 1, 0
+        )
       }
     )
   } else {
@@ -119,7 +123,10 @@ define_wasting_combined <- function(zscores,
         csam <- ifelse(zscores < -3 | muac < 115, 1, 0)
       },
       "cmam" = {
-        cmam <- ifelse((zscores >= -3 & zscores < -2) | (muac >= 115 & muac < 125), 1, 0)
+        cmam <- ifelse(
+          (zscores >= -3 & zscores < -2) | 
+            (muac >= 115 & muac < 125), 1, 0
+        )
       }
     )
   }
@@ -130,37 +137,31 @@ define_wasting_combined <- function(zscores,
 #' Define wasting
 #'
 #' @description
-#' Define if a given observation in the data set is wasted or not, and its
+#' Determine if a given observation in the data set is wasted or not, and its
 #' respective form of wasting (global, severe or moderate) on the basis of
-#' z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), raw MUAC values and
-#' combined case-definition.
+#' z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), raw MUAC 
+#' values and combined case-definition.
 #'
-#' @param df A data set object of class `data.frame` to use. It must have been
-#' wrangled using this package's wrangling functions for WFHZ or MUAC, or both
-#' (for combined) as appropriate.
+#' @param df A `tibble` object. It must have been wrangled using this package's 
+#' wrangling functions for WFHZ or MUAC, or both (for combined) as appropriate.
 #'
-#' @param zscores A vector of class `double` of WFHZ or MFAZ values. If the class
-#' does not match the expected type, the function will stop execution and return
-#' an error message indicating the type of mismatch.
+#' @param zscores A vector of class `double` of WFHZ or MFAZ values.
 #'
-#' @param muac A vector of class `integer` or `numeric` of raw MUAC values in
-#' millimeters. If the class does not match the expected type, the function will
-#' stop execution and return an error message indicating the type of mismatch.
+#' @param muac An `integer` or `character` vector of raw MUAC values in
+#' millimeters.
 #'
-#' @param edema A vector of class `character` of edema. Default is `NULL`.
-#' If the class does not match the expected type, the function will stop execution
-#' and return an error message indicating the type of mismatch. Code values should be
-#' "y" for presence and "n" for absence of bilateral edema. If different, the
-#' function will stop execution and return an error indicating the issue.
+#' @param edema A `character` vector indicating edema status. Default is NULL.
+#' Code values should be "y" for presence and "n" for absence of nutritional 
+#' edema.
 #'
-#' @param .by A choice of the criterion by which the case-definition should done.
-#' Choose `zscores` for WFHZ or MFAZ, `muac` for raw MUAC and `combined` for
-#' combined.
+#' @param .by A choice of the criterion by which a case is to be defined. Choose 
+#' "zscores" for WFHZ or MFAZ, "muac" for raw MUAC and "combined" for combined.
+#' Default value is "zscores".
 #'
-#' @returns Three vectors named `gam`, `sam` and `mam`, of class `numeric`, same
-#' length as inputs, containing dummy values: 1 for case and 0 for not case.
-#' This is added to `df`. When `combined` is selected, vector's names become
-#' `cgam`, `csam` and `cmam`.
+#' @returns The `tibble` object `df` with additional columns named named `gam`, 
+#' `sam` and `mam`, each of class `numeric` containing coded values of either 
+#' 1 (case) and 0 (not a case). If `.by = "combined"`, additional columns are
+#' named `cgam`, `csam` and `cmam`.
 #'
 #' @examples
 #' ## Case-definition by z-scores ----
@@ -202,9 +203,9 @@ define_wasting <- function(df,
                            .by = c("zscores", "muac", "combined")) {
 
   ## Difuse and evaluate arguments ----
-  zscores <- eval_tidy(enquo(zscores), df)
-  muac <- eval_tidy(enquo(muac), df)
-  edema <- eval_tidy(enquo(edema), df)
+  zscores <- rlang::eval_tidy(enquo(zscores), df)
+  muac <- rlang::eval_tidy(enquo(muac), df)
+  edema <- rlang::eval_tidy(enquo(edema), df)
 
   ## Enforce options in `.by` ----
   .by <- match.arg(.by)
@@ -212,25 +213,34 @@ define_wasting <- function(df,
   ## Enforce class of `zscores` ----
   if(!is.null(zscores)) {
     if (!is.double(zscores)) {
-      stop("`zscores` must be of class 'double'; not ", shQuote(class(zscores)), ". Please try again.")
+      stop(
+        "`zscores` must be of class double not ", 
+        class(zscores), ". Please try again."
+      )
     }
   }
 
   ## Enforce class of `muac` ----
   if(!is.null(muac)) {
     if (!(is.numeric(muac) | is.integer(muac))) {
-      stop("`muac` must be of class 'numeric' or 'integer'; not ", shQuote(class(muac)), ". Please try again.")
+      stop(
+        "`muac` must be of class numeric or integer not ", 
+        class(muac), ". Please try again."
+      )
     }
   }
 
   ## Enforce class of `edema` ----
   if(!is.null(edema)) {
     if (!is.character(edema)) {
-      stop("`edema` must be of class 'character'; not ", shQuote(class(edema)), ". Please try again.")
+      stop(
+        "`edema` must be of class character not ", 
+        class(edema), ". Please try again."
+      )
     }
     ## Enforce code values in `edema` ----
     if (!(all(levels(as.factor(as.character(edema))) %in% c("y", "n")))) {
-      stop("Values in `edema` should either be 'y' or 'n'. Please try again.")
+      stop('Values in `edema` should either be "y" or "n". Please try again.')
     }
   }
 
@@ -239,69 +249,69 @@ define_wasting <- function(df,
     ### By WFHZ or MFAZ and add to the data frame ----
     .by,
     "zscores" = {
-      df |>
-        mutate(
-          gam = define_wasting_zscores(
-            zscores = {{ zscores }},
-            edema = {{ edema }},
-            .cases = "gam"
-          ),
-          sam = define_wasting_zscores(
-            zscores = {{ zscores }},
-            edema = {{ edema }},
-            .cases = "sam"
-          ),
-          mam = define_wasting_zscores(
-            zscores = {{ zscores }},
-            edema = {{ edema }},
-            .cases = "mam"
-          )
+      dplyr::mutate(
+        .data = df,
+        gam = define_wasting_zscores(
+          zscores = {{ zscores }},
+          edema = {{ edema }},
+          .cases = "gam"
+        ),
+        sam = define_wasting_zscores(
+          zscores = {{ zscores }},
+          edema = {{ edema }},
+          .cases = "sam"
+        ),
+        mam = define_wasting_zscores(
+          zscores = {{ zscores }},
+          edema = {{ edema }},
+          .cases = "mam"
         )
+      )
     },
     ### By MUAC and add to the data frame ----
     "muac" = {
-      df |>
-        mutate(
-          gam = define_wasting_muac(
-            muac = {{ muac }},
-            edema = {{ edema }},
-            .cases = "gam"
-          ),
-          sam = define_wasting_muac(
-            muac = {{ muac }},
-            edema = {{ edema }},
-            .cases = "sam"
-          ),
-          mam = define_wasting_muac(
-            muac = {{ muac }},
-            edema = {{ edema }},
-            .cases = "mam"
-          )
+      dplyr::mutate(
+        .data = df,
+        gam = define_wasting_muac(
+          muac = {{ muac }},
+          edema = {{ edema }},
+          .cases = "gam"
+        ),
+        sam = define_wasting_muac(
+          muac = {{ muac }},
+          edema = {{ edema }},
+          .cases = "sam"
+        ),
+        mam = define_wasting_muac(
+          muac = {{ muac }},
+          edema = {{ edema }},
+          .cases = "mam"
         )
+      )
     },
     ### By combined add to the data frame ----
     "combined" = {
-      df |>
-        mutate(
-          cgam = define_wasting_combined(
-            zscores = {{ zscores }},
-            muac = {{ muac }},
-            edema = {{ edema }},
-            .cases = "cgam"
-          ),
-          csam = define_wasting_combined(
-            zscores = {{ zscores }},
-            muac = {{ muac }},
-            edema = {{ edema }},
-            .cases = "csam"
-          ),
-          cmam = define_wasting_combined(
-            zscores = {{ zscores }},
-            muac = {{ muac }},
-            edema = {{ edema }},
-            .cases = "cmam"
-          )
+      dplyr::mutate(
+        .data = df,
+        cgam = define_wasting_combined(
+          zscores = {{ zscores }},
+          muac = {{ muac }},
+          edema = {{ edema }},
+          .cases = "cgam"
+        ),
+        csam = define_wasting_combined(
+          zscores = {{ zscores }},
+          muac = {{ muac }},
+          edema = {{ edema }},
+          .cases = "csam"
+        ),
+        cmam = define_wasting_combined(
+          zscores = {{ zscores }},
+          muac = {{ muac }},
+          edema = {{ edema }},
+          .cases = "cmam"
         )
+      )
     }
   )
 }
@@ -316,14 +326,14 @@ define_wasting <- function(df,
 smart_tool_case_definition <- function(muac, edema = NULL) {
   if (!is.null(edema)) {
     ## Define cases including edema ----
-    x <- case_when(
+    x <- dplyr::case_when(
       muac < 115 | {{ edema }} == "y" ~ "sam",
       muac >= 115 & muac < 125 & {{ edema }} == "n" ~ "mam",
       .default = "not wasted"
     )
   } else {
     ## Define cases excluding edema ----
-    x <- case_when(
+    x <- dplyr::case_when(
       muac < 115 ~ "sam",
       muac >= 115 & muac < 125 ~ "mam",
       .default = "not wasted"

@@ -83,7 +83,7 @@ testthat::test_that(
           .to = "cm",
           .decimals = 3
         ),
-      regexp = "Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively"
+      regexp = 'Values for sex should either be "m" and "f" or 1 and 2 for male and female respectively'
     )
   }
 )
@@ -118,7 +118,7 @@ testthat::test_that(
           .to = "cm",
           .decimals = 3
         ),
-      regexp = "Values for sex should either be 'm', 'f' or 1 and 2 for male and female respectively"
+      regexp = 'Values for sex should either be "m" and "f" or 1 and 2 for male and female respectively'
     )
   }
 )

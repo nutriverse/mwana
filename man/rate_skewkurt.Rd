@@ -7,12 +7,10 @@
 rate_skewkurt(sk)
 }
 \arguments{
-\item{sk}{A vector of class \code{double} for skewness or kurtosis test results.
-If the class does not match the expected type, the function
-will stop execution and return an error message indicating the type of mismatch.}
+\item{sk}{A vector of class \code{double} for skewness or kurtosis test results.}
 }
 \value{
-A vector of class \code{factor} of the same length as \code{sk} for the
+A vector of class \code{factor} with the same length as \code{sk} for the
 acceptability rate.
 }
 \description{

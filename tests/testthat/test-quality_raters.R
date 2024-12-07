@@ -33,14 +33,15 @@ testthat::test_that(
     testthat::expect_error(
       rate_propof_flagged(as.character(props), .in = "mfaz"),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.character(props))),
+        "`p` must be of class double not ", 
+        class(as.character(props)),
         ". Please try again."
       )
     )
     testthat::expect_error(
       rate_propof_flagged(as.integer(props), .in = "mfaz"),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.integer(props))),
+        "`p` must be of class double not ", class(as.integer(props)),
         ". Please try again."
       )
     )
@@ -82,14 +83,15 @@ testthat::test_that(
     testthat::expect_error(
       rate_propof_flagged(as.character(props), .in = "wfhz"),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.character(props))),
+        "`p` must be of class double not ", 
+        class(as.character(props)),
         ". Please try again."
       )
     )
     testthat::expect_error(
       rate_propof_flagged(as.integer(props), .in = "wfhz"),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.integer(props))),
+        "`p` must be of class double not ", class(as.integer(props)),
         ". Please try again."
       )
     )
@@ -132,14 +134,14 @@ testthat::test_that(
     testthat::expect_error(
       rate_propof_flagged(as.character(props), .in = "raw_muac"),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.character(props))),
+        "`p` must be of class double not ", class(as.character(props)),
         ". Please try again."
       )
     )
     testthat::expect_error(
       rate_propof_flagged(as.integer(props), .in = "raw_muac"),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.integer(props))),
+        "`p` must be of class double not ", class(as.integer(props)),
         ". Please try again."
       )
     )
@@ -177,14 +179,14 @@ testthat::test_that(
     testthat::expect_error(
       rate_std(as.integer(stds), .of = "zscores"),
       regexp = paste0(
-        "`sd` must be of class double; not ", shQuote(class(as.integer(stds))),
+        "`sd` must be of class double not ", class(as.integer(stds)),
         ". Please try again."
       )
     )
     testthat::expect_error(
       rate_std(as.character(stds), .of = "zscores"),
       regexp = paste0(
-        "`sd` must be of class double; not ", shQuote(class(as.character(stds))),
+        "`sd` must be of class double not ", class(as.character(stds)),
         ". Please try again."
       )
     )
@@ -222,14 +224,14 @@ testthat::test_that(
     testthat::expect_error(
       rate_std(as.integer(val), .of = "raw_muac"),
       regexp = paste0(
-        "`sd` must be of class double; not ", shQuote(class(as.integer(val))),
+        "`sd` must be of class double not ", class(as.integer(val)),
         ". Please try again."
       )
     )
     testthat::expect_error(
       rate_std(as.character(val), .of = "raw_muac"),
       regexp = paste0(
-        "`sd` must be of class double; not ", shQuote(class(as.character(val))),
+        "`sd` must be of class double not ", class(as.character(val)),
         ". Please try again."
       )
     )
@@ -267,14 +269,14 @@ testthat::test_that(
     testthat::expect_error(
       rate_agesex_ratio(as.character(pval)),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.character(pval))),
+        "`p` must be of class double not ", class(as.character(pval)),
         ". Please try again."
       )
     )
     testthat::expect_error(
       rate_agesex_ratio(as.integer(pval)),
       regexp = paste0(
-        "`p` must be of class double; not ", shQuote(class(as.integer(pval))),
+        "`p` must be of class double not ", class(as.integer(pval)),
         ". Please try again."
       )
     )
@@ -306,14 +308,14 @@ testthat::test_that(
     testthat::expect_error(
       rate_skewkurt(as.character(sk)),
       regexp = paste0(
-        "`sk` must be of class double; not ", shQuote(class(as.character(sk))),
+        "`sk` must be of class double not ", class(as.character(sk)),
         ". Please try again."
       )
     )
     testthat::expect_error(
       rate_skewkurt(as.integer(sk)),
       regexp = paste0(
-        "`sk` must be of class double; not ", shQuote(class(as.integer(sk))),
+        "`sk` must be of class double not ", class(as.integer(sk)),
         ". Please try again."
       )
     )
@@ -342,8 +344,8 @@ testthat::test_that(
     testthat::expect_error(
       rate_overall_quality(as.character(q)),
       regexp = paste0(
-        "`q` must be of class numeric or integer; not ",
-        shQuote(class(as.character(q))), ". Please try again."
+        "`q` must be of class numeric or integer not ",
+        class(as.character(q)), ". Please try again."
       )
     )
   }

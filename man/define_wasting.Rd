@@ -13,39 +13,33 @@ define_wasting(
 )
 }
 \arguments{
-\item{df}{A data set object of class \code{data.frame} to use. It must have been
-wrangled using this package's wrangling functions for WFHZ or MUAC, or both
-(for combined) as appropriate.}
+\item{df}{A \code{tibble} object. It must have been wrangled using this package's
+wrangling functions for WFHZ or MUAC, or both (for combined) as appropriate.}
 
-\item{zscores}{A vector of class \code{double} of WFHZ or MFAZ values. If the class
-does not match the expected type, the function will stop execution and return
-an error message indicating the type of mismatch.}
+\item{zscores}{A vector of class \code{double} of WFHZ or MFAZ values.}
 
-\item{muac}{A vector of class \code{integer} or \code{numeric} of raw MUAC values in
-millimeters. If the class does not match the expected type, the function will
-stop execution and return an error message indicating the type of mismatch.}
+\item{muac}{An \code{integer} or \code{character} vector of raw MUAC values in
+millimeters.}
 
-\item{edema}{A vector of class \code{character} of edema. Default is \code{NULL}.
-If the class does not match the expected type, the function will stop execution
-and return an error message indicating the type of mismatch. Code values should be
-"y" for presence and "n" for absence of bilateral edema. If different, the
-function will stop execution and return an error indicating the issue.}
+\item{edema}{A \code{character} vector indicating edema status. Default is NULL.
+Code values should be "y" for presence and "n" for absence of nutritional
+edema.}
 
-\item{.by}{A choice of the criterion by which the case-definition should done.
-Choose \code{zscores} for WFHZ or MFAZ, \code{muac} for raw MUAC and \code{combined} for
-combined.}
+\item{.by}{A choice of the criterion by which a case is to be defined. Choose
+"zscores" for WFHZ or MFAZ, "muac" for raw MUAC and "combined" for combined.
+Default value is "zscores".}
 }
 \value{
-Three vectors named \code{gam}, \code{sam} and \code{mam}, of class \code{numeric}, same
-length as inputs, containing dummy values: 1 for case and 0 for not case.
-This is added to \code{df}. When \code{combined} is selected, vector's names become
-\code{cgam}, \code{csam} and \code{cmam}.
+The \code{tibble} object \code{df} with additional columns named named \code{gam},
+\code{sam} and \code{mam}, each of class \code{numeric} containing coded values of either
+1 (case) and 0 (not a case). If \code{.by = "combined"}, additional columns are
+named \code{cgam}, \code{csam} and \code{cmam}.
 }
 \description{
-Define if a given observation in the data set is wasted or not, and its
+Determine if a given observation in the data set is wasted or not, and its
 respective form of wasting (global, severe or moderate) on the basis of
-z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), raw MUAC values and
-combined case-definition.
+z-scores of weight-for-height (WFHZ), muac-for-age (MFAZ), raw MUAC
+values and combined case-definition.
 }
 \examples{
 ## Case-definition by z-scores ----

@@ -7,16 +7,14 @@
 rate_propof_flagged(p, .in = c("mfaz", "wfhz", "raw_muac"))
 }
 \arguments{
-\item{p}{A vector of class \code{double}, containing the proportions of flagged
-records in the data set. If the class does not match the expected type, the
-function will stop execution and return an error message indicating the type
-of mismatch.}
+\item{p}{A vector of class \code{double} of the proportions of flagged records in
+the data set.}
 
-\item{.in}{Specifies the data set where the rating should be done,
-with options: "wfhz", "mfaz", or "raw_muac".}
+\item{.in}{Specifies the data set where the rating should be done. Can be
+"wfhz", "mfaz", or "raw_muac". Default to "wfhz".}
 }
 \value{
-A vector of class \code{factor} of the same length as input, for the
+A vector of class \code{factor} with the same length as \code{p} for the
 acceptability rate.
 }
 \description{
