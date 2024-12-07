@@ -1,5 +1,3 @@
-# mwana (development version)
-
 # mwana 0.2.1
 
 ## General updates
