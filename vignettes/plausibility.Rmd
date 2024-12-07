@@ -1,0 +1,690 @@
+---
+title: "Running plausibility checks"
+author: Tomás Zaba
+bibliography: references.bib
+csl: harvard-cite-them-right-11th-edition.csl
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>"
+vignette: >
+  %\VignetteIndexEntry{Running plausibility checks}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+# Introduction
+
+Plausibility check is a tool that evaluates the overall quality and acceptability of anthropometric data to ensure its suitability for informing decision-making process.  
+
+`mwana` provides a set of handy functions to facilitate this evaluation. These functions allow users to assess the acceptability of weight-for-height z-score (WFHZ) and mid upper-arm circumference (MUAC) data. The evaluation of the latter can be done on the basis of MUAC-for-age z-score (MFAZ) or raw MUAC values.  
+
+In this vignette, we will learn how to use these functions and when to consider using MFAZ plausibility check over the one based on raw MUAC values. For demonstration, we will use a `mwana` built-in sample data set named `anthro.01`. This data set contains district level SMART surveys from anonymized locations. Do `?anthro.01` in `R` console to read more about it.
+
+We will begin the demonstration with the plausibility check that you are most familiar with and then proceed to the ones you are less familiar with. 
+
+## Plausibility check of WFHZ data
+
+We check the plausibility of WFHZ data by calling the `mw_plausibility_check_wfhz()` function. Before doing that, we need ensure the data is in the right "shape and format" that is accepted and understood by the function. Don't worry, you will soon learn how to get there. But first, let's take a moment to walk you through some key features about this function. 
+
+`mw_plausibility_check_wfhz()` is a replica of the plausibility check in ENA for SMART software of the SMART Methodology [@smart2017]. Under the hood, it runs the same test suite you already know from SMART. It also applies the same rating and scoring criteria. Beware though that there are some small differences to have in mind: 
+
+  (i) `mw_plausibility_check_wfhz()` does not include MUAC in its test suite. This is simply due the fact that now you can run a more comprehensive test suite for MUAC.
+  
+  (ii) `mw_plausibility_check_wfhz()` allows user to run checks on a multiple-area data set at once, without having to repeat the same workflow over and over again for the number of areas the data holds. 
+
+That is it! Now we can begin delving into the "how to". 
+
+It is always a good practice to start off by inspecting our data set. Let's check the first 6 rows of our data set:
+
+
+``` r
+head(anthro.01)
+```
+
+```
+## # A tibble: 6 × 11
+##   area       dos        cluster  team sex   dob      age weight height edema  muac
+##   <chr>      <date>       <int> <int> <chr> <date> <int>  <dbl>  <dbl> <chr> <int>
+## 1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n       146
+## 2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n       127
+## 3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n       142
+## 4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n       149
+## 5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n       143
+## 6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n       132
+```
+
+We can see that the data set has eleven variables, and the way how their respective values are presented. This is useful to inform the data wrangling workflow. 
+
+### Data wrangling
+
+As mentioned somewhere above, before we supply a data object to `mw_plausibility_check_wfhz()`, we need to wrangle it first. This task is executed by `mw_wrangle_age()` and `mw_wrangle_wfhz()`. Read more about the technical documentation by doing  `help("mw_wrangle_age")` or `help("mw_wrangle_wfhz")` in `R` console. 
+
+#### Wrangling age {#sec-age}
+
+We use `mw_wrangle_age()` to calculate child's age in months based on the date of data collection and child's date of birth. This is done as follows:
+
+
+``` r
+age_mo <- mw_wrangle_age(   # <1>
+  df = anthro.01            # <2>
+  dos = dos,                # <3>
+  dob = dob,                # <4>
+  age = age,                # <5>
+  .decimals = 2             # <6>
+)
+```
+
+1. The output for this operation will be assigned to an object called `age_mo`.
+
+2. The argument `df` is supplied with the `anthro.01` object which contains variables related to age that will be used for the wrangling process.
+
+3. The argument `dos` is supplied with the unquoted variable name in `df` that contains the date when the data collection was performed. In the `anthro.01` dataset, this so happens to be `dos` as well.
+
+4. The argument `dob` is supplied with the unquoted variable name in `df` that contains the date when the child was born. In the `anthro.01` dataset, this so happens to be `dob` as well.
+
+5. The argument `age` is supplied with the unquoted variable name in `df` that contains the age of the child in months. In the `anthro.01` dataset, this so happens to be `age` as well.
+
+6. The argument `.decimals` allows the user to specify the number of decimal places to which the output age values will be rounded off to. By default, `.decimals` is set to 2. So, even without specifying this argument, the resulting output will be rounded off to 2.
+
+This will return: 
+
+
+```
+## # A tibble: 6 × 12
+##   area       dos        cluster  team sex   dob      age weight height edema  muac age_days
+##   <chr>      <date>       <int> <int> <chr> <date> <int>  <dbl>  <dbl> <chr> <int>    <dbl>
+## 1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n       146    1796.
+## 2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n       127     244.
+## 3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n       142     578.
+## 4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n       149    1491.
+## 5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n       143     974 
+## 6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n       132     517.
+```
+
+#### Wrangling all other remaining variables 
+
+For this, we call `mw_wrangle_wfhz()` as follows: 
+
+
+``` r
+wrangled_df <- anthro.01 |>
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  )
+```
+
+In this example, the argument `.recode_sex` was set to `TRUE`. That is because under the hood, to compute the z-scores, a task made possible thanks to the {`zscorer`} package [@zscorer], it uses sex coded into 1 and 2 for male and female,  respectively. This means that if our sex variable is already in 1 and 2's, we would set it to `FALSE`. 
+
+:::{.callout-note}
+If by any chance your sex variable is coded in any other different way than aforementioned, then you will have to recode it outside `mwana` utilities and then set `.recode_sex` accordingly.
+:::
+
+Under the hood, after recoding (or not) the sex variables, `mw_wrangle_wfhz()` computes the z-scores, then identifies outliers and adds them to the data set. Two new variables (`wfhz` and `flag_wfhz`) are created and added to the data set. We can see this below: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 6 × 3
+##   area         wfhz flag_wfhz
+##   <chr>       <dbl>     <dbl>
+## 1 District E -1.83          0
+## 2 District E -0.956         0
+## 3 District E -0.796         0
+## 4 District E -0.74          0
+## 5 District E -0.679         0
+## 6 District E -0.432         0
+```
+
+### On to *de facto* plausibility check of WFHZ data
+
+We can check the plausibility of our data by calling `mw_plausibility_check_wfhz()` function as demonstrated below: 
+
+
+``` r
+x <- wrangled_df |>
+  mw_plausibility_check_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz
+  )
+```
+
+Or we can chain all previous functions in this way:
+
+
+``` r
+x <- anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |>
+  mw_plausibility_check_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz
+  )
+```
+
+The returned output is: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 1 × 19
+##       n flagged flagged_class sex_ratio sex_ratio_class age_ratio age_ratio_class dps_wgt dps_wgt_class
+##   <int>   <dbl> <fct>             <dbl> <chr>               <dbl> <chr>             <dbl> <chr>        
+## 1  1191  0.0101 Excellent         0.297 Excellent           0.409 Excellent          3.81 Excellent    
+## # ℹ 10 more variables: dps_hgt <dbl>, dps_hgt_class <chr>, sd <dbl>, sd_class <chr>, skew <dbl>,
+## #   skew_class <fct>, kurt <dbl>, kurt_class <fct>, quality_score <dbl>, quality_class <fct>
+```
+
+As we can see, the returned output is a summary table of statistics and ratings. 
+We can neat it for more clarity and readability. We can achieve this by chaining `mw_neat_output_wfhz()` to the previous pipeline: 
+
+
+``` r
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |>
+  mw_plausibility_check_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz
+  ) |>
+  mw_neat_output_wfhz()
+```
+
+This will give us: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 1 × 19
+##   `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)` `Class. of sex ratio`
+##              <int> <chr>              <fct>                    <chr>           <chr>                
+## 1             1191 1.0%               Excellent                0.297           Excellent            
+## # ℹ 14 more variables: `Age ratio (p)` <chr>, `Class. of age ratio` <chr>, `DPS weight (#)` <dbl>,
+## #   `Class. DPS weight` <chr>, `DPS height (#)` <dbl>, `Class. DPS height` <chr>,
+## #   `Standard Dev* (#)` <dbl>, `Class. of standard dev` <chr>, `Skewness* (#)` <dbl>,
+## #   `Class. of skewness` <fct>, `Kurtosis* (#)` <dbl>, `Class. of kurtosis` <fct>,
+## #   `Overall score` <dbl>, `Overall quality` <fct>
+```
+
+An already formatted table, with scientific notations converted to standard notations, etc.
+
+When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by using `group_by()` function from the {`dplyr`} package as follows:
+
+
+``` r
+## Load library ----
+library(dplyr)
+
+## The workflow ----
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_wfhz(
+    sex = sex,
+    weight = weight,
+    height = height,
+    .recode_sex = TRUE
+  ) |>
+  group_by(area) |> 
+  mw_plausibility_check_wfhz(
+    sex = sex,
+    age = age,
+    weight = weight,
+    height = height,
+    flags = flag_wfhz
+  ) |> 
+  group_by(area) |> 
+  mw_neat_output_wfhz()
+```
+
+This will return the following: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 2 × 20
+## # Groups:   Group [2]
+##   Group      `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
+##   <chr>                 <int> <chr>              <fct>                    <chr>          
+## 1 District E              505 0.8%               Excellent                0.593          
+## 2 District G              686 1.2%               Excellent                0.380          
+## # ℹ 15 more variables: `Class. of sex ratio` <chr>, `Age ratio (p)` <chr>,
+## #   `Class. of age ratio` <chr>, `DPS weight (#)` <dbl>, `Class. DPS weight` <chr>,
+## #   `DPS height (#)` <dbl>, `Class. DPS height` <chr>, `Standard Dev* (#)` <dbl>,
+## #   `Class. of standard dev` <chr>, `Skewness* (#)` <dbl>, `Class. of skewness` <fct>,
+## #   `Kurtosis* (#)` <dbl>, `Class. of kurtosis` <fct>, `Overall score` <dbl>, `Overall quality` <fct>
+```
+
+At this point, you have reached the end of your workflow 🎉 .
+
+## Plausibility check of MFAZ data
+
+We will assess the plausibility of MUAC data through MFAZ if we have age variable available in our data set.
+
+:::{.callout-note}
+The plausibility check for MFAZ data was built based on the insights gotten from @bilukha research presented at the 2023 High-Level Technical Assessment Workshop held in Nairobi, Kenya [@smarthighlevel]. Results from this research suggested a feasibility of applying the similar plausibility check as that of WFHZ for MFAZ, with a maximum acceptability of percent of flagged 
+records of 2.0%.
+:::
+
+We can run MFAZ plausibility check by calling `mw_plausibility_check_mfaz()`. As in WFHZ, we first need to ensure that the data is in the right shape and format that is accepted and understood by the function. The workflow starts with wrangling age; for this, we approach the same way as in @sec-age.
+
+:::{.callout-important}
+## Age ratio test in MFAZ
+
+As you know, the age ratio test in WFHZ is done on children aged 6 to 29 months old over those aged 30 to 59 months old. 
+This is different in MFAZ. The test is done on children aged 6 to 23 months over those aged 24 to 59 months old. This is as in the SMART MUAC Tool [@smartmuactool]. The test results is also used in the prevalence analysis to implement what the SMART MUAC tool does. This is further demonstrated in the vignette about prevalence.
+:::
+
+### Wrangling MFAZ data {#sec-wrangle_mfaz}
+
+This is the job of `mw_wrangle_muac()` function. We use it as follows:
+
+
+``` r
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    .to = "cm"
+  )
+```
+
+Just as in WFHZ wrangler, under the hood, `mw_wrangle_muac()` computes the z-scores then identifies outliers and flags them. These are stored in the `mfaz` and `flag_mfaz` variables that are created and added to the data set. 
+
+The above code returns: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 1,191 × 14
+##    area       dos        cluster  team   sex dob      age weight height edema  muac age_days   mfaz
+##    <chr>      <date>       <int> <int> <dbl> <date> <int>  <dbl>  <dbl> <chr> <dbl>    <dbl>  <dbl>
+##  1 District E 2023-12-04       1     3     1 NA        59   15.6  109.  n      14.6    1796. -1.45 
+##  2 District E 2023-12-04       1     3     1 NA         8    7.5   68.6 n      12.7     244. -1.67 
+##  3 District E 2023-12-04       1     3     1 NA        19    9.7   79.5 n      14.2     578. -0.617
+##  4 District E 2023-12-04       1     3     2 NA        49   14.3  100.  n      14.9    1491. -1.02 
+##  5 District E 2023-12-04       1     3     2 NA        32   12.4   92.1 n      14.3     974  -0.93 
+##  6 District E 2023-12-04       1     3     2 NA        17    9.3   77.8 n      13.2     517. -1.10 
+##  7 District E 2023-12-04       1     3     2 NA        20   10.1   80.4 n      14.3     609. -0.255
+##  8 District E 2023-12-04       1     3     2 NA        27   11.7   87.1 n      14.3     822. -0.677
+##  9 District E 2023-12-04       1     3     1 NA        46   13.6   98   n      13.5    1400. -2.18 
+## 10 District E 2023-12-04       1     3     1 NA        58   17.2  109.  n      15.9    1765. -0.403
+## # ℹ 1,181 more rows
+## # ℹ 1 more variable: flag_mfaz <dbl>
+```
+
+:::{.callout-note}
+`mw_wrangle_muac()` accepts MUAC values in centimeters. This is why it takes the arguments `.recode_muac` and `.to` to control whether there is need to transform the variable `muac` or not. Read the function documentation to learn about how to control these two arguments.
+:::
+
+### On to *de facto* plausibility check of MFAZ data
+
+We achieve this by calling the `mw_plausibility_check_mfaz()` function: 
+
+
+``` r
+## Load dplyr library ----
+library(dplyr)
+
+## The workflow ----
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    .to = "cm"
+  ) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
+  mw_plausibility_check_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz
+  )
+```
+
+And this will return: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 1 × 17
+##       n flagged flagged_class sex_ratio sex_ratio_class age_ratio age_ratio_class   dps dps_class    sd
+##   <int>   <dbl> <fct>             <dbl> <chr>               <dbl> <chr>           <dbl> <chr>     <dbl>
+## 1  1191 0.00504 Excellent         0.297 Excellent           0.636 Excellent         100 Problema… 0.767
+## # ℹ 7 more variables: sd_class <chr>, skew <dbl>, skew_class <fct>, kurt <dbl>, kurt_class <fct>,
+## #   quality_score <dbl>, quality_class <fct>
+```
+
+We can also neat this output. We just need to call `mw_neat_output_mfaz()` and chain it to the pipeline:
+
+
+``` r
+## Load dplyr library ----
+library(dplyr)
+
+## The workflow ----
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    .to = "cm"
+  ) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
+  mw_plausibility_check_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz
+  ) |>
+  mw_neat_output_mfaz()
+```
+
+This will return: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 1 × 17
+##   `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)` `Class. of sex ratio`
+##              <int> <chr>              <fct>                    <chr>           <chr>                
+## 1             1191 0.5%               Excellent                0.297           Excellent            
+## # ℹ 12 more variables: `Age ratio (p)` <chr>, `Class. of age ratio` <chr>, `DPS (#)` <dbl>,
+## #   `Class. of DPS` <chr>, `Standard Dev* (#)` <dbl>, `Class. of standard dev` <chr>,
+## #   `Skewness* (#)` <dbl>, `Class. of skewness` <fct>, `Kurtosis* (#)` <dbl>,
+## #   `Class. of kurtosis` <fct>, `Overall score` <dbl>, `Overall quality` <fct>
+```
+
+We can also run checks on a multiple-area data set as follows: 
+
+
+``` r
+## Load dplyr library ----
+library(dplyr)
+
+## The workflow ----
+anthro.01 |>
+  mw_wrangle_age(
+    dos = dos,
+    dob = dob,
+    age = age,
+    .decimals = 2
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = "age",
+    .recode_sex = TRUE,
+    .recode_muac = TRUE,
+    .to = "cm"
+  ) |>
+  mutate(muac = recode_muac(muac, .to = "mm")) |>
+  group_by(area) |> 
+  mw_plausibility_check_mfaz(
+    sex = sex,
+    muac = muac,
+    age = age,
+    flags = flag_mfaz
+  ) |>
+  group_by(area) |> 
+  mw_neat_output_mfaz()
+```
+
+This will return: 
+
+
+```
+## =======================================================================================================
+```
+
+```
+## # A tibble: 2 × 18
+## # Groups:   Group [2]
+##   Group      `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
+##   <chr>                 <int> <chr>              <fct>                    <chr>          
+## 1 District E              505 0.0%               Excellent                0.593          
+## 2 District G              686 0.9%               Excellent                0.380          
+## # ℹ 13 more variables: `Class. of sex ratio` <chr>, `Age ratio (p)` <chr>,
+## #   `Class. of age ratio` <chr>, `DPS (#)` <dbl>, `Class. of DPS` <chr>, `Standard Dev* (#)` <dbl>,
+## #   `Class. of standard dev` <chr>, `Skewness* (#)` <dbl>, `Class. of skewness` <fct>,
+## #   `Kurtosis* (#)` <dbl>, `Class. of kurtosis` <fct>, `Overall score` <dbl>, `Overall quality` <fct>
+```
+
+At this point, you have reached the end of your workflow ✨.
+
+## Plausibility check of raw MUAC data
+
+We will assess the plausibility of raw MUAC data through it's raw values when the variable age is not available in the data set. This is a job assigned to `mw_plausibility_check_muac()`. The workflow for this check is the shortest one.
+
+### Data wrangling
+
+As you can tell, z-scores cannot be computed in the absence of age. In this way, the data wrangling workflow would be quite minimal. You still set the arguments inside `mw_wrangle_muac()` as learned in @sec-wrangle_mfaz. The only difference is that here we will set `age` to `NULL`. Fundamentally, under the hood the function detects MUAC values that are outliers and flags them and stores them in `flag_muac` variable that is added to the data set. 
+  
+We will continue using the same data set:
+
+
+``` r
+anthro.01 |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  )
+```
+
+This returns: 
+
+
+```
+## # A tibble: 1,191 × 12
+##    area       dos        cluster  team   sex dob      age weight height edema  muac flag_muac
+##    <chr>      <date>       <int> <int> <dbl> <date> <int>  <dbl>  <dbl> <chr> <int>     <dbl>
+##  1 District E 2023-12-04       1     3     1 NA        59   15.6  109.  n       146         0
+##  2 District E 2023-12-04       1     3     1 NA         8    7.5   68.6 n       127         0
+##  3 District E 2023-12-04       1     3     1 NA        19    9.7   79.5 n       142         0
+##  4 District E 2023-12-04       1     3     2 NA        49   14.3  100.  n       149         0
+##  5 District E 2023-12-04       1     3     2 NA        32   12.4   92.1 n       143         0
+##  6 District E 2023-12-04       1     3     2 NA        17    9.3   77.8 n       132         0
+##  7 District E 2023-12-04       1     3     2 NA        20   10.1   80.4 n       143         0
+##  8 District E 2023-12-04       1     3     2 NA        27   11.7   87.1 n       143         0
+##  9 District E 2023-12-04       1     3     1 NA        46   13.6   98   n       135         0
+## 10 District E 2023-12-04       1     3     1 NA        58   17.2  109.  n       159         0
+## # ℹ 1,181 more rows
+```
+
+### On to *de facto* plausibility check
+
+We just have to add `mw_plausibility_check_muac()` to the above pipeline:
+
+
+``` r
+anthro.01 |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  ) |>
+  mw_plausibility_check_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+  )
+```
+
+And this will return: 
+
+
+```
+## # A tibble: 1 × 9
+##       n flagged flagged_class sex_ratio sex_ratio_class   dps dps_class    sd sd_class 
+##   <int>   <dbl> <fct>             <dbl> <chr>           <dbl> <chr>     <dbl> <fct>    
+## 1  1191 0.00252 Excellent         0.297 Excellent        5.39 Excellent  11.1 Excellent
+```
+
+We can also return a formatted table with `mw_neat_output_muac()`:
+
+
+``` r
+anthro.01 |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  ) |>
+  mw_plausibility_check_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+  ) |>
+  mw_neat_output_muac()
+```
+
+And we get:
+
+
+```
+## # A tibble: 1 × 9
+##   `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)` `Class. of sex ratio`
+##              <int> <chr>              <fct>                    <chr>           <chr>                
+## 1             1191 0.3%               Excellent                0.297           Excellent            
+## # ℹ 4 more variables: `DPS(#)` <dbl>, `Class. of DPS` <chr>, `Standard Dev* (#)` <dbl>,
+## #   `Class. of standard dev` <fct>
+```
+
+
+When working on multiple-area data, we approach the task the same way as demonstrated above:
+
+
+``` r
+## Load library ----
+library(dplyr)
+
+## Check plausibility ----
+anthro.01 |>
+  mw_wrangle_muac(
+    sex = sex,
+    muac = muac,
+    age = NULL,
+    .recode_sex = TRUE,
+    .recode_muac = FALSE,
+    .to = "none"
+  ) |>
+  group_by(area) |>
+  mw_plausibility_check_muac(
+    sex = sex,
+    flags = flag_muac,
+    muac = muac
+  ) |>
+  group_by(area) |> 
+  mw_neat_output_muac()
+```
+
+And we get:
+
+
+```
+## # A tibble: 2 × 10
+## # Groups:   Group [2]
+##   Group      `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
+##   <chr>                 <int> <chr>              <fct>                    <chr>          
+## 1 District E              505 0.0%               Excellent                0.593          
+## 2 District G              686 0.4%               Excellent                0.380          
+## # ℹ 5 more variables: `Class. of sex ratio` <chr>, `DPS(#)` <dbl>, `Class. of DPS` <chr>,
+## #   `Standard Dev* (#)` <dbl>, `Class. of standard dev` <fct>
+```
+
+# References
