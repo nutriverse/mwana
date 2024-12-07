@@ -1,11 +1,11 @@
-pandoc: '3.2'
+pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   ipc_amn_check: ipc_amn_check.html
   plausibility: plausibility.html
   prevalence: prevalence.html
-last_built: 2024-11-19T07:55Z
+last_built: 2024-12-07T12:18Z
 urls:
   reference: https://nutriverse.io/mwana/reference
   article: https://nutriverse.io/mwana/articles
