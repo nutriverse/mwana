@@ -13,7 +13,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r}
+#| label: global-setup
+#| echo: false
+#| message: false
 
+library(mwana)
+library(dplyr)
+```
 
 Evidence on the prevalence of acute malnutrition used in the IPC Acute Malnutrition (IPC AMN) can come from different sources: representative surveys, screenings, or community-based surveillance system (known as sentinel sites). The IPC sets minimum sample size requirements for each of these sources [@ipcmanual].
 
@@ -21,21 +28,11 @@ In the IPC AMN analysis workflow, the first step a data analyst has to take is t
 
 To demonstrate its usage, we will use the built-in sample data set `anthro.01`.
 
+```{r}
+#| label: view-data
+#| echo: true
 
-``` r
 head(anthro.01)
-```
-
-```
-## # A tibble: 6 × 11
-##   area       dos        cluster  team sex   dob      age weight height edema  muac
-##   <chr>      <date>       <int> <int> <chr> <date> <int>  <dbl>  <dbl> <chr> <int>
-## 1 District E 2023-12-04       1     3 m     NA        59   15.6  109.  n       146
-## 2 District E 2023-12-04       1     3 m     NA         8    7.5   68.6 n       127
-## 3 District E 2023-12-04       1     3 m     NA        19    9.7   79.5 n       142
-## 4 District E 2023-12-04       1     3 f     NA        49   14.3  100.  n       149
-## 5 District E 2023-12-04       1     3 f     NA        32   12.4   92.1 n       143
-## 6 District E 2023-12-04       1     3 f     NA        17    9.3   77.8 n       132
 ```
 
 
@@ -43,8 +40,11 @@ head(anthro.01)
 
 Now that we got acquainted with the data set, we can proceed to executing the task. To achieve this, we simply do:
 
+```{r}
+#| label: check
+#| echo: true
+#| eval: false
 
-``` r
 mw_check_ipcamn_ssreq(
   df = anthro.01,         # <1>
   cluster = cluster,      # <2>
@@ -60,8 +60,11 @@ mw_check_ipcamn_ssreq(
 
 We can also chain `anthro.01` to the function using the native pipe operator `|>`:
 
+```{r}
+#| label: pipe_operator
+#| echo: true
+#| eval: false
 
-``` r
 anthro.01 |>
   mw_check_ipcamn_ssreq(
     cluster = cluster,
@@ -70,12 +73,15 @@ anthro.01 |>
 ```
 
 Either way, the returned output will be: 
+```{r}
+#| label: view_check
+#| echo: false
 
-```
-## # A tibble: 1 × 3
-##   n_clusters n_obs meet_ipc
-##        <int> <int> <chr>   
-## 1         30  1191 yes
+anthro.01 |>
+  mw_check_ipcamn_ssreq(
+    cluster = cluster,
+    .source = "survey"
+  )
 ```
 
 A `tibble` object is returned with three columns:  
@@ -88,8 +94,11 @@ A `tibble` object is returned with three columns:
 
 The above output is not quite useful yet as we often deal with multiple-area datasets. We can get a summarized output by area as follows: 
 
+```{r}
+#| label: group_by
+#| echo: true
+#| eval: false
 
-``` r
 ## Load the dplyr package ----
 library(dplyr)
 
@@ -104,13 +113,16 @@ anthro.01 |>
 
 This will return: 
 
+```{r}
+#| label: view_group_by
+#| echo: false
 
-```
-## # A tibble: 2 × 4
-##   area       n_clusters n_obs meet_ipc
-##   <chr>           <int> <int> <chr>   
-## 1 District E         30   505 yes     
-## 2 District G         30   686 yes
+anthro.01 |>
+  group_by(area) |>
+  mw_check_ipcamn_ssreq(
+    cluster = cluster,
+    .source = "survey"
+  )
 ```
 
 For screening or sentinel site-based data, we approach the task the same way; we only have to change the `.source` parameter to "screening" or to "ssite" as appropriate, as well as to supply `cluster` with the right column name of the sub-areas inside the main area (villages, localities, comunas, communities, etc).
