@@ -29,6 +29,9 @@ complex_survey_estimates_wfhz <- function(df,
     )
   }
 
+  ## Filter out flags ----
+  df <- dplyr::filter(.data = df, .data$flag_wfhz == 0)
+
   ## Create a survey object ----
   if (!quo_is_null(wt)) {
     srvy <- srvyr::as_survey_design(
@@ -50,13 +53,12 @@ complex_survey_estimates_wfhz <- function(df,
   }
 
   ## Summarise prevalence ----
-  p <- dplyr::group_by(.data = srvy, {{ .by }}) |>
-    dplyr::filter(.data$flag_wfhz == 0) |>
-    dplyr::summarise(
-      dplyr::across(
+  p <- srvyr::group_by(srvy, {{ .by }}) |>
+    srvyr::summarise(
+      srvyr::across(
         .data$gam:.data$mam,
         list(
-          n = \(.) sum(., na.rm = TRUE),
+          n = ~sum(.x, na.rm = TRUE),
           p = \(.) srvyr::survey_mean(
             .,
             vartype = "ci",

@@ -45,10 +45,10 @@ complex_survey_estimates_mfaz <- function(df,
   }
 
   ## Summarise prevalence ----
-  p <- dplyr::group_by(.data = srvy, {{ .by }}) |>
-    dplyr::filter(.data$flag_mfaz == 0) |>
-    dplyr::summarise(
-      dplyr::across(
+  p <- srvyr::group_by(.data = srvy, {{ .by }}) |>
+    srvyr::filter(.data$flag_mfaz == 0) |>
+    srvyr::summarise(
+      srvyr::across(
         .data$gam:.data$mam,
         list(
           n = \(.) sum(., na.rm = TRUE),
