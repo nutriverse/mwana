@@ -41,7 +41,10 @@ complex_survey_estimates_combined <- function(df,
     )
   }
 
-  ## Create survey object ----
+  ## Filter out flags ----
+  df <- dplyr::filter(.data = df, .data$cflags == 0)
+
+  ## Create a survey object for a weighted analysis ----
   if (!quo_is_null(wt)) {
     srvy <- srvyr::as_survey_design(
       .data = df,
@@ -51,6 +54,7 @@ complex_survey_estimates_combined <- function(df,
       weights = !!wt
     )
   } else {
+    ## Create a survey object for an unweighted analysis ----
     srvy <- srvyr::as_survey_design(
       .data = df,
       ids = .data$cluster,
@@ -59,13 +63,12 @@ complex_survey_estimates_combined <- function(df,
     )
   }
   ## Summarise prevalence ----
-  p <- dplyr::group_by(.data = srvy, {{ .by }}) |>
-    dplyr::filter(.data$cflags == 0) |>
-    dplyr::summarise(
-      dplyr::across(
+  p <- srvyr::group_by(.data = srvy, {{ .by }}) |>
+    srvyr::summarise(
+      srvyr::across(
         .data$cgam:.data$cmam,
         list(
-          n = \(.) sum(., na.rm = TRUE),
+          n = ~sum(.x, na.rm = TRUE),
           p = \(.) srvyr::survey_mean(
             .,
             vartype = "ci",
@@ -87,44 +90,44 @@ complex_survey_estimates_combined <- function(df,
 #'
 #' @description
 #' Estimate the prevalence of wasting based on the combined case-definition of
-#' weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows 
-#' users to estimate prevalence in accordance with complex sample design 
-#' properties such as accounting for survey sample weights when needed or 
-#' applicable. The quality of the data is first evaluated by calculating and 
-#' rating the standard deviation of WFHZ and MFAZ and the p-value of the age 
-#' ratio test. Prevalence is calculated only when all tests are rated as not 
-#' problematic. If any of the tests rate as problematic, no estimation is done 
-#' and an NA value is returned. Outliers are detected in both WFHZ and MFAZ 
-#' datasets based on SMART flagging criteria. Identified outliers are then 
+#' weight-for-height z-scores (WFHZ), MUAC and/or edema. The function allows
+#' users to estimate prevalence in accordance with complex sample design
+#' properties such as accounting for survey sample weights when needed or
+#' applicable. The quality of the data is first evaluated by calculating and
+#' rating the standard deviation of WFHZ and MFAZ and the p-value of the age
+#' ratio test. Prevalence is calculated only when all tests are rated as not
+#' problematic. If any of the tests rate as problematic, no estimation is done
+#' and an NA value is returned. Outliers are detected in both WFHZ and MFAZ
+#' datasets based on SMART flagging criteria. Identified outliers are then
 #' excluded before prevalence estimation is performed.
 #'
 #' @param df A `tibble` object produced by sequential application of the
-#' [mw_wrangle_wfhz()] and [mw_wrangle_muac()]. Note that MUAC values in `df` 
+#' [mw_wrangle_wfhz()] and [mw_wrangle_muac()]. Note that MUAC values in `df`
 #' must be in millimeters unit after using [mw_wrangle_muac()]. Also, `df`
 #' must have a variable called `cluster` which contains the primary sampling
 #' unit identifiers.
 #'
-#' @param wt A vector of class `double` of the survey sampling weights. Default 
-#' is NULL which assumes a self-weighted survey as is the case for a survey 
+#' @param wt A vector of class `double` of the survey sampling weights. Default
+#' is NULL which assumes a self-weighted survey as is the case for a survey
 #' sample selected proportional to population size (i.e., SMART survey sample).
 #' Otherwise, a weighted analysis is implemented.
 #'
 #' @param edema A `character` vector for presence of nutritional edema coded as
-#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
 #' @param .by A `character` or `numeric` vector of the geographical areas
 #' or identifiers for where the data was collected and for which the analysis
 #' should be summarised for.
 #'
-#' @returns A summary `tibble` for the descriptive statistics about combined 
+#' @returns A summary `tibble` for the descriptive statistics about combined
 #' wasting.
 #'
 #' @details
 #' A concept of *combined flags* is introduced in this function. Any observation
 #' that is flagged for either `flag_wfhz` or `flag_mfaz` is flagged under a new
-#' variable named `cflags` added to `df`. This ensures that all flagged 
-#' observations from both WFHZ and MFAZ data are excluded from the prevalence 
+#' variable named `cflags` added to `df`. This ensures that all flagged
+#' observations from both WFHZ and MFAZ data are excluded from the prevalence
 #' analysis.
 #'
 #' | **flag_wfhz** | **flag_mfaz** | **cflags** |
@@ -174,7 +177,7 @@ mw_estimate_prevalence_combined <- function(df,
       .data = df,
       std_wfhz = rate_std(
         stats::sd(
-          remove_flags(as.numeric(.data$wfhz), "zscores"), 
+          remove_flags(as.numeric(.data$wfhz), "zscores"),
           na.rm = TRUE
         )
       ),
@@ -183,7 +186,7 @@ mw_estimate_prevalence_combined <- function(df,
       ),
       std_mfaz = rate_std(
         stats::sd(
-          remove_flags(as.numeric(.data$mfaz), "zscores"), 
+          remove_flags(as.numeric(.data$mfaz), "zscores"),
           na.rm = TRUE)
       ),
       muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz),
@@ -195,7 +198,7 @@ mw_estimate_prevalence_combined <- function(df,
       .data = df,
       std_wfhz = rate_std(
         stats::sd(
-          remove_flags(as.numeric(.data$wfhz), "zscores"), 
+          remove_flags(as.numeric(.data$wfhz), "zscores"),
           na.rm = TRUE
         )
       ),
@@ -204,7 +207,7 @@ mw_estimate_prevalence_combined <- function(df,
       ),
       std_mfaz = rate_std(
         stats::sd(
-          remove_flags(as.numeric(.data$mfaz), "zscores"), 
+          remove_flags(as.numeric(.data$mfaz), "zscores"),
           na.rm = TRUE
         )
       ),

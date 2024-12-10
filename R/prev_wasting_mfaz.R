@@ -26,7 +26,10 @@ complex_survey_estimates_mfaz <- function(df,
     )
   }
 
-  ## Create a survey object ----
+  ## Filter out flags ----
+  df <- dplyr::filter(.data = df, .data$flag_mfaz == 0)
+
+  ## Create a survey object for a weighted analysis ----
   if (!is.null(wt)) {
     srvy <- srvyr::as_survey_design(
       .data = df,
@@ -36,6 +39,7 @@ complex_survey_estimates_mfaz <- function(df,
       weights = {{ wt }}
     )
   } else {
+    ## Create a survey object for an unweighted analysis ----
     srvy <- srvyr::as_survey_design(
       .data = df,
       ids = .data$cluster,
@@ -46,7 +50,6 @@ complex_survey_estimates_mfaz <- function(df,
 
   ## Summarise prevalence ----
   p <- srvyr::group_by(.data = srvy, {{ .by }}) |>
-    srvyr::filter(.data$flag_mfaz == 0) |>
     srvyr::summarise(
       srvyr::across(
         .data$gam:.data$mam,
@@ -72,29 +75,29 @@ complex_survey_estimates_mfaz <- function(df,
 #' Estimate the prevalence of wasting based on z-scores of muac-for-age (MFAZ)
 #'
 #' @description
-#' Calculate the prevalence estimates of wasting based on z-scores of 
-#' MUAC-for-age and/or bilateral edema. The function allows users to estimate 
-#' prevalence in accordance with complex sample design properties such as 
-#' accounting for survey sample weights when needed or applicable. The quality 
-#' of the data is first evaluated by calculating and rating the standard 
-#' deviation of MFAZ. Standard approach to prevalence estimation is calculated 
-#' only when the standard deviation of MFAZ is rated as not problematic. If 
+#' Calculate the prevalence estimates of wasting based on z-scores of
+#' MUAC-for-age and/or bilateral edema. The function allows users to estimate
+#' prevalence in accordance with complex sample design properties such as
+#' accounting for survey sample weights when needed or applicable. The quality
+#' of the data is first evaluated by calculating and rating the standard
+#' deviation of MFAZ. Standard approach to prevalence estimation is calculated
+#' only when the standard deviation of MFAZ is rated as not problematic. If
 #' the standard deviation is problematic, prevalence is estimated using the
-#' PROBIT estimator. Outliers are detected based on SMART flagging criteria. 
-#' Identified outliers are then excluded before prevalence estimation is 
+#' PROBIT estimator. Outliers are detected based on SMART flagging criteria.
+#' Identified outliers are then excluded before prevalence estimation is
 #' performed.
 #'
 #' @param df A `data.frame` object that has been produced by the
 #' [mw_wrangle_age()] and [mw_wrangle_muac()] functions. The `df` should have a
 #' variable named `cluster` for the primary sampling unit identifiers.
 #'
-#' @param wt A vector of class `double` of the survey sampling weights. Default 
-#' is NULL which assumes a self-weighted survey as is the case for a survey 
+#' @param wt A vector of class `double` of the survey sampling weights. Default
+#' is NULL which assumes a self-weighted survey as is the case for a survey
 #' sample selected proportional to population size (i.e., SMART survey sample).
 #' Otherwise, a weighted analysis is implemented.
 #'
 #' @param edema A `character` vector for presence of nutritional edema coded as
-#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
 #' @param .by A `character` or `numeric` vector of the geographical areas
