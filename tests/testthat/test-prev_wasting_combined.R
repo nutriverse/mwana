@@ -10,20 +10,20 @@ testthat::test_that(
 
     ### Expected results ----
     #### combined GAM estimates and uncertainty ----
-    n_cgam <- 199
+    n_cgam <- 143
     p_cgam <- 7.1
     p_cgam_lci <- 5.6
     p_cgam_uci <- 8.5
     deff <- 1.72
 
     #### combined SAM estimates and uncertainty ----
-    n_csam <- 68
+    n_csam <- 27
     p_csam <- 1.5
     p_csam_lci <- 0.8
     p_csam_uci <- 2.3
 
     #### combined MAM estimates and uncertainty ----
-    n_cmam <- 145
+    n_cmam <- 123
     p_cmam <- 6.0
     p_cmam_lci <- 4.7
     p_cmam_uci <- 7.3
@@ -59,20 +59,20 @@ testthat::test_that(
 
     ### Expected results ----
     #### Combined GAM estimates and uncertainty ----
-    n_cgam <- 187
+    n_cgam <- 131
     p_cgam <- 6.4
     p_cgam_lci <- 5.0
     p_cgam_uci <- 7.8
     deff <- 1.67
 
     #### combined SAM estimates and uncertainty ----
-    n_csam <- 55
+    n_csam <- 14
     p_csam <- 0.8
     p_csam_lci <- 0.3
     p_csam_uci <- 1.2
 
     #### combined MAM estimates and uncertainty ----
-    n_cmam <- 146
+    n_cmam <- 124
     p_cmam <- 6.1
     p_cmam_lci <- 4.8
     p_cmam_uci <- 7.4
@@ -107,19 +107,19 @@ testthat::test_that(
 
     ### Expected results ----
     #### combined GAM estimates and uncertainty ----
-    n_cgam <- 199
+    n_cgam <- 143
     p_cgam <- 6.8
     p_cgam_lci <- 5.7
     p_cgam_uci <- 8.0
 
     #### combined SAM estimates and uncertainty ----
-    n_csam <- 68
+    n_csam <- 27
     p_csam <- 1.3
     p_csam_lci <- 0.8
     p_csam_uci <- 1.8
 
     #### combined MAM estimates and uncertainty ----
-    n_cmam <- 145
+    n_cmam <- 123
     p_cmam <- 5.9
     p_cmam_lci <- 4.8
     p_cmam_uci <- 7.0
@@ -155,20 +155,20 @@ testthat::test_that(
 
     ### Expected results for Nampula province ----
     #### GAM estimates and uncertainty ----
-    n_cgam <- 121
+    n_cgam <- 79
     p_cgam <- 8.4
     p_cgam_lci <- 6.0
     p_cgam_uci <- 10.9
     deff <- 1.87
 
     #### SAM estimates and uncertainty ----
-    n_csam <- 47
+    n_csam <- 18
     p_csam <- 2.0
     p_csam_lci <- 0.7
     p_csam_uci <- 3.3
 
     #### MAM estimates and uncertainty ----
-    n_cmam <- 80
+    n_cmam <- 65
     p_cmam <- 6.8
     p_cmam_lci <- 4.7
     p_cmam_uci <- 9.0

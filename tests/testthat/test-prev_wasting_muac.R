@@ -201,14 +201,14 @@ testthat::test_that(
 
     ### Expected results ----
     ### GAM estimates and uncertainty ----
-    n_gam <- 135
+    n_gam <- 118
     p_gam <- 5.6
     p_gam_lci <- 4.3
     p_gam_uci <- 6.9
     deff <- 1.86
 
     ### SAM estimates and uncertainty ----
-    n_sam <- 46
+    n_sam <- 29
     p_sam <- 1.7
     p_sam_lci <- 0.9
     p_sam_uci <- 2.4
@@ -247,13 +247,13 @@ testthat::test_that(
 
     ### Expected results ----
     ### GAM estimates and uncertainty ----
-    n_gam <- 123
+    n_gam <- 106
     p_gam <- 4.9
     p_gam_lci <- 3.8
     p_gam_uci <- 5.9
 
     ### SAM estimates and uncertainty ----
-    n_sam <- 33
+    n_sam <- 16
     p_sam <- 0.7
     p_sam_lci <- 0.4
     p_sam_uci <- 1.1
@@ -292,14 +292,14 @@ testthat::test_that(
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 123
+    n_gam <- 106
     p_gam <- 5.0
     p_gam_lci <- 3.8
     p_gam_uci <- 6.2
     deff <- 1.75
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 33
+    n_sam <- 16
     p_sam <- 0.9
     p_sam_lci <- 0.4
     p_sam_uci <- 1.5
@@ -336,13 +336,13 @@ testthat::test_that(
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 123
+    n_gam <- 106
     p_gam <- 4.9
     p_gam_lci <- 3.8
     p_gam_uci <- 5.9
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 33
+    n_sam <- 16
     p_sam <- 0.7
     p_sam_lci <- 0.4
     p_sam_uci <- 1.1
@@ -385,14 +385,14 @@ testthat::test_that(
 
     ### Expected results for Zambezia province ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 65
+    n_gam <- 57
     p_gam <- 5.5
     p_gam_lci <- 3.8
     p_gam_uci <- 7.2
     deff <- 1.67
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 18
+    n_sam <- 10
     p_sam <- 1.3
     p_sam_lci <- 0.4
     p_sam_uci <- 2.2

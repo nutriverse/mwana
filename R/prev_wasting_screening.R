@@ -10,7 +10,7 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
   ## Enforce class of `muac` ----
   if (!is.numeric(muac)) {
     stop(
-      "`muac` should be of class numeric not ", 
+      "`muac` should be of class numeric not ",
       class(muac), ". Try again!"
     )
   }
@@ -25,7 +25,7 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
     ### Enforce class of `edema` ----
     if (!is.character(edema)) {
       stop(
-        "`edema` should be of class character not ", class(edema), 
+        "`edema` should be of class character not ", class(edema),
         ". Try again!"
       )
     }
@@ -54,9 +54,12 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
       )
     )
   }
+
+  ## Filter out flgas ----
+  x <- dplyr::filter(.data = x, .data$flag_mfaz == 0)
+
   ## Summarize results ----
   p <- dplyr::group_by(.data = x, {{ .by }}) |>
-    dplyr::filter(.data$flag_mfaz == 0) |>
     dplyr::summarise(
       dplyr::across(
         .data$gam:.data$mam,
@@ -66,7 +69,6 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
         )
       )
     )
-  
   ## Return p ----
   p
 }
@@ -78,41 +80,41 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
 #' @description
 #' It is common to estimate prevalence of wasting from non survey data, such
 #' as screenings or any other community-based surveillance systems. In such
-#' situations, the analysis usually consists only in estimating the point 
-#' prevalence and the counts of positive cases, without necessarily estimating 
+#' situations, the analysis usually consists only in estimating the point
+#' prevalence and the counts of positive cases, without necessarily estimating
 #' the uncertainty. This function serves this use.
-#' 
-#' The quality of the data is first evaluated by calculating and rating the 
-#' standard deviation of MFAZ and the p-value of the age ratio test. Prevalence 
-#' is calculated only when the standard deviation of MFAZ is not problematic. If 
-#' both standard deviation of MFAZ and p-value of age ratio test is not 
-#' problematic, straightforward prevalence estimation is performed. If standard 
-#' deviation of MFAZ is not problematic but p-value of age ratio test is 
-#' problematic, age-weighting is applied to prevalence estimation to account for 
-#' the over-representation of younger children in the sample. If standard 
-#' deviation of MFAZ is problematic, no estimation is done and an NA value is 
-#' returned. Outliers are detected based on SMART flagging criteria for MFAZ. 
-#' Identified outliers are then excluded before prevalence  estimation is 
+#'
+#' The quality of the data is first evaluated by calculating and rating the
+#' standard deviation of MFAZ and the p-value of the age ratio test. Prevalence
+#' is calculated only when the standard deviation of MFAZ is not problematic. If
+#' both standard deviation of MFAZ and p-value of age ratio test is not
+#' problematic, straightforward prevalence estimation is performed. If standard
+#' deviation of MFAZ is not problematic but p-value of age ratio test is
+#' problematic, age-weighting is applied to prevalence estimation to account for
+#' the over-representation of younger children in the sample. If standard
+#' deviation of MFAZ is problematic, no estimation is done and an NA value is
+#' returned. Outliers are detected based on SMART flagging criteria for MFAZ.
+#' Identified outliers are then excluded before prevalence  estimation is
 #' performed.
 #'
-#' @param df A `tibble` object produced by [mw_wrangle_muac()] and 
-#' [mw_wrangle_age()] functions. Note that MUAC values in `df` 
+#' @param df A `tibble` object produced by [mw_wrangle_muac()] and
+#' [mw_wrangle_age()] functions. Note that MUAC values in `df`
 #' must be in millimeters unit after using [mw_wrangle_muac()]. Also, `df`
 #' must have a variable called `cluster` which contains the primary sampling
 #' unit identifiers.
 #'
-#' @param muac A `numeric` or `integer` vector of raw MUAC values. The 
+#' @param muac A `numeric` or `integer` vector of raw MUAC values. The
 #' measurement unit of the values should be millimeters.
 #'
 #' @param edema A `character` vector for presence of nutritional edema coded as
-#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
 #' @param .by A `character` or `numeric` vector of the geographical areas
 #' or identifiers for where the data was collected and for which the analysis
 #' should be summarised for.
 #'
-#' @returns A summary `tibble` for the descriptive statistics about combined 
+#' @returns A summary `tibble` for the descriptive statistics about combined
 #' wasting.
 #'
 #' @references

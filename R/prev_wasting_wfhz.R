@@ -32,7 +32,7 @@ complex_survey_estimates_wfhz <- function(df,
   ## Filter out flags ----
   df <- dplyr::filter(.data = df, .data$flag_wfhz == 0)
 
-  ## Create a survey object ----
+  ## Create a survey object for a weighted analysis ----
   if (!quo_is_null(wt)) {
     srvy <- srvyr::as_survey_design(
       .data = df,
@@ -42,15 +42,14 @@ complex_survey_estimates_wfhz <- function(df,
       weights = !!wt
     )
   } else {
-    ## Create survey object ----
-    srvy <- dplyr::mutate(df, wt = 1) |>
-      srvyr::as_survey_design(
-        ids = .data$cluster,
-        pps = "brewer",
-        variance = "YG",
-        weights = .data$wt
-      )
-  }
+    ## Create a survey object for an unweighted analysis ----
+    srvy <- srvyr::as_survey_design(
+      .data = df,
+      ids = .data$cluster,
+      pps = "brewer",
+      variance = "YG"
+  )
+}
 
   ## Summarise prevalence ----
   p <- srvyr::group_by(srvy, {{ .by }}) |>
@@ -79,29 +78,29 @@ complex_survey_estimates_wfhz <- function(df,
 #' Estimate the prevalence of wasting based on weight-for-height z-scores (WFHZ)
 #'
 #' @description
-#' Calculate the prevalence estimates of wasting based on z-scores of 
-#' weight-for-height and/or nutritional edema. The function allows users to 
-#' estimate prevalence in accordance with complex sample design properties such 
-#' as accounting for survey sample weights when needed or applicable. The 
-#' quality of the data is first evaluated by calculating and rating the standard 
-#' deviation of WFHZ. Standard approach to prevalence estimation is calculated 
-#' only when the standard deviation of MFAZ is rated as not problematic. If 
+#' Calculate the prevalence estimates of wasting based on z-scores of
+#' weight-for-height and/or nutritional edema. The function allows users to
+#' estimate prevalence in accordance with complex sample design properties such
+#' as accounting for survey sample weights when needed or applicable. The
+#' quality of the data is first evaluated by calculating and rating the standard
+#' deviation of WFHZ. Standard approach to prevalence estimation is calculated
+#' only when the standard deviation of MFAZ is rated as not problematic. If
 #' the standard deviation is problematic, prevalence is estimated using the
-#' PROBIT estimator. Outliers are detected based on SMART flagging criteria. 
-#' Identified outliers are then excluded before prevalence estimation is 
+#' PROBIT estimator. Outliers are detected based on SMART flagging criteria.
+#' Identified outliers are then excluded before prevalence estimation is
 #' performed.
 #'
-#' @param df A `tibble` object that has been produced by the [mw_wrangle_wfhz()] 
-#' functions. The `df` should have a variable named `cluster` for the primary 
+#' @param df A `tibble` object that has been produced by the [mw_wrangle_wfhz()]
+#' functions. The `df` should have a variable named `cluster` for the primary
 #' sampling unit identifiers.
 #'
-#' @param wt A vector of class `double` of the survey sampling weights. Default 
-#' is NULL which assumes a self-weighted survey as is the case for a survey 
+#' @param wt A vector of class `double` of the survey sampling weights. Default
+#' is NULL which assumes a self-weighted survey as is the case for a survey
 #' sample selected proportional to population size (i.e., SMART survey sample).
 #' Otherwise, a weighted analysis is implemented.
 #'
 #' @param edema A `character` vector for presence of nutritional edema coded as
-#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
 #' @param .by A `character` or `numeric` vector of the geographical areas
@@ -211,7 +210,7 @@ mw_estimate_prevalence_wfhz <- function(df,
 
     results[[i]] <- result
   }
-  
+
   dplyr::bind_rows(results) |>
     dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
     dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>

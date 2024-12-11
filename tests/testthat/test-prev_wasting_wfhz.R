@@ -13,20 +13,20 @@ testthat::test_that(
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 121
+    n_gam <- 86
     p_gam <- 4.3
     p_gam_lci <- 3.2
     p_gam_uci <- 5.4
     deff <- 1.58
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 43
+    n_sam <- 14
     p_sam <- 0.8
     p_sam_lci <- 0.2
     p_sam_uci <- 1.3
 
     #### MAM estimates and uncertainty ----
-    n_mam <- 78
+    n_mam <- 72
     p_mam <- 3.5
     p_mam_lci <- 2.6
     p_mam_uci <- 4.5
@@ -66,13 +66,13 @@ testthat::test_that(
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 25
+    n_gam <- 22
     p_gam <- 7.4
     p_gam_lci <- 3.5
     p_gam_uci <- 11.3
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 4
+    n_sam <- 1
     p_sam <- 0.3
     p_sam_lci <- -0.3
     p_sam_uci <- 1.0
@@ -113,19 +113,19 @@ testthat::test_that(
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 107
+    n_gam <- 72
     p_gam <- 3.4
     p_gam_lci <- 2.6
     p_gam_uci <- 4.2
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 29
+    n_sam <- 0
     p_sam <- 0.0
     p_sam_lci <- 0.0
     p_sam_uci <- 0.0
 
     #### MAM estimates and uncertainty ----
-    n_mam <- 78
+    n_mam <- 72
     p_mam <- 3.4
     p_mam_lci <- 2.6
     p_mam_uci <- 4.2
@@ -161,20 +161,20 @@ testthat::test_that(
 
     ### Expected results for Nampula province ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 80
+    n_gam <- 53
     p_gam <- 5.9
     p_gam_lci <- 4.1
     p_gam_uci <- 7.8
     deff <- 1.52
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 33
+    n_sam <- 10
     p_sam <- 1.3
     p_sam_lci <- 0.3
     p_sam_uci <- 2.3
 
     #### MAM estimates and uncertainty ----
-    n_mam <- 47
+    n_mam <- 43
     p_mam <- 4.7
     p_mam_lci <- 3.1
     p_mam_uci <- 6.2

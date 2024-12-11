@@ -76,13 +76,16 @@ complex_survey_estimates_muac <- function(df,
     )
   } else {
     df <- define_wasting(
-      df = df,      
+      df = df,
       muac = .data$muac,
       .by = "muac"
     )
   }
 
-  ### Weighted survey analysis ----
+  ## Filter out flags ----
+  df <- dplyr::filter(.data = df, .data$flag_mfaz == 0)
+
+  ## Create a survey object for a weighted analysis ----
   if (!is.null(wt)) {
     srvy <- srvyr::as_survey_design(
       .data = df,
@@ -92,7 +95,7 @@ complex_survey_estimates_muac <- function(df,
       weights = !!wt
     )
   } else {
-    ### Unweighted: typical SMART survey analysis ----
+    ## Create a survey object for an unweighted analysis ----
     srvy <- srvyr::as_survey_design(
       .data = df,
       ids = .data$cluster,
@@ -101,10 +104,9 @@ complex_survey_estimates_muac <- function(df,
     )
   }
   #### Summarise prevalence ----
-  p <- dplyr::group_by(.data = srvy, {{ .by }}) |>
-    dplyr::filter(.data$flag_mfaz == 0) |>
-    dplyr::summarise(
-      dplyr::across(
+  p <- srvyr::group_by(.data = srvy, {{ .by }}) |>
+    srvyr::summarise(
+      srvyr::across(
         .data$gam:.data$mam,
         list(
           n = \(.) sum(., na.rm = TRUE),
@@ -127,43 +129,43 @@ complex_survey_estimates_muac <- function(df,
 #' Estimate the prevalence of wasting based on MUAC for survey data
 #'
 #' @description
-#' 
-#' Estimate the prevalence of wasting based on MUAC and/or nutritional edema. 
-#' The function allows users to estimate prevalence in accordance with complex 
-#' sample design properties such as accounting for survey sample weights when 
-#' needed or applicable. The quality of the data is first evaluated by 
-#' calculating and rating the standard deviation of MFAZ and the p-value of the 
-#' age ratio test. Prevalence is calculated only when the standard deviation of 
-#' MFAZ is not problematic. If both standard deviation of MFAZ and p-value of 
-#' age ratio test is not problematic, straightforward prevalence estimation is 
-#' performed. If standard deviation of MFAZ is not problematic but p-value of 
-#' age ratio test is problematic, age-weighting is applied to prevalence 
-#' estimation to account for the over-representation of younger children in the 
-#' sample. If standard deviation of MFAZ is problematic, no estimation is done 
-#' and an NA value is returned. Outliers are detected based on SMART flagging 
-#' criteria for MFAZ. Identified outliers are then excluded before prevalence 
+#'
+#' Estimate the prevalence of wasting based on MUAC and/or nutritional edema.
+#' The function allows users to estimate prevalence in accordance with complex
+#' sample design properties such as accounting for survey sample weights when
+#' needed or applicable. The quality of the data is first evaluated by
+#' calculating and rating the standard deviation of MFAZ and the p-value of the
+#' age ratio test. Prevalence is calculated only when the standard deviation of
+#' MFAZ is not problematic. If both standard deviation of MFAZ and p-value of
+#' age ratio test is not problematic, straightforward prevalence estimation is
+#' performed. If standard deviation of MFAZ is not problematic but p-value of
+#' age ratio test is problematic, age-weighting is applied to prevalence
+#' estimation to account for the over-representation of younger children in the
+#' sample. If standard deviation of MFAZ is problematic, no estimation is done
+#' and an NA value is returned. Outliers are detected based on SMART flagging
+#' criteria for MFAZ. Identified outliers are then excluded before prevalence
 #' estimation is performed.
 #'
-#' @param df A `tibble` object produced by [mw_wrangle_muac()] and 
-#' [mw_wrangle_age()] functions. Note that MUAC values in `df` 
+#' @param df A `tibble` object produced by [mw_wrangle_muac()] and
+#' [mw_wrangle_age()] functions. Note that MUAC values in `df`
 #' must be in millimeters unit after using [mw_wrangle_muac()]. Also, `df`
 #' must have a variable called `cluster` which contains the primary sampling
 #' unit identifiers.
 #'
-#' @param wt A vector of class `double` of the survey sampling weights. Default 
-#' is NULL which assumes a self-weighted survey as is the case for a survey 
+#' @param wt A vector of class `double` of the survey sampling weights. Default
+#' is NULL which assumes a self-weighted survey as is the case for a survey
 #' sample selected proportional to population size (i.e., SMART survey sample).
 #' Otherwise, a weighted analysis is implemented.
 #'
 #' @param edema A `character` vector for presence of nutritional edema coded as
-#' "y" for presence of nutritional edema and "n" for absence of nutritional 
+#' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
 #' @param .by A `character` or `numeric` vector of the geographical areas
 #' or identifiers for where the data was collected and for which the analysis
 #' should be summarised for.
 #'
-#' @returns A summary `tibble` for the descriptive statistics about combined 
+#' @returns A summary `tibble` for the descriptive statistics about combined
 #' wasting.
 #'
 #' @references

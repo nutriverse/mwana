@@ -2,12 +2,12 @@
 #' Wrangle weight-for-height data
 #'
 #' @description
-#' Calculate z-scores for weight-for-height (WFHZ) and identify outliers based 
+#' Calculate z-scores for weight-for-height (WFHZ) and identify outliers based
 #' on the SMART methodology.
 #'
 #' @param df A `data.frame` object to wrangle data from.
 #'
-#' @param sex A `numeric` or `character` vector of child's sex. Code values 
+#' @param sex A `numeric` or `character` vector of child's sex. Code values
 #' should only be 1 or "m" for males and 2 or "f" for females.
 #'
 #' @param .recode_sex Logical. Set to TRUE if the values for `sex` are not coded
@@ -55,7 +55,7 @@ mw_wrangle_wfhz <- function(df,
   ## Check if the class of vector weight is "double" ----
   if (!is.double(weight)) {
     stop(
-      "`weight` must be of class double not ", 
+      "`weight` must be of class double not ",
       class(weight), ". Please try again."
     )
   }
@@ -63,7 +63,7 @@ mw_wrangle_wfhz <- function(df,
   ## Check if the class of vector height is "double" ----
   if (!is.double(height)) {
     stop(
-      "`height` must be of class double not ", 
+      "`height` must be of class double not ",
       class(height), ". Please try again."
     )
   }
@@ -89,7 +89,9 @@ mw_wrangle_wfhz <- function(df,
   ## Compute z-scores ----
   df <- dplyr::mutate(
     .data = df,
-    sex = !!recode_sex
+    sex = !!recode_sex,
+    weight = ifelse(weight < 3 | weight > 31, NA, weight),
+    height = ifelse(height < 54 | height > 124, NA, height)
   ) |>
     zscorer::addWGSR(
       sex = "sex",
@@ -102,7 +104,7 @@ mw_wrangle_wfhz <- function(df,
     dplyr::mutate(
       flag_wfhz = do.call(flag_outliers, list(.data$wfhz, .from = "zscores"))
     )
-  
+
   ## Return df ---
   tibble::as_tibble(df)
 }
