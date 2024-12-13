@@ -19,24 +19,24 @@ df <- ena_df |>
     sex = ifelse(SEX == "m", 1, 2),
     age_in_days_1 = MONTHS * (365.25 / 12),
     age_in_days_2 = floor(MONTHS) * (365.25 / 12),
-    age_in_days_3 = as.Date(SURVDATE, format = "%m/%d/%Y") - 
+    age_in_days_3 = as.Date(SURVDATE, format = "%m/%d/%Y") -
       as.Date(BIRTHDAT, format = "%m/%d/%Y"),
     age_in_days_4 = lubridate::day(
       as.period(
         interval(
-          start = as.Date(BIRTHDAT, format = "%m/%d/%Y"), 
+          start = as.Date(BIRTHDAT, format = "%m/%d/%Y"),
           end = as.Date(SURVDATE, format = "%m/%d/%Y")
         )
       )
     )
   ) |>
   dplyr::select(
-    sex, dplyr::starts_with("age"), 
-    wt = WEIGHT, ht = HEIGHT, oed = EDEMA, muac = MUAC, wfhz_ena = WHZ.WHO 
+    sex, dplyr::starts_with("age"),
+    wt = WEIGHT, ht = HEIGHT, oed = EDEMA, muac = MUAC, wfhz_ena = WHZ.WHO
   )
 
 df <- addWGSR(
-  df, sex = "sex", firstPart = "wt", secondPart = "ht", 
+  df, sex = "sex", firstPart = "wt", secondPart = "ht",
   index = "wfh", output = "wfhz_zscorer", digits = 3
 ) |>
   dplyr::mutate(
@@ -53,6 +53,19 @@ df <- addWGSR(
     mam_zscorer = ifelse(wfhz_zscorer >= -3 & wfhz_ena < -2, 1, 0),
     sam_anthro = ifelse(wfhz_anthro < -3, 1, 0),
     mam_anthro = ifelse(wfhz_anthro >= -3 & wfhz_ena < -2, 1, 0),
+  )
+
+## Calculate difference in reference to WHO zscores -----
+douglas <- addWGSR(
+  df, sex = "sex", firstPart = "wt", secondPart = "ht",
+  index = "wfh", output = "wfhz_zscorer", digits = 3
+) |>
+  dplyr::mutate(
+    wfhz_ena_2 = round(wfhz_ena, digits = 2),
+    wfhz_zscorer_2 = round(wfhz_zscorer, digits = 2),
+    wfhz_anthro = anthro_zscores(sex = sex, weight = wt, lenhei = ht)$zwfl,
+    who_ena = wfhz_anthro - wfhz_ena_2,
+    who_zscorer_mwana = wfhz_anthro - wfhz_zscorer_2
   )
 
 ### Tabulate sam and gam per method ----
@@ -78,5 +91,5 @@ mam_compare <- dplyr::count(df, mam_ena, name = "n_ena") |>
     dplyr::count(df, mam_anthro, name = "n_anthro") |>
       dplyr::rename(mam = mam_anthro)
   )
-  
-  
+
+
