@@ -23,7 +23,7 @@ performed."><meta property="og:image" content="https://nutriverse.io/mwana/logo.
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-success" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-success" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">mwana</a>
 
@@ -45,8 +45,7 @@ performed."><meta property="og:image" content="https://nutriverse.io/mwana/logo.
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://nutriverse.io"><span class="fa globe fa-lg"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://mastodon.social/@nutriverse"><span class="fa fab fa-mastodon fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://fosstodon.org/@nutriverse" aria-label="Mastodon"><span class="fa fab fa-mastodon fa-lg"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/nutriverse/mwana/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
@@ -125,7 +124,7 @@ should be summarised for.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 16</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   gam_n gam_p gam_p_low gam_p_upp gam_p_deff sam_n  sam_p sam_p_low sam_p_upp</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>   330 0.107    0.087<span style="text-decoration: underline;">3</span>     0.127        <span style="color: #BB0000;">Inf</span>    53 0.014<span style="text-decoration: underline;">4</span>   0.008<span style="text-decoration: underline;">94</span>    0.019<span style="text-decoration: underline;">8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>   320 0.107    0.087<span style="text-decoration: underline;">3</span>     0.127        <span style="color: #BB0000;">Inf</span>    43 0.014<span style="text-decoration: underline;">4</span>   0.008<span style="text-decoration: underline;">94</span>    0.019<span style="text-decoration: underline;">8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: sam_p_deff &lt;dbl&gt;, mam_n &lt;dbl&gt;, mam_p &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   mam_p_low &lt;dbl&gt;, mam_p_upp &lt;dbl&gt;, mam_p_deff &lt;dbl&gt;, wt_pop &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
@@ -139,8 +138,8 @@ should be summarised for.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 17</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   province   gam_n  gam_p gam_p_low gam_p_upp gam_p_deff sam_n  sam_p sam_p_low</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Province 1   154 0.119     0.085<span style="text-decoration: underline;">1</span>     0.153        <span style="color: #BB0000;">Inf</span>    15 0.010<span style="text-decoration: underline;">2</span>   0.001<span style="text-decoration: underline;">32</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Province 2    98 0.085<span style="text-decoration: underline;">4</span>    0.056<span style="text-decoration: underline;">5</span>     0.114        <span style="color: #BB0000;">Inf</span>    16 0.011<span style="text-decoration: underline;">7</span>   0.005<span style="text-decoration: underline;">10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Province 1   152 0.119     0.085<span style="text-decoration: underline;">1</span>     0.153        <span style="color: #BB0000;">Inf</span>    13 0.010<span style="text-decoration: underline;">2</span>   0.001<span style="text-decoration: underline;">32</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Province 2    95 0.085<span style="text-decoration: underline;">4</span>    0.056<span style="text-decoration: underline;">5</span>     0.114        <span style="color: #BB0000;">Inf</span>    13 0.011<span style="text-decoration: underline;">7</span>   0.005<span style="text-decoration: underline;">10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Province 3    <span style="color: #BB0000;">NA</span> 0.257    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>             <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span> 0.049<span style="text-decoration: underline;">1</span>  <span style="color: #BB0000;">NA</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: sam_p_upp &lt;dbl&gt;, sam_p_deff &lt;dbl&gt;, mam_n &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   mam_p &lt;dbl&gt;, mam_p_low &lt;dbl&gt;, mam_p_upp &lt;dbl&gt;, mam_p_deff &lt;dbl&gt;,</span></span>
