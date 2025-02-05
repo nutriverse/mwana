@@ -9,13 +9,13 @@ testthat::test_that(
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 226
+    n_gam <- 209
     p_gam <- 9.6
     p_gam_lci <- 8.1
     p_gam_uci <- 11.2
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 75
+    n_sam <- 58
     p_sam <- 2.7
     p_sam_lci <- 1.9
     p_sam_uci <- 3.5
@@ -52,13 +52,13 @@ testthat::test_that(
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
-    n_gam <- 215
+    n_gam <- 198
     p_gam <- 9.1
     p_gam_lci <- 7.6
     p_gam_uci <- 10.6
 
     #### SAM estimates and uncertainty ----
-    n_sam <- 62
+    n_sam <- 45
     p_sam <- 2.1
     p_sam_lci <- 1.4
     p_sam_uci <- 2.8

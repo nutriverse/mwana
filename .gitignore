@@ -15,8 +15,10 @@ docs
 /vignettes/plausibility_files/
 /vignettes/prevalence_files/
 /vignettes/sample_size_files/
+/vignettes/.quarto/
 
 /.quarto/
 
 
 data-raw/ENA_generated_zscores.csv
+/doc/
