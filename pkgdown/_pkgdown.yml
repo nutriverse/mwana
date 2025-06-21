@@ -8,7 +8,7 @@ development:
 template:
   bootstrap: 5
   theme: breeze-light
-  ganalytics: "G-94YZ36XGLH"
+  ganalytics: G-94YZ36XGLH
   bslib:
     bootswatch: pulse
     pkgdown-nav-height: 100px
@@ -33,7 +33,7 @@ navbar:
         href: articles/ipc_amn_check.html
     mastodon:
       icon: "fab fa-mastodon fa-lg"
-      href: https://fosstodon.org/@nutriverse
+      href: https://mastodon.social/@nutriverse
       aria-label: Mastodon
 
 home:
