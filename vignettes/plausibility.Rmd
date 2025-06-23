@@ -251,13 +251,10 @@ This will give us:
 
 An already formatted table, with scientific notations converted to standard notations, etc.
 
-When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by using `group_by()` function from the {`dplyr`} package as follows:
+When working on a multiple-area data set, for instance districts, we can check the plausibility of all districts in the data set at once by using the argument `.by` as follows:
 
 
 ``` r
-## Load library ----
-library(dplyr)
-
 ## The workflow ----
 anthro.01 |>
   mw_wrangle_age(
@@ -272,16 +269,15 @@ anthro.01 |>
     height = height,
     .recode_sex = TRUE
   ) |>
-  group_by(area) |> 
   mw_plausibility_check_wfhz(
     sex = sex,
     age = age,
     weight = weight,
     height = height,
-    flags = flag_wfhz
+    flags = flag_wfhz, 
+    .by = area
   ) |> 
-  group_by(area) |> 
-  mw_neat_output_wfhz()
+  mw_neat_output_wfhz(.by = area)
 ```
 
 This will return the following: 
@@ -293,7 +289,6 @@ This will return the following:
 
 ```
 ## # A tibble: 2 × 20
-## # Groups:   Group [2]
 ##   Group      `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
 ##   <chr>                 <int> <chr>              <fct>                    <chr>          
 ## 1 District E              505 0.8%               Excellent                0.593          
@@ -385,9 +380,6 @@ We achieve this by calling the `mw_plausibility_check_mfaz()` function:
 
 
 ``` r
-## Load dplyr library ----
-library(dplyr)
-
 ## The workflow ----
 anthro.01 |>
   mw_wrangle_age(
@@ -404,7 +396,6 @@ anthro.01 |>
     .recode_muac = TRUE,
     .to = "cm"
   ) |>
-  mutate(muac = recode_muac(muac, .to = "mm")) |>
   mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
@@ -422,9 +413,9 @@ And this will return:
 
 ```
 ## # A tibble: 1 × 17
-##       n flagged flagged_class sex_ratio sex_ratio_class age_ratio age_ratio_class   dps dps_class    sd
-##   <int>   <dbl> <fct>             <dbl> <chr>               <dbl> <chr>           <dbl> <chr>     <dbl>
-## 1  1191 0.00504 Excellent         0.297 Excellent           0.636 Excellent         100 Problema… 0.767
+##      n flagged flagged_class sex_ratio sex_ratio_class age_ratio age_ratio_class   dps dps_class    sd
+##  <int>   <dbl> <fct>             <dbl> <chr>               <dbl> <chr>           <dbl> <chr>     <dbl>
+## 1  1191 0.00504 Excellent         0.297 Excellent           0.636 Excellent        5.39 Excellent 0.767
 ## # ℹ 7 more variables: sd_class <chr>, skew <dbl>, skew_class <fct>, kurt <dbl>, kurt_class <fct>,
 ## #   quality_score <dbl>, quality_class <fct>
 ```
@@ -452,7 +443,6 @@ anthro.01 |>
     .recode_muac = TRUE,
     .to = "cm"
   ) |>
-  mutate(muac = recode_muac(muac, .to = "mm")) |>
   mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
@@ -484,9 +474,6 @@ We can also run checks on a multiple-area data set as follows:
 
 
 ``` r
-## Load dplyr library ----
-library(dplyr)
-
 ## The workflow ----
 anthro.01 |>
   mw_wrangle_age(
@@ -503,16 +490,14 @@ anthro.01 |>
     .recode_muac = TRUE,
     .to = "cm"
   ) |>
-  mutate(muac = recode_muac(muac, .to = "mm")) |>
-  group_by(area) |> 
   mw_plausibility_check_mfaz(
     sex = sex,
     muac = muac,
     age = age,
-    flags = flag_mfaz
+    flags = flag_mfaz,
+    .by = area
   ) |>
-  group_by(area) |> 
-  mw_neat_output_mfaz()
+  mw_neat_output_mfaz(.by = area)
 ```
 
 This will return: 
@@ -607,8 +592,8 @@ And this will return:
 
 ```
 ## # A tibble: 1 × 9
-##       n flagged flagged_class sex_ratio sex_ratio_class   dps dps_class    sd sd_class 
-##   <int>   <dbl> <fct>             <dbl> <chr>           <dbl> <chr>     <dbl> <fct>    
+##      n flagged flagged_class sex_ratio sex_ratio_class   dps dps_class    sd sd_class 
+##  <int>   <dbl> <fct>             <dbl> <chr>           <dbl> <chr>     <dbl> <fct>    
 ## 1  1191 0.00252 Excellent         0.297 Excellent        5.39 Excellent  11.1 Excellent
 ```
 
@@ -638,8 +623,8 @@ And we get:
 
 ```
 ## # A tibble: 1 × 9
-##   `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)` `Class. of sex ratio`
-##              <int> <chr>              <fct>                    <chr>           <chr>                
+##  `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)` `Class. of sex ratio`
+##             <int> <chr>              <fct>                    <chr>           <chr>                
 ## 1             1191 0.3%               Excellent                0.297           Excellent            
 ## # ℹ 4 more variables: `DPS(#)` <dbl>, `Class. of DPS` <chr>, `Standard Dev* (#)` <dbl>,
 ## #   `Class. of standard dev` <fct>
@@ -650,9 +635,6 @@ When working on multiple-area data, we approach the task the same way as demonst
 
 
 ``` r
-## Load library ----
-library(dplyr)
-
 ## Check plausibility ----
 anthro.01 |>
   mw_wrangle_muac(
@@ -663,14 +645,13 @@ anthro.01 |>
     .recode_muac = FALSE,
     .to = "none"
   ) |>
-  group_by(area) |>
   mw_plausibility_check_muac(
     sex = sex,
     flags = flag_muac,
-    muac = muac
+    muac = muac, 
+    .by = area
   ) |>
-  group_by(area) |> 
-  mw_neat_output_muac()
+  mw_neat_output_muac(.by = area)
 ```
 
 And we get:
@@ -678,9 +659,8 @@ And we get:
 
 ```
 ## # A tibble: 2 × 10
-## # Groups:   Group [2]
 ##   Group      `Total children` `Flagged data (%)` `Class. of flagged data` `Sex ratio (p)`
-##   <chr>                 <int> <chr>              <fct>                    <chr>          
+##  <chr>                 <int> <chr>              <fct>                    <chr>          
 ## 1 District E              505 0.0%               Excellent                0.593          
 ## 2 District G              686 0.4%               Excellent                0.380          
 ## # ℹ 5 more variables: `Class. of sex ratio` <chr>, `DPS(#)` <dbl>, `Class. of DPS` <chr>,
