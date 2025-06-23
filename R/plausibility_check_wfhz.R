@@ -61,7 +61,8 @@
 #'   age = age,
 #'   weight = weight,
 #'   height = height,
-#'   flags = flag_wfhz
+#'   flags = flag_wfhz,
+#'   .by = area
 #' )
 #'
 #'
@@ -73,7 +74,50 @@ mw_plausibility_check_wfhz <- function(df,
                                        age,
                                        weight,
                                        height,
-                                       flags) {
+                                       flags, 
+                                       .by = NULL) {
+  
+  ## Difuse argument `.by` for later evaluation ----
+  .by <- enquo(.by)
+
+  if (rlang::quo_is_null(.by)) {
+
+    ## Summarise statistics  ----
+  df <- dplyr::summarise(
+    .data = df,
+    n = dplyr::n(),
+    flagged = sum({{ flags }}, na.rm = TRUE) / n(),
+    flagged_class = rate_propof_flagged(.data$flagged, .in = "wfhz"),
+    sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
+    sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
+    age_ratio = nipnTK::ageRatioTest({{ age }}, ratio = 0.85)$p,
+    age_ratio_class = rate_agesex_ratio(.data$age_ratio),
+    dps_wgt = nipnTK::digitPreference({{ weight }}, digits = 1)$dps,
+    dps_wgt_class = nipnTK::digitPreference({{ weight }}, digits = 1)$dpsClass,
+    dps_hgt = nipnTK::digitPreference({{ height }}, digits = 1)$dps,
+    dps_hgt_class = nipnTK::digitPreference({{ height }}, digits = 1)$dpsClass,
+    sd = stats::sd(remove_flags(.data$wfhz, .from = "zscores"), na.rm = TRUE),
+    sd_class = rate_std(.data$sd, .of = "zscores"),
+    skew = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$s,
+    skew_class = rate_skewkurt(.data$skew),
+    kurt = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$k,
+    kurt_class = rate_skewkurt(.data$kurt),
+    quality_score = score_overall_quality(
+      cl_flags = .data$flagged_class,
+      cl_sex = .data$sex_ratio_class,
+      cl_age = .data$age_ratio_class,
+      cl_dps_h = .data$dps_hgt_class,
+      cl_dps_w = .data$dps_wgt_class,
+      cl_std = .data$sd_class,
+      cl_skw = .data$skew_class,
+      cl_kurt = .data$kurt_class,
+      .for = "wfhz"
+    ),
+    quality_class = rate_overall_quality(.data$quality_score)
+  )
+  } 
+
+  if (!quo_is_null(.by)) {
   ## Summarise statistics  ----
   df <- dplyr::summarise(
     .data = df,
@@ -106,8 +150,9 @@ mw_plausibility_check_wfhz <- function(df,
       .for = "wfhz"
     ),
     quality_class = rate_overall_quality(.data$quality_score),
-    .groups = "drop"
+    .by = !!.by
   )
+  }
 
   ## Return data.frame ----
   df
