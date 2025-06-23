@@ -48,7 +48,8 @@ Now that we got acquainted with the data set, we can proceed to executing the ta
 mw_check_ipcamn_ssreq(
   df = anthro.01,         # <1>
   cluster = cluster,      # <2>
-  .source = "survey"      # <3>
+  .source = "survey",     # <3>
+  .by = NULL              # <4>
 )
 ```
 
@@ -58,6 +59,8 @@ mw_check_ipcamn_ssreq(
 
 3. The argument `.source` should be specified with the type of the source for the data in `df`. Since `anthro.01` data is from a survey, we specify this argument as *"survey"*.
 
+4. The argument `.by` controls whether the analysis should be grouped by a given category. 
+
 We can also chain `anthro.01` to the function using the native pipe operator `|>`:
 
 
@@ -65,7 +68,8 @@ We can also chain `anthro.01` to the function using the native pipe operator `|>
 anthro.01 |>
   mw_check_ipcamn_ssreq(
     cluster = cluster,
-    .source = "survey"
+    .source = "survey",
+    .by = NULL
   )
 ```
 
@@ -90,15 +94,11 @@ The above output is not quite useful yet as we often deal with multiple-area dat
 
 
 ``` r
-## Load the dplyr package ----
-library(dplyr)
-
-## Use the group_by() function ----
 anthro.01 |>
-  group_by(area) |>
   mw_check_ipcamn_ssreq(
     cluster = cluster,
-    .source = "survey"
+    .source = "survey",
+    .by = area
   )
 ```
 
@@ -107,10 +107,11 @@ This will return:
 
 ```
 ## # A tibble: 2 × 4
-##   area       n_clusters n_obs meet_ipc
-##   <chr>           <int> <int> <chr>   
-## 1 District E         30   505 yes     
-## 2 District G         30   686 yes
+##  area       n_clusters n_obs meet_ipc
+##  <chr>           <int> <int> <chr>   
+## 1 District E         28   505 yes     
+## 2 District G         30   686 yes   
+
 ```
 
 For screening or sentinel site-based data, we approach the task the same way; we only have to change the `.source` parameter to "screening" or to "ssite" as appropriate, as well as to supply `cluster` with the right column name of the sub-areas inside the main area (villages, localities, comunas, communities, etc).
