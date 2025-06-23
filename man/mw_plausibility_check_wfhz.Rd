@@ -19,6 +19,10 @@ mw_plausibility_check_wfhz(df, sex, age, weight, height, flags, .by = NULL)
 \item{height}{A vector of class \code{double} of child's height in centimeters.}
 
 \item{flags}{A \code{numeric} vector of flagged records.}
+
+\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas for
+where the data was collected and for which the analysis should be summarised
+for.}
 }
 \value{
 A single row summary \code{tibble} with 19 columns for the plausibility check
@@ -60,9 +64,9 @@ mw_plausibility_check_wfhz(
   age = age,
   weight = weight,
   height = height,
-  flags = flag_wfhz
+  flags = flag_wfhz,
+  .by = area
 )
-
 
 }
 \references{

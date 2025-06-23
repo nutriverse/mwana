@@ -116,8 +116,7 @@ testthat::test_that(
         height = height, 
         .by = area
       ) |>
-      group_by(area) |>
-      mw_neat_output_wfhz()
+      mw_neat_output_wfhz(.by = area)
 
     ## Tests ----
     testthat::expect_s3_class(quality, "tbl_df")
