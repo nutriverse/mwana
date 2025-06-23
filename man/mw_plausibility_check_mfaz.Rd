@@ -4,7 +4,7 @@
 \alias{mw_plausibility_check_mfaz}
 \title{Check the plausibility and acceptability of MUAC-for-age z-score (MFAZ) data}
 \usage{
-mw_plausibility_check_mfaz(df, sex, muac, age, flags)
+mw_plausibility_check_mfaz(df, sex, muac, age, flags, .by = NULL)
 }
 \arguments{
 \item{df}{A \code{data.frame} object to check.}
@@ -69,7 +69,8 @@ mw_plausibility_check_mfaz(
   flags = flag_mfaz,
   sex = sex,
   muac = muac,
-  age = age
+  age = age,
+  .by = area
 )
 
 }

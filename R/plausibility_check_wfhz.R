@@ -217,7 +217,7 @@ mw_neat_output_wfhz <- function(df, .by = NULL) {
   ## Difuse argument `.by` for later evaluation ----
   .by <- enquo(.by)
 
-  if (quo_is_null(.by)) {
+  if (rlang::quo_is_null(.by)) {
     ## Format data frame ----
     df <- dplyr::mutate(
       .data = df,

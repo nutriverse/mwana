@@ -25,8 +25,9 @@ where the data was collected and for which the analysis should be summarised
 for.}
 }
 \value{
-A single row summary \code{tibble} with 19 columns for the plausibility check
-results and their respective acceptability rates.
+A single row summary \code{tibble} with 19 columns (if ungrouped analysis,
+otherwise 20) for the plausibility check results and their respective
+acceptability rates.
 }
 \description{
 Check the overall plausibility and acceptability of WFHZ data through a

@@ -9,6 +9,10 @@ mw_neat_output_wfhz(df, .by = NULL)
 \arguments{
 \item{df}{An \code{tibble} object returned by the \code{\link[=mw_plausibility_check_wfhz]{mw_plausibility_check_wfhz()}}
 containing the summarized results to be formatted.}
+
+\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas for
+where the data was collected and for which the analysis should be summarised
+for.}
 }
 \value{
 A \code{tibble} object of the same length and width as \code{df}, with column names and

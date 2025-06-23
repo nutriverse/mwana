@@ -5,7 +5,7 @@
 \title{Clean and format the output tibble returned from the MUAC-for-age z-score
 plausibility check}
 \usage{
-mw_neat_output_mfaz(df)
+mw_neat_output_mfaz(df, .by = NULL)
 }
 \arguments{
 \item{df}{An \code{data.frame} object returned by \code{\link[=mw_plausibility_check_mfaz]{mw_plausibility_check_mfaz()}}
@@ -46,10 +46,11 @@ pl <- mw_plausibility_check_mfaz(
   flags = flag_mfaz,
   sex = sex,
   muac = muac,
-  age = age
+  age = age, 
+  .by = area
 )
 
 ## Now neat the output table ----
-mw_neat_output_mfaz(df = pl)
+mw_neat_output_mfaz(df = pl, .by = area)
 
 }

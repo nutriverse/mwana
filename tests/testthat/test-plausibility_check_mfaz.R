@@ -25,7 +25,8 @@ testthat::test_that(
         flags = flag_mfaz,
         sex = sex,
         muac = muac,
-        age = age
+        age = age, 
+        .by = NULL
       )
 
     ## Tests ----
@@ -110,15 +111,14 @@ testthat::test_that(
         .recode_muac = TRUE,
         .to = "cm"
       ) |>
-      group_by(area) |>
       mw_plausibility_check_mfaz(
         flags = flag_mfaz,
         sex = sex,
         muac = muac,
-        age = age
+        age = age,
+        .by = area
       ) |>
-      group_by(area) |>
-      mw_neat_output_mfaz()
+      mw_neat_output_mfaz(.by = area)
 
     ## Tests ----
     testthat::expect_s3_class(quality, "tbl_df")
