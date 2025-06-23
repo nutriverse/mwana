@@ -3,14 +3,14 @@
 #'
 #' @description
 #' Check the overall plausibility and acceptability of MFAZ data through a
-#' structured test suite encompassing checks for sampling and 
-#' measurement-related biases in the dataset. This test suite follows the 
+#' structured test suite encompassing checks for sampling and
+#' measurement-related biases in the dataset. This test suite follows the
 #' recommendation made by Bilukha & Kianian (2023) on the plausibility of
 #' constructing a comprehensive plausibility check for MUAC data similar to
 #' weight-for-height z-score to evaluate its acceptability when age values are
 #' available in the dataset.
 #'
-#' The function works on a `data.frame` returned from wrangling functions for 
+#' The function works on a `data.frame` returned from wrangling functions for
 #' age and for MUAC-for-age z-score data available from this package.
 #'
 #' @param df A `data.frame` object to check.
@@ -22,19 +22,19 @@
 #' @param muac A `numeric` vector of child's MUAC in centimeters.
 #'
 #' @param flags A `numeric` vector of flagged records.
-#' 
+#'
 #' @param .by A `character` or `numeric` vector of the geographical areas for
 #' where the data was collected and for which the analysis should be summarised
 #' for.
 #'
-#' @returns A single row summary `tibble` with 17 columns (if ungrouped analysis, 
-#' otherwise 18), containing the plausibility check results and their respective 
+#' @returns A single row summary `tibble` with 17 columns (if ungrouped analysis,
+#' otherwise 18), containing the plausibility check results and their respective
 #' acceptability ratings.
 #'
 #' @details
-#' Whilst the function uses the same checks and criteria as those for 
-#' weight-for-height z-scores in the SMART plausibility check, the percent of 
-#' flagged records is evaluated using different cut-off points, with a maximum 
+#' Whilst the function uses the same checks and criteria as those for
+#' weight-for-height z-scores in the SMART plausibility check, the percent of
+#' flagged records is evaluated using different cut-off points, with a maximum
 #' acceptability of 2.0% as shown below:
 #'
 #' |**Excellent** | **Good** | **Acceptable** | **Problematic** |
@@ -85,88 +85,87 @@
 #' )
 #'
 #' @export
-#' 
+#'
 mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, .by = NULL) {
-
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
   if (rlang::quo_is_null(.by)) {
-
-## Summarise statistics  ----
-  df <- dplyr::summarise(
-    .data = df,
-    n = dplyr::n(),
-    flagged = sum({{ flags }}, na.rm = TRUE) / dplyr::n(),
-    flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
-    sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-    sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-    age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
-    age_ratio_class = rate_agesex_ratio(.data$age_ratio),
-    dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
-    dps_class = nipnTK::digitPreference(
-      {{ muac }}, digits = 1, values = 0:9
-    )$dpsClass,
-    sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
-    sd_class = rate_std(.data$sd, .of = "zscores"),
-    skew = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
-    skew_class = rate_skewkurt(.data$skew),
-    kurt = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
-    kurt_class = rate_skewkurt(.data$kurt),
-    quality_score = score_overall_quality(
-      cl_flags = .data$flagged_class,
-      cl_sex = .data$sex_ratio_class,
-      cl_age = .data$age_ratio_class,
-      cl_dps_m = .data$dps_class,
-      cl_std = .data$sd_class,
-      cl_skw = .data$skew_class,
-      cl_kurt = .data$kurt_class,
-      .for = "mfaz"
-    ),
-    quality_class = rate_overall_quality(.data$quality_score)
-  )
-
-} 
+    ## Summarise statistics  ----
+    df <- dplyr::summarise(
+      .data = df,
+      n = dplyr::n(),
+      flagged = sum({{ flags }}, na.rm = TRUE) / dplyr::n(),
+      flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
+      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
+      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
+      age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
+      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
+      dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
+      dps_class = nipnTK::digitPreference(
+        {{ muac }},
+        digits = 1, values = 0:9
+      )$dpsClass,
+      sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
+      sd_class = rate_std(.data$sd, .of = "zscores"),
+      skew = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
+      skew_class = rate_skewkurt(.data$skew),
+      kurt = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
+      kurt_class = rate_skewkurt(.data$kurt),
+      quality_score = score_overall_quality(
+        cl_flags = .data$flagged_class,
+        cl_sex = .data$sex_ratio_class,
+        cl_age = .data$age_ratio_class,
+        cl_dps_m = .data$dps_class,
+        cl_std = .data$sd_class,
+        cl_skw = .data$skew_class,
+        cl_kurt = .data$kurt_class,
+        .for = "mfaz"
+      ),
+      quality_class = rate_overall_quality(.data$quality_score)
+    )
+  }
   if (!rlang::quo_is_null(.by)) {
     ## Summarise statistics  ----
-  df <- dplyr::summarise(
-    .data = df,
-    n = dplyr::n(),
-    flagged = sum({{ flags }}, na.rm = TRUE) / dplyr::n(),
-    flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
-    sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-    sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-    age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
-    age_ratio_class = rate_agesex_ratio(.data$age_ratio),
-    dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
-    dps_class = nipnTK::digitPreference(
-      {{ muac }}, digits = 1, values = 0:9
-    )$dpsClass,
-    sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
-    sd_class = rate_std(.data$sd, .of = "zscores"),
-    skew = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
-    skew_class = rate_skewkurt(.data$skew),
-    kurt = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
-    kurt_class = rate_skewkurt(.data$kurt),
-    quality_score = score_overall_quality(
-      cl_flags = .data$flagged_class,
-      cl_sex = .data$sex_ratio_class,
-      cl_age = .data$age_ratio_class,
-      cl_dps_m = .data$dps_class,
-      cl_std = .data$sd_class,
-      cl_skw = .data$skew_class,
-      cl_kurt = .data$kurt_class,
-      .for = "mfaz"
-    ),
-    quality_class = rate_overall_quality(.data$quality_score), 
-    .by = !!.by
-  )
+    df <- dplyr::summarise(
+      .data = df,
+      n = dplyr::n(),
+      flagged = sum({{ flags }}, na.rm = TRUE) / dplyr::n(),
+      flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
+      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
+      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
+      age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
+      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
+      dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
+      dps_class = nipnTK::digitPreference(
+        {{ muac }},
+        digits = 1, values = 0:9
+      )$dpsClass,
+      sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
+      sd_class = rate_std(.data$sd, .of = "zscores"),
+      skew = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
+      skew_class = rate_skewkurt(.data$skew),
+      kurt = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
+      kurt_class = rate_skewkurt(.data$kurt),
+      quality_score = score_overall_quality(
+        cl_flags = .data$flagged_class,
+        cl_sex = .data$sex_ratio_class,
+        cl_age = .data$age_ratio_class,
+        cl_dps_m = .data$dps_class,
+        cl_std = .data$sd_class,
+        cl_skw = .data$skew_class,
+        cl_kurt = .data$kurt_class,
+        .for = "mfaz"
+      ),
+      quality_class = rate_overall_quality(.data$quality_score),
+      .by = !!.by
+    )
   }
 
-    ## Return data.frame ----
+  ## Return data.frame ----
   df
 }
-  
+
 
 
 #'
@@ -174,18 +173,18 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, .by = NULL) {
 #' plausibility check
 #'
 #' @description
-#' Converts scientific notations to standard notations, rounds off values, and 
+#' Converts scientific notations to standard notations, rounds off values, and
 #' renames columns to meaningful names.
 #'
 #' @param df An `data.frame` object returned by [mw_plausibility_check_mfaz()]
 #' containing the summarized results to be formatted.
-#' 
+#'
 #' @param .by A `character` or `numeric` vector of the geographical areas for
 #' where the data was collected and for which the analysis should be summarised
 #' for.
 #'
 #' @returns
-#' A `data.frame` object of the same length and width as `df`, with column 
+#' A `data.frame` object of the same length and width as `df`, with column
 #' names and values formatted as appropriate.
 #'
 #' @examples
@@ -215,7 +214,7 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, .by = NULL) {
 #'   flags = flag_mfaz,
 #'   sex = sex,
 #'   muac = muac,
-#'   age = age, 
+#'   age = age,
 #'   .by = area
 #' )
 #'
@@ -225,60 +224,59 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, .by = NULL) {
 #' @export
 #'
 mw_neat_output_mfaz <- function(df, .by = NULL) {
-
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
   if (rlang::quo_is_null(.by)) {
     ## Format data frame ----
-  df <- dplyr::mutate(
-    .data = df,
-    flagged = scales::label_percent(
-      accuracy = 0.1, suffix = "%", decimal.mark = "."
-    )(.data$flagged),
-    sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-    age_ratio = scales::label_pvalue()(.data$age_ratio),
-    sd = round(.data$sd, digits = 2),
-    dps = round(.data$dps),
-    skew = round(.data$skew, digits = 2),
-    kurt = round(.data$kurt, digits = 2)
-  ) |>
-    ## Rename columns ----
-    stats::setNames(
-      c(
-        "Total children", "Flagged data (%)",
-        "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
-        "Age ratio (p)", "Class. of age ratio", "DPS (#)",
-        "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
-        "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
-        "Class. of kurtosis", "Overall score", "Overall quality"
+    df <- dplyr::mutate(
+      .data = df,
+      flagged = scales::label_percent(
+        accuracy = 0.1, suffix = "%", decimal.mark = "."
+      )(.data$flagged),
+      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
+      age_ratio = scales::label_pvalue()(.data$age_ratio),
+      sd = round(.data$sd, digits = 2),
+      dps = round(.data$dps),
+      skew = round(.data$skew, digits = 2),
+      kurt = round(.data$kurt, digits = 2)
+    ) |>
+      ## Rename columns ----
+      stats::setNames(
+        c(
+          "Total children", "Flagged data (%)",
+          "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
+          "Age ratio (p)", "Class. of age ratio", "DPS (#)",
+          "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
+          "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
+          "Class. of kurtosis", "Overall score", "Overall quality"
+        )
       )
-    )
   } else {
-
-  ## Format data frame ----
-  df <- dplyr::mutate(
-    .data = df,
-    flagged = scales::label_percent(
-      accuracy = 0.1, suffix = "%", decimal.mark = "."
-    )(.data$flagged),
-    sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-    age_ratio = scales::label_pvalue()(.data$age_ratio),
-    sd = round(.data$sd, digits = 2),
-    dps = round(.data$dps),
-    skew = round(.data$skew, digits = 2),
-    kurt = round(.data$kurt, digits = 2)
-  ) |>
-    ## Rename columns ----
-    stats::setNames(
-      c("Group", "Total children", "Flagged data (%)",
-        "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
-        "Age ratio (p)", "Class. of age ratio", "DPS (#)",
-        "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
-        "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
-        "Class. of kurtosis", "Overall score", "Overall quality"
+    ## Format data frame ----
+    df <- dplyr::mutate(
+      .data = df,
+      flagged = scales::label_percent(
+        accuracy = 0.1, suffix = "%", decimal.mark = "."
+      )(.data$flagged),
+      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
+      age_ratio = scales::label_pvalue()(.data$age_ratio),
+      sd = round(.data$sd, digits = 2),
+      dps = round(.data$dps),
+      skew = round(.data$skew, digits = 2),
+      kurt = round(.data$kurt, digits = 2)
+    ) |>
+      ## Rename columns ----
+      stats::setNames(
+        c(
+          "Group", "Total children", "Flagged data (%)",
+          "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
+          "Age ratio (p)", "Class. of age ratio", "DPS (#)",
+          "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
+          "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
+          "Class. of kurtosis", "Overall score", "Overall quality"
+        )
       )
-    )
   }
   ## Return data.frame ----
   df
