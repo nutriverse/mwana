@@ -10,6 +10,10 @@ mw_neat_output_mfaz(df, .by = NULL)
 \arguments{
 \item{df}{An \code{data.frame} object returned by \code{\link[=mw_plausibility_check_mfaz]{mw_plausibility_check_mfaz()}}
 containing the summarized results to be formatted.}
+
+\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas for
+where the data was collected and for which the analysis should be summarised
+for.}
 }
 \value{
 A \code{data.frame} object of the same length and width as \code{df}, with column
@@ -46,7 +50,7 @@ pl <- mw_plausibility_check_mfaz(
   flags = flag_mfaz,
   sex = sex,
   muac = muac,
-  age = age, 
+  age = age,
   .by = area
 )
 
