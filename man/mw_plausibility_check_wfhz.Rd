@@ -5,7 +5,7 @@
 \title{Check the plausibility and acceptability of weight-for-height z-score (WFHZ)
 data}
 \usage{
-mw_plausibility_check_wfhz(df, sex, age, weight, height, flags)
+mw_plausibility_check_wfhz(df, sex, age, weight, height, flags, .by = NULL)
 }
 \arguments{
 \item{df}{A \code{tibble} object to check.}
