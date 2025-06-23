@@ -29,8 +29,9 @@
 #' for.
 #'
 #' @returns
-#' A single row summary `tibble` with 19 columns for the plausibility check
-#' results and their respective acceptability rates.
+#' A single row summary `tibble` with 19 columns (if ungrouped analysis, 
+#' otherwise 20) for the plausibility check results and their respective 
+#' acceptability rates.
 #'
 #' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
 #' [mw_wrangle_age()]
@@ -168,6 +169,10 @@ mw_plausibility_check_wfhz <- function(df,
 #'
 #' @param df An `tibble` object returned by the [mw_plausibility_check_wfhz()]
 #' containing the summarized results to be formatted.
+#' 
+#' @param .by A `character` or `numeric` vector of the geographical areas for
+#' where the data was collected and for which the analysis should be summarised
+#' for.
 #'
 #' @returns
 #' A `tibble` object of the same length and width as `df`, with column names and
