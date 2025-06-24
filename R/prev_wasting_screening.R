@@ -3,7 +3,9 @@
 #' @keywords internal
 #'
 #'
-get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
+get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) {
+
+  ## Difuse arguments ----
   muac <- rlang::eval_tidy(enquo(muac), df)
   edema <- rlang::eval_tidy(enquo(edema), df)
 
@@ -55,9 +57,13 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL) {
     )
   }
 
-  ## Filter out flgas ----
-  x <- dplyr::filter(.data = x, .data$flag_mfaz == 0)
-
+  ## Filter out flags ----
+  if (raw_muac) {
+x <- dplyr::filter(.data = x, .data$flag_mfaz == 0)
+  } else {
+    x <- dplyr::filter(.data = x, .data$flag_muac == 0)
+  }
+  
   ## Summarize results ----
   p <- dplyr::group_by(.data = x, {{ .by }}) |>
     dplyr::summarise(
