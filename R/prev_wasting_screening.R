@@ -105,6 +105,9 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) 
 #' must have a variable called `cluster` which contains the primary sampling
 #' unit identifiers.
 #'
+#' @param age_cat A `character` vector of child's age in categories. Code values
+#' should be "6-23" and "24-59".
+#'
 #' @param muac A `numeric` or `integer` vector of raw MUAC values. The
 #' measurement unit of the values should be millimeters.
 #'
@@ -149,6 +152,8 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) 
 #'   edema = NULL,
 #'   .by = NULL
 #' )
+#'
+#' @rdname muac-screening
 #'
 #' @export
 #'
@@ -266,6 +271,28 @@ mw_estimate_prevalence_screening <- function(df,
 #'
 #'
 #'
+#' @examples
+#'
+#' anthro.01 |>
+#'   mw_wrangle_muac(
+#'     sex = sex,
+#'     .recode_sex = TRUE,
+#'     muac = muac
+#'   ) |>
+#'   transform(
+#'     age_cat = ifelse(age < 24, "6-23", "24-59")
+#'   ) |>
+#'   mw_estimate_prevalence_screening2(
+#'     age_cat = age_cat,
+#'     muac = muac,
+#'     edema = edema,
+#'     .by = area
+#'   )
+#'
+#' @rdname muac-screening
+#'
+#'
+#' @export
 #'
 #'
 mw_estimate_prevalence_screening2 <- function(
@@ -329,7 +356,7 @@ mw_estimate_prevalence_screening2 <- function(
   }
 
   ## Loop ----
-  for (i in seq_along(nrow(path))) {
+  for (i in seq_len(nrow(path))) {
     if (!rlang::quo_is_null(.by)) {
       area <- dplyr::pull(path, !!.by)[i]
       data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == area)
@@ -357,6 +384,7 @@ mw_estimate_prevalence_screening2 <- function(
         raw_muac = TRUE
       )
     }
+    results[[i]] <- r
   } else if (analysis_approach == "weighted") {
     if (!rlang::quo_is_null(.by)) {
       r <- mw_estimate_smart_age_wt(
@@ -372,6 +400,7 @@ mw_estimate_prevalence_screening2 <- function(
         raw_muac = TRUE
       )
     }
+    results[[i]] <- r
   } else {
     if (!quo_is_null(.by)) {
       r <- dplyr::summarise(
@@ -393,5 +422,5 @@ mw_estimate_prevalence_screening2 <- function(
   }
 
   ## Return results ----
-  results
+  dplyr::bind_rows(results)
 }
