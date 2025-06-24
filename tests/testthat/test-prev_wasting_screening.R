@@ -16,7 +16,8 @@ testthat::test_that(
       get_estimates(
         muac = muac,
         edema = edema,
-        .by = NULL
+        .by = NULL, 
+        raw_muac = FALSE
       )
 
     ### Observed estimates ----
@@ -155,6 +156,59 @@ testthat::test_that(
     testthat::expect_equal(round(p[[5]][1] * 100, 1), sam_p)
     testthat::expect_equal(p[[6]][1], mam_n)
     testthat::expect_equal(round(p[[7]][1] * 100, 1), mam_p)
+  }
+)
+
+## When `raw_muac` is either `TRUE` or `FALSE` ----
+testthat::test_that(
+  "When get_estimates() is set to `raw_muac = TRUE`, it filters outliers
+  based on `flag_muac`",
+  {
+    ### Observed results ----
+    r <- anthro.01 |>
+      mw_wrangle_age(age = age) |>
+      mw_wrangle_muac(
+        sex = sex,
+        .recode_sex = TRUE,
+        muac = muac
+      ) |>
+      get_estimates(
+        muac = muac,
+        raw_muac = TRUE
+      )
+
+    ### Tests ----
+    testthat::expect_s3_class(object = r, class = "tbl_df")
+    testthat::expect_no_error(object = r)
+  }
+)
+
+
+## When `raw_muac` is either `TRUE` or `FALSE` ----
+testthat::test_that(
+  "When get_estimates() is set to `raw_muac = FALSE`, it filters outliers
+  based on `flag_mfaz`",
+  {
+    ### Observed results ----
+    r <- anthro.01 |>
+      mw_wrangle_age(age = age) |>
+      mw_wrangle_muac(
+        sex = sex,
+        .recode_sex = TRUE,
+        age = age,
+        muac = muac,
+        .recode_muac = TRUE,
+        .to = "cm"
+      ) |>
+      mutate(muac = recode_muac(muac, .to = "mm")) |>
+      get_estimates(
+        muac = muac,
+        raw_muac = FALSE
+      )
+
+    ### Tests ----
+    testthat::expect_s3_class(object = r, class = "tbl_df")
+    testthat::expect_no_error(object = r)
   }
 )
 
