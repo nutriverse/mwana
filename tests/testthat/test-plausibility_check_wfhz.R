@@ -24,7 +24,8 @@ testthat::test_that(
         age = age,
         weight = weight,
         height = height,
-        flags = flag_wfhz
+        flags = flag_wfhz, 
+        .by = NULL
       )
 
     ## Tests ----
@@ -66,7 +67,8 @@ testthat::test_that(
         sex = sex,
         age = age,
         weight = weight,
-        height = height
+        height = height, 
+        .by = NULL
       ) |>
       mw_neat_output_wfhz()
 
@@ -106,16 +108,15 @@ testthat::test_that(
         height = height,
         .recode_sex = TRUE
       ) |>
-      group_by(area) |>
       mw_plausibility_check_wfhz(
         flags = flag_wfhz,
         sex = sex,
         age = age,
         weight = weight,
-        height = height
+        height = height, 
+        .by = area
       ) |>
-      group_by(area) |>
-      mw_neat_output_wfhz()
+      mw_neat_output_wfhz(.by = area)
 
     ## Tests ----
     testthat::expect_s3_class(quality, "tbl_df")
@@ -135,4 +136,3 @@ testthat::test_that(
     )
   }
 )
-

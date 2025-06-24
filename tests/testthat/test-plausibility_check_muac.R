@@ -84,14 +84,13 @@ testthat::test_that(
         .recode_muac = FALSE,
         .to = "none"
       ) |>
-      group_by(area) |>
       mw_plausibility_check_muac(
         flags = flag_muac,
         sex = sex,
-        muac = muac
+        muac = muac, 
+        .by = area
       )|>
-      group_by(area) |>
-      mw_neat_output_muac()
+      mw_neat_output_muac(.by = area)
 
     ## Tests ----
     testthat::expect_s3_class(quality, "data.frame")
