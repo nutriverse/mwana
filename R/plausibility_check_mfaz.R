@@ -227,57 +227,30 @@ mw_neat_output_mfaz <- function(df, .by = NULL) {
   ## Difuse argument `.by` ----
   .by <- enquo(.by)
 
-  if (rlang::quo_is_null(.by)) {
-    ## Format data frame ----
-    df <- dplyr::mutate(
-      .data = df,
-      flagged = scales::label_percent(
-        accuracy = 0.1, suffix = "%", decimal.mark = "."
-      )(.data$flagged),
-      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-      age_ratio = scales::label_pvalue()(.data$age_ratio),
-      sd = round(.data$sd, digits = 2),
-      dps = round(.data$dps),
-      skew = round(.data$skew, digits = 2),
-      kurt = round(.data$kurt, digits = 2)
-    ) |>
-      ## Rename columns ----
-      stats::setNames(
-        c(
-          "Total children", "Flagged data (%)",
-          "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
-          "Age ratio (p)", "Class. of age ratio", "DPS (#)",
-          "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
-          "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
-          "Class. of kurtosis", "Overall score", "Overall quality"
-        )
+  df <- dplyr::mutate(
+    .data = df,
+    flagged = scales::label_percent(
+      accuracy = 0.1, suffix = "%", decimal.mark = "."
+    )(.data$flagged),
+    sex_ratio = scales::label_pvalue()(.data$sex_ratio),
+    age_ratio = scales::label_pvalue()(.data$age_ratio),
+    sd = round(.data$sd, digits = 2),
+    dps = round(.data$dps),
+    skew = round(.data$skew, digits = 2),
+    kurt = round(.data$kurt, digits = 2)
+  ) |>
+    ## Rename columns ----
+    stats::setNames(
+      c(
+        if (!rlang::quo_is_null(.by)) "Group" else NULL,
+        "Total children", "Flagged data (%)",
+        "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
+        "Age ratio (p)", "Class. of age ratio", "DPS (#)",
+        "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
+        "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
+        "Class. of kurtosis", "Overall score", "Overall quality"
       )
-  } else {
-    ## Format data frame ----
-    df <- dplyr::mutate(
-      .data = df,
-      flagged = scales::label_percent(
-        accuracy = 0.1, suffix = "%", decimal.mark = "."
-      )(.data$flagged),
-      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-      age_ratio = scales::label_pvalue()(.data$age_ratio),
-      sd = round(.data$sd, digits = 2),
-      dps = round(.data$dps),
-      skew = round(.data$skew, digits = 2),
-      kurt = round(.data$kurt, digits = 2)
-    ) |>
-      ## Rename columns ----
-      stats::setNames(
-        c(
-          "Group", "Total children", "Flagged data (%)",
-          "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
-          "Age ratio (p)", "Class. of age ratio", "DPS (#)",
-          "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",
-          "Skewness* (#)", "Class. of skewness", "Kurtosis* (#)",
-          "Class. of kurtosis", "Overall score", "Overall quality"
-        )
-      )
-  }
+    )
   ## Return data.frame ----
   df
 }

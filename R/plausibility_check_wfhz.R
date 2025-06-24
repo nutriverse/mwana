@@ -29,8 +29,8 @@
 #' for.
 #'
 #' @returns
-#' A single row summary `tibble` with 19 columns (if ungrouped analysis, 
-#' otherwise 20) for the plausibility check results and their respective 
+#' A single row summary `tibble` with 19 columns (if ungrouped analysis,
+#' otherwise 20) for the plausibility check results and their respective
 #' acceptability rates.
 #'
 #' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
@@ -169,7 +169,7 @@ mw_plausibility_check_wfhz <- function(df,
 #'
 #' @param df An `tibble` object returned by the [mw_plausibility_check_wfhz()]
 #' containing the summarized results to be formatted.
-#' 
+#'
 #' @param .by A `character` or `numeric` vector of the geographical areas for
 #' where the data was collected and for which the analysis should be summarised
 #' for.
@@ -217,62 +217,33 @@ mw_neat_output_wfhz <- function(df, .by = NULL) {
   ## Difuse argument `.by` for later evaluation ----
   .by <- enquo(.by)
 
-  if (rlang::quo_is_null(.by)) {
-    ## Format data frame ----
-    df <- dplyr::mutate(
-      .data = df,
-      flagged = scales::label_percent(
-        accuracy = 0.1, suffix = "%", decimal.mark = "."
-      )(.data$flagged),
-      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-      age_ratio = scales::label_pvalue()(.data$age_ratio),
-      sd = round(.data$sd, digits = 2),
-      dps_wgt = round(.data$dps_wgt),
-      dps_hgt = round(.data$dps_hgt),
-      skew = round(.data$skew, digits = 2),
-      kurt = round(.data$kurt, digits = 2)
-    ) |>
-      ## Rename columns ----
-      stats::setNames(
-        c(
-          "Total children", "Flagged data (%)", "Class. of flagged data",
-          "Sex ratio (p)", "Class. of sex ratio", "Age ratio (p)",
-          "Class. of age ratio", "DPS weight (#)", "Class. DPS weight",
-          "DPS height (#)", "Class. DPS height", "Standard Dev* (#)",
-          "Class. of standard dev", "Skewness* (#)", "Class. of skewness",
-          "Kurtosis* (#)", "Class. of kurtosis", "Overall score",
-          "Overall quality"
-        )
+  ## Format data frame ----
+  df <- dplyr::mutate(
+    .data = df,
+    flagged = scales::label_percent(
+      accuracy = 0.1, suffix = "%", decimal.mark = "."
+    )(.data$flagged),
+    sex_ratio = scales::label_pvalue()(.data$sex_ratio),
+    age_ratio = scales::label_pvalue()(.data$age_ratio),
+    sd = round(.data$sd, digits = 2),
+    dps_wgt = round(.data$dps_wgt),
+    dps_hgt = round(.data$dps_hgt),
+    skew = round(.data$skew, digits = 2),
+    kurt = round(.data$kurt, digits = 2)
+  ) |>
+    ## Rename columns ----
+    stats::setNames(
+      c(
+        if (!rlang::quo_is_null(.by)) "Group" else NULL,
+        "Total children", "Flagged data (%)", "Class. of flagged data",
+        "Sex ratio (p)", "Class. of sex ratio", "Age ratio (p)",
+        "Class. of age ratio", "DPS weight (#)", "Class. DPS weight",
+        "DPS height (#)", "Class. DPS height", "Standard Dev* (#)",
+        "Class. of standard dev", "Skewness* (#)", "Class. of skewness",
+        "Kurtosis* (#)", "Class. of kurtosis", "Overall score",
+        "Overall quality"
       )
-  } else {
-    ## Format data frame adding the variable `Group` ----
-    df <- dplyr::mutate(
-      .data = df,
-      flagged = scales::label_percent(
-        accuracy = 0.1, suffix = "%", decimal.mark = "."
-      )(.data$flagged),
-      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-      age_ratio = scales::label_pvalue()(.data$age_ratio),
-      sd = round(.data$sd, digits = 2),
-      dps_wgt = round(.data$dps_wgt),
-      dps_hgt = round(.data$dps_hgt),
-      skew = round(.data$skew, digits = 2),
-      kurt = round(.data$kurt, digits = 2)
-    ) |>
-      ## Rename columns ----
-      stats::setNames(
-        c(
-          "Group",
-          "Total children", "Flagged data (%)", "Class. of flagged data",
-          "Sex ratio (p)", "Class. of sex ratio", "Age ratio (p)",
-          "Class. of age ratio", "DPS weight (#)", "Class. DPS weight",
-          "DPS height (#)", "Class. DPS height", "Standard Dev* (#)",
-          "Class. of standard dev", "Skewness* (#)", "Class. of skewness",
-          "Kurtosis* (#)", "Class. of kurtosis", "Overall score",
-          "Overall quality"
-        )
-      )
-  }
+    )
 
   ## Return data.frame ----
   df

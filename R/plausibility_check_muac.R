@@ -20,8 +20,8 @@
 #' where the data was collected and for which the analysis should be summarised
 #' for.
 #'
-#' @returns A single row summary `tibble` with 9 columns (if ungrouped analysis, 
-#' otherwise 10), containing the plausibility check results and their respective 
+#' @returns A single row summary `tibble` with 9 columns (if ungrouped analysis,
+#' otherwise 10), containing the plausibility check results and their respective
 #' acceptability ratings.
 #'
 #' @details
@@ -164,45 +164,25 @@ mw_neat_output_muac <- function(df, .by = NULL) {
   ## Difuse argument ----
   .by <- enquo(.by)
 
-  if (rlang::quo_is_null(.by)) {
-    ## Format data frame ----
-    df <- dplyr::mutate(
-      .data = df,
-      flagged = scales::label_percent(
-        accuracy = 0.1, suffix = "%", decimal.mark = "."
-      )(.data$flagged),
-      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-      sd = round(.data$sd, digits = 2),
-      dps = round(.data$dps)
-    ) |>
-      ## Rename columns ----
-      stats::setNames(
-        c(
-          "Total children", "Flagged data (%)", "Class. of flagged data",
-          "Sex ratio (p)", "Class. of sex ratio", "DPS(#)", "Class. of DPS",
-          "Standard Dev* (#)", "Class. of standard dev"
-        )
+  ## Format data frame ----
+  df <- dplyr::mutate(
+    .data = df,
+    flagged = scales::label_percent(
+      accuracy = 0.1, suffix = "%", decimal.mark = "."
+    )(.data$flagged),
+    sex_ratio = scales::label_pvalue()(.data$sex_ratio),
+    sd = round(.data$sd, digits = 2),
+    dps = round(.data$dps)
+  ) |>
+    ## Rename columns ----
+    stats::setNames(
+      c(
+        if (!rlang::quo_is_null(.by)) "Group" else NULL,
+        "Total children", "Flagged data (%)", "Class. of flagged data",
+        "Sex ratio (p)", "Class. of sex ratio", "DPS(#)", "Class. of DPS",
+        "Standard Dev* (#)", "Class. of standard dev"
       )
-  } else {
-    ## Format data frame ----
-    df <- dplyr::mutate(
-      .data = df,
-      flagged = scales::label_percent(
-        accuracy = 0.1, suffix = "%", decimal.mark = "."
-      )(.data$flagged),
-      sex_ratio = scales::label_pvalue()(.data$sex_ratio),
-      sd = round(.data$sd, digits = 2),
-      dps = round(.data$dps)
-    ) |>
-      ## Rename columns ----
-      stats::setNames(
-        c(
-          "Group", "Total children", "Flagged data (%)", "Class. of flagged data",
-          "Sex ratio (p)", "Class. of sex ratio", "DPS(#)", "Class. of DPS",
-          "Standard Dev* (#)", "Class. of standard dev"
-        )
-      )
-  }
+    )
 
   ## Return data.frame ----
   df
