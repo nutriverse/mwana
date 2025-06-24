@@ -21,3 +21,29 @@ testthat::test_that(
     )
   }
 )
+
+
+# Test check: mw_stattest_ageratio2() ----
+testthat::test_that(
+  "mw_stattest_ageratio2() works as expected",
+  {
+    ## Sample data ----
+    age_cat <- ifelse(anthro.01[["age"]] < 24, "6-23", "24-59")
+    age <- anthro.01[["age"]]
+
+    ## Observed results ----
+    y <- mw_stattest_ageratio2(age_cat, .expectedP = 0.66)
+
+    ## Tests ----
+    testthat::expect_type(x, "list")
+    testthat::expect_vector(x)
+    testthat::expect_named(x, c("p", "observedR", "observedP"))
+    testthat::expect_error(
+     mw_stattest_ageratio2(age, .expectedP = 0.66),
+      regexp = paste0(
+        "`age_cat` must be of class `character` not ", class(age), 
+        ". Please try again."
+      )
+    )
+  }
+)
