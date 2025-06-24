@@ -30,9 +30,10 @@ testthat::test_that(
     ## Sample data ----
     age_cat <- ifelse(anthro.01[["age"]] < 24, "6-23", "24-59")
     age <- anthro.01[["age"]]
+    ager <- ifelse(anthro.01[["age"]] < 24, "0-23", "24-60")
 
     ## Observed results ----
-    y <- mw_stattest_ageratio2(age_cat, .expectedP = 0.66)
+    x <- mw_stattest_ageratio2(age_cat, .expectedP = 0.66)
 
     ## Tests ----
     testthat::expect_type(x, "list")
@@ -44,6 +45,11 @@ testthat::test_that(
         "`age_cat` must be of class `character` not ", class(age), 
         ". Please try again."
       )
+    )
+    testthat::expect_error(
+     mw_stattest_ageratio2(ager, .expectedP = 0.66),
+      regexp = 'Unexpected categories in `age_cat`. Please consider re-coding it to "6-23"
+      and "24-59". Please try again.'
     )
   }
 )
