@@ -269,11 +269,14 @@ mw_estimate_prevalence_muac <- function(df,
         output <- mw_estimate_smart_age_wt(
           data_subset,
           edema = {{ edema }},
+          raw_muac = FALSE,
           .by = !!.by
         )
       } else {
       ### Estimate age-weighted prevalence as per SMART MUAC tool ----
-        output <- mw_estimate_smart_age_wt(data_subset, edema = {{ edema }})
+        output <- mw_estimate_smart_age_wt(
+          data_subset, edema = {{ edema }}, raw_muac = FALSE
+        )
       }
     } else {
       ##£ Return NA's ----
