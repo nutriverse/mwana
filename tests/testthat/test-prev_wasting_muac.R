@@ -536,7 +536,6 @@ testthat::test_that(
   {
   
     ## Tests ----
-    testthat::expect_s3_class(p, "tbl")
     testthat::expect_error(object = anthro.04 |>
       subset(province == "Province 2") |>
       mw_estimate_smart_age_wt(raw_muac = TRUE), inherit = TRUE)

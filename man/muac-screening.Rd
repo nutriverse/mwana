@@ -79,21 +79,21 @@ mw_estimate_prevalence_screening(
 )
 
 
-anthro.01 |> 
-mw_wrangle_muac(
-sex = sex, 
-.recode_sex = TRUE,
-muac = muac
-) |> 
-transform(
-age_cat = ifelse(age <24, "6-23", "24-59")
-) |> 
-mw_estimate_prevalence_screening2(
-age_cat = age_cat,
-muac = muac,
-edema = edema, 
-.by = area
-)
+anthro.01 |>
+  mw_wrangle_muac(
+    sex = sex,
+    .recode_sex = TRUE,
+    muac = muac
+  ) |>
+  transform(
+    age_cat = ifelse(age < 24, "6-23", "24-59")
+  ) |>
+  mw_estimate_prevalence_screening2(
+    age_cat = age_cat,
+    muac = muac,
+    edema = edema,
+    .by = area
+  )
 
 }
 \references{

@@ -28,6 +28,9 @@ edema. Default is NULL.}
 \item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
 or identifiers for where the data was collected and for which the analysis
 should be summarised for.}
+
+\item{raw_muac}{Logical. Whether outliers should be excluded based on the raw
+MUAC values or MFAZ.}
 }
 \value{
 A summary \code{tibble} for the descriptive statistics about combined

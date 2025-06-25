@@ -160,6 +160,9 @@ complex_survey_estimates_muac <- function(df,
 #' @param edema A `character` vector for presence of nutritional edema coded as
 #' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
+#' 
+#' @param raw_muac Logical. Whether outliers should be excluded based on the raw
+#' MUAC values or MFAZ.
 #'
 #' @param .by A `character` or `numeric` vector of the geographical areas
 #' or identifiers for where the data was collected and for which the analysis
@@ -340,27 +343,26 @@ mw_estimate_smart_age_wt <- function(df, edema = NULL, raw_muac = FALSE, .by = N
   if (!rlang::quo_is_null(.by)) {
     df <- df |>
       dplyr::summarise(
-        sam = smart_age_weighting(muac, age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(muac, age, {{ edema }}, .form = "mam"),
-        gam = sam + mam,
+        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
+        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+        gam = .data$sam + .data$mam,
         .by = !!.by
       )
   } else {
     df <- df |>
       dplyr::summarise(
-        sam = smart_age_weighting(muac, age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(muac, age, {{ edema }}, .form = "mam"),
-        gam = sam + mam
+        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
+        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+        gam = .data$sam + .data$mam
       )
   }
 
   ## Rename outputs
   df |>
     dplyr::rename(
-      gam_p = gam,
-      sam_p = sam,
-      mam_p = mam
+      gam_p = .data$gam,
+      sam_p = .data$sam,
+      mam_p = .data$mam
     )
 
 }
-
