@@ -370,7 +370,7 @@ anthro.02 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -400,7 +400,7 @@ anthro.02 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -416,21 +416,23 @@ anthro.02 |>
 You may have noticed that in the above code block, we called the `recode_muac()` function inside `mutate()`. This is because after you use `mw_wrangle_muac()`, it puts the MUAC variable in centimeters. The `mw_estimate_prevalence_muac()` function was defined to accept MUAC in millimeters. Therefore, it must be converted to millimeters. 
 :::
 
-#### Estimation for non survey data
+#### Estimation for non-survey data
 
-Thus far, the demonstration has been around survey data. However, it is also common in day-to-day practice to come across non survey data to analyse. Non survey data can be screenings or any other 
-kind of community-based surveillance data. With this kind of data, the analysis workflow usually consists in a simple estimation of the point prevalence and the counts of the positive cases, without necessarily estimating the uncertainty. `mwana` provides a handy function for this task: `mw_estimate_prevalence_screening()`. Under the hood, this function works exactly the same way as `mw_estimate_prevalence_muac()`. The only difference is that it was designed to deal with non survey data. 
+Thus far, the demonstration has been around survey data. However, it is also common in day-to-day practice to come across non-survey data to analyse. Non-survey data can be screenings or any other 
+kind of community-based surveillance data. With this kind of data, the analysis workflow usually consists in a simple estimation of the point prevalence and the counts of the positive cases, without necessarily estimating the uncertainty. `mwana` provides two handy functions for this task: `mw_estimate_prevalence_screening()` and `mw_estimate_prevalence_screening2()`.  
 
-To demonstrate its usage, we will use the `anthro.04` data set.
+Under the hood, the former function works the same way as `mw_estimate_prevalence_muac()`. However, it was specifically designed to handle non-survey data. The latter function is intended for cases where a child's age is provided in categorical form in its turn, is used for cases in which the child's age is given in age categories ("6-23" and "24-59" months) rather than in a continuous form (age in months). In such cases, outliers are identified and excluded from the prevalence analysis using raw MUAC values, as MFAZ cannot be computed when age in months is missing.
+
+The `anthro.04` dataset will be used to illustrate the application of these functions.
 ```{r}
 #| label: non-survey
 #| echo: true
 #| eval: false
 
-anthro.04 |> 
+anthro.04 |>
   mw_estimate_prevalence_screening(
-    muac = muac, 
-    edema = edema, 
+    muac = muac,
+    edema = edema,
     .by = province
   )
 ```
@@ -440,13 +442,61 @@ The returned output is:
 #| label: non-survey-view
 #| echo: false
 
-anthro.04 |> 
+anthro.04 |>
   mw_estimate_prevalence_screening(
-    muac = muac, 
-    edema = edema, 
+    muac = muac,
+    edema = edema,
     .by = province
   )
 ```
+
+The `mw_estimate_prevalence_screening2()` function is applied as demonstrated below. In this example, the input data contains age in months rather than in categories. To meet the function’s requirements, we convert the age variable into two categories and store the result in a new `age_cat` variable.
+
+```{r}
+#| label: non-survey2
+#| echo: true
+#| eval: false
+
+anthro.04 |>
+  mutate(
+    age_cat = ifelse(age < 24, "6-23", "24-59") 
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    .recode_sex = FALSE,
+    muac = muac
+  ) |>
+  mw_estimate_prevalence_screening2(
+    age_cat = age_cat,
+    muac = muac,
+    edema = edema,
+    .by = province
+  )
+```
+
+This will return: 
+```{r}
+#| label: non-survey2-view
+#| echo: true
+#| eval: true
+
+anthro.04 |>
+  mutate(
+    age_cat = ifelse(age < 24, "6-23", "24-59")
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    .recode_sex = FALSE,
+    muac = muac
+  ) |>
+  mw_estimate_prevalence_screening2(
+    age_cat = age_cat,
+    muac = muac,
+    edema = edema,
+    .by = province
+  )
+```
+
 
 ### Estimation of the combined prevalence of wasting
 
@@ -487,7 +537,7 @@ anthro.01 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -520,7 +570,7 @@ anthro.01 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -578,8 +628,8 @@ anthro.01 |>
     .recode_sex = TRUE,
     muac = muac,
     .recode_muac = TRUE,
-    unit = "cm",
-    .to = "age"
+    .to = "cm",
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -616,7 +666,7 @@ anthro.01 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")

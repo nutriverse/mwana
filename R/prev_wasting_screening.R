@@ -309,7 +309,7 @@ mw_estimate_prevalence_screening2 <- function(
       dplyr::summarise(
         age_ratio = rate_agesex_ratio(
           mw_stattest_ageratio2(
-            .data$age_cat, 0.66
+            age_cat, 0.66
           )$p
         ),
         std = rate_std(
@@ -335,7 +335,7 @@ mw_estimate_prevalence_screening2 <- function(
       dplyr::summarise(
         age_ratio = rate_agesex_ratio(
           mw_stattest_ageratio2(
-            .data$age_cat, 0.66
+            age_cat, 0.66
           )$p
         ),
         std = rate_std(
