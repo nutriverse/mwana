@@ -363,13 +363,12 @@ mw_estimate_prevalence_screening2 <- function(
     } else {
       data_subset <- df
     }
-  }
 
   analysis_approach <- path$analysis_approach[i]
 
   if (analysis_approach == "unweighted") {
-    if (!rlang::quo_is_null(.by)) {
-      r <- get_estimates(
+    r <- if (!rlang::quo_is_null(.by)) {
+      get_estimates(
         df = data_subset,
         muac = {{ muac }},
         edema = {{ edema }},
@@ -377,33 +376,31 @@ mw_estimate_prevalence_screening2 <- function(
         .by = !!.by
       )
     } else {
-      r <- get_estimates(
+      get_estimates(
         df = data_subset,
         muac = {{ muac }},
         edema = {{ edema }},
         raw_muac = TRUE
       )
     }
-    results[[i]] <- r
   } else if (analysis_approach == "weighted") {
-    if (!rlang::quo_is_null(.by)) {
-      r <- mw_estimate_smart_age_wt(
+    r <- if (!rlang::quo_is_null(.by)) {
+      mw_estimate_smart_age_wt(
         df = data_subset,
         edema = {{ edema }},
         .by = !!.by,
         raw_muac = TRUE
       )
     } else {
-      r <- mw_estimate_smart_age_wt(
+      mw_estimate_smart_age_wt(
         df = data_subset,
         edema = {{ edema }},
         raw_muac = TRUE
       )
     }
-    results[[i]] <- r
   } else {
-    if (!quo_is_null(.by)) {
-      r <- dplyr::summarise(
+    r <- if (!rlang::quo_is_null(.by)) {
+      dplyr::summarise(
         .data = data_subset,
         gam_p = NA_real_,
         sam_p = NA_real_,
@@ -412,15 +409,26 @@ mw_estimate_prevalence_screening2 <- function(
       )
     } else {
       ## Return NA's  ----
-      r <- tibble::tibble(
+      tibble::tibble(
         gam_p = NA_real_,
         sam_p = NA_real_,
         mam_p = NA_real_
       )
     }
-    results[[i]] <- r
+  }
+      results[[i]] <- r
   }
 
+   ### Ensure that all categories in `.by` get added to the tibble ----
+  results <- if (!quo_is_null(.by)) {
+    dplyr::bind_rows(results) |>
+      dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
+      dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
+      dplyr::relocate(.data$mam_p, .after = .data$mam_n)
+  } else {
+    ## Non-grouped results
+    dplyr::bind_rows(results)
+  }
   ## Return results ----
-  dplyr::bind_rows(results)
-}
+  results
+  }
