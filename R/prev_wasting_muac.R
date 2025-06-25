@@ -160,6 +160,9 @@ complex_survey_estimates_muac <- function(df,
 #' @param edema A `character` vector for presence of nutritional edema coded as
 #' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
+#' 
+#' @param raw_muac Logical. Whether outliers should be excluded based on the raw
+#' MUAC values or MFAZ.
 #'
 #' @param .by A `character` or `numeric` vector of the geographical areas
 #' or identifiers for where the data was collected and for which the analysis
@@ -266,11 +269,14 @@ mw_estimate_prevalence_muac <- function(df,
         output <- mw_estimate_smart_age_wt(
           data_subset,
           edema = {{ edema }},
+          raw_muac = FALSE,
           .by = !!.by
         )
       } else {
       ### Estimate age-weighted prevalence as per SMART MUAC tool ----
-        output <- mw_estimate_smart_age_wt(data_subset, edema = {{ edema }})
+        output <- mw_estimate_smart_age_wt(
+          data_subset, edema = {{ edema }}, raw_muac = FALSE
+        )
       }
     } else {
       ##£ Return NA's ----
@@ -324,7 +330,7 @@ mw_estimate_prevalence_muac <- function(df,
 #' @export
 #'
 
-mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
+mw_estimate_smart_age_wt <- function(df, edema = NULL, raw_muac = FALSE, .by = NULL) {
   ## Defuse argument `.by` ----
   .by <- enquo(.by)
 
@@ -333,42 +339,33 @@ mw_estimate_smart_age_wt <- function(df, edema = NULL, .by = NULL) {
     stop("MUAC values must be in millimeters. Please try again.")
   }
 
-  if (!quo_is_null(.by)) {
-    df <- dplyr::filter(.data = df, .data$flag_mfaz == 0) |>
+  flag_var <- if (raw_muac) "flag_muac" else "flag_mfaz"
+  df <- dplyr::filter(df, .data[[flag_var]] == 0)
+
+  ## Summarise with or without grouping
+  if (!rlang::quo_is_null(.by)) {
+    df <- df |>
       dplyr::summarise(
-        sam = smart_age_weighting(
-          .data$muac, .data$age, {{ edema }}, .form = "sam"
-        ),
-        mam = smart_age_weighting(
-          .data$muac, .data$age, {{ edema }}, .form = "mam"
-        ),
-        gam = sum(.data$sam, .data$mam),
+        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
+        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+        gam = .data$sam + .data$mam,
         .by = !!.by
-      ) |>
-      dplyr::rename(
-        gam_p = .data$gam,
-        sam_p = .data$sam,
-        mam_p = .data$mam
       )
   } else {
-    df <- dplyr::filter(.data = df, .data$flag_mfaz == 0) |>
+    df <- df |>
       dplyr::summarise(
-        sam = smart_age_weighting(
-          .data$muac, .data$age, {{ edema }}, .form = "sam"
-        ),
-        mam = smart_age_weighting(
-          .data$muac, .data$age, {{ edema }}, .form = "mam"
-        ),
-        gam = sum(.data$sam, .data$mam)
-      ) |>
-      dplyr::rename(
-        gam_p = .data$gam,
-        sam_p = .data$sam,
-        mam_p = .data$mam
+        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
+        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+        gam = .data$sam + .data$mam
       )
   }
 
-  ## Return df ----
-  df
-}
+  ## Rename outputs
+  df |>
+    dplyr::rename(
+      gam_p = .data$gam,
+      sam_p = .data$sam,
+      mam_p = .data$mam
+    )
 
+}

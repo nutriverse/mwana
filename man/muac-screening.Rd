@@ -2,9 +2,12 @@
 % Please edit documentation in R/prev_wasting_screening.R
 \name{mw_estimate_prevalence_screening}
 \alias{mw_estimate_prevalence_screening}
+\alias{mw_estimate_prevalence_screening2}
 \title{Estimate the prevalence of wasting based on MUAC for non-survey data}
 \usage{
 mw_estimate_prevalence_screening(df, muac, edema = NULL, .by = NULL)
+
+mw_estimate_prevalence_screening2(df, age_cat, muac, edema = NULL, .by = NULL)
 }
 \arguments{
 \item{df}{A \code{tibble} object produced by \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}} and
@@ -23,6 +26,9 @@ edema. Default is NULL.}
 \item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
 or identifiers for where the data was collected and for which the analysis
 should be summarised for.}
+
+\item{age_cat}{A \code{character} vector of child's age in categories. Code values
+should be "6-23" and "24-59".}
 }
 \value{
 A summary \code{tibble} for the descriptive statistics about combined
@@ -71,6 +77,23 @@ mw_estimate_prevalence_screening(
   edema = NULL,
   .by = NULL
 )
+
+
+anthro.01 |>
+  mw_wrangle_muac(
+    sex = sex,
+    .recode_sex = TRUE,
+    muac = muac
+  ) |>
+  transform(
+    age_cat = ifelse(age < 24, "6-23", "24-59")
+  ) |>
+  mw_estimate_prevalence_screening2(
+    age_cat = age_cat,
+    muac = muac,
+    edema = edema,
+    .by = area
+  )
 
 }
 \references{

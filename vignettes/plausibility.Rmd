@@ -336,7 +336,7 @@ anthro.01 |>
   mw_wrangle_muac(
     sex = sex,
     muac = muac,
-    age = "age",
+    age = age,
     .recode_sex = TRUE,
     .recode_muac = TRUE,
     .to = "cm"
@@ -391,7 +391,7 @@ anthro.01 |>
   mw_wrangle_muac(
     sex = sex,
     muac = muac,
-    age = "age",
+    age = age,
     .recode_sex = TRUE,
     .recode_muac = TRUE,
     .to = "cm"
@@ -438,7 +438,7 @@ anthro.01 |>
   mw_wrangle_muac(
     sex = sex,
     muac = muac,
-    age = "age",
+    age = age,
     .recode_sex = TRUE,
     .recode_muac = TRUE,
     .to = "cm"
@@ -485,7 +485,7 @@ anthro.01 |>
   mw_wrangle_muac(
     sex = sex,
     muac = muac,
-    age = "age",
+    age = age,
     .recode_sex = TRUE,
     .recode_muac = TRUE,
     .to = "cm"

@@ -16,7 +16,8 @@ testthat::test_that(
       get_estimates(
         muac = muac,
         edema = edema,
-        .by = NULL
+        .by = NULL, 
+        raw_muac = FALSE
       )
 
     ### Observed estimates ----
@@ -155,6 +156,59 @@ testthat::test_that(
     testthat::expect_equal(round(p[[5]][1] * 100, 1), sam_p)
     testthat::expect_equal(p[[6]][1], mam_n)
     testthat::expect_equal(round(p[[7]][1] * 100, 1), mam_p)
+  }
+)
+
+## When `raw_muac` is either `TRUE` or `FALSE` ----
+testthat::test_that(
+  "When get_estimates() is set to `raw_muac = TRUE`, it filters outliers
+  based on `flag_muac`",
+  {
+    ### Observed results ----
+    r <- anthro.01 |>
+      mw_wrangle_age(age = age) |>
+      mw_wrangle_muac(
+        sex = sex,
+        .recode_sex = TRUE,
+        muac = muac
+      ) |>
+      get_estimates(
+        muac = muac,
+        raw_muac = TRUE
+      )
+
+    ### Tests ----
+    testthat::expect_s3_class(object = r, class = "tbl_df")
+    testthat::expect_no_error(object = r)
+  }
+)
+
+
+## When `raw_muac` is either `TRUE` or `FALSE` ----
+testthat::test_that(
+  "When get_estimates() is set to `raw_muac = FALSE`, it filters outliers
+  based on `flag_mfaz`",
+  {
+    ### Observed results ----
+    r <- anthro.01 |>
+      mw_wrangle_age(age = age) |>
+      mw_wrangle_muac(
+        sex = sex,
+        .recode_sex = TRUE,
+        age = age,
+        muac = muac,
+        .recode_muac = TRUE,
+        .to = "cm"
+      ) |>
+      mutate(muac = recode_muac(muac, .to = "mm")) |>
+      get_estimates(
+        muac = muac,
+        raw_muac = FALSE
+      )
+
+    ### Tests ----
+    testthat::expect_s3_class(object = r, class = "tbl_df")
+    testthat::expect_no_error(object = r)
   }
 )
 
@@ -297,5 +351,80 @@ testthat::test_that(
     testthat::expect_vector(p, size = 1, ncol(3))
     testthat::expect_s3_class(p, "tbl")
     testthat::expect_true(all(sapply(p[columns_to_check], \(.) all(is.na(.)))))
+  }
+)
+
+# Test check: mw_estimate_prevalence_screening2() ----
+testthat::test_that(
+  "mw_estimate_prevalence_screening2() works as expected when `.by = NULL` ",
+  { 
+
+    ## Observed results ----
+    p <- anthro.01 |> 
+      mutate(age_cat = ifelse(age < 24, "6-23", "24-59")) |> 
+      mw_wrangle_muac(
+        sex = sex,
+        .recode_sex = TRUE,
+        muac = muac
+      ) |> 
+        mw_estimate_prevalence_screening2(
+          age_cat = age_cat,
+          muac = muac
+        )
+    
+    ## Tests ----
+    testthat::expect_s3_class(p, "tbl_df")
+    testthat::expect_equal(round(p[[2]]*100, 2), 2.95)
+  }
+)
+
+testthat::test_that(
+  "mw_estimate_prevalence_screening2() works as expected when `.by` is not NULL ",
+  { 
+
+    ## Observed results ----
+    p <- anthro.01 |> 
+      mutate(age_cat = ifelse(age < 24, "6-23", "24-59")) |> 
+      mw_wrangle_muac(
+        sex = sex,
+        .recode_sex = TRUE,
+        muac = muac
+      ) |> 
+        mw_estimate_prevalence_screening2(
+          age_cat = age_cat,
+          muac = muac, 
+          .by = area
+        )
+    
+    ## Tests ----
+    testthat::expect_s3_class(p, "tbl_df")
+    testthat::expect_equal(round(p[[3]][2]*100, 2), 3.22)
+    testthat::expect_equal(names(p[1]), "area")
+  }
+)
+
+## Test-check: mw_estimate_prevalence_screening2() ----
+testthat::test_that(
+  "mw_estimate_prevalence_screening2() returns correct estimates for weighted analysis",
+  {
+    ### Get the prevalence estimates ----
+    p <- anthro.04 |>
+      mutate(age_cat = ifelse(age < 24, "6-23", "24-59")) |> 
+      mw_wrangle_muac(
+        muac = muac, 
+        sex = sex
+      ) |> 
+      mw_estimate_prevalence_screening2(muac = muac, edema = edema, .by = province)
+
+    
+    ### Tests ----
+    testthat::expect_s3_class(p, "tbl_df")
+    testthat::expect_equal(round(p[[3]][1] * 100, 1), expected = 10.5)
+    testthat::expect_equal(p[[2]][1], expected = 135)
+    testthat::expect_equal(p[[4]][1], expected = 19)
+    testthat::expect_equal(p[[6]][1], expected = 116)
+    testthat::expect_true(is.na(p[[2]][2]))
+    testthat::expect_equal(round(p[[3]][3] * 100, 1), expected = 14.1)
+
   }
 )

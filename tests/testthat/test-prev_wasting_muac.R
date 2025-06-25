@@ -514,7 +514,7 @@ testthat::test_that(
     ## Observed results ----
     p <- anthro.04 |>
       subset(province == "Province 2") |>
-      mw_estimate_smart_age_wt()
+      mw_estimate_smart_age_wt(raw_muac = FALSE)
 
     ## Expected results ----
     gam <- 11.2
@@ -529,6 +529,21 @@ testthat::test_that(
 
   }
 )
+
+# Test check: mw_estimate_smart_age_wt() ----
+testthat::test_that(
+  "mw_estimate_smart_age_wt() works well when `raw_muac = TRUE`",
+  {
+  
+    ## Tests ----
+    testthat::expect_error(object = anthro.04 |>
+      subset(province == "Province 2") |>
+      mw_estimate_smart_age_wt(raw_muac = TRUE), inherit = TRUE)
+
+  }
+)
+
+
 ## When MUAC is not in millimeters the function errors ----
 testthat::test_that(
   "When MUAC is not in centimeters, the function stop execution",

@@ -2,10 +2,13 @@
 % Please edit documentation in R/stattests.R
 \name{mw_stattest_ageratio}
 \alias{mw_stattest_ageratio}
+\alias{mw_stattest_ageratio2}
 \title{Test for statistical difference between the proportion of children aged 24 to
 59 months old over those aged 6 to 23 months old}
 \usage{
 mw_stattest_ageratio(age, .expectedP = 0.66)
+
+mw_stattest_ageratio2(age_cat, .expectedP = 0.66)
 }
 \arguments{
 \item{age}{A \code{numeric} vector of child's age in months.}
@@ -13,6 +16,9 @@ mw_stattest_ageratio(age, .expectedP = 0.66)
 \item{.expectedP}{The expected proportion of children aged 24 to 59 months
 old over those aged 6 to 23 months old. By default, this is expected to be
 0.66.}
+
+\item{age_cat}{A \code{character} vector of child's age in categories. Code values
+should be "6-23" and "24-59".}
 }
 \value{
 A \code{list} object with three elements: \code{p} for p-value of the
@@ -32,8 +38,17 @@ months old, as performed in the SMART plausibility check, use
 \code{\link[nipnTK:ageRatioTest]{nipnTK::ageRatioTest()}} instead.
 }
 \examples{
+
 mw_stattest_ageratio(
   age = anthro.02$age,
+  .expectedP = 0.66
+)
+
+
+age <- ifelse(anthro.02$age < 24, "6-23", "24-59")
+
+mw_stattest_ageratio2(
+  age = age,
   .expectedP = 0.66
 )
 

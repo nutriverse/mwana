@@ -7,7 +7,7 @@
 \usage{
 mw_estimate_prevalence_muac(df, wt = NULL, edema = NULL, .by = NULL)
 
-mw_estimate_smart_age_wt(df, edema = NULL, .by = NULL)
+mw_estimate_smart_age_wt(df, edema = NULL, raw_muac = FALSE, .by = NULL)
 }
 \arguments{
 \item{df}{A \code{tibble} object produced by \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}} and
@@ -28,6 +28,9 @@ edema. Default is NULL.}
 \item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
 or identifiers for where the data was collected and for which the analysis
 should be summarised for.}
+
+\item{raw_muac}{Logical. Whether outliers should be excluded based on the raw
+MUAC values or MFAZ.}
 }
 \value{
 A summary \code{tibble} for the descriptive statistics about combined
