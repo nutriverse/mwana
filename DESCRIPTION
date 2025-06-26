@@ -23,7 +23,7 @@ Imports:
     nipnTK,
     rlang,
     scales,
-    srvyr,
+    srvyr (>= 1.3.0),
     stats,
     zscorer,
     tibble,
