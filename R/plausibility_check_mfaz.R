@@ -23,13 +23,16 @@
 #'
 #' @param flags A `numeric` vector of flagged records.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas for
-#' where the data was collected and for which the analysis should be summarised
-#' for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
-#' @returns A single row summary `tibble` with 17 columns (if ungrouped analysis,
-#' otherwise 18), containing the plausibility check results and their respective
-#' acceptability ratings.
+#' @returns A single-row summary `tibble` with columns containing the plausibility
+#'  check results. If ungrouped analysis, the output will consist of 17 columns
+#' and one row; otherwise, the number of columns will vary according to the number
+#' vectors specified, and the number of rows to the categories within the grouping
+#' variables.
+#'
 #'
 #' @details
 #' Whilst the function uses the same checks and criteria as those for
@@ -81,86 +84,53 @@
 #'   sex = sex,
 #'   muac = muac,
 #'   age = age,
-#'   .by = area
+#'   area, team
 #' )
 #'
 #' @export
 #'
-mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, .by = NULL) {
+mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, ...) {
   ## Difuse argument `.by` ----
-  .by <- enquo(.by)
+  .by <- rlang::enquos(...)
 
-  if (rlang::quo_is_null(.by)) {
-    ## Summarise statistics  ----
-    df <- dplyr::summarise(
-      .data = df,
-      n = dplyr::n(),
-      flagged = sum({{ flags }}, na.rm = TRUE) / dplyr::n(),
-      flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
-      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-      age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
-      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
-      dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
-      dps_class = nipnTK::digitPreference(
-        {{ muac }},
-        digits = 1, values = 0:9
-      )$dpsClass,
-      sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
-      sd_class = rate_std(.data$sd, .of = "zscores"),
-      skew = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
-      skew_class = rate_skewkurt(.data$skew),
-      kurt = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
-      kurt_class = rate_skewkurt(.data$kurt),
-      quality_score = score_overall_quality(
-        cl_flags = .data$flagged_class,
-        cl_sex = .data$sex_ratio_class,
-        cl_age = .data$age_ratio_class,
-        cl_dps_m = .data$dps_class,
-        cl_std = .data$sd_class,
-        cl_skw = .data$skew_class,
-        cl_kurt = .data$kurt_class,
-        .for = "mfaz"
-      ),
-      quality_class = rate_overall_quality(.data$quality_score)
-    )
-  }
-  if (!rlang::quo_is_null(.by)) {
-    ## Summarise statistics  ----
-    df <- dplyr::summarise(
-      .data = df,
-      n = dplyr::n(),
-      flagged = sum({{ flags }}, na.rm = TRUE) / dplyr::n(),
-      flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
-      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-      age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
-      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
-      dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
-      dps_class = nipnTK::digitPreference(
-        {{ muac }},
-        digits = 1, values = 0:9
-      )$dpsClass,
-      sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
-      sd_class = rate_std(.data$sd, .of = "zscores"),
-      skew = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
-      skew_class = rate_skewkurt(.data$skew),
-      kurt = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
-      kurt_class = rate_skewkurt(.data$kurt),
-      quality_score = score_overall_quality(
-        cl_flags = .data$flagged_class,
-        cl_sex = .data$sex_ratio_class,
-        cl_age = .data$age_ratio_class,
-        cl_dps_m = .data$dps_class,
-        cl_std = .data$sd_class,
-        cl_skw = .data$skew_class,
-        cl_kurt = .data$kurt_class,
-        .for = "mfaz"
-      ),
-      quality_class = rate_overall_quality(.data$quality_score),
-      .by = !!.by
-    )
-  }
+
+  ## Apply grouping if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+
+  ## Summarise statistics  ----
+  df <- dplyr::summarise(
+    .data = df,
+    n = dplyr::n(),
+    flagged = sum({{ flags }}, na.rm = TRUE) / dplyr::n(),
+    flagged_class = rate_propof_flagged(.data$flagged, .in = "mfaz"),
+    sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
+    sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
+    age_ratio = mw_stattest_ageratio({{ age }}, .expectedP = 0.66)$p,
+    age_ratio_class = rate_agesex_ratio(.data$age_ratio),
+    dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
+    dps_class = nipnTK::digitPreference(
+      {{ muac }},
+      digits = 1, values = 0:9
+    )$dpsClass,
+    sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
+    sd_class = rate_std(.data$sd, .of = "zscores"),
+    skew = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$s,
+    skew_class = rate_skewkurt(.data$skew),
+    kurt = nipnTK::skewKurt(remove_flags(.data$mfaz, .from = "zscores"))$k,
+    kurt_class = rate_skewkurt(.data$kurt),
+    quality_score = score_overall_quality(
+      cl_flags = .data$flagged_class,
+      cl_sex = .data$sex_ratio_class,
+      cl_age = .data$age_ratio_class,
+      cl_dps_m = .data$dps_class,
+      cl_std = .data$sd_class,
+      cl_skw = .data$skew_class,
+      cl_kurt = .data$kurt_class,
+      .for = "mfaz"
+    ),
+    quality_class = rate_overall_quality(.data$quality_score),
+    .groups = "keep"
+  )
 
   ## Return data.frame ----
   df
@@ -178,10 +148,6 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, .by = NULL) {
 #'
 #' @param df An `data.frame` object returned by [mw_plausibility_check_mfaz()]
 #' containing the summarized results to be formatted.
-#'
-#' @param .by A `character` or `numeric` vector of the geographical areas for
-#' where the data was collected and for which the analysis should be summarised
-#' for.
 #'
 #' @returns
 #' A `data.frame` object of the same length and width as `df`, with column
@@ -215,18 +181,15 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, .by = NULL) {
 #'   sex = sex,
 #'   muac = muac,
 #'   age = age,
-#'   .by = area
+#'   area
 #' )
 #'
 #' ## Now neat the output table ----
-#' mw_neat_output_mfaz(df = pl, .by = area)
+#' mw_neat_output_mfaz(df = pl)
 #'
 #' @export
 #'
-mw_neat_output_mfaz <- function(df, .by = NULL) {
-  ## Difuse argument `.by` ----
-  .by <- enquo(.by)
-
+mw_neat_output_mfaz <- function(df) {
   df <- dplyr::mutate(
     .data = df,
     flagged = scales::label_percent(
@@ -242,7 +205,7 @@ mw_neat_output_mfaz <- function(df, .by = NULL) {
     ## Rename columns ----
     stats::setNames(
       c(
-        if (!rlang::quo_is_null(.by)) "Group" else NULL,
+        if (length(dplyr::group_vars(df)) == 0) NULL else tools::toTitleCase(dplyr::group_vars(df)),
         "Total children", "Flagged data (%)",
         "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
         "Age ratio (p)", "Class. of age ratio", "DPS (#)",

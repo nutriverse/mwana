@@ -16,13 +16,15 @@
 #'
 #' @param flags A `numeric` vector of flagged records.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas for
-#' where the data was collected and for which the analysis should be summarised
-#' for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
-#' @returns A single row summary `tibble` with 9 columns (if ungrouped analysis,
-#' otherwise 10), containing the plausibility check results and their respective
-#' acceptability ratings.
+#' @returns A single-row summary `tibble` with columns containing the plausibility
+#' check results. If ungrouped analysis, the output will consist of nine columns
+#' and one row; otherwise, the number of columns will vary according to the number
+#' vectors specified, and the number of rows to the categories within the grouping
+#' variables.
 #'
 #' @details
 #' Cut-off points used for the percent of flagged records:
@@ -58,57 +60,33 @@
 #'   df = df_muac,
 #'   flags = flag_muac,
 #'   sex = sex,
-#'   muac = muac
+#'   muac = muac,
+#'   area, team # group analysis by survey area and by survey team
 #' )
 #'
 #' @export
 #'
-mw_plausibility_check_muac <- function(df, sex, muac, flags, .by = NULL) {
+mw_plausibility_check_muac <- function(df, sex, muac, flags, ...) {
   ## Difuse argument `.by` ----
-  .by <- enquo(.by)
+  by <- rlang::enquos(...)
 
-  if (rlang::quo_is_null(.by)) {
-    ## Summarise statistics  ----
-    df <- dplyr::summarise(
-      .data = df,
-      n = dplyr::n(),
-      flagged = sum({{ flags }}, na.rm = TRUE) / n(),
-      flagged_class = rate_propof_flagged(.data$flagged, .in = "raw_muac"),
-      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))[["p"]],
-      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-      dps = nipnTK::digitPreference(
-        {{ muac }},
-        digits = 0, values = 0:9
-      )[["dps"]],
-      dps_class = nipnTK::digitPreference(
-        {{ muac }},
-        digits = 0, values = 0:9
-      )[["dpsClass"]],
-      sd = stats::sd(remove_flags({{ muac }}, .from = "raw_muac"), na.rm = TRUE),
-      sd_class = rate_std(.data$sd, .of = "raw_muac")
-    )
-  } else {
-    ## Summarise statistics  ----
-    df <- dplyr::summarise(
-      .data = df,
-      n = dplyr::n(),
-      flagged = sum({{ flags }}, na.rm = TRUE) / n(),
-      flagged_class = rate_propof_flagged(.data$flagged, .in = "raw_muac"),
-      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))[["p"]],
-      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-      dps = nipnTK::digitPreference(
-        {{ muac }},
-        digits = 0, values = 0:9
-      )[["dps"]],
-      dps_class = nipnTK::digitPreference(
-        {{ muac }},
-        digits = 0, values = 0:9
-      )[["dpsClass"]],
-      sd = stats::sd(remove_flags({{ muac }}, .from = "raw_muac"), na.rm = TRUE),
-      sd_class = rate_std(.data$sd, .of = "raw_muac"),
-      .by = !!.by
-    )
-  }
+  ## Apply grouping if needed ----
+  if (length(by) > 0) df <- dplyr::group_by(df, !!!by)
+
+  ## Summarise statistics  ----
+  df <- dplyr::summarise(
+    .data = df,
+    n = dplyr::n(),
+    flagged = sum({{ flags }}, na.rm = TRUE) / n(),
+    flagged_class = rate_propof_flagged(.data$flagged, .in = "raw_muac"),
+    sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))[["p"]],
+    sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
+    dps = nipnTK::digitPreference({{ muac }}, digits = 0, values = 0:9)[["dps"]],
+    dps_class = nipnTK::digitPreference({{ muac }}, digits = 0, values = 0:9)[["dpsClass"]],
+    sd = stats::sd(remove_flags({{ muac }}, .from = "raw_muac"), na.rm = TRUE),
+    sd_class = rate_std(.data$sd, .of = "raw_muac"),
+    .groups = "keep"
+  )
 
   ## Return data.frame ----
   df
@@ -125,10 +103,6 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags, .by = NULL) {
 #'
 #' @param df A `tibble` object returned by the [mw_plausibility_check_muac()]
 #' function containing the summarized results to be formatted.
-#'
-#' @param .by A `character` or `numeric` vector of the geographical areas for
-#' where the data was collected and for which the analysis should be summarised
-#' for.
 #'
 #' @returns
 #' A `data.frame` object of the same length and width as `df`, with column names
@@ -160,9 +134,8 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags, .by = NULL) {
 #'
 #' @export
 #'
-mw_neat_output_muac <- function(df, .by = NULL) {
+mw_neat_output_muac <- function(df) {
   ## Difuse argument ----
-  .by <- enquo(.by)
 
   ## Format data frame ----
   df <- dplyr::mutate(
@@ -177,7 +150,7 @@ mw_neat_output_muac <- function(df, .by = NULL) {
     ## Rename columns ----
     stats::setNames(
       c(
-        if (!rlang::quo_is_null(.by)) "Group" else NULL,
+        if (length(dplyr::group_vars(df)) == 0) NULL else tools::toTitleCase(dplyr::group_vars(df)),
         "Total children", "Flagged data (%)", "Class. of flagged data",
         "Sex ratio (p)", "Class. of sex ratio", "DPS(#)", "Class. of DPS",
         "Standard Dev* (#)", "Class. of standard dev"

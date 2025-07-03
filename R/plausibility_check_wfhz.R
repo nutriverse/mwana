@@ -24,14 +24,16 @@
 #'
 #' @param flags A `numeric` vector of flagged records.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas for
-#' where the data was collected and for which the analysis should be summarised
-#' for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
 #' @returns
-#' A single row summary `tibble` with 19 columns (if ungrouped analysis,
-#' otherwise 20) for the plausibility check results and their respective
-#' acceptability rates.
+#' A single-row summary `tibble` with columns containing the plausibility
+#' check results. If ungrouped analysis, the output will consist of 19 columns
+#' and one row; otherwise, the number of columns will vary according to the number
+#' vectors specified, and the number of rows to the categories within the grouping
+#' variables.
 #'
 #' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
 #' [mw_wrangle_age()]
@@ -67,7 +69,7 @@
 #'   weight = weight,
 #'   height = height,
 #'   flags = flag_wfhz,
-#'   .by = area
+#'   area, team
 #' )
 #'
 #' @export
@@ -79,83 +81,47 @@ mw_plausibility_check_wfhz <- function(df,
                                        weight,
                                        height,
                                        flags,
-                                       .by = NULL) {
-  ## Difuse argument `.by` for later evaluation ----
-  .by <- enquo(.by)
+                                       ...) {
+  ## Difuse grouping vars ----
+  .by <- rlang::enquos(...)
 
-  if (rlang::quo_is_null(.by)) {
-    ## Summarise statistics  ----
-    df <- dplyr::summarise(
-      .data = df,
-      n = dplyr::n(),
-      flagged = sum({{ flags }}, na.rm = TRUE) / n(),
-      flagged_class = rate_propof_flagged(.data$flagged, .in = "wfhz"),
-      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-      age_ratio = nipnTK::ageRatioTest({{ age }}, ratio = 0.85)$p,
-      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
-      dps_wgt = nipnTK::digitPreference({{ weight }}, digits = 1)$dps,
-      dps_wgt_class = nipnTK::digitPreference({{ weight }}, digits = 1)$dpsClass,
-      dps_hgt = nipnTK::digitPreference({{ height }}, digits = 1)$dps,
-      dps_hgt_class = nipnTK::digitPreference({{ height }}, digits = 1)$dpsClass,
-      sd = stats::sd(remove_flags(.data$wfhz, .from = "zscores"), na.rm = TRUE),
-      sd_class = rate_std(.data$sd, .of = "zscores"),
-      skew = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$s,
-      skew_class = rate_skewkurt(.data$skew),
-      kurt = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$k,
-      kurt_class = rate_skewkurt(.data$kurt),
-      quality_score = score_overall_quality(
-        cl_flags = .data$flagged_class,
-        cl_sex = .data$sex_ratio_class,
-        cl_age = .data$age_ratio_class,
-        cl_dps_h = .data$dps_hgt_class,
-        cl_dps_w = .data$dps_wgt_class,
-        cl_std = .data$sd_class,
-        cl_skw = .data$skew_class,
-        cl_kurt = .data$kurt_class,
-        .for = "wfhz"
-      ),
-      quality_class = rate_overall_quality(.data$quality_score)
-    )
-  }
+  ## Apply grouping if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
 
-  if (!quo_is_null(.by)) {
-    ## Summarise statistics  ----
-    df <- dplyr::summarise(
-      .data = df,
-      n = dplyr::n(),
-      flagged = sum({{ flags }}, na.rm = TRUE) / n(),
-      flagged_class = rate_propof_flagged(.data$flagged, .in = "wfhz"),
-      sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
-      sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-      age_ratio = nipnTK::ageRatioTest({{ age }}, ratio = 0.85)$p,
-      age_ratio_class = rate_agesex_ratio(.data$age_ratio),
-      dps_wgt = nipnTK::digitPreference({{ weight }}, digits = 1)$dps,
-      dps_wgt_class = nipnTK::digitPreference({{ weight }}, digits = 1)$dpsClass,
-      dps_hgt = nipnTK::digitPreference({{ height }}, digits = 1)$dps,
-      dps_hgt_class = nipnTK::digitPreference({{ height }}, digits = 1)$dpsClass,
-      sd = stats::sd(remove_flags(.data$wfhz, .from = "zscores"), na.rm = TRUE),
-      sd_class = rate_std(.data$sd, .of = "zscores"),
-      skew = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$s,
-      skew_class = rate_skewkurt(.data$skew),
-      kurt = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$k,
-      kurt_class = rate_skewkurt(.data$kurt),
-      quality_score = score_overall_quality(
-        cl_flags = .data$flagged_class,
-        cl_sex = .data$sex_ratio_class,
-        cl_age = .data$age_ratio_class,
-        cl_dps_h = .data$dps_hgt_class,
-        cl_dps_w = .data$dps_wgt_class,
-        cl_std = .data$sd_class,
-        cl_skw = .data$skew_class,
-        cl_kurt = .data$kurt_class,
-        .for = "wfhz"
-      ),
-      quality_class = rate_overall_quality(.data$quality_score),
-      .by = !!.by
-    )
-  }
-
+  ## Summarise statistics  ----
+  df <- dplyr::summarise(
+    .data = df,
+    n = dplyr::n(),
+    flagged = sum({{ flags }}, na.rm = TRUE) / n(),
+    flagged_class = rate_propof_flagged(.data$flagged, .in = "wfhz"),
+    sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))$p,
+    sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
+    age_ratio = nipnTK::ageRatioTest({{ age }}, ratio = 0.85)$p,
+    age_ratio_class = rate_agesex_ratio(.data$age_ratio),
+    dps_wgt = nipnTK::digitPreference({{ weight }}, digits = 1)$dps,
+    dps_wgt_class = nipnTK::digitPreference({{ weight }}, digits = 1)$dpsClass,
+    dps_hgt = nipnTK::digitPreference({{ height }}, digits = 1)$dps,
+    dps_hgt_class = nipnTK::digitPreference({{ height }}, digits = 1)$dpsClass,
+    sd = stats::sd(remove_flags(.data$wfhz, .from = "zscores"), na.rm = TRUE),
+    sd_class = rate_std(.data$sd, .of = "zscores"),
+    skew = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$s,
+    skew_class = rate_skewkurt(.data$skew),
+    kurt = nipnTK::skewKurt(remove_flags(.data$wfhz, .from = "zscores"))$k,
+    kurt_class = rate_skewkurt(.data$kurt),
+    quality_score = score_overall_quality(
+      cl_flags = .data$flagged_class,
+      cl_sex = .data$sex_ratio_class,
+      cl_age = .data$age_ratio_class,
+      cl_dps_h = .data$dps_hgt_class,
+      cl_dps_w = .data$dps_wgt_class,
+      cl_std = .data$sd_class,
+      cl_skw = .data$skew_class,
+      cl_kurt = .data$kurt_class,
+      .for = "wfhz"
+    ),
+    quality_class = rate_overall_quality(.data$quality_score),
+    .groups = "keep"
+  )
   ## Return data.frame ----
   df
 }
@@ -169,10 +135,6 @@ mw_plausibility_check_wfhz <- function(df,
 #'
 #' @param df An `tibble` object returned by the [mw_plausibility_check_wfhz()]
 #' containing the summarized results to be formatted.
-#'
-#' @param .by A `character` or `numeric` vector of the geographical areas for
-#' where the data was collected and for which the analysis should be summarised
-#' for.
 #'
 #' @returns
 #' A `tibble` object of the same length and width as `df`, with column names and
@@ -205,18 +167,15 @@ mw_plausibility_check_wfhz <- function(df,
 #'   weight = weight,
 #'   height = height,
 #'   flags = flag_wfhz,
-#'   .by = area
+#'   area
 #' )
 #'
 #' ## Now neat the output table ----
-#' mw_neat_output_wfhz(df = pl, .by = area)
+#' mw_neat_output_wfhz(df = pl)
 #'
 #' @export
 
-mw_neat_output_wfhz <- function(df, .by = NULL) {
-  ## Difuse argument `.by` for later evaluation ----
-  .by <- enquo(.by)
-
+mw_neat_output_wfhz <- function(df) {
   ## Format data frame ----
   df <- dplyr::mutate(
     .data = df,
@@ -234,7 +193,7 @@ mw_neat_output_wfhz <- function(df, .by = NULL) {
     ## Rename columns ----
     stats::setNames(
       c(
-        if (!rlang::quo_is_null(.by)) "Group" else NULL,
+        if (length(dplyr::group_vars(df)) == 0) NULL else tools::toTitleCase(dplyr::group_vars(df)),
         "Total children", "Flagged data (%)", "Class. of flagged data",
         "Sex ratio (p)", "Class. of sex ratio", "Age ratio (p)",
         "Class. of age ratio", "DPS weight (#)", "Class. DPS weight",

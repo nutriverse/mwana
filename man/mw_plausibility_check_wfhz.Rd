@@ -5,7 +5,7 @@
 \title{Check the plausibility and acceptability of weight-for-height z-score (WFHZ)
 data}
 \usage{
-mw_plausibility_check_wfhz(df, sex, age, weight, height, flags, .by = NULL)
+mw_plausibility_check_wfhz(df, sex, age, weight, height, flags, ...)
 }
 \arguments{
 \item{df}{A \code{tibble} object to check.}
@@ -20,14 +20,16 @@ mw_plausibility_check_wfhz(df, sex, age, weight, height, flags, .by = NULL)
 
 \item{flags}{A \code{numeric} vector of flagged records.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas for
-where the data was collected and for which the analysis should be summarised
-for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
-A single row summary \code{tibble} with 19 columns (if ungrouped analysis,
-otherwise 20) for the plausibility check results and their respective
-acceptability rates.
+A single-row summary \code{tibble} with columns containing the plausibility
+check results. If ungrouped analysis, the output will consist of 19 columns
+and one row; otherwise, the number of columns will vary according to the number
+vectors specified, and the number of rows to the categories within the grouping
+variables.
 }
 \description{
 Check the overall plausibility and acceptability of WFHZ data through a
@@ -66,7 +68,7 @@ mw_plausibility_check_wfhz(
   weight = weight,
   height = height,
   flags = flag_wfhz,
-  .by = area
+  area, team
 )
 
 }
