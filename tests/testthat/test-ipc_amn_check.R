@@ -35,7 +35,7 @@ testthat::test_that(
       df = anthro.01,
       cluster = cluster,
       .source = "survey",
-      .by = area
+      area
     )
 
     ## Tests ----
