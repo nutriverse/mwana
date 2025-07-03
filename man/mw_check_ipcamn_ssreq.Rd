@@ -9,7 +9,7 @@ mw_check_ipcamn_ssreq(
   df,
   cluster,
   .source = c("survey", "screening", "ssite"),
-  .by = NULL
+  ...
 )
 }
 \arguments{
@@ -26,13 +26,12 @@ representative survey data at the area of analysis; "screening" for
 screening data; "ssite" for community-based sentinel site data. Default value
 is "survey".}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
-or identifiers for where the data was collected and for which the analysis
-should be summarised for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
-A summary \code{tibble} with 3 columns (when \code{.by} is NULL) or 4 columns
-(when \code{.by} is not NULL), containing check results for:
+A summary \code{tibble} containing check results for:
 \itemize{
 \item \code{n_clusters} - the total number of unique clusters or
 screening or site identifiers;
@@ -51,7 +50,7 @@ mw_check_ipcamn_ssreq(
   df = anthro.01,
   cluster = cluster,
   .source = "survey",
-  .by = area
+  area
 )
 
 }

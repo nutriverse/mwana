@@ -21,12 +21,11 @@
 #' screening data; "ssite" for community-based sentinel site data. Default value
 #' is "survey".
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas
-#' or identifiers for where the data was collected and for which the analysis
-#' should be summarised for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
-#' @returns A summary `tibble` with 3 columns (when `.by` is NULL) or 4 columns
-#' (when `.by` is not NULL), containing check results for:
+#' @returns A summary `tibble` containing check results for:
 #'
 #' - `n_clusters` - the total number of unique clusters or
 #' screening or site identifiers;
@@ -44,7 +43,7 @@
 #'   df = anthro.01,
 #'   cluster = cluster,
 #'   .source = "survey",
-#'   .by = area
+#'   area
 #' )
 #'
 #' @export
@@ -52,10 +51,10 @@
 mw_check_ipcamn_ssreq <- function(df,
                                   cluster,
                                   .source = c("survey", "screening", "ssite"),
-                                  .by = NULL) {
+                                  ...) {
   ## Defuse and evaluate arguments ----
   cluster <- rlang::eval_tidy(enquo(cluster), df)
-  .by <- enquo(.by)
+  .by <- rlang::enquos(...)
 
   ## Enforce the options in `.source` ----
   .source <- match.arg(.source)
@@ -69,21 +68,10 @@ mw_check_ipcamn_ssreq <- function(df,
     )
   }
 
-  if (rlang::quo_is_null(.by)) {
-    ## Summarize ignoring groups ----
-    df <- dplyr::summarise(
-      .data = df,
-      n_clusters = dplyr::n_distinct({{ cluster }}),
-      n_obs = dplyr::n(),
-      meet_ipc = dplyr::case_when(
-        .source == "survey" & n_clusters >= 25 ~ "yes",
-        .source == "screening" & n_clusters >= 3 & n_obs >= 600 ~ "yes",
-        .source == "ssite" & n_clusters >= 5 & n_obs >= 200 ~ "yes",
-        .default = "no"
-      )
-    )
-  } else {
-    ## Summarise considering groups ----
+  ## Apply grouping when needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+  
+  ## Summarise statistics ----
     df <- dplyr::summarise(
       .data = df,
       n_clusters = dplyr::n_distinct(cluster),
@@ -93,10 +81,8 @@ mw_check_ipcamn_ssreq <- function(df,
         .source == "screening" & n_clusters >= 3 & n_obs >= 600 ~ "yes",
         .source == "ssite" & n_clusters >= 5 & n_obs >= 200 ~ "yes",
         .default = "no"
-      ),
-      .by = !!.by
+      )
     )
-  }
 
   ## Return tibble ----
   tibble::as_tibble(df)

@@ -68,8 +68,7 @@ We can also chain `anthro.01` to the function using the native pipe operator `|>
 anthro.01 |>
   mw_check_ipcamn_ssreq(
     cluster = cluster,
-    .source = "survey",
-    .by = NULL
+    .source = "survey"
   )
 ```
 
@@ -98,9 +97,11 @@ anthro.01 |>
   mw_check_ipcamn_ssreq(
     cluster = cluster,
     .source = "survey",
-    .by = area
+    area                 # <1>
   )
 ```
+
+1. A vector containing the categories for which the analysis should be summarised. More than one vector can be specified, separated by `,`. 
 
 This will return: 
 
