@@ -4,7 +4,7 @@
 \alias{mw_plausibility_check_mfaz}
 \title{Check the plausibility and acceptability of MUAC-for-age z-score (MFAZ) data}
 \usage{
-mw_plausibility_check_mfaz(df, sex, muac, age, flags, .by = NULL)
+mw_plausibility_check_mfaz(df, sex, muac, age, flags, ...)
 }
 \arguments{
 \item{df}{A \code{data.frame} object to check.}
@@ -17,14 +17,16 @@ mw_plausibility_check_mfaz(df, sex, muac, age, flags, .by = NULL)
 
 \item{flags}{A \code{numeric} vector of flagged records.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas for
-where the data was collected and for which the analysis should be summarised
-for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
-A single row summary \code{tibble} with 17 columns (if ungrouped analysis,
-otherwise 18), containing the plausibility check results and their respective
-acceptability ratings.
+A single-row summary \code{tibble} with columns containing the plausibility
+check results. If ungrouped analysis, the output will consist of 17 columns
+and one row; otherwise, the number of columns will vary according to the number
+vectors specified, and the number of rows to the categories within the grouping
+variables.
 }
 \description{
 Check the overall plausibility and acceptability of MFAZ data through a
@@ -75,7 +77,7 @@ mw_plausibility_check_mfaz(
   sex = sex,
   muac = muac,
   age = age,
-  .by = area
+  area, team
 )
 
 }
