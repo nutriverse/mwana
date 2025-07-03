@@ -104,10 +104,6 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags, ...) {
 #' @param df A `tibble` object returned by the [mw_plausibility_check_muac()]
 #' function containing the summarized results to be formatted.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas for
-#' where the data was collected and for which the analysis should be summarised
-#' for.
-#'
 #' @returns
 #' A `data.frame` object of the same length and width as `df`, with column names
 #' and values formatted for clarity and readability.
