@@ -24,8 +24,7 @@ testthat::test_that(
         age = age,
         weight = weight,
         height = height,
-        flags = flag_wfhz, 
-        .by = NULL
+        flags = flag_wfhz
       )
 
     ## Tests ----
@@ -67,8 +66,7 @@ testthat::test_that(
         sex = sex,
         age = age,
         weight = weight,
-        height = height, 
-        .by = NULL
+        height = height
       ) |>
       mw_neat_output_wfhz()
 
@@ -114,16 +112,16 @@ testthat::test_that(
         age = age,
         weight = weight,
         height = height, 
-        .by = area
+        area
       ) |>
-      mw_neat_output_wfhz(.by = area)
+      mw_neat_output_wfhz()
 
     ## Tests ----
     testthat::expect_s3_class(quality, "tbl_df")
     testthat::expect_equal(ncol(quality), 20)
     testthat::expect_equal(nrow(quality), 2)
     testthat::expect_true(
-      all(c("Group", "Total children", "Flagged data (%)",
+      all(c(tools::toTitleCase(dplyr::group_vars(quality)), "Total children", "Flagged data (%)",
             "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
             "Age ratio (p)", "Class. of age ratio", "DPS weight (#)",
             "Class. DPS weight", "DPS height (#)", "Class. DPS height",
