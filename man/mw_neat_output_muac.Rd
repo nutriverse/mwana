@@ -4,7 +4,7 @@
 \alias{mw_neat_output_muac}
 \title{Clean and format the output tibble returned from the MUAC plausibility check}
 \usage{
-mw_neat_output_muac(df, .by = NULL)
+mw_neat_output_muac(df)
 }
 \arguments{
 \item{df}{A \code{tibble} object returned by the \code{\link[=mw_plausibility_check_muac]{mw_plausibility_check_muac()}}

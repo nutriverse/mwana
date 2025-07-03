@@ -4,7 +4,7 @@
 \alias{mw_plausibility_check_muac}
 \title{Check the plausibility and acceptability of raw MUAC data}
 \usage{
-mw_plausibility_check_muac(df, sex, muac, flags, .by = NULL)
+mw_plausibility_check_muac(df, sex, muac, flags, ...)
 }
 \arguments{
 \item{df}{A \code{data.frame} object to check. It must have been wrangled using
@@ -16,14 +16,16 @@ the \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}} function.}
 
 \item{flags}{A \code{numeric} vector of flagged records.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas for
-where the data was collected and for which the analysis should be summarised
-for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
-A single row summary \code{tibble} with 9 columns (if ungrouped analysis,
-otherwise 10), containing the plausibility check results and their respective
-acceptability ratings.
+A single-row summary \code{tibble} with columns containing the plausibility
+check results. If ungrouped analysis, the output will consist of nine columns
+and one row; otherwise, the number of columns will vary according to the number
+vectors specified, and the number of rows to the categories within the grouping
+variables.
 }
 \description{
 Check the overall plausibility and acceptability of raw MUAC data
@@ -54,7 +56,8 @@ mw_plausibility_check_muac(
   df = df_muac,
   flags = flag_muac,
   sex = sex,
-  muac = muac
+  muac = muac,
+  area, team # group analysis by survey area and by survey team
 )
 
 }
