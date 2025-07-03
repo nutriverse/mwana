@@ -59,6 +59,7 @@ reference:
    - title: Statistical tests
      contents:
      - mw_stattest_ageratio
+     - mw_stattest_ageratio2
 
    - title: IPC sample size checks
      contents:
@@ -83,6 +84,7 @@ reference:
      - mw_estimate_prevalence_mfaz
      - mw_estimate_prevalence_combined
      - mw_estimate_prevalence_screening
+     - mw_estimate_prevalence_screening2
      - mw_estimate_smart_age_wt
 
    - title: Utilities
