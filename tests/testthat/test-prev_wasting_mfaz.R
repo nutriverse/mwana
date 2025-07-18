@@ -5,7 +5,7 @@ testthat::test_that(
   {
     ### Get the prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prevalence_mfaz(edema = edema, .by = NULL)
+      mw_estimate_prevalence_mfaz(edema = edema)
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
@@ -48,7 +48,7 @@ testthat::test_that(
   {
     ### Get the prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prevalence_mfaz(edema = NULL, .by = NULL)
+      mw_estimate_prevalence_mfaz()
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
@@ -93,7 +93,7 @@ testthat::test_that(
   {
     ### Get the prevalence estimates ----
     p <- anthro.04 |>
-      mw_estimate_prevalence_mfaz(edema = edema, .by = province)
+      mw_estimate_prevalence_mfaz(edema = edema, wt = NULL, province)
 
     ### Subset a province whose analysis approach is unweighted ---
     province_1 <- subset(p, province == "Province 1")
