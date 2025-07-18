@@ -18,7 +18,7 @@ License: GPL (>= 3)
 Depends: 
     R (>= 4.1)
 Imports: 
-    dplyr (>= 1.1.4),
+    dplyr,
     lubridate,
     nipnTK,
     rlang,
@@ -27,7 +27,8 @@ Imports:
     stats,
     zscorer,
     tibble,
-    methods
+    methods,
+    purrr
 Suggests:
     knitr,
     rmarkdown,
