@@ -76,8 +76,7 @@ To achieve this we do:
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
-    edema = edema,
-    .by = NULL
+    edema = edema
   )
 ```
 
@@ -89,8 +88,7 @@ This will return:
 mw_estimate_prevalence_wfhz(
   df = anthro.02,
   wt = NULL,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 ```
 
@@ -104,8 +102,7 @@ If for some reason the variable edema is not available in the data set, or it's 
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
-    edema = NULL, # Setting edema to NULL
-    .by = NULL
+    edema = NULL # Setting edema to NULL
   )
 ```
 
@@ -118,14 +115,13 @@ And we get:
 mw_estimate_prevalence_wfhz(
   df = anthro.02,
   wt = NULL,
-  edema = NULL,
-  .by = NULL
+  edema = NULL
 )
 ```
 
 If we inspect the `gam_n` and `gam_p` columns of this output table and the previous, we notice differences in the numbers. This occurs because edema cases were excluded in the second implementation. Note that you will observed a change if there are positive cases of edema in the data set; otherwise, setting `edema = NULL` will have no effect whatsoever. 
 
-The above output summary does not show results by province. We can control that using the `.by` argument. In the above examples, it was set to `NULL`; now let's pass the name of the column containing the locations where the data was collected. In our case, the column is `province`: 
+The above output summary does not show results by province. We can control that by suppling the variable or set of variables after edema. Let's pass the name of the column containing the locations where the data was collected. In our case, the column is `province`: 
 
 ```{r}
 #| label: unwt_wast_wfhz_province
@@ -136,7 +132,7 @@ anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = province # province is the variable's name holding data on where the survey was conducted.
+    province # province is the variable's name holding data on where the survey was conducted.
   )
 ```
 
@@ -150,7 +146,7 @@ anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -169,7 +165,7 @@ anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = wtfactor, # Passing the wtfactor to wt
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -183,7 +179,7 @@ anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = wtfactor,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -221,7 +217,7 @@ anthro.03 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = district
+    district, sex
   )
 ```
 
@@ -241,7 +237,7 @@ anthro.03 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = district
+    district, sex
   )
 ```
 
