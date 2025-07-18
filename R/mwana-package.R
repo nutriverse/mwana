@@ -2,9 +2,6 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#'   greensIndex
-#'   relocate select
-#'   summarise bind_rows ends_with everything filter is_grouped_df pull
 #' @importFrom dplyr across case_when group_by mutate n n_distinct rename 
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr ends_with
