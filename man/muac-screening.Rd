@@ -5,9 +5,9 @@
 \alias{mw_estimate_prevalence_screening2}
 \title{Estimate the prevalence of wasting based on MUAC for non-survey data}
 \usage{
-mw_estimate_prevalence_screening(df, muac, edema = NULL, .by = NULL)
+mw_estimate_prevalence_screening(df, muac, edema = NULL, ...)
 
-mw_estimate_prevalence_screening2(df, age_cat, muac, edema = NULL, .by = NULL)
+mw_estimate_prevalence_screening2(df, age_cat, muac, edema = NULL, ...)
 }
 \arguments{
 \item{df}{A \code{tibble} object produced by \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}} and
@@ -23,9 +23,9 @@ measurement unit of the values should be millimeters.}
 "y" for presence of nutritional edema and "n" for absence of nutritional
 edema. Default is NULL.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
-or identifiers for where the data was collected and for which the analysis
-should be summarised for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 
 \item{age_cat}{A \code{character} vector of child's age in categories. Code values
 should be "6-23" and "24-59".}
@@ -59,7 +59,7 @@ mw_estimate_prevalence_screening(
   df = anthro.02,
   muac = muac,
   edema = edema,
-  .by = province
+  province
 )
 
 ## With `edema` set to `NULL` ----
@@ -67,15 +67,15 @@ mw_estimate_prevalence_screening(
   df = anthro.02,
   muac = muac,
   edema = NULL,
-  .by = province
+  province
 )
 
-## With `.by` set to `NULL` ----
+## Specifying the grouping variables ----
 mw_estimate_prevalence_screening(
   df = anthro.02,
   muac = muac,
   edema = NULL,
-  .by = NULL
+  province
 )
 
 
@@ -92,7 +92,7 @@ anthro.01 |>
     age_cat = age_cat,
     muac = muac,
     edema = edema,
-    .by = area
+    area
   )
 
 }
