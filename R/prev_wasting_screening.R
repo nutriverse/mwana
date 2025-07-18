@@ -3,10 +3,12 @@
 #' @keywords internal
 #'
 #'
-get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) {
+get_estimates <- function(df, muac, edema = NULL, raw_muac = FALSE, ...) {
   ## Difuse arguments ----
+    by <- rlang::enquos(...)
   muac <- rlang::eval_tidy(enquo(muac), df)
   edema <- rlang::eval_tidy(enquo(edema), df)
+
 
   ## Enforce class of `muac` ----
   if (!is.numeric(muac)) {
@@ -61,7 +63,7 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) 
   x <- dplyr::filter(x, .data[[flag]] == 0)
 
   ## Summarize results ----
-  p <- dplyr::group_by(.data = x, {{ .by }}) |>
+  p <- dplyr::group_by(.data = x, !!!by) |>
     dplyr::summarise(
       dplyr::across(
         .data$gam:.data$mam,
@@ -115,9 +117,9 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) 
 #' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas
-#' or identifiers for where the data was collected and for which the analysis
-#' should be summarised for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
 #' @returns A summary `tibble` for the descriptive statistics about combined
 #' wasting.
@@ -134,7 +136,7 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) 
 #'   df = anthro.02,
 #'   muac = muac,
 #'   edema = edema,
-#'   .by = province
+#'   province
 #' )
 #'
 #' ## With `edema` set to `NULL` ----
@@ -142,15 +144,15 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) 
 #'   df = anthro.02,
 #'   muac = muac,
 #'   edema = NULL,
-#'   .by = province
+#'   province
 #' )
 #'
-#' ## With `.by` set to `NULL` ----
+#' ## Specifying the grouping variables ----
 #' mw_estimate_prevalence_screening(
 #'   df = anthro.02,
 #'   muac = muac,
 #'   edema = NULL,
-#'   .by = NULL
+#'   province
 #' )
 #'
 #' @rdname muac-screening
@@ -160,17 +162,19 @@ get_estimates <- function(df, muac, edema = NULL, .by = NULL, raw_muac = FALSE) 
 mw_estimate_prevalence_screening <- function(df,
                                              muac,
                                              edema = NULL,
-                                             .by = NULL) {
+                                             ...) {
   ## Difuse argument `.by` ----
-  .by <- enquo(.by)
+  .by <- rlang::enquos(...)
 
   ## Empty vector type list to store results ----
   results <- list()
 
+  ## Apply groupings if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+  
   ## Determine the analysis path that fits the data ----
-  if (!quo_is_null(.by)) {
-    path <- dplyr::group_by(.data = df, !!.by) |>
-      dplyr::summarise(
+    path <- dplyr::summarise(
+      .data = df,
         age_ratio = rate_agesex_ratio(
           mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
         ),
@@ -181,63 +185,56 @@ mw_estimate_prevalence_screening <- function(df,
           )
         ),
         analysis_approach = set_analysis_path(.data$age_ratio, .data$std),
-        .groups = "drop"
+        .groups = "keep"
       )
-  } else {
-    path <- dplyr::summarise(
-      .data = df,
-      age_ratio = rate_agesex_ratio(
-        mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
-      ),
-      std = rate_std(
-        stats::sd(
-          remove_flags(as.numeric(.data$mfaz), "zscores"),
-          na.rm = TRUE
-        )
-      ),
-      analysis_approach = set_analysis_path(.data$age_ratio, .data$std)
-    )
-  }
 
   ## Iterate over a data frame and compute estimates as per analysis path ----
   for (i in seq_len(nrow(path))) {
-    if (!quo_is_null(.by)) {
-      area <- dplyr::pull(path, !!.by)[i]
-      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == area)
+    if (length(.by) > 0) {
+area <- dplyr::pull(path, !!.by[[1]])[i]
+      data_subset <- dplyr::filter(df, !!.by[[1]] == area)
     } else {
       data_subset <- df
     }
-
+ 
     analysis_approach <- path$analysis_approach[i]
     if (analysis_approach == "unweighted") {
-      if (!quo_is_null(.by)) {
+      if (length(.by) > 0) {
         output <- get_estimates(
-          df = data_subset, muac = {{ muac }}, edema = {{ edema }}, .by = !!.by
+          df = data_subset, 
+          muac = {{ muac }}, 
+          edema = {{ edema }}, 
+          raw_muac = FALSE, 
+          !!!.by
         )
       } else {
         output <- get_estimates(
-          df = data_subset, muac = {{ muac }}, edema = {{ edema }}
+          df = data_subset, 
+          muac = {{ muac }}, 
+          edema = {{ edema }},
+          raw_muac = FALSE
         )
       }
     } else if (analysis_approach == "weighted") {
-      if (!quo_is_null(.by)) {
+      if (length(.by) > 0) {
         output <- mw_estimate_smart_age_wt(
-          df = data_subset, edema = {{ edema }}, .by = !!.by
+          df = data_subset, edema = {{ edema }}, raw_muac = FALSE, !!!.by
         )
       } else {
         output <- mw_estimate_smart_age_wt(
-          df = data_subset, edema = {{ edema }}
+          df = data_subset, edema = {{ edema }}, raw_muac = FALSE
         )
       }
     } else {
       ## Return NA's ----
-      if (!quo_is_null(.by)) {
-        output <- dplyr::summarise(
-          .data = data_subset,
+      if (length(.by) > 0) {
+        output <- data_subset |> 
+          dplyr::group_by(!!!.by) |> 
+          dplyr::summarise(
           gam_p = NA_real_,
           sam_p = NA_real_,
           mam_p = NA_real_,
-          .by = !!.by
+          .groups = "drop"
         )
       } else {
         ## Return NA's  ----
@@ -253,7 +250,7 @@ mw_estimate_prevalence_screening <- function(df,
   }
 
   ### Ensure that all categories in `.by` get added to the tibble ----
-  if (!quo_is_null(.by)) {
+  if (length(.by) > 0) {
     results <- dplyr::bind_rows(results) |>
       dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
       dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
@@ -286,7 +283,7 @@ mw_estimate_prevalence_screening <- function(df,
 #'     age_cat = age_cat,
 #'     muac = muac,
 #'     edema = edema,
-#'     .by = area
+#'     area
 #'   )
 #'
 #' @rdname muac-screening
@@ -296,15 +293,17 @@ mw_estimate_prevalence_screening <- function(df,
 #'
 #'
 mw_estimate_prevalence_screening2 <- function(
-    df, age_cat, muac, edema = NULL, .by = NULL) {
+    df, age_cat, muac, edema = NULL, ...) {
   ## Difuse argument `.by` ----
-  .by <- enquo(.by)
+  .by <- rlang::enquos(...)
 
   ## Empty vector of type list ----
   results <- list()
 
+  ## Apply grouping if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+
   ## Determine the analysis path that fits the data ----
-  if (!rlang::quo_is_null(.by)) {
     path <- df |>
       dplyr::summarise(
         age_ratio = rate_agesex_ratio(
@@ -325,58 +324,32 @@ mw_estimate_prevalence_screening2 <- function(
         analysis_approach = set_analysis_path(
           ageratio_class = .data$age_ratio,
           sd_class = .data$std
-        ),
-        .by = !!.by
+        ), 
+        .groups = "keep"
       )
-  }
-
-  if (rlang::quo_is_null(.by)) {
-    path <- df |>
-      dplyr::summarise(
-        age_ratio = rate_agesex_ratio(
-          mw_stattest_ageratio2(
-            age_cat, 0.66
-          )$p
-        ),
-        std = rate_std(
-          stats::sd(
-            remove_flags(
-              as.numeric(.data$muac),
-              .from = "raw_muac"
-            ),
-            na.rm = TRUE
-          ),
-          .of = "raw_muac"
-        ),
-        analysis_approach = set_analysis_path(
-          ageratio_class = .data$age_ratio,
-          sd_class = .data$std
-        )
-      )
-  }
-
-  ## Loop ----
+  
+  ## Loop over groups ----
   for (i in seq_len(nrow(path))) {
-    if (!rlang::quo_is_null(.by)) {
-      area <- dplyr::pull(path, !!.by)[i]
-      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == area)
-    } else {
-      data_subset <- df
-    }
-
+  if (length(.by) > 0) {
+    g <- dplyr::pull(path, !!.by[[1]])[i]
+    data_subset <- dplyr::filter(df, !!.by[[1]] == g)
+  } else {
+    data_subset <- df
+  }
+    
   analysis_approach <- path$analysis_approach[i]
 
   if (analysis_approach == "unweighted") {
-    r <- if (!rlang::quo_is_null(.by)) {
-      get_estimates(
+    if (length(.by) > 0) {
+      r <- get_estimates(
         df = data_subset,
         muac = {{ muac }},
         edema = {{ edema }},
         raw_muac = TRUE,
-        .by = !!.by
+        !!!.by
       )
     } else {
-      get_estimates(
+      r <- get_estimates(
         df = data_subset,
         muac = {{ muac }},
         edema = {{ edema }},
@@ -384,32 +357,33 @@ mw_estimate_prevalence_screening2 <- function(
       )
     }
   } else if (analysis_approach == "weighted") {
-    r <- if (!rlang::quo_is_null(.by)) {
-      mw_estimate_smart_age_wt(
+    if (length(.by) > 0) {
+     r <- mw_estimate_smart_age_wt(
         df = data_subset,
         edema = {{ edema }},
-        .by = !!.by,
-        raw_muac = TRUE
+        raw_muac = TRUE,
+        !!!.by
       )
     } else {
-      mw_estimate_smart_age_wt(
+      r <- mw_estimate_smart_age_wt(
         df = data_subset,
         edema = {{ edema }},
         raw_muac = TRUE
       )
     }
   } else {
-    r <- if (!rlang::quo_is_null(.by)) {
+    if (length(.by) > 0) {
+      r <- data_subset |> 
+        dplyr::group_by(!!!.by) |> 
       dplyr::summarise(
-        .data = data_subset,
         gam_p = NA_real_,
         sam_p = NA_real_,
         mam_p = NA_real_,
-        .by = !!.by
+        .groups = "drop"
       )
     } else {
       ## Return NA's  ----
-      tibble::tibble(
+      r <- tibble::tibble(
         gam_p = NA_real_,
         sam_p = NA_real_,
         mam_p = NA_real_
@@ -420,15 +394,15 @@ mw_estimate_prevalence_screening2 <- function(
   }
 
    ### Ensure that all categories in `.by` get added to the tibble ----
-  results <- if (!quo_is_null(.by)) {
-    dplyr::bind_rows(results) |>
+  if (length(.by) > 0) {
+    results <- dplyr::bind_rows(results) |>
       dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
       dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
       dplyr::relocate(.data$mam_p, .after = .data$mam_n)
   } else {
     ## Non-grouped results
-    dplyr::bind_rows(results)
+    results <- dplyr::bind_rows(results)
   }
   ## Return results ----
   results
-  }
+}

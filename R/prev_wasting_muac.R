@@ -322,17 +322,16 @@ mw_estimate_prevalence_muac <- function(df,
 #'
 #' mw_estimate_smart_age_wt(
 #'   df = .data,
-#'   edema = edema,
-#'   .by = NULL
+#'   edema = edema
 #' )
 #'
 #' @rdname prev_muac
 #' @export
 #'
 
-mw_estimate_smart_age_wt <- function(df, edema = NULL, raw_muac = FALSE, .by = NULL) {
+mw_estimate_smart_age_wt <- function(df, edema = NULL, raw_muac = FALSE, ...) {
   ## Defuse argument `.by` ----
-  .by <- enquo(.by)
+  .by <- rlang::enquos(...)
 
   ## Enforce measuring unit is in "mm" ----
   if (any(grepl("\\.", df$muac))) {
@@ -341,31 +340,22 @@ mw_estimate_smart_age_wt <- function(df, edema = NULL, raw_muac = FALSE, .by = N
 
   flag_var <- if (raw_muac) "flag_muac" else "flag_mfaz"
   df <- dplyr::filter(df, .data[[flag_var]] == 0)
+  
+  ## Apply grouping if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
 
-  ## Summarise with or without grouping
-  if (!rlang::quo_is_null(.by)) {
+  ## Summarise ----
     df <- df |>
       dplyr::summarise(
         sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
         mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
-        gam = .data$sam + .data$mam,
-        .by = !!.by
-      )
-  } else {
-    df <- df |>
-      dplyr::summarise(
-        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
-        gam = .data$sam + .data$mam
-      )
-  }
-
-  ## Rename outputs
-  df |>
+        gam = .data$sam + .data$mam, 
+        .groups = "keep"
+      )|>
     dplyr::rename(
       gam_p = .data$gam,
       sam_p = .data$sam,
       mam_p = .data$mam
     )
-
+df
 }
