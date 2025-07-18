@@ -329,8 +329,7 @@ Nonetheless, if for any reason we decide to go for it anyway, then we would appl
 anthro.04 |>
   subset(province == "Province 2") |>
   mw_estimate_smart_age_wt(
-    edema = edema,
-    .by = NULL
+    edema = edema
   )
 ```
 
@@ -433,7 +432,7 @@ anthro.04 |>
   mw_estimate_prevalence_screening(
     muac = muac,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -446,7 +445,7 @@ anthro.04 |>
   mw_estimate_prevalence_screening(
     muac = muac,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -470,7 +469,7 @@ anthro.04 |>
     age_cat = age_cat,
     muac = muac,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -493,7 +492,7 @@ anthro.04 |>
     age_cat = age_cat,
     muac = muac,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
