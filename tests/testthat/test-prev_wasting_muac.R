@@ -513,8 +513,7 @@ testthat::test_that(
   {
     ## Observed results ----
     p <- anthro.04 |>
-      subset(province == "Province 2") |>
-      mw_estimate_smart_age_wt(raw_muac = FALSE)
+      mw_estimate_smart_age_wt(raw_muac = FALSE, edema = NULL, province)
 
     ## Expected results ----
     gam <- 11.2
@@ -523,9 +522,9 @@ testthat::test_that(
 
     ## Tests ----
     testthat::expect_s3_class(p, "tbl")
-    testthat::expect_equal(round(p[[3]][1] * 100, 1), gam)
-    testthat::expect_equal(round(p[[1]][1] * 100, 1), sam)
-    testthat::expect_equal(round(p[[2]][1] * 100, 1), mam)
+    testthat::expect_equal(round(p[[4]][2] * 100, 1), gam)
+    testthat::expect_equal(round(p[[2]][2] * 100, 1), sam)
+    testthat::expect_equal(round(p[[3]][2] * 100, 1), mam)
 
   }
 )
