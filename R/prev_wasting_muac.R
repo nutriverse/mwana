@@ -160,7 +160,7 @@ complex_survey_estimates_muac <- function(df,
 #' @param edema A `character` vector for presence of nutritional edema coded as
 #' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
-#' 
+#'
 #' @param raw_muac Logical. Whether outliers should be excluded based on the raw
 #' MUAC values or MFAZ.
 #'
@@ -225,7 +225,8 @@ mw_estimate_prevalence_muac <- function(df,
         ),
         std = rate_std(
           stats::sd(
-            remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE
+            remove_flags(as.numeric(.data$mfaz), "zscores"),
+            na.rm = TRUE
           )
         ),
         analysis_approach = set_analysis_path(.data$age_ratio, .data$std),
@@ -240,7 +241,8 @@ mw_estimate_prevalence_muac <- function(df,
       ),
       std = rate_std(
         stats::sd(
-          remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE
+          remove_flags(as.numeric(.data$mfaz), "zscores"),
+          na.rm = TRUE
         )
       ),
       analysis_approach = set_analysis_path(.data$age_ratio, .data$std)
@@ -259,7 +261,7 @@ mw_estimate_prevalence_muac <- function(df,
     analysis_approach <- x$analysis_approach[i]
 
     if (analysis_approach == "unweighted") {
-      ##£ Estimate PPS-based prevalence ----
+      ## £ Estimate PPS-based prevalence ----
       output <- complex_survey_estimates_muac(
         data_subset, {{ wt }}, {{ edema }}, !!.by
       )
@@ -273,13 +275,14 @@ mw_estimate_prevalence_muac <- function(df,
           .by = !!.by
         )
       } else {
-      ### Estimate age-weighted prevalence as per SMART MUAC tool ----
+        ### Estimate age-weighted prevalence as per SMART MUAC tool ----
         output <- mw_estimate_smart_age_wt(
-          data_subset, edema = {{ edema }}, raw_muac = FALSE
+          data_subset,
+          edema = {{ edema }}, raw_muac = FALSE
         )
       }
     } else {
-      ##£ Return NA's ----
+      ## £ Return NA's ----
       if (!quo_is_null(.by)) {
         output <- dplyr::summarise(
           .data = data_subset,
@@ -289,7 +292,7 @@ mw_estimate_prevalence_muac <- function(df,
           .by = !!.by
         )
       } else {
-      ### Return NA's  ----
+        ### Return NA's  ----
         output <- tibble::tibble(
           gam_p = NA_real_,
           sam_p = NA_real_,
@@ -340,22 +343,22 @@ mw_estimate_smart_age_wt <- function(df, edema = NULL, raw_muac = FALSE, ...) {
 
   flag_var <- if (raw_muac) "flag_muac" else "flag_mfaz"
   df <- dplyr::filter(df, .data[[flag_var]] == 0)
-  
+
   ## Apply grouping if needed ----
   if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
 
   ## Summarise ----
-    df <- df |>
-      dplyr::summarise(
-        sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
-        mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
-        gam = .data$sam + .data$mam, 
-        .groups = "keep"
-      )|>
+  df <- df |>
+    dplyr::summarise(
+      sam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "sam"),
+      mam = smart_age_weighting(.data$muac, .data$age, {{ edema }}, .form = "mam"),
+      gam = .data$sam + .data$mam,
+      .groups = "keep"
+    ) |>
     dplyr::rename(
       gam_p = .data$gam,
       sam_p = .data$sam,
       mam_p = .data$mam
     )
-df
+  df
 }
