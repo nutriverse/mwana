@@ -197,7 +197,7 @@ testthat::test_that(
   {
     ### Get the prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prevalence_muac(edema = edema, wt = wtfactor, .by = NULL)
+      mw_estimate_prevalence_muac(edema = edema, wt = wtfactor)
 
     ### Expected results ----
     ### GAM estimates and uncertainty ----
@@ -288,7 +288,7 @@ testthat::test_that(
   {
     ### Get the prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prevalence_muac(edema = NULL, wt = wtfactor, .by = NULL)
+      mw_estimate_prevalence_muac(edema = NULL, wt = wtfactor)
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
@@ -332,7 +332,7 @@ testthat::test_that(
   {
     ### Get prevalence estimates ----
     p <- anthro.02 |>
-      mw_estimate_prevalence_muac(edema = NULL, .by = NULL)
+      mw_estimate_prevalence_muac(edema = NULL)
 
     ### Expected results ----
     #### GAM estimates and uncertainty ----
@@ -370,17 +370,17 @@ testthat::test_that(
 )
 
 
-## When age_ratio & std != problematic & !is.null(wt) with .by = province
+## When age_ratio & std != problematic & !is.null(wt) by grouped vars
 testthat::test_that(
-  "mw_estimate_prevalence_muac() yields correct estimates when .by is
-    used",
+  "mw_estimate_prevalence_muac() yields correct estimates when grouping variables are
+    specified",
   {
     ### Get prevalence estimates ----
     p <- anthro.02 |>
       mw_estimate_prevalence_muac(
         edema = edema,
         wt = wtfactor,
-        .by = province
+        province
       )
 
     ### Expected results for Zambezia province ----
@@ -432,7 +432,7 @@ testthat::test_that(
   {
     ### Get the prevalence estimates ----
     p <- anthro.04 |>
-      mw_estimate_prevalence_muac(edema = edema, .by = province)
+      mw_estimate_prevalence_muac(edema = edema, wt = NULL, province)
 
     ### A Province whose analysis approach is unweighted ---
     province_1 <- subset(p, province == "Province 1")
@@ -465,12 +465,11 @@ testthat::test_that(
   {
     ### Get the prevalence estimates ----
     p <- anthro.04 |>
-      subset(province == "Province 3") |>
-      mw_estimate_prevalence_muac(edema = edema, .by = NULL)
+      mw_estimate_prevalence_muac(edema = edema, wt = NULL, province)
 
     ### The test ----
     testthat::expect_s3_class(p, "tbl")
-    testthat::expect_true(all(sapply(p[names(p)], \(.) all(is.na(.)))))
+    testthat::expect_true(all(sapply(p[names(p[[3]])], \(.) all(is.na(.)))))
   }
 )
 

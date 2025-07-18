@@ -298,7 +298,7 @@ anthro.04 |>
   mw_estimate_prevalence_muac(
     wt = NULL,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -312,7 +312,7 @@ anthro.04 |>
   mw_estimate_prevalence_muac(
     wt = NULL,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -377,7 +377,7 @@ anthro.02 |>
   mw_estimate_prevalence_muac(
     wt = wtfactor,
     edema = edema,
-    .by = province
+    province, strata
   )
 ```
 
@@ -407,7 +407,7 @@ anthro.02 |>
   mw_estimate_prevalence_muac(
     wt = wtfactor,
     edema = edema,
-    .by = province
+    province, strata
   )
 ```
 
