@@ -185,14 +185,15 @@ mw_estimate_prevalence_screening <- function(df,
       )
     ),
     analysis_approach = set_analysis_path(.data$age_ratio, .data$std),
-    .groups = "keep"
+    .groups = "drop"
   )
 
   ## Iterate over a data frame and compute estimates as per analysis path ----
   for (i in seq_len(nrow(path))) {
     if (length(.by) > 0) {
-      area <- dplyr::pull(path, !!.by[[1]])[i]
-      data_subset <- dplyr::filter(df, !!.by[[1]] == area)
+      vals <- purrr::map(.by, ~ dplyr::pull(path, !!.x)[i])
+      exprs <- purrr::map2(.by, vals, ~ rlang::expr(!!rlang::get_expr(.x) == !!.y))
+      data_subset <- dplyr::filter(df, !!!exprs)
     } else {
       data_subset <- df
     }
@@ -248,20 +249,17 @@ mw_estimate_prevalence_screening <- function(df,
 
     results[[i]] <- output
   }
-
-  ### Ensure that all categories in `.by` get added to the tibble ----
-  if (length(.by) > 0) {
-    results <- dplyr::bind_rows(results) |>
+  ## Relocate variables ----
+  results <- dplyr::bind_rows(results)
+ .df <- if (any(names(results) %in% c("gam_n"))) {
+    results |> 
       dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
       dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
       dplyr::relocate(.data$mam_p, .after = .data$mam_n)
   } else {
-    ## Non-grouped results
-    results <- dplyr::bind_rows(results)
+    results
   }
-
-  ## Return results ----
-  results
+  .df
 }
 
 
@@ -308,7 +306,7 @@ mw_estimate_prevalence_screening2 <- function(
     dplyr::summarise(
       age_ratio = rate_agesex_ratio(
         mw_stattest_ageratio2(
-          age_cat, 0.66
+          {{ age_cat }}, 0.66
         )$p
       ),
       std = rate_std(
@@ -325,14 +323,15 @@ mw_estimate_prevalence_screening2 <- function(
         ageratio_class = .data$age_ratio,
         sd_class = .data$std
       ),
-      .groups = "keep"
+      .groups = "drop"
     )
 
   ## Loop over groups ----
   for (i in seq_len(nrow(path))) {
     if (length(.by) > 0) {
-      g <- dplyr::pull(path, !!.by[[1]])[i]
-      data_subset <- dplyr::filter(df, !!.by[[1]] == g)
+      vals <- purrr::map(.by, ~ dplyr::pull(path, !!.x)[i])
+      exprs <- purrr::map2(.by, vals, ~ rlang::expr(!!rlang::get_expr(.x) == !!.y))
+      data_subset <- dplyr::filter(df, !!!exprs)
     } else {
       data_subset <- df
     }
@@ -393,16 +392,15 @@ mw_estimate_prevalence_screening2 <- function(
     results[[i]] <- r
   }
 
-  ### Ensure that all categories in `.by` get added to the tibble ----
-  if (length(.by) > 0) {
-    results <- dplyr::bind_rows(results) |>
+  ### Relocate variables ----
+  results <- dplyr::bind_rows(results)
+  .df <- if (any(names(results) %in% c("gam_n"))) {
+    results |>
       dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
       dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
       dplyr::relocate(.data$mam_p, .after = .data$mam_n)
   } else {
-    ## Non-grouped results
-    results <- dplyr::bind_rows(results)
+    results
   }
-  ## Return results ----
-  results
+  .df
 }

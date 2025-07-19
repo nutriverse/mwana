@@ -270,19 +270,17 @@ mw_estimate_prevalence_muac <- function(df,
     results[[i]] <- output
   }
 
-  ## Ensure that all categories in `.by` get added to the tibble ----
-  if (length(.by) > 0) {
-    results <- dplyr::bind_rows(results) |>
+  ### Relocate variables ----
+  results <- dplyr::bind_rows(results)
+  .df <- if (any(names(results) %in% c("gam_n"))) {
+    results |>
       dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
       dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
       dplyr::relocate(.data$mam_p, .after = .data$mam_n)
   } else {
-    ### Non-grouped results ----
-    results <- dplyr::bind_rows(results)
+    results
   }
-
-  ## Return results ----
-  results
+  .df
 }
 
 #'
