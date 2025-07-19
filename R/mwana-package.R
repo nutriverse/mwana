@@ -18,6 +18,7 @@
 #' @importFrom purrr map
 #' @importFrom purrr map2
 #' @importFrom rlang .data sym enquo eval_tidy quo_is_null quo_name
+#' @importFrom rlang as_name
 #' @importFrom rlang get_expr
 #' @importFrom scales label_percent label_pvalue
 #' @importFrom srvyr as_survey_design survey_mean
