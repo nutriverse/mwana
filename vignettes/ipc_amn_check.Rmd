@@ -9,7 +9,7 @@ knitr:
     comment: "#>"
 vignette: >
   %\VignetteIndexEntry{Checking if IPC Acute Malnutrition sample size requirements were met}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -48,8 +48,7 @@ Now that we got acquainted with the data set, we can proceed to executing the ta
 mw_check_ipcamn_ssreq(
   df = anthro.01,         # <1>
   cluster = cluster,      # <2>
-  .source = "survey",     # <3>
-  .by = NULL              # <4>
+  .source = "survey"      # <3>
 )
 ```
 
@@ -58,8 +57,6 @@ mw_check_ipcamn_ssreq(
 2. The argument `cluster` should be specified with the unquoted variable name in `df` that contains information for the unique cluster or screening or sentinel site identifiers. In this case, `anthro.01` has a variable called `cluster` which we supply to this argument unquoted.
 
 3. The argument `.source` should be specified with the type of the source for the data in `df`. Since `anthro.01` data is from a survey, we specify this argument as *"survey"*.
-
-4. The argument `.by` controls whether the analysis should be grouped by a given category. 
 
 We can also chain `anthro.01` to the function using the native pipe operator `|>`:
 

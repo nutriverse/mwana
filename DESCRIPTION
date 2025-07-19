@@ -42,5 +42,5 @@ RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/nutriverse/mwana, https://nutriverse.io/mwana
 BugReports: https://github.com/nutriverse/mwana/issues
-VignetteBuilder: quarto
+VignetteBuilder: knitr
 Config/testthat/edition: 3

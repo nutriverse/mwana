@@ -9,7 +9,7 @@ knitr:
     comment: "#>"
 vignette: >
   %\VignetteIndexEntry{Running plausibility checks}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
