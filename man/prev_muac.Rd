@@ -5,9 +5,9 @@
 \alias{mw_estimate_smart_age_wt}
 \title{Estimate the prevalence of wasting based on MUAC for survey data}
 \usage{
-mw_estimate_prevalence_muac(df, wt = NULL, edema = NULL, .by = NULL)
+mw_estimate_prevalence_muac(df, wt = NULL, edema = NULL, ...)
 
-mw_estimate_smart_age_wt(df, edema = NULL, raw_muac = FALSE, .by = NULL)
+mw_estimate_smart_age_wt(df, edema = NULL, raw_muac = FALSE, ...)
 }
 \arguments{
 \item{df}{A \code{tibble} object produced by \code{\link[=mw_wrangle_muac]{mw_wrangle_muac()}} and
@@ -25,9 +25,9 @@ Otherwise, a weighted analysis is implemented.}
 "y" for presence of nutritional edema and "n" for absence of nutritional
 edema. Default is NULL.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
-or identifiers for where the data was collected and for which the analysis
-should be summarised for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 
 \item{raw_muac}{Logical. Whether outliers should be excluded based on the raw
 MUAC values or MFAZ.}
@@ -58,8 +58,7 @@ estimation is performed.
 mw_estimate_prevalence_muac(
   df = anthro.04,
   wt = NULL,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 
 ## When .by is not set to NULL ----
@@ -67,7 +66,7 @@ mw_estimate_prevalence_muac(
   df = anthro.04,
   wt = NULL,
   edema = edema,
-  .by = province
+  province
 )
 
 ## An application of `mw_estimate_smart_age_wt()` ----
@@ -75,8 +74,7 @@ mw_estimate_prevalence_muac(
 
 mw_estimate_smart_age_wt(
   df = .data,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 
 }

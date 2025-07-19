@@ -6,54 +6,35 @@
 complex_survey_estimates_wfhz <- function(df,
                                           wt = NULL,
                                           edema = NULL,
-                                          .by) {
+                                          ...) {
   ## Difuse arguments ----
-  wt <- enquo(wt)
-  edema <- enquo(edema)
+  wt <- rlang::enquo(wt)
+  edema <- rlang::enquo(edema)
+  .by <- rlang::enquos(...)
 
   ## Defines case based on the availability of edema ----
-  if (!quo_is_null(edema)) {
-    ## When edema is available ----
     df <- define_wasting(
       df,
       zscores = .data$wfhz,
       edema = !!edema,
       .by = "zscores"
     )
-  } else {
-    ## When edema is not available ----
-    df <- define_wasting(
-      df,
-      zscores = .data$wfhz,
-      .by = "zscores"
-    )
-  }
 
   ## Filter out flags ----
   df <- dplyr::filter(.data = df, .data$flag_wfhz == 0)
 
   ## Create a survey object for a weighted analysis ----
-  if (!quo_is_null(wt)) {
-    srvy <- srvyr::as_survey_design(
-      .data = df,
+    srvy <- srvyr::group_by(df, !!!.by) |> 
+      srvyr::as_survey_design(
       ids = .data$cluster,
       pps = "brewer",
       variance = "YG",
       weights = !!wt
     )
-  } else {
-    ## Create a survey object for an unweighted analysis ----
-    srvy <- srvyr::as_survey_design(
-      .data = df,
-      ids = .data$cluster,
-      pps = "brewer",
-      variance = "YG"
-  )
-}
 
   ## Summarise prevalence ----
-  p <- srvyr::group_by(srvy, {{ .by }}) |>
-    srvyr::summarise(
+  p <- srvyr::summarise(
+    .data = srvy,
       srvyr::across(
         .data$gam:.data$mam,
         list(
@@ -103,9 +84,9 @@ complex_survey_estimates_wfhz <- function(df,
 #' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas
-#' or identifiers for where the data was collected and for which the analysis
-#' should be summarised for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
 #' @returns A summary `tibble` for the descriptive statistics about wasting.
 #'
@@ -124,8 +105,7 @@ complex_survey_estimates_wfhz <- function(df,
 #' mw_estimate_prevalence_wfhz(
 #'   df = data,
 #'   wt = NULL,
-#'   edema = edema,
-#'   .by = NULL
+#'   edema = edema
 #' )
 #'
 #' ## Now when .by is not set to NULL ----
@@ -133,7 +113,7 @@ complex_survey_estimates_wfhz <- function(df,
 #'   df = data,
 #'   wt = NULL,
 #'   edema = edema,
-#'   .by = district
+#'   district
 #' )
 #'
 #' ## When a weighted analysis is needed ----
@@ -141,7 +121,7 @@ complex_survey_estimates_wfhz <- function(df,
 #'   df = anthro.02,
 #'   wt = wtfactor,
 #'   edema = edema,
-#'   .by = province
+#'   province
 #' )
 #'
 #' @export
@@ -150,57 +130,49 @@ complex_survey_estimates_wfhz <- function(df,
 mw_estimate_prevalence_wfhz <- function(df,
                                         wt = NULL,
                                         edema = NULL,
-                                        .by = NULL) {
+                                        ...) {
   ## Defuse argument `.by` ----
-  .by <- enquo(.by)
+  .by <- rlang::enquos(...)
 
   ## Empty vector type list ----
   results <- list()
 
-  if (!quo_is_null(.by)) {
+  ## Apply grouping if needed ----
+  if (length(.by) > 0)  df <- dplyr::group_by(df, !!!.by)
+  
     ## Rate standard deviation ----
-    x <- dplyr::summarise(
+    d <- dplyr::summarise(
       .data = df,
-      std = rate_std(
-        stats::sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)
-      ),
-      .by = !!.by
+      std = rate_std(stats::sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)),
+      .groups = "keep"
     )
-  } else {
-    ## Rate standard deviation ----
-    x <- dplyr::summarise(
-      .data = df,
-      std = rate_std(
-        stats::sd(remove_flags(.data$wfhz, "zscores"), na.rm = TRUE)
-      )
-    )
-  }
 
   ## Compute prevalence based on the rate of the SD ----
-  for (i in seq_len(nrow(x))) {
-    if (!quo_is_null(.by)) {
-      area <- dplyr::pull(x, !!.by)[i]
-      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == !!area)
+  for (i in seq_len(nrow(d))) {
+     if (length(.by) > 0) {
+      vals <- purrr::map(.by, ~ dplyr::pull(d, !!.x)[i])
+      exprs <- purrr::map2(.by, vals, ~ rlang::expr(!!rlang::get_expr(.x) == !!.y))
+      data_subset <- dplyr::filter(df, !!!exprs)
     } else {
       data_subset <- df
     }
 
-    std <- x$std[i]
+    std <- d$std[i]
     if (std != "Problematic") {
       ### Compute complex sample-based prevalence estimates ----
       result <- complex_survey_estimates_wfhz(
         data_subset,
         wt = {{ wt }},
         edema = {{ edema }},
-        .by = !!.by
+        !!!.by
       )
     } else {
       ### Compute PROBIT-based prevalence estimates----
-      if (!quo_is_null(.by)) {
+      if (length(.by) > 0) {
         result <- estimate_probit_prevalence(
           data_subset,
-          .by = !!.by,
-          .for = "wfhz"
+          .for = "wfhz",
+          !!!.by
         )
       } else {
         ### Compute PROBIT-based prevalence estimates ----

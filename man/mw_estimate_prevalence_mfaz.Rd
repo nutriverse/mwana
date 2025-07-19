@@ -4,7 +4,7 @@
 \alias{mw_estimate_prevalence_mfaz}
 \title{Estimate the prevalence of wasting based on z-scores of muac-for-age (MFAZ)}
 \usage{
-mw_estimate_prevalence_mfaz(df, wt = NULL, edema = NULL, .by = NULL)
+mw_estimate_prevalence_mfaz(df, wt = NULL, edema = NULL, ...)
 }
 \arguments{
 \item{df}{A \code{data.frame} object that has been produced by the
@@ -20,9 +20,9 @@ Otherwise, a weighted analysis is implemented.}
 "y" for presence of nutritional edema and "n" for absence of nutritional
 edema. Default is NULL.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
-or identifiers for where the data was collected and for which the analysis
-should be summarised for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
 A summary \code{tibble} for the descriptive statistics about wasting.
@@ -41,20 +41,19 @@ Identified outliers are then excluded before prevalence estimation is
 performed.
 }
 \examples{
-## When .by = NULL ----
+## Without grouping variables ----
 mw_estimate_prevalence_mfaz(
   df = anthro.04,
   wt = NULL,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 
-## When .by is not set to NULL ----
+## With grouping variables ----
 mw_estimate_prevalence_mfaz(
   df = anthro.04,
   wt = NULL,
   edema = edema,
-  .by = province
+  province
 )
 
 }

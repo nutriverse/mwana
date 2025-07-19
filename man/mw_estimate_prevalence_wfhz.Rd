@@ -4,7 +4,7 @@
 \alias{mw_estimate_prevalence_wfhz}
 \title{Estimate the prevalence of wasting based on weight-for-height z-scores (WFHZ)}
 \usage{
-mw_estimate_prevalence_wfhz(df, wt = NULL, edema = NULL, .by = NULL)
+mw_estimate_prevalence_wfhz(df, wt = NULL, edema = NULL, ...)
 }
 \arguments{
 \item{df}{A \code{tibble} object that has been produced by the \code{\link[=mw_wrangle_wfhz]{mw_wrangle_wfhz()}}
@@ -20,9 +20,9 @@ Otherwise, a weighted analysis is implemented.}
 "y" for presence of nutritional edema and "n" for absence of nutritional
 edema. Default is NULL.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
-or identifiers for where the data was collected and for which the analysis
-should be summarised for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
 A summary \code{tibble} for the descriptive statistics about wasting.
@@ -55,8 +55,7 @@ data <- mw_wrangle_wfhz(
 mw_estimate_prevalence_wfhz(
   df = data,
   wt = NULL,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 
 ## Now when .by is not set to NULL ----
@@ -64,7 +63,7 @@ mw_estimate_prevalence_wfhz(
   df = data,
   wt = NULL,
   edema = edema,
-  .by = district
+  district
 )
 
 ## When a weighted analysis is needed ----
@@ -72,7 +71,7 @@ mw_estimate_prevalence_wfhz(
   df = anthro.02,
   wt = wtfactor,
   edema = edema,
-  .by = province
+  province
 )
 
 }

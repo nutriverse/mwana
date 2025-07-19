@@ -6,66 +6,50 @@
 complex_survey_estimates_mfaz <- function(df,
                                           wt = NULL,
                                           edema = NULL,
-                                          .by) {
+                                          ...) {
   ## Difuse arguments ----
-  wt <- enquo(wt)
-  edema <- enquo(edema)
+  wt <- rlang::enquo(wt)
+  edema <- rlang::enquo(edema)
+  .by <- rlang::enquos(...)
 
   ## Defines case based on the availability of edema ----
-  if (!quo_is_null(edema)) {
-    ## When edema is available ----
-    df <- with(
-      df,
-      define_wasting(df, zscores = .data$mfaz, edema = !!edema, .by = "zscores")
-    )
-  } else {
-    ## When edema is not available ----
-    df <- with(
-      df,
-      define_wasting(df, zscores = .data$mfaz, .by = "zscores")
-    )
-  }
+  df <- define_wasting(
+    df,
+    zscores = .data$mfaz,
+    edema = !!edema,
+    .by = "zscores"
+  )
 
   ## Filter out flags ----
   df <- dplyr::filter(.data = df, .data$flag_mfaz == 0)
 
   ## Create a survey object for a weighted analysis ----
-  if (!is.null(wt)) {
-    srvy <- srvyr::as_survey_design(
-      .data = df,
+  srvy <- srvyr::group_by(df, !!!.by) |>
+    srvyr::as_survey_design(
       ids = .data$cluster,
       pps = "brewer",
       variance = "YG",
-      weights = {{ wt }}
+      weights = !!wt
     )
-  } else {
-    ## Create a survey object for an unweighted analysis ----
-    srvy <- srvyr::as_survey_design(
-      .data = df,
-      ids = .data$cluster,
-      pps = "brewer",
-      variance = "YG"
-    )
-  }
 
   ## Summarise prevalence ----
-  p <- srvyr::group_by(.data = srvy, {{ .by }}) |>
-    srvyr::summarise(
-      srvyr::across(
-        .data$gam:.data$mam,
-        list(
-          n = \(.) sum(., na.rm = TRUE),
-          p = \(.) srvyr::survey_mean(
-            .,
-            vartype = "ci",
-            level = 0.95,
-            deff = TRUE,
-            na.rm = TRUE
-          )
+  p <- srvyr::summarise(
+    .data = srvy,
+    srvyr::across(
+      .data$gam:.data$mam,
+      list(
+        n = \(.) sum(., na.rm = TRUE),
+        p = \(.) srvyr::survey_mean(
+          .,
+          vartype = "ci",
+          level = 0.95,
+          deff = TRUE,
+          na.rm = TRUE
         )
-      ),
-      wt_pop = round(sum(srvyr::cur_svy_wts()))
-    )
+      )
+    ),
+    wt_pop = round(sum(srvyr::cur_svy_wts()))
+  )
   p
 }
 
@@ -100,27 +84,26 @@ complex_survey_estimates_mfaz <- function(df,
 #' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas
-#' or identifiers for where the data was collected and for which the analysis
-#' should be summarised for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
 #' @returns A summary `tibble` for the descriptive statistics about wasting.
 #'
 #' @examples
-#' ## When .by = NULL ----
+#' ## Without grouping variables ----
 #' mw_estimate_prevalence_mfaz(
 #'   df = anthro.04,
 #'   wt = NULL,
-#'   edema = edema,
-#'   .by = NULL
+#'   edema = edema
 #' )
 #'
-#' ## When .by is not set to NULL ----
+#' ## With grouping variables ----
 #' mw_estimate_prevalence_mfaz(
 #'   df = anthro.04,
 #'   wt = NULL,
 #'   edema = edema,
-#'   .by = province
+#'   province
 #' )
 #'
 #' @export
@@ -128,37 +111,29 @@ complex_survey_estimates_mfaz <- function(df,
 mw_estimate_prevalence_mfaz <- function(df,
                                         wt = NULL,
                                         edema = NULL,
-                                        .by = NULL) {
+                                        ...) {
   ## Defuse argument .by ----
-  .by <- enquo(.by)
+  .by <- rlang::enquos(...)
 
   ## Empty vector ----
   results <- list()
 
-  if (!quo_is_null(.by)) {
-    ## Check standard deviation ----
-    x <- dplyr::summarise(
-      .data = df,
-      std = rate_std(
-        stats::sd(remove_flags(.data$mfaz, "zscores"), na.rm = TRUE)
-      ),
-      .by = !!.by
-    )
-  } else {
-    ## Check standard deviation ----
-    x <- dplyr::summarise(
-      .data = df,
-      std = rate_std(
-        stats::sd(remove_flags(.data$mfaz, "zscores"), na.rm = TRUE)
-      )
-    )
-  }
+  ## Apply grouping if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+
+  ## Check standard deviation ----
+  x <- dplyr::summarise(
+    .data = df,
+    std = rate_std(stats::sd(remove_flags(.data$mfaz, "zscores"), na.rm = TRUE)),
+    .groups = "keep"
+  )
 
   ## Iterate over data frame to compute prevalence according to the SD ----
   for (i in seq_len(nrow(x))) {
-    if (!quo_is_null(.by)) {
-      area <- dplyr::pull(x, !!.by)[i]
-      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == !!area)
+    if (length(.by) > 0) {
+      vals <- purrr::map(.by, ~ dplyr::pull(x, !!.x)[i])
+      exprs <- purrr::map2(.by, vals, ~ rlang::expr(!!rlang::get_expr(.x) == !!.y))
+      data_subset <- dplyr::filter(df, !!!exprs)
     } else {
       data_subset <- df
     }
@@ -167,12 +142,12 @@ mw_estimate_prevalence_mfaz <- function(df,
     if (std != "Problematic") {
       ### Compute standard complex sample based prevalence analysis ----
       result <- complex_survey_estimates_mfaz(
-        data_subset, {{ wt }}, {{ edema }}, !!.by
+        data_subset, {{ wt }}, {{ edema }}, !!!.by
       )
     } else {
       ### Compute grouped PROBIT based prevalence ----
-      if (!quo_is_null(.by)) {
-        result <- estimate_probit_prevalence(data_subset, !!.by, .for = "mfaz")
+      if (length(.by) > 0) {
+        result <- estimate_probit_prevalence(data_subset, .for = "mfaz", !!!.by)
       } else {
         ### Compute PROBIT based prevalence ----
         result <- estimate_probit_prevalence(data_subset, .for = "mfaz")
