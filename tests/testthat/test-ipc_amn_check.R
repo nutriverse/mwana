@@ -19,7 +19,7 @@ testthat::test_that(
         .source = "survey"
       ),
       regexp = paste0(
-        "`cluster` must be of class `integer` or `character` not ",
+        "`cluster` must be of class `integer` or `character`, not ",
         shQuote(class(anthro.01$weight)), ". Please try again."
       )
     )

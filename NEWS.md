@@ -15,7 +15,7 @@
 
 * Refactored plausibility check and prevalence functions to allow multiple grouping variables (rather than just one, as was the case in earlier versions). The `.by` argument is no longer used; instead, users must specify the variable or set of variables using `...` .
 
-* Reduced repeated code in several function definitons.
+* Reduced repeated code in several function definitions.
 
 <br/>
 
