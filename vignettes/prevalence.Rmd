@@ -535,7 +535,7 @@ anthro.01 |>
   mw_estimate_prevalence_combined(
     wt = NULL,
     edema = edema,
-    .by = area
+    area
   )
 ```
 
@@ -569,7 +569,7 @@ anthro.01 |>
   mw_estimate_prevalence_combined(
     wt = NULL,
     edema = edema,
-    .by = area
+    area
   )
 ```
 

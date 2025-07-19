@@ -6,80 +6,54 @@
 complex_survey_estimates_combined <- function(df,
                                               wt = NULL,
                                               edema = NULL,
-                                              .by) {
+                                              ...) {
   ## Defuse arguments ----
-  wt <- enquo(wt)
-  edema <- enquo(edema)
+  wt <- rlang::enquo(wt)
+  edema <- rlang::enquo(edema)
+  .by <- rlang::enquos(...)
 
   ## Defines case based on the availability of edema ----
-  if (!quo_is_null(edema)) {
-    ### Case definition when `edema` is not null ----
-    df <- with(
-      df,
-      define_wasting(df,
-        zscore = .data$wfhz,
-        muac = .data$muac,
-        edema = !!edema,
-        .by = "combined"
-      ) |>
-        dplyr::mutate(
-          cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
-        )
+  df <- define_wasting(df,
+    zscores = .data$wfhz,
+    muac = .data$muac,
+    edema = !!edema,
+    .by = "combined"
+  ) |>
+    dplyr::mutate(
+      cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
+    ) |>
+    dplyr::filter(
+      .data$cflags == 0
     )
-  } else {
-    ### Case definition when `edema` is null ----
-    df <- with(
-      df,
-      define_wasting(df,
-        zscore = .data$wfhz,
-        muac = .data$muac,
-        .by = "combined"
-      ) |>
-        dplyr::mutate(
-          cflags = ifelse(.data$flag_wfhz == 1 | .data$flag_mfaz == 1, 1, 0)
-        )
-    )
-  }
-
-  ## Filter out flags ----
-  df <- dplyr::filter(.data = df, .data$cflags == 0)
 
   ## Create a survey object for a weighted analysis ----
-  if (!quo_is_null(wt)) {
-    srvy <- srvyr::as_survey_design(
-      .data = df,
+  srvy <- df |>
+    srvyr::group_by(!!!.by) |>
+    srvyr::as_survey_design(
       ids = .data$cluster,
       pps = "brewer",
       variance = "YG",
       weights = !!wt
     )
-  } else {
-    ## Create a survey object for an unweighted analysis ----
-    srvy <- srvyr::as_survey_design(
-      .data = df,
-      ids = .data$cluster,
-      pps = "brewer",
-      variance = "YG"
-    )
-  }
+
   ## Summarise prevalence ----
-  p <- srvyr::group_by(.data = srvy, {{ .by }}) |>
-    srvyr::summarise(
-      srvyr::across(
-        .data$cgam:.data$cmam,
-        list(
-          n = ~sum(.x, na.rm = TRUE),
-          p = \(.) srvyr::survey_mean(
-            .,
-            vartype = "ci",
-            level = 0.95,
-            deff = TRUE,
-            na.rm = TRUE
-          )
+  p <- srvyr::summarise(
+    srvy,
+    srvyr::across(
+      .data$cgam:.data$cmam,
+      list(
+        n = ~ sum(.x, na.rm = TRUE),
+        p = \(.) srvyr::survey_mean(
+          .,
+          vartype = "ci",
+          level = 0.95,
+          deff = TRUE,
+          na.rm = TRUE
         )
-      ),
-      wt_pop = sum(srvyr::cur_svy_wts())
-    )
+      )
+    ),
+    wt_pop = sum(srvyr::cur_svy_wts())
+  )
   p
 }
 
@@ -116,9 +90,9 @@ complex_survey_estimates_combined <- function(df,
 #' "y" for presence of nutritional edema and "n" for absence of nutritional
 #' edema. Default is NULL.
 #'
-#' @param .by A `character` or `numeric` vector of the geographical areas
-#' or identifiers for where the data was collected and for which the analysis
-#' should be summarised for.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
 #'
 #' @returns A summary `tibble` for the descriptive statistics about combined
 #' wasting.
@@ -137,20 +111,18 @@ complex_survey_estimates_combined <- function(df,
 #' | 0 | 0  | 0 |
 #'
 #' @examples
-#' ## When .by and wt are set to NULL ----
+#' ## When wt are set to NULL ----
 #' mw_estimate_prevalence_combined(
 #'   df = anthro.02,
 #'   wt = NULL,
-#'   edema = edema,
-#'   .by = NULL
+#'   edema = edema
 #' )
 #'
-#' ## When wt is not set to NULL ----
+#' ## When `wt` is not set to NULL ----
 #' mw_estimate_prevalence_combined(
 #'   df = anthro.02,
 #'   wt = wtfactor,
-#'   edema = edema,
-#'   .by = NULL
+#'   edema = edema
 #' )
 #'
 #' @export
@@ -159,9 +131,9 @@ complex_survey_estimates_combined <- function(df,
 mw_estimate_prevalence_combined <- function(df,
                                             wt = NULL,
                                             edema = NULL,
-                                            .by = NULL) {
-  ## Defuse argument `.by` ----
-  .by <- enquo(.by)
+                                            ...) {
+  ## Capture grouping vars ----
+  .by <- rlang::enquos(...)
 
   ## Enforce measuring unit is in "mm" ----
   if (any(grepl("\\.", df$muac))) {
@@ -171,55 +143,25 @@ mw_estimate_prevalence_combined <- function(df,
   ## Empty vector to store results ----
   results <- list()
 
-  if (!quo_is_null(.by)) {
-    ## Rate standard deviation and set MUAC analysis path ----
-    x <- dplyr::summarise(
-      .data = df,
-      std_wfhz = rate_std(
-        stats::sd(
-          remove_flags(as.numeric(.data$wfhz), "zscores"),
-          na.rm = TRUE
-        )
-      ),
-      age_ratio = rate_agesex_ratio(
-        mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
-      ),
-      std_mfaz = rate_std(
-        stats::sd(
-          remove_flags(as.numeric(.data$mfaz), "zscores"),
-          na.rm = TRUE)
-      ),
-      muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz),
-      .by = !!.by
-    )
-  } else {
-    ## Rate standard deviation and set MUAC analysis path ----
-    x <- dplyr::summarise(
-      .data = df,
-      std_wfhz = rate_std(
-        stats::sd(
-          remove_flags(as.numeric(.data$wfhz), "zscores"),
-          na.rm = TRUE
-        )
-      ),
-      age_ratio = rate_agesex_ratio(
-        mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p
-      ),
-      std_mfaz = rate_std(
-        stats::sd(
-          remove_flags(as.numeric(.data$mfaz), "zscores"),
-          na.rm = TRUE
-        )
-      ),
-      muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz)
-    )
-  }
+  ## Apply grouping as needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+
+  ## Rate standard deviation and set MUAC analysis path ----
+  x <- dplyr::summarise(
+    .data = df,
+    std_wfhz = rate_std(stats::sd(remove_flags(as.numeric(.data$wfhz), "zscores"), na.rm = TRUE)),
+    age_ratio = rate_agesex_ratio(mw_stattest_ageratio(.data$age, .expectedP = 0.66)$p),
+    std_mfaz = rate_std(stats::sd(remove_flags(as.numeric(.data$mfaz), "zscores"), na.rm = TRUE)),
+    muac_analysis_path = set_analysis_path(.data$age_ratio, .data$std_mfaz),
+    .groups = "drop"
+  )
 
   ## Iterate over data.frame to compute prevalence according to the SD ----
   for (i in seq_len(nrow(x))) {
-    if (!quo_is_null(.by)) {
-      area <- dplyr::pull(x, !!.by)[i]
-      data_subset <- dplyr::filter(df, !!sym(quo_name(.by)) == !!area)
+    if (length(.by) > 0) {
+      vals <- purrr::map(.by, ~ dplyr::pull(x, !!.x)[i])
+      exprs <- purrr::map2(.by, vals, ~ rlang::expr(!!rlang::get_expr(.x) == !!.y))
+      data_subset <- dplyr::filter(df, !!!exprs)
     } else {
       data_subset <- df
     }
@@ -233,18 +175,18 @@ mw_estimate_prevalence_combined <- function(df,
         df = data_subset,
         wt = {{ wt }},
         edema = {{ edema }},
-        .by = !!.by
+        !!!.by
       )
     } else {
       ## Add NA ----
-      if (!quo_is_null(.by)) {
-        output <- dplyr::summarise(
-          .data = data_subset,
-          cgam_p = NA_real_,
-          csam_p = NA_real_,
-          cmam_p = NA_real_,
-          .by = !!.by
-        )
+      if (length(.by) > 0) {
+        output <- data_subset |>
+          dplyr::group_by(!!!.by) |>
+          dplyr::summarise(
+            cgam_p = NA_real_,
+            csam_p = NA_real_,
+            cmam_p = NA_real_
+          )
       } else {
         ## Add NA ----
         output <- tibble::tibble(
@@ -256,17 +198,16 @@ mw_estimate_prevalence_combined <- function(df,
     }
     results[[i]] <- output
   }
-  ### Ensure that all categories in `.by` get added to the tibble ----
-  if (!quo_is_null(.by)) {
-    results <- dplyr::bind_rows(results) |>
-      dplyr::relocate(.data$cgam_p, .after = .data$cgam_n) |>
-      dplyr::relocate(.data$csam_p, .after = .data$csam_n) |>
-      dplyr::relocate(.data$cmam_p, .after = .data$cmam_n)
-  } else {
-    ## Ungrouped results
-    results <- dplyr::bind_rows(results)
-  }
 
-  ## Return results ----
-  results
+  ### Relocate variables ----
+  results <- dplyr::bind_rows(results)
+  .df <- if (any(names(results) %in% c("gam_n"))) {
+    results |>
+      dplyr::relocate(.data$gam_p, .after = .data$gam_n) |>
+      dplyr::relocate(.data$sam_p, .after = .data$sam_n) |>
+      dplyr::relocate(.data$mam_p, .after = .data$mam_n)
+  } else {
+    results
+  }
+  .df
 }
