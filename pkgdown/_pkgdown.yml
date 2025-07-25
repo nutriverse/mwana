@@ -3,12 +3,12 @@ title: mwana
 url: https://nutriverse.io/mwana/
 
 development:
-  mode: auto
+  mode: release
 
 template:
   bootstrap: 5
   theme: breeze-light
-  ganalytics: G-94YZ36XGLH
+  ganalytics: "G-94YZ36XGLH"
   bslib:
     bootswatch: pulse
     pkgdown-nav-height: 100px
