@@ -3,7 +3,7 @@ title: mwana
 url: https://nutriverse.io/mwana/
 
 development:
-  mode: release
+  mode: devel
 
 template:
   bootstrap: 5
