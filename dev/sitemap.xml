@@ -9,6 +9,7 @@
 <url><loc>https://nutriverse.io/mwana/dev/authors.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/index.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/news/index.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/dev/reference/age_ratio.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/anthro.01.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/anthro.02.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/anthro.03.html</loc></url>
@@ -18,10 +19,10 @@
 <url><loc>https://nutriverse.io/mwana/dev/reference/index.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mfaz.01.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mfaz.02.html</loc></url>
+<url><loc>https://nutriverse.io/mwana/dev/reference/muac-screening.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_check_ipcamn_ssreq.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_estimate_prevalence_combined.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_estimate_prevalence_mfaz.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/dev/reference/mw_estimate_prevalence_screening.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_estimate_prevalence_wfhz.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_neat_output_mfaz.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_neat_output_muac.html</loc></url>
@@ -29,7 +30,6 @@
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_plausibility_check_mfaz.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_plausibility_check_muac.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_plausibility_check_wfhz.html</loc></url>
-<url><loc>https://nutriverse.io/mwana/dev/reference/mw_stattest_ageratio.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_wrangle_age.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_wrangle_muac.html</loc></url>
 <url><loc>https://nutriverse.io/mwana/dev/reference/mw_wrangle_wfhz.html</loc></url>
