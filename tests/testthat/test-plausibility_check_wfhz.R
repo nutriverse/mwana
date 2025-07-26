@@ -106,15 +106,14 @@ testthat::test_that(
         height = height,
         .recode_sex = TRUE
       ) |>
-      group_by(area) |>
       mw_plausibility_check_wfhz(
         flags = flag_wfhz,
         sex = sex,
         age = age,
         weight = weight,
-        height = height
+        height = height, 
+        area
       ) |>
-      group_by(area) |>
       mw_neat_output_wfhz()
 
     ## Tests ----
@@ -122,7 +121,7 @@ testthat::test_that(
     testthat::expect_equal(ncol(quality), 20)
     testthat::expect_equal(nrow(quality), 2)
     testthat::expect_true(
-      all(c("Group", "Total children", "Flagged data (%)",
+      all(c(tools::toTitleCase(dplyr::group_vars(quality)), "Total children", "Flagged data (%)",
             "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
             "Age ratio (p)", "Class. of age ratio", "DPS weight (#)",
             "Class. DPS weight", "DPS height (#)", "Class. DPS height",
@@ -135,4 +134,3 @@ testthat::test_that(
     )
   }
 )
-

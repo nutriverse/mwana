@@ -1,21 +1,18 @@
 ---
 title: "Estimating the prevalence of wasting"
 author: Tomás Zaba
+output: rmarkdown::html_vignette
 knitr:
   opts_chunk: 
     collapse: true
     comment: "#>"
 vignette: >
   %\VignetteIndexEntry{Estimating the prevalence of wasting}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
-#| label: load_library
-#| echo: false
-#| message: false
-
+```{r load_library, echo = FALSE, message = FALSE}
 library(mwana)
 library(dplyr)
 ```
@@ -48,18 +45,11 @@ To estimate the prevalence of wasting based on WFHZ we use the `mw_estimate_prev
 
 As usual, we start off by inspecting our data set:
 
-```{r}
-#| label: inspect_anthro.02
-#| echo: true
-#| eval: false
-
+```{r inspect_anthro.02, echo = TRUE, eval = FALSE}
 tail(anthro.02)
 ```
 
-```{r}
-#| label: view_anthro.02
-#| echo: false
-
+```{r view_anthro.02, echo = FALSE}
 tail(anthro.02)
 ```
 
@@ -68,89 +58,64 @@ We can see that the data set contains the required variables for a WFHZ prevalen
 #### Estimation of unweighted prevalence 
 
 To achieve this we do: 
-```{r}
-#| label: unwt_wast_wfhz
-#| echo: true
-#| eval: false
-
+```{r unwt_wast_wfhz, echo = TRUE, eval = FALSE}
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
-    edema = edema,
-    .by = NULL
+    edema = edema
   )
 ```
 
 This will return: 
-```{r}
-#| label: view_unwt_wast_wfhz
-#| echo: false
-
+```{r view_unwt_wast_wfhz, echo = FALSE}
 mw_estimate_prevalence_wfhz(
   df = anthro.02,
   wt = NULL,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 ```
 
 If for some reason the variable edema is not available in the data set, or it's there but not plausible, we can exclude it from the analysis by setting the argument `edema` to `NULL`:
 
-```{r}
-#| label: unwt_wast_wfhz_noedema
-#| echo: true
-#| eval: false
-
+```{r unwt_wast_wfhz_noedema, echo = TRUE, eval = FALSE}
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
-    edema = NULL, # Setting edema to NULL
-    .by = NULL
+    edema = NULL # Setting edema to NULL
   )
 ```
 
 And we get: 
 
-```{r}
-#| label: view_unwt_wast_wfhz_noedema
-#| echo: false
-
+```{r view_unwt_wast_wfhz_noedema, echo = FALSE}
 mw_estimate_prevalence_wfhz(
   df = anthro.02,
   wt = NULL,
-  edema = NULL,
-  .by = NULL
+  edema = NULL
 )
 ```
 
 If we inspect the `gam_n` and `gam_p` columns of this output table and the previous, we notice differences in the numbers. This occurs because edema cases were excluded in the second implementation. Note that you will observed a change if there are positive cases of edema in the data set; otherwise, setting `edema = NULL` will have no effect whatsoever. 
 
-The above output summary does not show results by province. We can control that using the `.by` argument. In the above examples, it was set to `NULL`; now let's pass the name of the column containing the locations where the data was collected. In our case, the column is `province`: 
+The above output summary does not show results by province. We can control this by supplying the variable or set of variables containing the locations where the data was collected, or any other category (such as teams, sex, etc.) after edema. In our case, we will use the column `province`: 
 
-```{r}
-#| label: unwt_wast_wfhz_province
-#| echo: true
-#| eval: false
-
+```{r unwt_wast_wfhz_province, echo = TRUE, eval = FALSE}
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = province # province is the variable's name holding data on where the survey was conducted.
+    province # province is the variable's name holding data on where the survey was conducted.
   )
 ```
 
 And _voila_ : 
 
-```{r}
-#| label: view_unwt_wast_wfhz_province
-#| echo: false
-
+```{r view_unwt_wast_wfhz_province, echo = FALSE}
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -160,30 +125,23 @@ A table with two rows is returned with each province's statistics.
 
 To get the weighted prevalence, we make the use of the `wt` argument. We pass to it the column name containing the final survey weights. In our case, the column name is `wtfactor`:
 
-```{r}
-#| label: wt_wasting_wfhz
-#| echo: true
-#| eval: false
-
+```{r wt_wasting_wfhz, echo = TRUE, eval = FALSE}
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = wtfactor, # Passing the wtfactor to wt
     edema = edema,
-    .by = province
+    province
   )
 ```
 
 And you get: 
 
-```{r}
-#| label: view_wt_wasting_wfhz
-#| echo: false
-
+```{r view_wt_wasting_wfhz, echo = FALSE}
 anthro.02 |>
   mw_estimate_prevalence_wfhz(
     wt = wtfactor,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -197,20 +155,13 @@ Under the hood, before starting the prevalence estimation, the function first ch
 
 Let's inspect our data set:
 
-```{r}
-#| label: anthro.3
-#| echo: false
-
+```{r anthro.3, echo = FALSE}
 head(anthro.03)
 ```
 
 Now let's apply the prevalence function. This is data is not wrangled, so we will have to wrangle it before passing to the prevalence function: 
 
-```{r}
-#| label: anthro.3_prev
-#| echo: true
-#| eval: false
-
+```{r anthro.3_prev, echo = TRUE, eval = FALSE}
 anthro.03 |>
   mw_wrangle_wfhz(
     sex = sex,
@@ -221,16 +172,13 @@ anthro.03 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = district
+    district
   )
 ```
 
 The returned output will be: 
 
-```{r}
-#| label: view_anthro.3_prev
-#| echo: false
-
+```{r view_anthro.3_prev, echo = FALSE}
 anthro.03 |>
   mw_wrangle_wfhz(
     sex = sex,
@@ -241,7 +189,7 @@ anthro.03 |>
   mw_estimate_prevalence_wfhz(
     wt = NULL,
     edema = edema,
-    .by = district
+    district
   )
 ```
 
@@ -276,10 +224,7 @@ Fundamentally, the function performs the standard deviation and age ratio tests,
 To demonstrate this we will use the `anthro.04` data set. 
 
 As usual, let's first inspect it: 
-```{r}
-#| label: anthro.04
-#| echo: false
-
+```{r anthro.04, echo = FALSE}
 tail(anthro.04)
 ```
 
@@ -289,30 +234,23 @@ You see that this data has already been wrangled, so we will go straight to the 
 As in ENA Software, make sure you run the plausibility check before you call the prevalence function. This is good to know about the acceptability of your data. If we do that with `anthro.04` we will see which province has issues, hence what we should be expecting to see in below demonstrations based on the conditionals stated above.
 :::
 
-```{r}
-#| label: prev_muac
-#| echo: true
-#| eval: false
-
+```{r prev_muac, echo = TRUE, eval = FALSE}
 anthro.04 |>
   mw_estimate_prevalence_muac(
     wt = NULL,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
 This will return: 
 
-```{r}
-#| label: view_prev_muac
-#| echo: false
-
+```{r view_prev_muac, echo = FALSE}
 anthro.04 |>
   mw_estimate_prevalence_muac(
     wt = NULL,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -321,24 +259,16 @@ We see that in Province 1, all columns are filled with numbers; in Province 2, s
 Alternatively, we can choose to apply the function that calculates the age-weighted prevalence estimates inside `mw_estimate_prevalence_muac()` directly on to our data set. This can be done by calling the `mw_estimate_smart_age_wt()` function. It worth noting that although possible, we recommend to use the main function. This is simply due the fact that if we decide to use the function independently, then we must, before calling it, check the acceptability of the standard deviation of MFAZ and of the age ratio test, and then evaluate if the conditions that fits the use `mw_estimate_smart_age_wt()` are there. We would have to do that ourselves. This introduces some kind of cumbersomeness in the workflow, and along with that, a risk of picking a wrong analysis workflow.
 
 Nonetheless, if for any reason we decide to go for it anyway, then we would apply the function as demonstrated below. We will continue using the `anthro.04` data set. For this demonstration, we will just pull out the data set from `Province 2` where we already know that the conditions to apply `mw_estimate_smart_age_wt()` are met, and then we will pipe it in to the function:
-```{r}
-#| label: smart_wt
-#| echo: true
-#| eval: false
-
+```{r smart-wt, echo = TRUE, eval = FALSE}
 anthro.04 |>
   subset(province == "Province 2") |>
   mw_estimate_smart_age_wt(
-    edema = edema,
-    .by = NULL
+    edema = edema
   )
 ```
 
 This returns the following: 
-```{r}
-#| label: smart_wt_view
-#| echo: false
-
+```{r smart-wt-view, echo = FALSE}
 anthro.04 |>
   subset(province == "Province 2") |>
   mw_estimate_smart_age_wt()
@@ -350,11 +280,7 @@ For this we go back `anthro.02` data set.
 
 We approach this task as follows: 
 
-```{r}
-#| label: wt_muac_prev
-#| echo: true
-#| eval: false
-
+```{r wt_muac_prev, echo = TRUE, eval = FALSE}
 ## Load library ----
 library(dplyr)
 
@@ -370,7 +296,7 @@ anthro.02 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -378,17 +304,13 @@ anthro.02 |>
   mw_estimate_prevalence_muac(
     wt = wtfactor,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
 This will return: 
 
-```{r}
-#| label: view_wt_muac_prev
-#| echo: false
-#| message: false
-
+```{r view_wt_muac_prev, echo = FALSE, message = FALSE}
 anthro.02 |>
   mw_wrangle_age(
     age = age,
@@ -400,7 +322,7 @@ anthro.02 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -408,7 +330,7 @@ anthro.02 |>
   mw_estimate_prevalence_muac(
     wt = wtfactor,
     edema = edema,
-    .by = province
+    province
   )
 ```
 
@@ -416,37 +338,72 @@ anthro.02 |>
 You may have noticed that in the above code block, we called the `recode_muac()` function inside `mutate()`. This is because after you use `mw_wrangle_muac()`, it puts the MUAC variable in centimeters. The `mw_estimate_prevalence_muac()` function was defined to accept MUAC in millimeters. Therefore, it must be converted to millimeters. 
 :::
 
-#### Estimation for non survey data
+#### Estimation for non-survey data
 
-Thus far, the demonstration has been around survey data. However, it is also common in day-to-day practice to come across non survey data to analyse. Non survey data can be screenings or any other 
-kind of community-based surveillance data. With this kind of data, the analysis workflow usually consists in a simple estimation of the point prevalence and the counts of the positive cases, without necessarily estimating the uncertainty. `mwana` provides a handy function for this task: `mw_estimate_prevalence_screening()`. Under the hood, this function works exactly the same way as `mw_estimate_prevalence_muac()`. The only difference is that it was designed to deal with non survey data. 
+Thus far, the demonstration has been around survey data. However, it is also common in day-to-day practice to come across non-survey data to analyse. Non-survey data can be screenings or any other 
+kind of community-based surveillance data. With this kind of data, the analysis workflow usually consists in a simple estimation of the point prevalence and the counts of the positive cases, without necessarily estimating the uncertainty. `mwana` provides two handy functions for this task: `mw_estimate_prevalence_screening()` and `mw_estimate_prevalence_screening2()`.  
 
-To demonstrate its usage, we will use the `anthro.04` data set.
-```{r}
-#| label: non-survey
-#| echo: true
-#| eval: false
+Under the hood, the former function works the same way as `mw_estimate_prevalence_muac()`. However, it was specifically designed to handle non-survey data. The latter function is intended for cases where a child's age is provided in categorical form in its turn, is used for cases in which the child's age is given in age categories ("6-23" and "24-59" months) rather than in a continuous form (age in months). In such cases, outliers are identified and excluded from the prevalence analysis using raw MUAC values, as MFAZ cannot be computed when age in months is missing.
 
-anthro.04 |> 
+The `anthro.04` dataset will be used to illustrate the application of these functions.
+```{r non-survey, echo = TRUE, eval = FALSE}
+anthro.04 |>
   mw_estimate_prevalence_screening(
-    muac = muac, 
-    edema = edema, 
-    .by = province
+    muac = muac,
+    edema = edema,
+    province
   )
 ```
 
 The returned output is: 
-```{r}
-#| label: non-survey-view
-#| echo: false
-
-anthro.04 |> 
+```{r non-survey-view, echo = FALSE}
+anthro.04 |>
   mw_estimate_prevalence_screening(
-    muac = muac, 
-    edema = edema, 
-    .by = province
+    muac = muac,
+    edema = edema,
+    province
   )
 ```
+
+The `mw_estimate_prevalence_screening2()` function is applied as demonstrated below. In this example, the input data contains age in months rather than in categories. To meet the function’s requirements, we convert the age variable into two categories and store the result in a new `age_cat` variable.
+
+```{r non-survey2, echo = TRUE, eval = FALSE}
+anthro.04 |>
+  mutate(
+    age_cat = ifelse(age < 24, "6-23", "24-59") 
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    .recode_sex = FALSE,
+    muac = muac
+  ) |>
+  mw_estimate_prevalence_screening2(
+    age_cat = age_cat,
+    muac = muac,
+    edema = edema,
+    province
+  )
+```
+
+This will return: 
+```{r non-survey-view2, echo = TRUE, eval = FALSE}
+anthro.04 |>
+  mutate(
+    age_cat = ifelse(age < 24, "6-23", "24-59")
+  ) |>
+  mw_wrangle_muac(
+    sex = sex,
+    .recode_sex = FALSE,
+    muac = muac
+  ) |>
+  mw_estimate_prevalence_screening2(
+    age_cat = age_cat,
+    muac = muac,
+    edema = edema,
+    province
+  )
+```
+
 
 ### Estimation of the combined prevalence of wasting
 
@@ -455,21 +412,14 @@ The estimation of the combined prevalence of wasting is a task attributed to the
 To demonstrate it's implementation we will use the `anthro.01` data set.
 
 Let's inspect the data:
-```{r}
-#| label: view_anthro.01
-#| echo: false
-
+```{r view_anthro.01, echo = FALSE}
 head(anthro.01)
 ```
 
 #### Data wrangling
 
 Fundamentally, it combines the data wrangling workflow of WFHZ and MUAC: 
-```{r}
-#| label: combined_wrangling
-#| echo: true
-#| eval: false
-
+```{r combined_wrangling, echo = TRUE, eval = FALSE}
 ## Load library ----
 library(dplyr)
 
@@ -487,7 +437,7 @@ anthro.01 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -502,11 +452,7 @@ anthro.01 |>
 
 This is to get the `wfhz` and `flag_wfhz` the `mfaz` and `flag_mfaz` added to the data set. In the output below, we have just selected these columns: 
 
-```{r}
-#| label: view_combined_wrangling
-#| echo: false
-#| message: false
-
+```{r view_combined_wrangling, echo = FALSE, message = FALSE}
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -520,7 +466,7 @@ anthro.01 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -557,11 +503,7 @@ Combined flags consists of defining as flag any observation that is flagged in e
 
 Now that we understand what happens under the hood, we can now proceed to implement it: 
 
-```{r}
-#| label: cwasting
-#| echo: true
-#| eval: false
-
+```{r cwasting, echo = TRUE, eval = FALSE}
 ## Load library ----
 library(dplyr)
 
@@ -578,8 +520,8 @@ anthro.01 |>
     .recode_sex = TRUE,
     muac = muac,
     .recode_muac = TRUE,
-    unit = "cm",
-    .to = "age"
+    .to = "cm",
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -593,16 +535,13 @@ anthro.01 |>
   mw_estimate_prevalence_combined(
     wt = NULL,
     edema = edema,
-    .by = area
+    area
   )
 ```
 
 We get this: 
 
-```{r}
-#| label: view_cwasting
-#| echo: false
-
+```{r view_cwasting, echo = FALSE}
 anthro.01 |>
   mw_wrangle_age(
     dos = dos,
@@ -616,7 +555,7 @@ anthro.01 |>
     muac = muac,
     .recode_muac = TRUE,
     .to = "cm",
-    age = "age"
+    age = age
   ) |>
   mutate(
     muac = recode_muac(muac, .to = "mm")
@@ -630,7 +569,7 @@ anthro.01 |>
   mw_estimate_prevalence_combined(
     wt = NULL,
     edema = edema,
-    .by = area
+    area
   )
 ```
 

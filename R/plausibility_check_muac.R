@@ -2,12 +2,12 @@
 #' Check the plausibility and acceptability of raw MUAC data
 #'
 #' @description
-#' Check the overall plausibility and acceptability of raw MUAC data 
-#' through a structured test suite encompassing checks for sampling and 
-#' measurement-related biases in the dataset. The test suite in this function 
+#' Check the overall plausibility and acceptability of raw MUAC data
+#' through a structured test suite encompassing checks for sampling and
+#' measurement-related biases in the dataset. The test suite in this function
 #' follows the recommendation made by Bilukha & Kianian (2023).
 #'
-#' @param df A `data.frame` object to check. It must have been wrangled using 
+#' @param df A `data.frame` object to check. It must have been wrangled using
 #' the [mw_wrangle_muac()] function.
 #'
 #' @param sex A `numeric` vector for child's sex with 1 = males and 2 = females.
@@ -16,8 +16,15 @@
 #'
 #' @param flags A `numeric` vector of flagged records.
 #'
-#' @returns A single row summary `tibble` with 9 columns containing the 
-#' plausibility check results and their respective acceptability ratings.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
+#'
+#' @returns A single-row summary `tibble` with columns containing the plausibility
+#' check results. If ungrouped analysis, the output will consist of nine columns
+#' and one row; otherwise, the number of columns will vary according to the number
+#' vectors specified, and the number of rows to the categories within the grouping
+#' variables.
 #'
 #' @details
 #' Cut-off points used for the percent of flagged records:
@@ -53,12 +60,19 @@
 #'   df = df_muac,
 #'   flags = flag_muac,
 #'   sex = sex,
-#'   muac = muac
+#'   muac = muac,
+#'   area, team # group analysis by survey area and by survey team
 #' )
 #'
 #' @export
 #'
-mw_plausibility_check_muac <- function(df, sex, muac, flags) {
+mw_plausibility_check_muac <- function(df, sex, muac, flags, ...) {
+  ## Difuse argument `.by` ----
+  by <- rlang::enquos(...)
+
+  ## Apply grouping if needed ----
+  if (length(by) > 0) df <- dplyr::group_by(df, !!!by)
+
   ## Summarise statistics  ----
   df <- dplyr::summarise(
     .data = df,
@@ -67,15 +81,11 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
     flagged_class = rate_propof_flagged(.data$flagged, .in = "raw_muac"),
     sex_ratio = nipnTK::sexRatioTest({{ sex }}, codes = c(1, 2))[["p"]],
     sex_ratio_class = rate_agesex_ratio(.data$sex_ratio),
-    dps = nipnTK::digitPreference(
-      {{ muac }}, digits = 0, values = 0:9
-    )[["dps"]],
-    dps_class = nipnTK::digitPreference(
-      {{ muac }}, digits = 0, values = 0:9
-    )[["dpsClass"]],
+    dps = nipnTK::digitPreference({{ muac }}, digits = 0, values = 0:9)[["dps"]],
+    dps_class = nipnTK::digitPreference({{ muac }}, digits = 0, values = 0:9)[["dpsClass"]],
     sd = stats::sd(remove_flags({{ muac }}, .from = "raw_muac"), na.rm = TRUE),
     sd_class = rate_std(.data$sd, .of = "raw_muac"),
-    .groups = "drop"
+    .groups = "keep"
   )
 
   ## Return data.frame ----
@@ -88,14 +98,14 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
 #' Clean and format the output tibble returned from the MUAC plausibility check
 #'
 #' @description
-#' Converts scientific notations to standard notations, rounds off values, and 
+#' Converts scientific notations to standard notations, rounds off values, and
 #' renames columns to meaningful names.
 #'
-#' @param df A `tibble` object returned by the [mw_plausibility_check_muac()] 
+#' @param df A `tibble` object returned by the [mw_plausibility_check_muac()]
 #' function containing the summarized results to be formatted.
 #'
 #' @returns
-#' A `data.frame` object of the same length and width as `df`, with column names 
+#' A `data.frame` object of the same length and width as `df`, with column names
 #' and values formatted for clarity and readability.
 #'
 #' @examples
@@ -125,8 +135,7 @@ mw_plausibility_check_muac <- function(df, sex, muac, flags) {
 #' @export
 #'
 mw_neat_output_muac <- function(df) {
-  ## Check if `df` is grouped ----
-  is_grouped <- is_grouped_df(df)
+  ## Difuse argument ----
 
   ## Format data frame ----
   df <- dplyr::mutate(
@@ -141,13 +150,13 @@ mw_neat_output_muac <- function(df) {
     ## Rename columns ----
     stats::setNames(
       c(
-        if (is_grouped) "Group" else NULL,
-        "Total children", "Flagged data (%)", "Class. of flagged data", 
-        "Sex ratio (p)", "Class. of sex ratio", "DPS(#)", "Class. of DPS", 
+        if (length(dplyr::group_vars(df)) == 0) NULL else tools::toTitleCase(dplyr::group_vars(df)),
+        "Total children", "Flagged data (%)", "Class. of flagged data",
+        "Sex ratio (p)", "Class. of sex ratio", "DPS(#)", "Class. of DPS",
         "Standard Dev* (#)", "Class. of standard dev"
       )
-  )
-  
+    )
+
   ## Return data.frame ----
   df
 }

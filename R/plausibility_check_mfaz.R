@@ -3,14 +3,14 @@
 #'
 #' @description
 #' Check the overall plausibility and acceptability of MFAZ data through a
-#' structured test suite encompassing checks for sampling and 
-#' measurement-related biases in the dataset. This test suite follows the 
+#' structured test suite encompassing checks for sampling and
+#' measurement-related biases in the dataset. This test suite follows the
 #' recommendation made by Bilukha & Kianian (2023) on the plausibility of
 #' constructing a comprehensive plausibility check for MUAC data similar to
 #' weight-for-height z-score to evaluate its acceptability when age values are
 #' available in the dataset.
 #'
-#' The function works on a `data.frame` returned from wrangling functions for 
+#' The function works on a `data.frame` returned from wrangling functions for
 #' age and for MUAC-for-age z-score data available from this package.
 #'
 #' @param df A `data.frame` object to check.
@@ -23,13 +23,21 @@
 #'
 #' @param flags A `numeric` vector of flagged records.
 #'
-#' @returns A single row summary `tibble` with 17 columns containing the 
-#' plausibility check results and their respective acceptability ratings.
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
+#'
+#' @returns A single-row summary `tibble` with columns containing the plausibility
+#'  check results. If ungrouped analysis, the output will consist of 17 columns
+#' and one row; otherwise, the number of columns will vary according to the number
+#' vectors specified, and the number of rows to the categories within the grouping
+#' variables.
+#'
 #'
 #' @details
-#' Whilst the function uses the same checks and criteria as those for 
-#' weight-for-height z-scores in the SMART plausibility check, the percent of 
-#' flagged records is evaluated using different cut-off points, with a maximum 
+#' Whilst the function uses the same checks and criteria as those for
+#' weight-for-height z-scores in the SMART plausibility check, the percent of
+#' flagged records is evaluated using different cut-off points, with a maximum
 #' acceptability of 2.0% as shown below:
 #'
 #' |**Excellent** | **Good** | **Acceptable** | **Problematic** |
@@ -75,11 +83,20 @@
 #'   flags = flag_mfaz,
 #'   sex = sex,
 #'   muac = muac,
-#'   age = age
+#'   age = age,
+#'   area, team
 #' )
 #'
 #' @export
-mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
+#'
+mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags, ...) {
+  ## Difuse argument `.by` ----
+  .by <- rlang::enquos(...)
+
+
+  ## Apply grouping if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+
   ## Summarise statistics  ----
   df <- dplyr::summarise(
     .data = df,
@@ -92,7 +109,8 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
     age_ratio_class = rate_agesex_ratio(.data$age_ratio),
     dps = nipnTK::digitPreference({{ muac }}, digits = 1, values = 0:9)$dps,
     dps_class = nipnTK::digitPreference(
-      {{ muac }}, digits = 1, values = 0:9
+      {{ muac }},
+      digits = 1, values = 0:9
     )$dpsClass,
     sd = stats::sd(remove_flags(.data$mfaz, .from = "zscores"), na.rm = TRUE),
     sd_class = rate_std(.data$sd, .of = "zscores"),
@@ -111,7 +129,7 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
       .for = "mfaz"
     ),
     quality_class = rate_overall_quality(.data$quality_score),
-    .groups = "drop"
+    .groups = "keep"
   )
 
   ## Return data.frame ----
@@ -119,19 +137,20 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 }
 
 
+
 #'
 #' Clean and format the output tibble returned from the MUAC-for-age z-score
 #' plausibility check
 #'
 #' @description
-#' Converts scientific notations to standard notations, rounds off values, and 
+#' Converts scientific notations to standard notations, rounds off values, and
 #' renames columns to meaningful names.
 #'
 #' @param df An `data.frame` object returned by [mw_plausibility_check_mfaz()]
 #' containing the summarized results to be formatted.
 #'
 #' @returns
-#' A `data.frame` object of the same length and width as `df`, with column 
+#' A `data.frame` object of the same length and width as `df`, with column
 #' names and values formatted as appropriate.
 #'
 #' @examples
@@ -161,7 +180,8 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #'   flags = flag_mfaz,
 #'   sex = sex,
 #'   muac = muac,
-#'   age = age
+#'   age = age,
+#'   area
 #' )
 #'
 #' ## Now neat the output table ----
@@ -170,10 +190,6 @@ mw_plausibility_check_mfaz <- function(df, sex, muac, age, flags) {
 #' @export
 #'
 mw_neat_output_mfaz <- function(df) {
-  ## Check if `df` is grouped ----
-  is_grouped <- dplyr::is_grouped_df(df)
-
-  ## Format data frame ----
   df <- dplyr::mutate(
     .data = df,
     flagged = scales::label_percent(
@@ -189,7 +205,7 @@ mw_neat_output_mfaz <- function(df) {
     ## Rename columns ----
     stats::setNames(
       c(
-        if (is_grouped) "Group" else NULL,
+        if (length(dplyr::group_vars(df)) == 0) NULL else tools::toTitleCase(dplyr::group_vars(df)),
         "Total children", "Flagged data (%)",
         "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
         "Age ratio (p)", "Class. of age ratio", "DPS (#)",
@@ -198,7 +214,6 @@ mw_neat_output_mfaz <- function(df) {
         "Class. of kurtosis", "Overall score", "Overall quality"
       )
     )
-  
   ## Return data.frame ----
   df
 }

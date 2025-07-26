@@ -1,12 +1,12 @@
 #'
-#' Check the plausibility and acceptability of weight-for-height z-score (WFHZ) 
+#' Check the plausibility and acceptability of weight-for-height z-score (WFHZ)
 #' data
 #'
 #' @description
 #' Check the overall plausibility and acceptability of WFHZ data through a
-#' structured test suite encompassing checks for sampling and 
-#' measurement-related biases in the dataset. The test suite, including the 
-#' criteria and corresponding rating of acceptability, follows the standards in 
+#' structured test suite encompassing checks for sampling and
+#' measurement-related biases in the dataset. The test suite, including the
+#' criteria and corresponding rating of acceptability, follows the standards in
 #' the SMART plausibility check.
 #'
 #' The function works on a data frame returned by this package's wrangling
@@ -24,9 +24,16 @@
 #'
 #' @param flags A `numeric` vector of flagged records.
 #'
+#' @param ... A vector of class `character`, specifying the categories for which
+#' the analysis should be summarised for. Usually geographical areas. More than
+#' one vector can be specified.
+#'
 #' @returns
-#' A single row summary `tibble` with 19 columns for the plausibility check 
-#' results and their respective acceptability rates.
+#' A single-row summary `tibble` with columns containing the plausibility
+#' check results. If ungrouped analysis, the output will consist of 19 columns
+#' and one row; otherwise, the number of columns will vary according to the number
+#' vectors specified, and the number of rows to the categories within the grouping
+#' variables.
 #'
 #' @seealso [mw_plausibility_check_mfaz()] [mw_plausibility_check_muac()]
 #' [mw_wrangle_age()]
@@ -61,9 +68,9 @@
 #'   age = age,
 #'   weight = weight,
 #'   height = height,
-#'   flags = flag_wfhz
+#'   flags = flag_wfhz,
+#'   area, team
 #' )
-#'
 #'
 #' @export
 #'
@@ -73,7 +80,14 @@ mw_plausibility_check_wfhz <- function(df,
                                        age,
                                        weight,
                                        height,
-                                       flags) {
+                                       flags,
+                                       ...) {
+  ## Difuse grouping vars ----
+  .by <- rlang::enquos(...)
+
+  ## Apply grouping if needed ----
+  if (length(.by) > 0) df <- dplyr::group_by(df, !!!.by)
+
   ## Summarise statistics  ----
   df <- dplyr::summarise(
     .data = df,
@@ -106,9 +120,8 @@ mw_plausibility_check_wfhz <- function(df,
       .for = "wfhz"
     ),
     quality_class = rate_overall_quality(.data$quality_score),
-    .groups = "drop"
+    .groups = "keep"
   )
-
   ## Return data.frame ----
   df
 }
@@ -117,7 +130,7 @@ mw_plausibility_check_wfhz <- function(df,
 #' Clean and format the output tibble returned from the WFHZ plausibility check
 #'
 #' @description
-#' Converts scientific notations to standard notations, rounds off values, and 
+#' Converts scientific notations to standard notations, rounds off values, and
 #' renames columns to meaningful names.
 #'
 #' @param df An `tibble` object returned by the [mw_plausibility_check_wfhz()]
@@ -153,19 +166,16 @@ mw_plausibility_check_wfhz <- function(df,
 #'   age = age,
 #'   weight = weight,
 #'   height = height,
-#'   flags = flag_wfhz
+#'   flags = flag_wfhz,
+#'   area
 #' )
 #'
 #' ## Now neat the output table ----
 #' mw_neat_output_wfhz(df = pl)
 #'
-#'
 #' @export
 
 mw_neat_output_wfhz <- function(df) {
-  ## Check if `df` is grouped ----
-  is_grouped <- is_grouped_df(df)
-
   ## Format data frame ----
   df <- dplyr::mutate(
     .data = df,
@@ -182,19 +192,18 @@ mw_neat_output_wfhz <- function(df) {
   ) |>
     ## Rename columns ----
     stats::setNames(
-      c( 
-        if (is_grouped) "Group" else NULL,
+      c(
+        if (length(dplyr::group_vars(df)) == 0) NULL else tools::toTitleCase(dplyr::group_vars(df)),
         "Total children", "Flagged data (%)", "Class. of flagged data",
         "Sex ratio (p)", "Class. of sex ratio", "Age ratio (p)",
         "Class. of age ratio", "DPS weight (#)", "Class. DPS weight",
         "DPS height (#)", "Class. DPS height", "Standard Dev* (#)",
         "Class. of standard dev", "Skewness* (#)", "Class. of skewness",
-        "Kurtosis* (#)", "Class. of kurtosis", "Overall score", 
+        "Kurtosis* (#)", "Class. of kurtosis", "Overall score",
         "Overall quality"
       )
-  )
-  
+    )
+
   ## Return data.frame ----
   df
 }
-

@@ -150,7 +150,7 @@ testthat::test_that(
       mw_estimate_prevalence_combined(
         edema = edema,
         wt = wtfactor,
-        .by = province
+        province
       )
 
     ### Expected results for Nampula province ----
@@ -177,20 +177,20 @@ testthat::test_that(
     sum_wt <- 869504
 
     ### Tests ----
-    testthat::expect_equal(p[[2]][2], n_cgam)
-    testthat::expect_equal(round(p[[3]][2] * 100, 1), p_cgam)
-    testthat::expect_equal(round(p[[4]][2] * 100, 1), p_cgam_lci)
-    testthat::expect_equal(round(p[[5]][2] * 100, 1), p_cgam_uci)
-    testthat::expect_equal(round(p[[6]][2], 2), deff)
-    testthat::expect_equal(p[[7]][2], n_csam)
-    testthat::expect_equal(round(p[[8]][2] * 100, 1), p_csam)
-    testthat::expect_equal(round(p[[9]][2] * 100, 1), p_csam_lci)
-    testthat::expect_equal(round(p[[10]][2] * 100, 1), p_csam_uci)
-    testthat::expect_equal(p[[12]][2], n_cmam)
-    testthat::expect_equal(round(p[[13]][2] * 100, 1), p_cmam)
-    testthat::expect_equal(round(p[[14]][2] * 100, 1), p_cmam_lci)
-    testthat::expect_equal(round(p[[15]][2] * 100, 1), p_cmam_uci)
-    testthat::expect_equal(round(p[[17]][2]), sum_wt)
+    testthat::expect_equal(p[[2]][1], n_cgam)
+    testthat::expect_equal(round(p[[3]][1] * 100, 1), p_cgam)
+    testthat::expect_equal(round(p[[4]][1] * 100, 1), p_cgam_lci)
+    testthat::expect_equal(round(p[[5]][1] * 100, 1), p_cgam_uci)
+    testthat::expect_equal(round(p[[6]][1], 2), deff)
+    testthat::expect_equal(p[[7]][1], n_csam)
+    testthat::expect_equal(round(p[[8]][1] * 100, 1), p_csam)
+    testthat::expect_equal(round(p[[9]][1] * 100, 1), p_csam_lci)
+    testthat::expect_equal(round(p[[10]][1] * 100, 1), p_csam_uci)
+    testthat::expect_equal(p[[12]][1], n_cmam)
+    testthat::expect_equal(round(p[[13]][1] * 100, 1), p_cmam)
+    testthat::expect_equal(round(p[[14]][1] * 100, 1), p_cmam_lci)
+    testthat::expect_equal(round(p[[15]][1] * 100, 1), p_cmam_uci)
+    testthat::expect_equal(round(p[[17]][1]), sum_wt)
   }
 )
 
@@ -222,7 +222,8 @@ testthat::test_that(
       ) |>
       mw_estimate_prevalence_combined(
         edema = edema,
-        .by = district
+        wt = NULL,
+        district
       )
 
     ### Subset a district where a normal analysis should be computed ----
@@ -267,8 +268,7 @@ testthat::test_that(
       ) |>
       subset(district == "Maravia") |>
       mw_estimate_prevalence_combined(
-        edema = edema,
-        .by = NULL
+        edema = edema
       )
 
     ### Tests ----

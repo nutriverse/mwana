@@ -46,7 +46,8 @@ pl <- mw_plausibility_check_mfaz(
   flags = flag_mfaz,
   sex = sex,
   muac = muac,
-  age = age
+  age = age,
+  area
 )
 
 ## Now neat the output table ----

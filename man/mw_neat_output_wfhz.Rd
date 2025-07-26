@@ -44,11 +44,11 @@ pl <- mw_plausibility_check_wfhz(
   age = age,
   weight = weight,
   height = height,
-  flags = flag_wfhz
+  flags = flag_wfhz,
+  area
 )
 
 ## Now neat the output table ----
 mw_neat_output_wfhz(df = pl)
-
 
 }

@@ -3,8 +3,8 @@ bibentry(
   header   = "To cite mwana in publications use:",
   title    = "mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R",
   author   = c(person("Tomás Zaba"), person("Ernest Guevarra")),
-  year     = 2024,
-  note     = "R package version 0.2.1",
+  year     = 2025,
+  note     = "R package version 0.2.2",
   url      = "https://nutriverse.io/mwana/",
   doi      = "10.5281/zenodo.14176624"
 )

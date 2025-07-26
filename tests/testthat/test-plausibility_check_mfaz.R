@@ -110,22 +110,21 @@ testthat::test_that(
         .recode_muac = TRUE,
         .to = "cm"
       ) |>
-      group_by(area) |>
       mw_plausibility_check_mfaz(
         flags = flag_mfaz,
         sex = sex,
         muac = muac,
-        age = age
+        age = age,
+        area, sex
       ) |>
-      group_by(area) |>
       mw_neat_output_mfaz()
 
     ## Tests ----
     testthat::expect_s3_class(quality, "tbl_df")
-    testthat::expect_equal(ncol(quality), 18)
-    testthat::expect_equal(nrow(quality), 2)
+    testthat::expect_equal(ncol(quality), 19)
+    testthat::expect_equal(nrow(quality), 4)
     testthat::expect_true(
-      all(c("Group", "Total children", "Flagged data (%)",
+      all(c(tools::toTitleCase(dplyr::group_vars(quality)), "Total children", "Flagged data (%)",
             "Class. of flagged data", "Sex ratio (p)", "Class. of sex ratio",
             "Age ratio (p)", "Class. of age ratio", "DPS (#)",
             "Class. of DPS", "Standard Dev* (#)", "Class. of standard dev",

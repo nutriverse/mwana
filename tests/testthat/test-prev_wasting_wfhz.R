@@ -7,8 +7,7 @@ testthat::test_that(
     p <- mw_estimate_prevalence_wfhz(
       df = anthro.02,
       edema = edema,
-      wt = wtfactor,
-      .by = NULL
+      wt = wtfactor
     )
 
     ### Expected results ----
@@ -60,8 +59,7 @@ testthat::test_that(
     ### Get the prevalence estimates ----
     p <- mw_estimate_prevalence_wfhz(
       df = wfhz.01,
-      edema = edema,
-      .by = NULL
+      edema = edema
     )
 
     ### Expected results ----
@@ -107,8 +105,7 @@ testthat::test_that(
     ### Get the prevalence estimates ----
     p <- mw_estimate_prevalence_wfhz(
       df = anthro.02,
-      edema = NULL,
-      .by = NULL
+      edema = NULL
     )
 
     ### Expected results ----
@@ -148,15 +145,15 @@ testthat::test_that(
 
 ## When std =! problematic & !is.null(wt) with .by = province ----
 testthat::test_that(
-  "mw_estimate_prevalence_wfhz() yields correct estimates when .by is
-    used",
+  "mw_estimate_prevalence_wfhz() yields correct estimates when grouping variables
+  are used",
   {
     ### Get the prevalence estimates ----
     p <- mw_estimate_prevalence_wfhz(
       df = anthro.02,
       edema = edema,
       wt = wtfactor,
-      .by = province
+      province
     )
 
     ### Expected results for Nampula province ----
@@ -183,20 +180,20 @@ testthat::test_that(
     sum_wt <- 878704
 
     ### Tests ----
-    testthat::expect_equal(p[[2]][2], n_gam)
-    testthat::expect_equal(round(p[[3]][2] * 100, 1), p_gam)
-    testthat::expect_equal(round(p[[4]][2] * 100, 1), p_gam_lci)
-    testthat::expect_equal(round(p[[5]][2] * 100, 1), p_gam_uci)
-    testthat::expect_equal(round(p[[6]][2], 2), deff)
-    testthat::expect_equal(p[[7]][2], n_sam)
-    testthat::expect_equal(round(p[[8]][2] * 100, 1), p_sam)
-    testthat::expect_equal(round(p[[9]][2] * 100, 1), p_sam_lci)
-    testthat::expect_equal(round(p[[10]][2] * 100, 1), p_sam_uci)
-    testthat::expect_equal(p[[12]][2], n_mam)
-    testthat::expect_equal(round(p[[13]][2] * 100, 1), p_mam)
-    testthat::expect_equal(round(p[[14]][2] * 100, 1), p_mam_lci)
-    testthat::expect_equal(round(p[[15]][2] * 100, 1), p_mam_uci)
-    testthat::expect_equal(p[[17]][2], sum_wt)
+    testthat::expect_equal(p[[2]][1], n_gam)
+    testthat::expect_equal(round(p[[3]][1] * 100, 1), p_gam)
+    testthat::expect_equal(round(p[[4]][1] * 100, 1), p_gam_lci)
+    testthat::expect_equal(round(p[[5]][1] * 100, 1), p_gam_uci)
+    testthat::expect_equal(round(p[[6]][1], 2), deff)
+    testthat::expect_equal(p[[7]][1], n_sam)
+    testthat::expect_equal(round(p[[8]][1] * 100, 1), p_sam)
+    testthat::expect_equal(round(p[[9]][1] * 100, 1), p_sam_lci)
+    testthat::expect_equal(round(p[[10]][1] * 100, 1), p_sam_uci)
+    testthat::expect_equal(p[[12]][1], n_mam)
+    testthat::expect_equal(round(p[[13]][1] * 100, 1), p_mam)
+    testthat::expect_equal(round(p[[14]][1] * 100, 1), p_mam_lci)
+    testthat::expect_equal(round(p[[15]][1] * 100, 1), p_mam_uci)
+    testthat::expect_equal(p[[17]][1], sum_wt)
   }
 )
 
@@ -216,7 +213,7 @@ testthat::test_that(
       mw_estimate_prevalence_wfhz(
         edema = edema,
         wt = NULL,
-        .by = district
+        district
       )
 
     ### Select a district where standard deviation is rated as problematic ----

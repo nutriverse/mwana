@@ -24,7 +24,7 @@ testthat::test_that(
     p <- anthro.03 |>
       mw_wrangle_wfhz(sex, weight, height, .recode_sex = TRUE) |>
       subset(district == "Metuge") |>
-      estimate_probit_prevalence(.for = "wfhz", .by = NULL)
+      estimate_probit_prevalence(.for = "wfhz")
 
     ## Tests ----
     testthat::expect_s3_class(p, class = "tbl", exact = FALSE)
@@ -42,7 +42,7 @@ testthat::test_that(
     p <- anthro.03 |>
       mw_wrangle_wfhz(sex, weight, height, .recode_sex = TRUE) |>
       subset(district == "Metuge" | district == "Maravia") |>
-      estimate_probit_prevalence(.by = district, .for = "wfhz")
+      estimate_probit_prevalence(.for = "wfhz", district)
 
     ## Tests ----
     testthat::expect_length(p, 4)
@@ -56,7 +56,7 @@ testthat::test_that(
   {
     ## Input data ----
     p <- mfaz.01 |>
-      estimate_probit_prevalence(.for = "mfaz", .by = NULL)
+      estimate_probit_prevalence(.for = "mfaz")
 
     ## Tests ----
     testthat::expect_s3_class(p, class = "tbl", exact = FALSE)

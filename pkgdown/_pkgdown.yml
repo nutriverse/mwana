@@ -3,7 +3,7 @@ title: mwana
 url: https://nutriverse.io/mwana/
 
 development:
-  mode: auto
+  mode: devel
 
 template:
   bootstrap: 5
@@ -33,7 +33,7 @@ navbar:
         href: articles/ipc_amn_check.html
     mastodon:
       icon: "fab fa-mastodon fa-lg"
-      href: https://fosstodon.org/@nutriverse
+      href: https://mastodon.social/@nutriverse
       aria-label: Mastodon
 
 home:
@@ -59,6 +59,7 @@ reference:
    - title: Statistical tests
      contents:
      - mw_stattest_ageratio
+     - mw_stattest_ageratio2
 
    - title: IPC sample size checks
      contents:
@@ -83,6 +84,7 @@ reference:
      - mw_estimate_prevalence_mfaz
      - mw_estimate_prevalence_combined
      - mw_estimate_prevalence_screening
+     - mw_estimate_prevalence_screening2
      - mw_estimate_smart_age_wt
 
    - title: Utilities

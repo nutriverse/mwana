@@ -4,7 +4,7 @@
 \alias{mw_estimate_prevalence_combined}
 \title{Estimate the prevalence of combined wasting}
 \usage{
-mw_estimate_prevalence_combined(df, wt = NULL, edema = NULL, .by = NULL)
+mw_estimate_prevalence_combined(df, wt = NULL, edema = NULL, ...)
 }
 \arguments{
 \item{df}{A \code{tibble} object produced by sequential application of the
@@ -22,9 +22,9 @@ Otherwise, a weighted analysis is implemented.}
 "y" for presence of nutritional edema and "n" for absence of nutritional
 edema. Default is NULL.}
 
-\item{.by}{A \code{character} or \code{numeric} vector of the geographical areas
-or identifiers for where the data was collected and for which the analysis
-should be summarised for.}
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
 A summary \code{tibble} for the descriptive statistics about combined
@@ -56,20 +56,18 @@ analysis.\tabular{ccc}{
 }
 }
 \examples{
-## When .by and wt are set to NULL ----
+## When wt are set to NULL ----
 mw_estimate_prevalence_combined(
   df = anthro.02,
   wt = NULL,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 
-## When wt is not set to NULL ----
+## When `wt` is not set to NULL ----
 mw_estimate_prevalence_combined(
   df = anthro.02,
   wt = wtfactor,
-  edema = edema,
-  .by = NULL
+  edema = edema
 )
 
 }

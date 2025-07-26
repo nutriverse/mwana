@@ -5,7 +5,12 @@
 \title{Check whether sample size requirements for IPC Acute Malnutrition (IPC AMN)
 analysis are met}
 \usage{
-mw_check_ipcamn_ssreq(df, cluster, .source = c("survey", "screening", "ssite"))
+mw_check_ipcamn_ssreq(
+  df,
+  cluster,
+  .source = c("survey", "screening", "ssite"),
+  ...
+)
 }
 \arguments{
 \item{df}{A \code{data.frame} object to check.}
@@ -20,10 +25,13 @@ type of mismatch.}
 representative survey data at the area of analysis; "screening" for
 screening data; "ssite" for community-based sentinel site data. Default value
 is "survey".}
+
+\item{...}{A vector of class \code{character}, specifying the categories for which
+the analysis should be summarised for. Usually geographical areas. More than
+one vector can be specified.}
 }
 \value{
-A single row summary \code{tibble} with 3 columns containing
-check results for:
+A summary \code{tibble} containing check results for:
 \itemize{
 \item \code{n_clusters} - the total number of unique clusters or
 screening or site identifiers;
@@ -41,7 +49,8 @@ each  source. This function verifies whether these requirements are met.
 mw_check_ipcamn_ssreq(
   df = anthro.01,
   cluster = cluster,
-  .source = "survey"
+  .source = "survey",
+  area
 )
 
 }
