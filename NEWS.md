@@ -3,7 +3,7 @@
 ## New features
 
 * Added new functions:
-    - `mw_stattest_ageratio2()`: Tests for statistical differences in proportions as in `[mw_stattest_ageratio()]`, but for cases where age is provided in the categories “6–23” and “24–59” months.
+    - `mw_stattest_ageratio2()`: Tests for statistical differences in proportions as in `mw_stattest_ageratio()`, but for cases where age is provided in the categories “6–23” and “24–59” months.
 
     - `mw_estimate_prevalence_screening2()`: Estimates the prevalence of acute malnutrition for non-survey data when age is given in the categories “6–23” and “24–59” months. This ensures that the age-weighting approach is applied when applicable. Outliers are excluded using raw MUAC rather than MUAC-for-age z-scores.
 
