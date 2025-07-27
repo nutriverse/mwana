@@ -9,7 +9,7 @@ type: software
 license: GPL-3.0-or-later
 title: 'mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis
   of Wasting in R'
-version: 0.2.2.9000
+version: 2.2.9000
 doi: 10.5281/zenodo.14176624
 abstract: A simple and streamlined workflow for plausibility checks and prevalence
   analysis of wasting based on the Standardized Monitoring and Assessment of Relief
@@ -23,6 +23,8 @@ authors:
 - family-names: Guevarra
   given-names: Ernest
   orcid: https://orcid.org/0000-0002-4887-4415
+- family-names: Myatt
+  given-names: Mark
 preferred-citation:
   type: manual
   title: 'mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis
@@ -30,8 +32,9 @@ preferred-citation:
   authors:
   - name: Tomás Zaba
   - name: Ernest Guevarra
-  year: '2024'
-  notes: R package version 0.2.1
+  - name: Mark Myatt
+  year: '2025'
+  notes: R package version 0.2.2
   url: https://nutriverse.io/mwana/
   doi: 10.5281/zenodo.14176624
 repository-code: https://github.com/nutriverse/mwana
@@ -86,7 +89,6 @@ references:
     orcid: https://orcid.org/0000-0003-4777-038X
   year: '2025'
   doi: 10.32614/CRAN.package.dplyr
-  version: '>= 1.1.4'
 - type: software
   title: lubridate
   abstract: 'lubridate: Make Dealing with Dates a Little Easier'
@@ -109,7 +111,7 @@ references:
     Toolkit'
   notes: Imports
   url: https://nutriverse.io/nipnTK/
-  repository: https://CRAN.R-project.org/package=nipnTK
+  repository: https://nutriverse.r-universe.dev
   authors:
   - family-names: Myatt
     given-names: Mark
@@ -168,6 +170,7 @@ references:
     given-names: Ben
   year: '2025'
   doi: 10.32614/CRAN.package.srvyr
+  version: '>= 1.3.0'
 - type: software
   title: stats
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -182,8 +185,8 @@ references:
   title: zscorer
   abstract: 'zscorer: Child Anthropometry z-Score Calculator'
   notes: Imports
-  url: https://github.com/nutriverse/zscorer
-  repository: https://CRAN.R-project.org/package=zscorer
+  url: https://nutriverse/zscorer/
+  repository: https://nutriverse.r-universe.dev
   authors:
   - family-names: Myatt
     given-names: Mark
@@ -221,6 +224,22 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2025'
+- type: software
+  title: purrr
+  abstract: 'purrr: Functional Programming Tools'
+  notes: Imports
+  url: https://purrr.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=purrr
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  year: '2025'
+  doi: 10.32614/CRAN.package.purrr
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
@@ -310,9 +329,6 @@ references:
     given-names: Jim
     email: james.hester@rstudio.com
   year: '2025'
-  identifiers:
-  - type: url
-    value: https://docs.ropensci.org/spelling/
   doi: 10.32614/CRAN.package.spelling
 - type: software
   title: testthat

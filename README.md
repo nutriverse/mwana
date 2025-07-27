@@ -175,19 +175,19 @@ citation provided by a call to `citation()` function as follows:
 citation("mwana")
 #> To cite mwana in publications use:
 #> 
-#>   Tomás Zaba, Ernest Guevarra (2024). _mwana: An Efficient Workflow for
-#>   Plausibility Checks and Prevalence Analysis of Wasting in R_.
-#>   doi:10.5281/zenodo.14176624
-#>   <https://doi.org/10.5281/zenodo.14176624>, R package version 0.2.1,
+#>   Tomás Zaba, Ernest Guevarra, Mark Myatt (2025). _mwana: An Efficient
+#>   Workflow for Plausibility Checks and Prevalence Analysis of Wasting
+#>   in R_. doi:10.5281/zenodo.14176624
+#>   <https://doi.org/10.5281/zenodo.14176624>, R package version 0.2.2,
 #>   <https://nutriverse.io/mwana/>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
 #>     title = {mwana: An Efficient Workflow for Plausibility Checks and Prevalence Analysis of Wasting in R},
-#>     author = {{Tomás Zaba} and {Ernest Guevarra}},
-#>     year = {2024},
-#>     note = {R package version 0.2.1},
+#>     author = {{Tomás Zaba} and {Ernest Guevarra} and {Mark Myatt}},
+#>     year = {2025},
+#>     note = {R package version 0.2.2},
 #>     url = {https://nutriverse.io/mwana/},
 #>     doi = {10.5281/zenodo.14176624},
 #>   }

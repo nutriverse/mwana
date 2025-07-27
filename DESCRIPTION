@@ -8,7 +8,8 @@ Authors@R: c(
            role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-7079-3574")),
     person("Ernest", "Guevarra", role = c("aut", "cph"),
-           comment = c(ORCID = "0000-0002-4887-4415"))
+           comment = c(ORCID = "0000-0002-4887-4415")),
+    person("Mark", "Myatt", role = "aut")
   )
 Description: A simple and streamlined workflow for plausibility checks and 
   prevalence analysis of wasting based on the Standardized
